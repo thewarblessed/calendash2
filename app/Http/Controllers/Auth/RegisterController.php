@@ -175,4 +175,158 @@ class RegisterController extends Controller
         
     }
 
+    public function registerMobile(Request $request)
+    {
+        $response = [];
+        // dd($request->all());
+        $role = $request->role;
+        // dd($role);
+        if($role === "Student")
+        {
+            // dd("Student ako");
+            $request->validate([
+
+                'firstname' => 'required|min:3|max:255',
+                'lastname' => 'required|min:3|max:255',
+                'tupId' => 'required|max:7',
+                'course' => 'required|min:3|max:255',
+                'section' => 'required|min:3|max:255',
+                'dept' => 'required|min:3|max:255',
+                'organization' => 'required|min:3|max:255',
+                'email' => 'required|email|max:255|unique:users',
+                'password' => 'required|min:7|max:255',
+            ], [
+                'firstname.required' => 'First Name is required',
+                'lastname.required' => 'Last Name is required',
+                'tupId.required' => 'TUP ID is invalid',
+                'course.required' => 'Course is required',
+                'section.required' => 'Section is required',
+                'dept.required' => 'Department is required',
+                'organization.required' => 'Organization is required',
+                'email.required' => 'Email is required',
+                'password.required' => 'Password is required',
+            ]);
+                
+            $user = User::create([
+                'name' => $request->firstname .' '.$request->lastname,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+                'role' => 'student'
+            ]);
+
+            $lastid = DB::getPdo()->lastInsertId();
+
+            $student = Student::create([
+                'firstname' => $request->firstname,
+                'lastname' => $request->lastname,
+                'tupId' => 'TUPT-'.''.$request->tupId,
+                'course' => $request->course, 
+                'yearLevel' => $request->yearLevel,
+                'department' => $request->dept,
+                'studOrg' => $request->organization,
+                'section' => $request->section,
+                'role' => $request->orgRole,
+                'user_id' => $lastid
+            ]);
+            
+            // Auth::login($user);
+            // $token = $user->createToken(time())->plainTextToken;
+            $response['message'] = 'Registration successful';
+            $response['user'] = $user;
+            $response['student'] = $student;
+            return response()->json($response, 200);
+        }
+        elseif ($role === "Professor") {
+            $request->validate([
+
+                'firstname' => 'required|min:3|max:255',
+                'lastname' => 'required|min:3|max:255',
+                'tupId' => 'required|max:7',
+                'dept' => 'required|min:3|max:255',
+                'organization' => 'required|min:3|max:255',
+                'email' => 'required|email|max:255|unique:users',
+                'password' => 'required|min:7|max:255',
+            ], [
+                'firstname.required' => 'First Name is required',
+                'lastname.required' => 'Last Name is required',
+                'tupId.required' => 'TUP ID is invalid',
+                'dept.required' => 'Department is required',
+                'organization.required' => 'Organization is required',
+                'email.required' => 'Email is required',
+                'password.required' => 'Password is required',
+            ]);
+                
+            $user = User::create([
+                'name' => $request->firstname .' '.$request->lastname,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+                'role' => 'professor'
+            ]);
+
+            $lastidprof = DB::getPdo()->lastInsertId();
+            // dd($lastidprof);
+            $prof = Prof::create([
+                'firstname' => $request->firstname,
+                'lastname' => $request->lastname,
+                'tupId' => 'TUPT-'.''.$request->tupId,
+                'department' => $request->dept,
+                'organization' => $request->organization,
+                'role' => $request->orgRole,
+                'user_id' => $lastidprof
+            ]);
+            
+            // Auth::login($user);
+            // $token = $user->createToken(time())->plainTextToken;
+            $response['message'] = 'Registration successful';
+            $response['user'] = $user;
+            $response['prof'] = $prof;
+            return response()->json($response, 200);
+            // return response()->json(["success" => "Registered Successfully.", "user" => $user, "token" => $token,"status" => 200]);
+        }
+        elseif ($role === "Staff"){
+            $request->validate([
+
+                'firstname' => 'required|min:3|max:255',
+                'lastname' => 'required|min:3|max:255',
+                'tupId' => 'required|max:7',
+                'email' => 'required|email|max:255|unique:users',
+                'password' => 'required|min:7|max:255',
+            ], [
+                'firstname.required' => 'First Name is required',
+                'lastname.required' => 'Last Name is required',
+                'tupId.required' => 'TUP ID is invalid',
+                'email.required' => 'Email is required',
+                'password.required' => 'Password is required',
+            ]);
+                
+            $user = User::create([
+                'name' => $request->firstname .' '.$request->lastname,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+                'role' => 'staff'
+            ]);
+
+            $lastidstaff = DB::getPdo()->lastInsertId();
+
+            $staff = Staff::create([
+                'firstname' => $request->firstname,
+                'lastname' => $request->lastname,
+                'tupId' => 'TUPT-'.''.$request->tupId,
+                'department' => 'Admin/Staff',
+                'role' => 'unfinished',
+                'user_id' => $lastidstaff
+            ]);
+            
+            Auth::login($user);
+            $token = $user->createToken(time())->plainTextToken;
+            $response['message'] = 'Registration successful';
+            $response['user'] = $user;
+            $response['staff'] = $staff;
+            return response()->json($response, 200);
+            // return response()->json(["success" => "Registered Successfully.", "user" => $user, "token" => $token,"status" => 200]);
+        }
+
+        
+    }
+
 }

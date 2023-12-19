@@ -12,7 +12,6 @@
                                     <h3>Venues list</h3>
                                     <p class="text-sm">See information about all venues</p>
                                 </div>
-                                
                             </div>
 
                             <div class="form-group">

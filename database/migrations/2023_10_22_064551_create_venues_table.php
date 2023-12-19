@@ -16,7 +16,7 @@ return new class extends Migration
             $table->text('name');
             $table->text('description');
             $table->text('capacity');
-            $table->string('image')->default('venues.jpg');
+            $table->string('image');
             $table->timestamps();
             $table->softDeletes();
         });

@@ -24,4 +24,8 @@ class Staff extends Model
         "role",
         "user_id"
     ];
+
+    public function user() {
+        return $this->belongsTo('App\Models\User');
+    }
 }

@@ -22,4 +22,8 @@ class Venue extends Model
         "capacity",
         "image",
     ];
+
+    public function event() {
+        return $this->hasMany('App\Models\Event', 'venue_id');
+    }
 }

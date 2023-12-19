@@ -122,9 +122,7 @@ $(document).ready(function () {
 
     $("#venueTable tbody").on("click", 'a.deleteBtn', function (e) {
         e.preventDefault();
-
         var id = $(this).data("id");
-
         console.log(id);
         Swal.fire({
             title: 'Are you sure you want to delete this venue?',

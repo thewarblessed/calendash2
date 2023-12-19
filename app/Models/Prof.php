@@ -22,6 +22,11 @@ class Prof extends Model
         "tupId",
         "department",
         "organization",
-        "role"
+        "role",
+        "user_id"
     ];
+
+    public function user() {
+        return $this->belongsTo('App\Models\User');
+    }
 }

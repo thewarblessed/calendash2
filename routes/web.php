@@ -27,9 +27,13 @@ Route::get('/', function () {
 
 //SIDEBAR SIDEBAR SIDEBAR SIDEBAR
 
-Route::get('/dashboard', function () {
+// Route::get('/dashboard', function () {
+//     return view('dashboard');
+// })->name('dashboard');
+
+Route::middleware('auth:sanctum')->get('/dashboard', function () {
     return view('dashboard');
-})->name('dashboard')->middleware('auth');
+})->name('dashboard');
 
 Route::get('/tables', function () {
     return view('tables');
