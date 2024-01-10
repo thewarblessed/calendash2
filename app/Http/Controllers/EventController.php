@@ -7,6 +7,7 @@ use App\Models\Venue;
 use App\Models\Event;
 use App\Models\User;
 use View;
+use Auth;
 
 class EventController extends Controller
 {
@@ -47,6 +48,34 @@ class EventController extends Controller
     public function store(Request $request)
     {
         //
+        // dd($request->all());
+        $event = new Event();
+        $event->user_id = $request->user_id;
+        $event->venue_id = $request->event_venue;
+        $event->eventName = $request->eventName;
+        $event->description = $request->eventDesc;
+        $event->event_date = $request->event_date;
+        $event->start_time = $request->start_time;
+        $event->end_time = $request->end_time;
+        $event->participants = $request->numParticipants;
+        $event->target_dept = 'MTICS';
+        $event->status = "PENDING";
+        $event->event_letter = "default.pdf";
+        // $event->dept_head = 0;
+        // $event->adaa = 0;
+        // $event->atty = 0;
+        // $event->osa = 0;
+        
+        // dd($event);
+        $event->save();
+        return response()->json(["success" => "Event Created Successfully.", "Event" => $event, "status" => 200]);
+    }
+
+    public function showEvents()
+    {
+        $events = Event::orderBy('id')->get();
+        return response()->json($events);
+        // return View::make('event.create', compact('venues'));
     }
 
     /**

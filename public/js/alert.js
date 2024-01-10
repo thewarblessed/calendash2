@@ -166,8 +166,13 @@ $(document).ready(function () {
     });//end delete venue
 
     $("#filterCapacity").on("input", function() {
+        // let elements = document.querySelectorAll(".card-title");
+        // let cards = document.querySelectorAll(".card_capacity");
         var filterValue = parseInt($(this).val());
+        // let searchInput = parseInt($(this).val());
+        // console.log(searchInput)
         // (!isNaN(venueCapacity) && venueCapacity <= filterValue)
+
         if (!isNaN(filterValue)) {
             // Hide all venues
             $("div.card_capacity").hide();
@@ -183,7 +188,75 @@ $(document).ready(function () {
             // Show all venues if the filter input is not a valid number
             $("div.card_capacity").show();
         }
+
+
     });//end filter venue
+
+    $("#createEvent_submit").on("click", function (e) {
+
+        e.preventDefault();
+        // $('#serviceSubmit').show()
+        var data = $('#createEventForm')[0];
+        console.log(data);
+        let formData = new FormData($('#createEventForm')[0]);
+        console.log(formData);
+    
+        for(var pair of formData.entries()){
+            console.log(pair[0] + ',' + pair[1]);
+        }
+        console.log(formData)   
+        $.ajax({
+            type: "POST",
+            url: "/api/create/newEvent",
+            data: formData,
+            contentType: false,
+            processData: false,
+            headers: {
+                'Authorization' :'Bearer ' + sessionStorage.getItem('token'),
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+            dataType: "json",
+            success: function(data) {
+                console.log(data);
+               
+                // var $ctable = $('#ctable').DataTable();
+                // $ctable.ajax.reload();
+                // $ctable.row.add(data.customer).draw(false);
+                // // $etable.row.add(data.client).draw(false);
+                setTimeout(function() {
+                    window.location.href = '/myevents';
+                }, 1500);
+                  
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Event has been Requested!',
+                    showConfirmButton: false,
+                    timer: 3000
+                  })        
+            },
+            error: function(error) {
+                console.log('error');
+            }
+        });
+        //Swal.fire('SweetAlert2 is working!')
+    });//end create
+
+    // document.getElementById("search").addEventListener("click", () => {
+    //     //initializations
+    //     let searchInput = document.getElementById("search-input").value;
+    //     let elements = document.querySelectorAll(".product-name");
+    //     let cards = document.querySelectorAll(".card");
+    //     //loop through all elements
+    //     elements.forEach((element, index) => {
+    //       //check if text includes the search value
+    //       if (element.innerText.includes(searchInput.toUpperCase())) {
+    //         //display matching card
+    //         cards[index].classList.remove("hide");
+    //       } else {
+    //         //hide others
+    //         cards[index].classList.add("hide");
+    //       }
+    //     });
+    //   });
     
 
 })

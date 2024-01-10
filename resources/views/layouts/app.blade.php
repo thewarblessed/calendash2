@@ -175,6 +175,7 @@
     <script src="../assets/js/plugins/smooth-scrollbar.min.js"></script>
     <script src="../assets/js/plugins/chartjs.min.js"></script>
     <script src="../assets/js/plugins/swiper-bundle.min.js" type="text/javascript"></script>
+    <script src="../dist/fullcalendar/index.global.js"></script>
     <script>
         if (document.getElementsByClassName('mySwiper')) {
             var swiper = new Swiper(".mySwiper", {

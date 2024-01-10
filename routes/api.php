@@ -73,6 +73,17 @@ Route::get('/create/venueFilter',[
         'uses' => 'EventController@searchVenues',
         'as' => 'searchVenue',
         ]);
+// create Event
+Route::post('/create/newEvent',[
+    'uses' => 'EventController@store',
+    'as' => 'storeEvent',
+    ]);
+
+// GET ALL EVENTS
+Route::get('/show/allEvent',[
+        'uses' => 'EventController@showEvents',
+        'as' => 'showEvent',
+        ]);
 
 // Route::get('/createEvent', function () {
 //     return view('event.create');

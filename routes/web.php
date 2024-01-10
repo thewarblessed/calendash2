@@ -5,6 +5,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\VenueController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ResetPasswordController;
@@ -55,9 +56,17 @@ Route::get('/venues', [VenueController::class, 'indexUser'])
     ->name('venues.indexUser')
     ->middleware('auth');
 
-Route::get('/calendar', function () {
-    return view('event.events');
-})->name('calendar')->middleware('auth');
+// Route::get('/calendar', function () {
+//     return view('event.events');
+// })->name('calendar')->middleware('auth');
+
+Route::get('/search', function () {
+    return view('event.new');
+})->name('new')->middleware('auth');
+
+Route::get('/calendar', [CalendarController::class, 'myCalendar'])
+    ->name('calendar')
+    ->middleware('auth');
 
 Route::get('/wallet', function () {
     return view('wallet');
@@ -127,6 +136,17 @@ Route::get('/createEvent', [EventController::class, 'showVenues'])
         ->name('createEvent')
         ->middleware('auth');
 
+//CREATE EVENTS POST
+
+// Route::post('/post/createEvent',[
+//         'uses' => 'EventController@store',
+//         'as' => 'createEventPost',
+//         ]);
+
+Route::post('/createEvent/post', [EventController::class, 'store'])
+    ->name('createEventPost')
+    ->middleware('auth');
+
 // VENUE ADMIN 
 // Route::get('/admin/venues', function () {
 //     // return view('admin.venue.index');
@@ -134,8 +154,14 @@ Route::get('/createEvent', [EventController::class, 'showVenues'])
 
 Route::get('/admin/venues', [VenueController::class, 'index'])->name('adminVenues')->middleware('auth');
 
+
+
 Route::get('/admin/createVenue', [VenueController::class, 'create'])
     ->middleware('auth')
     ->name('adminVenueCreate');
+
+Route::get('/texteditor', function () {
+    return view('event.editor');
+})->name('multiform')->middleware('auth');
 
 

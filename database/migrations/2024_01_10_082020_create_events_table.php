@@ -20,13 +20,17 @@ return new class extends Migration
             $table->text('eventName');
             $table->text('description');
             $table->date('event_date');
+            $table->time('start_time');
+            $table->time('end_time');
             $table->integer('participants');
             $table->text('target_dept');
             $table->text('status');
-            $table->integer('dept_head')->unsigned()->nullable();
-            $table->integer('adaa')->unsigned()->nullable();
-            $table->integer('atty')->unsigned()->nullable();
-            $table->integer('osa')->unsigned()->nullable();
+            $table->string('dept_head')->nullable();
+            $table->string('adaa')->nullable();
+            $table->string('atty')->nullable();
+            $table->string('campus_director')->nullable();
+            $table->string('osa')->nullable();
+            $table->string('event_letter')->default('default.pdf');
             $table->timestamps();
         });
     }
