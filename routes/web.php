@@ -2,9 +2,10 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\VenueController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\RequestController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
@@ -44,26 +45,23 @@ Route::get('/events', function () {
     return view('event.events');
 })->name('events')->middleware('auth');
 
+// USER CREATE EVENT
 Route::get('/myevents', function () {
     return view('event.myEvents');
 })->name('myEvents')->middleware('auth');
 
-// Route::get('/venues', function () {
-//     return view('venues.index');
-// })->name('venues')->middleware('auth');
-
+// USER CHECK VENUES
 Route::get('/venues', [VenueController::class, 'indexUser'])
     ->name('venues.indexUser')
     ->middleware('auth');
 
-// Route::get('/calendar', function () {
-//     return view('event.events');
-// })->name('calendar')->middleware('auth');
+        // FOR REFERENCE SEARCH
+// Route::get('/search', function () {
+//     return view('event.new');
+// })->name('new')->middleware('auth');
 
-Route::get('/search', function () {
-    return view('event.new');
-})->name('new')->middleware('auth');
 
+// USER CHECK CALENDAR
 Route::get('/calendar', [CalendarController::class, 'myCalendar'])
     ->name('calendar')
     ->middleware('auth');
@@ -127,22 +125,18 @@ Route::get('/laravel-examples/user-profile', [ProfileController::class, 'index']
 Route::put('/laravel-examples/user-profile/update', [ProfileController::class, 'update'])->name('users.update')->middleware('auth');
 Route::get('/laravel-examples/users-management', [UserController::class, 'index'])->name('users-management')->middleware('auth');
 
-// CREATE EVENT
+
 // Route::get('/createEvent', function () {
 //     return view('event.create');
 // })->name('createEvent')->middleware('auth');
 
+
+// CREATE EVENT
 Route::get('/createEvent', [EventController::class, 'showVenues'])
         ->name('createEvent')
         ->middleware('auth');
 
 //CREATE EVENTS POST
-
-// Route::post('/post/createEvent',[
-//         'uses' => 'EventController@store',
-//         'as' => 'createEventPost',
-//         ]);
-
 Route::post('/createEvent/post', [EventController::class, 'store'])
     ->name('createEventPost')
     ->middleware('auth');
@@ -163,5 +157,18 @@ Route::get('/admin/createVenue', [VenueController::class, 'create'])
 Route::get('/texteditor', function () {
     return view('event.editor');
 })->name('multiform')->middleware('auth');
+
+// ADAA
+// Route::get('/request', function () {
+//     return view('adaa.request');
+// })->name('adaaRequest');
+
+Route::get('/request', [RequestController::class, 'index'])
+    ->middleware('auth')
+    ->name('adaaRequest');
+
+
+
+
 
 
