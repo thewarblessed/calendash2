@@ -85,12 +85,24 @@ Route::get('/show/allEvent',[
         'as' => 'showEvent',
         ]);
 
+// GET SINGLE EVENT
+Route::get('/show/event/{id}',[
+        'uses' => 'RequestController@edit',
+        'as' => 'showSingleEvent',
+        ]);
+
+Route::get('/show/letter/{id}',[
+        'uses' => 'EventController@showLetter',
+        'as' => 'showLetter',
+]);
+
 // Route::get('/createEvent', function () {
 //     return view('event.create');
 // })->name('createEvent')->middleware('auth');
 
 
 // Route::resource('admin/venue', 'VenueController');
+
 
 ////////////////================ MOBILE ROUTES ================//////////////////
 //REGISTRATION MOBILE

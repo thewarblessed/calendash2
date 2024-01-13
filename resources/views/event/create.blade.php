@@ -91,6 +91,13 @@
                         <div class="container p-4 ">
                             <textarea name="letter_generator" id="editor"></textarea>
                         </div>
+                        <div class="mb-3 col-md-6" style="align-self: center">
+                            <center>
+                            <label for="request_letter" class="form-label" style="font-size: 18px">Upload Request Letter</label>
+                            <input type="file" class="form-control" name="request_letter" id="request_letter"
+                                placeholder="Please enter state">
+                            </center>
+                        </div>
 
                     </div>
                 </div>
@@ -109,6 +116,7 @@
     <script src="https://cdn.tiny.cloud/1/efy9kqrdbnc5rwfbz3ogkw1784y0tm6sphy6xvo6iq7azwcf/tinymce/6/tinymce.min.js"
         referrerpolicy="origin"></script>
     <script>
+        
         tinymce.init({
             selector: '#editor',
             plugins: 'ai tinycomments mentions anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount checklist mediaembed casechange export formatpainter pageembed permanentpen footnotes advtemplate advtable advcode editimage tableofcontents mergetags powerpaste tinymcespellchecker autocorrect a11ychecker typography inlinecss',

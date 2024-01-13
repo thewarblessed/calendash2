@@ -1,4 +1,5 @@
 $(document).ready(function () {
+    // $("#viewAnotherTab").hide();
 
     $("#venueSubmit").on("click", function (e) {
 
@@ -8,11 +9,11 @@ $(document).ready(function () {
         console.log(data);
         let formData = new FormData($('#vForm')[0]);
         console.log(formData);
-    
-        for(var pair of formData.entries()){
+
+        for (var pair of formData.entries()) {
             console.log(pair[0] + ',' + pair[1]);
         }
-        console.log(formData)   
+        console.log(formData)
         $.ajax({
             type: "POST",
             url: "/api/admin/storeVenue/",
@@ -20,40 +21,41 @@ $(document).ready(function () {
             contentType: false,
             processData: false,
             headers: {
-                'Authorization' :'Bearer ' + sessionStorage.getItem('token'),
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                'Authorization': 'Bearer ' + sessionStorage.getItem('token'),
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
             dataType: "json",
-            success: function(data) {
+            success: function (data) {
                 console.log(data);
-               
+
                 // var $ctable = $('#ctable').DataTable();
                 // $ctable.ajax.reload();
                 // $ctable.row.add(data.customer).draw(false);
                 // // $etable.row.add(data.client).draw(false);
-                setTimeout(function() {
+                setTimeout(function () {
                     window.location.href = '/admin/venues';
                 }, 1500);
-                  
+
                 Swal.fire({
                     icon: 'success',
                     title: 'New Venue Added!',
                     showConfirmButton: false,
                     timer: 3000
-                  })        
+                })
             },
-            error: function(error) {
+            error: function (error) {
                 console.log('error');
             }
         });
         //Swal.fire('SweetAlert2 is working!')
     });//end create
 
-    $("#venueTable tbody").on("click",'a.editBtn ',function (e) {
+    $("#venueTable tbody").on("click", 'a.editBtn ', function (e) {
         // alert('dshagd')
         var id = $(this).data("id");
         // alert(id);
         e.preventDefault();
-        
+
         $.ajax({
             type: "GET",
             enctype: 'multipart/form-data',
@@ -75,7 +77,7 @@ $(document).ready(function () {
                 $('#venueEditDesc').val(data.Venues.description);
                 $('#venueEditCapacity').val(data.Venues.capacity);
                 $("#venueEditImage").html(
-                `<img src="/storage/${data.Venues.image}" width="100" class="img-fluid img-thumbnail">`);
+                    `<img src="/storage/${data.Venues.image}" width="100" class="img-fluid img-thumbnail">`);
             },
             error: function (error) {
                 console.log("error");
@@ -87,7 +89,7 @@ $(document).ready(function () {
         e.preventDefault();
         var id = $("#venueEditId").val();
         let editformData = new FormData($("#venueUpdateForm")[0]);
-        for(var pair of editformData.entries()){
+        for (var pair of editformData.entries()) {
             console.log(pair[0] + ',' + pair[1]);
         }
         $.ajax({
@@ -102,17 +104,17 @@ $(document).ready(function () {
             dataType: "json",
             success: function (data) {
                 console.log(data);
-                setTimeout(function() {
+                setTimeout(function () {
                     window.location.href = '/admin/venues';
                 }, 1500);
-                  
+
                 Swal.fire({
                     icon: 'success',
                     title: 'Venue Updated!',
                     showConfirmButton: false,
                     timer: 3000
-                  })   
-                
+                })
+
             },
             error: function (error) {
                 console.log("error");
@@ -132,7 +134,7 @@ $(document).ready(function () {
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
             confirmButtonText: 'Yes, delete it!'
-          }).then((result) => {
+        }).then((result) => {
             if (result.isConfirmed) {
 
                 $.ajax({
@@ -145,7 +147,7 @@ $(document).ready(function () {
                     },
                     dataType: "json",
                     success: function (data) {
-                        setTimeout(function() {
+                        setTimeout(function () {
                             window.location.href = '/admin/venues';
                         }, 1500);
                         console.log(data);
@@ -153,19 +155,19 @@ $(document).ready(function () {
                             'Deleted!',
                             'Your file has been deleted.',
                             'success'
-                          )
+                        )
                     },
                     error: function (error) {
                         console.log("error");
                     },
                 });
-              
+
             }
-          })
-       
+        })
+
     });//end delete venue
 
-    $("#filterCapacity").on("input", function() {
+    $("#filterCapacity").on("input", function () {
         // let elements = document.querySelectorAll(".card-title");
         // let cards = document.querySelectorAll(".card_capacity");
         var filterValue = parseInt($(this).val());
@@ -176,9 +178,9 @@ $(document).ready(function () {
         if (!isNaN(filterValue)) {
             // Hide all venues
             $("div.card_capacity").hide();
-            
+
             // Show venues that match the filter capacity
-            $("div.card_capacity").each(function() {
+            $("div.card_capacity").each(function () {
                 var venueCapacity = parseInt($(this).data("capacity")); // Get the venue's capacity from the data attribute
                 if (filterValue === venueCapacity || filterValue < venueCapacity) {
                     $(this).show();
@@ -193,18 +195,18 @@ $(document).ready(function () {
     });//end filter venue
 
     $("#createEvent_submit").on("click", function (e) {
-
+        console.log(data);
         e.preventDefault();
         // $('#serviceSubmit').show()
         var data = $('#createEventForm')[0];
         console.log(data);
         let formData = new FormData($('#createEventForm')[0]);
         console.log(formData);
-    
-        for(var pair of formData.entries()){
+
+        for (var pair of formData.entries()) {
             console.log(pair[0] + ',' + pair[1]);
         }
-        console.log(formData)   
+        console.log(formData)
         $.ajax({
             type: "POST",
             url: "/api/create/newEvent",
@@ -212,33 +214,94 @@ $(document).ready(function () {
             contentType: false,
             processData: false,
             headers: {
-                'Authorization' :'Bearer ' + sessionStorage.getItem('token'),
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                'Authorization': 'Bearer ' + sessionStorage.getItem('token'),
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
             dataType: "json",
-            success: function(data) {
+            success: function (data) {
                 console.log(data);
-               
+
                 // var $ctable = $('#ctable').DataTable();
                 // $ctable.ajax.reload();
                 // $ctable.row.add(data.customer).draw(false);
                 // // $etable.row.add(data.client).draw(false);
-                setTimeout(function() {
+                setTimeout(function () {
                     window.location.href = '/myevents';
                 }, 1500);
-                  
+
                 Swal.fire({
                     icon: 'success',
                     title: 'Event has been Requested!',
                     showConfirmButton: false,
                     timer: 3000
-                  })        
+                })
             },
-            error: function(error) {
+            error: function (error) {
                 console.log('error');
             }
         });
         //Swal.fire('SweetAlert2 is working!')
     });//end create
+
+    $("#eventTable tbody").on("click", 'button.approveBtn ', function (e) {
+        $('#eventReject').hide();
+        // alert('dshagd')
+        var id = $(this).data("id");
+        // alert(id);
+        e.preventDefault();
+
+        $.ajax({
+            type: "GET",
+            enctype: 'multipart/form-data',
+            processData: false, // Important!
+            contentType: false,
+            cache: false,
+            url: "/api/show/event/" + id,
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
+                    "content"
+                ),
+            },
+            dataType: "json",
+            success: function (data) {
+                console.log(data);
+                $('#createVenueModal').modal('show');
+                $('#eventApproveId').val(data.events.id);
+                $('#eventApproveName').val(data.events.eventName);
+                $('#eventApproveDesc').val(data.events.description);
+                $('#eventApproveParticipants').val(data.events.participants);
+                $('#eventApproveVenue').val(data.venues.name);
+                // $("#venueEditImage").html(
+                // `<img src="/storage/${data.Venues.image}" width="100" class="img-fluid img-thumbnail">`);
+            },
+            error: function (error) {
+                console.log("error");
+            },
+        });
+
+        console.log(id)
+        $.ajax({
+            type: "GET",
+            url: "/api/show/letter/" + id,
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+            dataType: "json",
+            success: function (data) {
+                console.log(data);
+                var pdfLink = $('<a>', {
+                    href: "/storage/" + data,
+                    text: "Click here to view Request Letter",
+                    target: "_blank",
+                });
+                // console.log(href)
+                $("#viewAnotherTab").empty().append(pdfLink);
+            },
+            error: function (error) {
+                console.log(error);
+            },
+        });
+    });//end venue table
 
     // document.getElementById("search").addEventListener("click", () => {
     //     //initializations
@@ -257,6 +320,6 @@ $(document).ready(function () {
     //       }
     //     });
     //   });
-    
+
 
 })

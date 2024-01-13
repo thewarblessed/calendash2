@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use App\Models\Venue;
 use App\Models\Event;
 use App\Models\User;
 use View;
 use Auth;
+
 
 class EventController extends Controller
 {
@@ -60,7 +62,23 @@ class EventController extends Controller
         $event->participants = $request->numParticipants;
         $event->target_dept = 'MTICS';
         $event->status = "PENDING";
-        $event->event_letter = "default.pdf";
+
+        $request->validate([
+            'request_letter' => 'required|mimes:pdf|max:2048', // PDF file validation
+        ]);
+
+        // $pdfFile = $request->file('request_letter');
+        // $pdfFileName = time() . '' . $pdfFile->getClientOriginalName();
+        // $pdfFile->move(public_path('uploads/pdf'), $pdfFileName);
+
+        // $file->research_file = $pdfFileName;
+
+        $files = $request->file('request_letter');
+        $event->event_letter = 'pdf/'.time().'-'.$files->getClientOriginalName();
+        // $venues->save();
+        Storage::put('public/pdf/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
+
+        // $event->event_letter = "default.pdf";
         // $event->dept_head = 0;
         // $event->adaa = 0;
         // $event->atty = 0;
@@ -70,6 +88,21 @@ class EventController extends Controller
         $event->save();
         return response()->json(["success" => "Event Created Successfully.", "Event" => $event, "status" => 200]);
     }
+
+    public function showLetter(string $id)
+    {
+        $event = Event::find($id);
+        $request_letter = $event->event_letter;
+        // dd($request_letter);
+        return response()->json($request_letter);
+    }
+
+    // public function showRequestLetter($fileName)
+    // {
+    //     $filePath = storage_path("public/pdf/{$fileName}");
+
+    //     return response()->file($filePath)->header('Content-Type', 'application/pdf');
+    // }
 
     public function showEvents()
     {

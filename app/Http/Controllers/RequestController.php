@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Event;
+use App\Models\Venue;
 use View;
 use Carbon\Carbon;
+
 
 class RequestController extends Controller
 {
@@ -16,13 +18,6 @@ class RequestController extends Controller
     {
         //
         $events = Event::orderBy('id')->get();
-        $da = Event::orderBy('id')->select('event_date')->get();
-        // dd($events);
-        dd($time);
-        // $start_time = $events->start_time;
-        // $end_time = $event->end_time;
-
-        
         // return response()->json($events);
         return View::make('adaa.request', compact('events'));
     }
@@ -41,6 +36,8 @@ class RequestController extends Controller
     public function store(Request $request)
     {
         //
+
+
     }
 
     /**
@@ -49,6 +46,7 @@ class RequestController extends Controller
     public function show(string $id)
     {
         //
+
     }
 
     /**
@@ -57,6 +55,11 @@ class RequestController extends Controller
     public function edit(string $id)
     {
         //
+        $events = Event::find($id);
+
+        // dd($events->venue_id);
+        $venues = Venue::find($events->venue_id);
+        return response()->json(["events" => $events, "venues" => $venues, "status" => 200]);
     }
 
     /**
