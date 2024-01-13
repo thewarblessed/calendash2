@@ -47,6 +47,14 @@
         </div>
     </main>
     <script>
+        function getRandomColor() {
+            var letters = '0123456789ABCDEF';
+            var color = '#';
+            for (var i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
         document.addEventListener('DOMContentLoaded', function() {
             var calendarEl = document.getElementById('myCalendar');
             var calendar = new FullCalendar.Calendar(calendarEl, {
@@ -55,6 +63,52 @@
                     center: 'title',
                     right: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
                 },
+                events: [  // Array of event objects
+                    {
+                        title: 'Event 1',
+                        start: '2024-01-11T10:00:00',  // Start time in ISO format (YYYY-MM-DDTHH:mm:ss)
+                        end: '2024-01-11T12:00:00',
+                        color: getRandomColor()
+                    },
+                    {
+                        title: 'Event 2',
+                        start: '2024-01-11T13:00:00',  // Start time in ISO format (YYYY-MM-DDTHH:mm:ss)
+                        end: '2024-01-11T14:00:00',
+                        color: getRandomColor()
+                    },
+                    {
+                        title: 'Event 3',
+                        start: '2024-01-11T15:00:00',  // Start time in ISO format (YYYY-MM-DDTHH:mm:ss)
+                        end: '2024-01-11T16:00:00',
+                        color: getRandomColor()
+                    },
+                    {
+                        title: 'Event 4',
+                        start: '2024-01-11T17:00:00',  // Start time in ISO format (YYYY-MM-DDTHH:mm:ss)
+                        end: '2024-01-11T18:00:00',
+                        color: getRandomColor()
+                    },
+                    {
+                        title: 'Event 2',
+                        start: '2024-01-15T15:30:00',
+                        end: '2024-01-15T17:00:00',
+                        color: getRandomColor()
+                    },
+                    {
+                        title: 'ACSO WEEK',
+                        start: '2024-01-22',
+                        end: '2024-01-27T00:00:00',
+                        color: getRandomColor()
+                    },
+                    {
+                        title: 'BATTLE OF THE BANDS',
+                        start: '2024-01-22T15:30:00',
+                        end: '2024-01-22T17:00:00',
+                        color: getRandomColor()
+                    },
+                    
+                    // Add more events as needed
+                ]
             });
             calendar.render();
         });
