@@ -54,7 +54,7 @@ class EventController extends Controller
         $event = new Event();
         $event->user_id = $request->user_id;
         $event->venue_id = $request->event_venue;
-        $event->eventName = $request->eventName;
+        $event->event_name = $request->eventName;
         $event->description = $request->eventDesc;
         $event->event_date = $request->event_date;
         $event->start_time = $request->start_time;
@@ -97,15 +97,9 @@ class EventController extends Controller
         return response()->json($request_letter);
     }
 
-    // public function showRequestLetter($fileName)
-    // {
-    //     $filePath = storage_path("public/pdf/{$fileName}");
-
-    //     return response()->file($filePath)->header('Content-Type', 'application/pdf');
-    // }
 
     public function showEvents()
-    {
+    {   
         $events = Event::orderBy('id')->get();
         return response()->json($events);
         // return View::make('event.create', compact('venues'));
@@ -150,7 +144,7 @@ class EventController extends Controller
         $event = new Event();
         $event->user_id = $request->user_id;
         $event->venue_id = $request->venue_id;
-        $event->eventName = $request->eventname;
+        $event->event_name = $request->eventname;
         $event->description = $request->description;
         $event->event_date = $request->date;
         $event->participants = $request->participants;

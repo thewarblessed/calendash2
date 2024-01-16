@@ -19,16 +19,22 @@ class Event extends Model
     protected $fillable = [
         "user_id",
         "venue_id",
-        "eventName",
+        "event_name",
         "description",
         "event_date",
+        "start_time",
+        "end_time",
         "participants",
         "target_dept",
+        "event_letter",
         "status",
+        "sect_head",
         "dept_head",
+        "osa",
         "adaa",
         "atty",
-        "osa"
+        "campus_director"
+
     ];
 
     public function user() {

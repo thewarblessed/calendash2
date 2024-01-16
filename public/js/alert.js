@@ -241,7 +241,7 @@ $(document).ready(function () {
             }
         });
         //Swal.fire('SweetAlert2 is working!')
-    });//end create
+    });//end create event
 
     $("#eventTable tbody").on("click", 'button.approveBtn ', function (e) {
         $('#eventReject').hide();
@@ -267,7 +267,7 @@ $(document).ready(function () {
                 console.log(data);
                 $('#createVenueModal').modal('show');
                 $('#eventApproveId').val(data.events.id);
-                $('#eventApproveName').val(data.events.eventName);
+                $('#eventApproveName').val(data.events.event_name);
                 $('#eventApproveDesc').val(data.events.description);
                 $('#eventApproveParticipants').val(data.events.participants);
                 $('#eventApproveVenue').val(data.venues.name);
@@ -301,7 +301,82 @@ $(document).ready(function () {
                 console.log(error);
             },
         });
-    });//end venue table
+    });//end event table
+
+    $("#officialSubmit").on("click", function (e) {
+
+        e.preventDefault();
+        // $('#serviceSubmit').show()
+        var data = $('#officialForm')[0];
+        console.log(data);
+        let formData = new FormData($('#officialForm')[0]);
+        console.log(formData);
+
+        for (var pair of formData.entries()) {
+            console.log(pair[0] + ',' + pair[1]);
+        }
+        console.log(formData)
+        $.ajax({
+            type: "POST",
+            url: "/api/admin/storeOfficial/",
+            data: formData,
+            contentType: false,
+            processData: false,
+            headers: {
+                'Authorization': 'Bearer ' + sessionStorage.getItem('token'),
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            dataType: "json",
+            success: function (data) {
+                console.log(data);
+
+                // var $ctable = $('#ctable').DataTable();
+                // $ctable.ajax.reload();
+                // $ctable.row.add(data.customer).draw(false);
+                // // $etable.row.add(data.client).draw(false);
+                setTimeout(function () {
+                    window.location.href = '/admin/officials';
+                }, 1500);
+
+                Swal.fire({
+                    icon: 'success',
+                    title: 'New Official Added!',
+                    showConfirmButton: false,
+                    timer: 3000
+                })
+            },
+            error: function (error) {
+                console.log('error');
+            }
+        });
+        //Swal.fire('SweetAlert2 is working!')
+    });//end create official
+
+    
+    $("#eventApprove").on("click", async function (e) {
+        const { value: formValues } = await Swal.fire({
+            title: "Multiple inputs",
+            html: `
+                <input id="swal-input1" class="swal2-input">
+                <input id="swal-input2" class="swal2-input">
+            `,
+            focusConfirm: true, // Set focusConfirm to true if you want to focus on the "Confirm" button
+            preConfirm: () => {
+                return [
+                    document.getElementById("swal-input1").value,
+                    document.getElementById("swal-input2").value
+                ];
+            }
+        });
+    
+        if (formValues) {
+            Swal.fire(JSON.stringify(formValues));
+        }
+    });
+
+    // Approve Request
+    
+    
 
     // document.getElementById("search").addEventListener("click", () => {
     //     //initializations

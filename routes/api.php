@@ -90,18 +90,37 @@ Route::get('/show/event/{id}',[
         'uses' => 'RequestController@edit',
         'as' => 'showSingleEvent',
         ]);
-
+// SHOW LETTER
 Route::get('/show/letter/{id}',[
         'uses' => 'EventController@showLetter',
         'as' => 'showLetter',
 ]);
 
-// Route::get('/createEvent', function () {
-//     return view('event.create');
-// })->name('createEvent')->middleware('auth');
+// SHOW EVENT BASED ON ROLE
+// Route::get('/show/event',[
+//         'uses' => 'RequestController@store',
+//         'as' => 'showEventRole',
+// ]);
+
+// APPROVE REQUEST
+// Route::post('/request/approve/{id}',[
+//         'uses' => 'RequestController@store',
+//         'as' => 'EventApproval',
+// ])->middleware('auth');
 
 
-// Route::resource('admin/venue', 'VenueController');
+
+///////////////////// OFFICIALS ////////////////
+// ADD OFFICIALS
+Route::post('/admin/storeOfficial',[
+        'uses' => 'OfficialController@store',
+        'as' => 'storeOfficial',
+]);
+
+Route::post('/request/approve/{id}',[
+        'uses' => 'RequestController@store',
+        'as' => 'showEventRole',
+]);
 
 
 ////////////////================ MOBILE ROUTES ================//////////////////

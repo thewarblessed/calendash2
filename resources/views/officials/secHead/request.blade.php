@@ -115,7 +115,7 @@
                                                 </div>
                                             </td> --}}
                                             <td>
-                                                <p class="text-sm text-dark font-weight-semibold mb-0">{{$event->eventName}}</p>
+                                                <p class="text-sm text-dark font-weight-semibold mb-0" style="margin-left: 16px">{{$event->event_name}}</p>
                                                 
                                             </td>
                                             {{-- <td>
@@ -148,8 +148,10 @@
                                                 
                                             </td> --}}
                                             <td >
-                                                <button type="button" class="btn btn-dark approveBtn" style="width: 110px; height: 40px;" data-bs-toggle="modal" data-id="{{$event->id}}" data-bs-target="#approveRequestModal" id="tableApprove">Approve</button>
-                                                <button type="button" class="btn btn-danger rejectBtn" style="width: 110px; height: 40px;" data-id="{{$event->id}}">Reject</button>
+                                                <div class="text-sm text-dark font-weight-semibold mb-0">
+                                                    <button type="button" class="btn btn-dark approveBtn" style="width: 110px; height: 40px;" data-bs-toggle="modal" data-id="{{$event->id}}" data-bs-target="#approveRequestModal" id="tableApprove">Approve</button>
+                                                    <button type="button" class="btn btn-danger rejectBtn" style="width: 110px; height: 40px;" data-id="{{$event->id}}">Reject</button>
+                                                </div>
                                             </td>
                                             
                                             
@@ -181,14 +183,18 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                     </div>
+                    <div>
+                        <p style="margin-left: 20px">Are you sure you want to Approve this Request?</p>
+                    </div>
                     <div class="modal-body">
                
-                        <form id="eventUpdateForm" enctype="multipart/form-data">
+                        <form id="eventApprovalForm" enctype="multipart/form-data" method="POST" action="{{ url('/api/request/approve/{id}') }}" >
                             @csrf
                             <div class="form-group">
                               <label for="exampleFormControlInput1">Name of the event</label>
+                              <input name="eventAuthId" type="text" class="form-control" id="eventAuthId" value={{Auth::user()->id}} hidden>
                               <input name="eventApproveId" type="text" class="form-control" id="eventApproveId" hidden>
-                              <input name="eventApproveName" type="text" class="form-control" id="eventApproveName" required >
+                              <input name="eventApproveName" type="text" class="form-control" id="eventApproveName" disabled >
                             </div>
                             <div class="form-group">
                                 <label for="exampleFormControlInput1">Description</label>
@@ -197,11 +203,11 @@
                             </div>
                             <div class="form-group">
                                 <label for="exampleFormControlInput1">No. of Participants</label>
-                                <input name="eventApproveParticipants" type="text" class="form-control" id="eventApproveParticipants" required>
+                                <input name="eventApproveParticipants" type="text" class="form-control" id="eventApproveParticipants" disabled>
                             </div>
                             <div class="form-group">
                                 <label for="exampleFormControlInput1">Venue</label>
-                                <input name="eventApproveVenue" type="text" class="form-control" id="eventApproveVenue" required>
+                                <input name="eventApproveVenue" type="text" class="form-control" id="eventApproveVenue" disabled>
                             </div>
                             
                             <div class="form-group">
@@ -214,7 +220,7 @@
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-white" data-bs-dismiss="modal" id="modalClose">Close</button>
-                                <button type="submit" class="btn btn-dark" id="eventUpdate">Approve Request</button>
+                                <a type="" class="btn btn-dark" id="eventApprove">Approve Request</a>
                                 <button type="button" class="btn btn-danger" id="eventReject">Reject</button>
                             </div>
                         </form>
@@ -227,7 +233,10 @@
            
             {{-- <x-app.footer /> --}}
         </div>
-    </main><script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    </main>
+    
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
     <script type="text/javascript" src="/js/alert.js"></script>
+    <script src="sweetalert2.all.min.js"></script>
 </x-app-layout>

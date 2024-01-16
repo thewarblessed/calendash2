@@ -15,17 +15,17 @@
                         <div class="mb-3">
                             <label for="name" class="form-label">Event Name</label>
                             <input type="text" class="form-control" name="eventName" id="eventName"
-                                placeholder="Please enter event name">
+                                placeholder="Please enter event name" required>
                         </div>
                         <div class="mb-3">
                             <label for="eventDesc" class="form-label">Event Description</label>
                             <input type="text" class="form-control" name="eventDesc" id="eventDesc"
-                                placeholder="Please enter event description">
+                                placeholder="Please enter event description" required>
                         </div>
                         <div class="mb-3">
                             <label for="numParticipants" class="form-label">No. of participants</label>
                             <input type="number" class="form-control" name="numParticipants" id="numParticipants"
-                                placeholder="Please enter no. of participants (ex. 100)">
+                                placeholder="Please enter no. of participants (ex. 100)" required>
                         </div>
                     </div>
 
@@ -47,7 +47,7 @@
                                                 <p class="card-text">Capacity: {{ $venue->capacity }}</p>
                                                 <div class="form-check">
                                                     <input class="form-check-input" type="radio" name="event_venue"
-                                                        id="event_venue" value= "{{ $venue->id }}">
+                                                        id="event_venue" value= "{{ $venue->id }}" required>
                                                     <label class="custom-control-label" for="event_venue"
                                                         style="color: blue; font-size: 18px"><strong>SELECT</strong>
                                                     </label>
@@ -65,20 +65,17 @@
                         <h3 style="text-align: center">Set Date and Time</h3>
                         <div class="mb-3">
                             <label for="company_name" class="form-label">Set Date</label>
-                            <input type="date" class="form-control" name="event_date" id="event_date"
-                                placeholder="Please enter company name">
+                            <input type="date" class="form-control" name="event_date" id="event_date" required>
                         </div>
 
                         <div class="row">
                             <div class="mb-3 col-md-6">
                                 <label for="start_time" class="form-label">Set Start Time</label>
-                                <input type="time" class="form-control" name="start_time" id="start_time"
-                                    placeholder="Please enter city">
+                                <input type="time" class="form-control" name="start_time" id="start_time" required>
                             </div>
                             <div class="mb-3 col-md-6">
                                 <label for="end_time" class="form-label">Set End Time</label>
-                                <input type="time" class="form-control" name="end_time" id="end_time"
-                                    placeholder="Please enter state">
+                                <input type="time" class="form-control" name="end_time" id="end_time" required>
                             </div>
                         </div>
                     </div>
@@ -94,8 +91,7 @@
                         <div class="mb-3 col-md-6" style="align-self: center">
                             <center>
                             <label for="request_letter" class="form-label" style="font-size: 18px">Upload Request Letter</label>
-                            <input type="file" class="form-control" name="request_letter" id="request_letter"
-                                placeholder="Please enter state">
+                            <input type="file" class="form-control" name="request_letter" id="request_letter" required>
                             </center>
                         </div>
 

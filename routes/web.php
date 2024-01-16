@@ -7,6 +7,7 @@ use App\Http\Controllers\EventController;
 use App\Http\Controllers\RequestController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CalendarController;
+use App\Http\Controllers\OfficialController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ResetPasswordController;
@@ -158,15 +159,27 @@ Route::get('/texteditor', function () {
     return view('event.editor');
 })->name('multiform')->middleware('auth');
 
+////////////////////  REQUEST APPROVAL
 // ADAA
-// Route::get('/request', function () {
-//     return view('adaa.request');
-// })->name('adaaRequest');
 
 Route::get('/request', [RequestController::class, 'index'])
     ->middleware('auth')
     ->name('adaaRequest');
 
+//  STORE REQUEST APPROVAL
+Route::post('/request/approve/{id}', [RequestController::class, 'store'])
+->middleware('auth')
+->name('EventApproval');
+
+/////////////////////// CREATE OFFICIALS FOR ADMIN /////////////
+// GET ALL OFFICIALS
+Route::get('/admin/officials', [OfficialController::class, 'index'])
+
+    ->name('AdminAllOfficials');
+// CREATE OFFICIALS
+Route::get('/admin/createOfficials', [OfficialController::class, 'create'])
+    ->middleware('auth')
+    ->name('AdminCreateOfficials');
 
 
 

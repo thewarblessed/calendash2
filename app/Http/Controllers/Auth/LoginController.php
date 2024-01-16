@@ -41,10 +41,11 @@ class LoginController extends Controller
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
             $token = $user->createToken(time())->plainTextToken;
+            
             return redirect('/dashboard');
             // return response()->json(["success" => "Login Successfully.", "user" => $user,"status" => 200]);
         }
-
+        Auth::login();
         return back()->withErrors([
             'message' => 'The provided credentials do not match our records.',
         ])->withInput($request->only('email'));

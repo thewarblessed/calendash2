@@ -17,20 +17,21 @@ return new class extends Migration
             $table->foreign('user_id')->references('id')->on('users');
             $table->integer('venue_id')->unsigned()->nullable();
             $table->foreign('venue_id')->references('id')->on('venues');
-            $table->text('eventName');
+            $table->text('event_name');
             $table->text('description');
             $table->date('event_date');
             $table->time('start_time');
             $table->time('end_time');
             $table->integer('participants');
             $table->text('target_dept');
+            $table->string('event_letter')->default('default.pdf');
             $table->text('status');
+            $table->string('sect_head')->nullable();
             $table->string('dept_head')->nullable();
+            $table->string('osa')->nullable();
             $table->string('adaa')->nullable();
             $table->string('atty')->nullable();
             $table->string('campus_director')->nullable();
-            $table->string('osa')->nullable();
-            $table->string('event_letter')->default('default.pdf');
             $table->timestamps();
         });
     }
