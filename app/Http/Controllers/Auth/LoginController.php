@@ -45,7 +45,6 @@ class LoginController extends Controller
             return redirect('/dashboard');
             // return response()->json(["success" => "Login Successfully.", "user" => $user,"status" => 200]);
         }
-        Auth::login();
         return back()->withErrors([
             'message' => 'The provided credentials do not match our records.',
         ])->withInput($request->only('email'));
