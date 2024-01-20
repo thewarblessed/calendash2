@@ -12,6 +12,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
+use App\Http\Controllers\GoogleSocialiteController;
 
 /*
 |--------------------------------------------------------------------------
@@ -181,6 +182,9 @@ Route::get('/admin/createOfficials', [OfficialController::class, 'create'])
     ->middleware('auth')
     ->name('AdminCreateOfficials');
 
+// GOOGLE LOGIN 
+Route::get('auth/google', [GoogleSocialiteController::class, 'redirectToGoogle']);
+Route::get('/callback/google', [GoogleSocialiteController::class, 'handleCallback']);
 
 
 

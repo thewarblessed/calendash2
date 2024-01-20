@@ -53,13 +53,15 @@
                                         </div>
                                         <div class="text-center">
                                             <button type="submit" class="btn btn-dark w-100 mt-4 mb-3">Sign in</button>
-                                            <button type="button" class="btn btn-white btn-icon w-100 mb-3">
+                                            <a href="{{url('auth/google')}}" type="button" class="btn btn-white btn-icon w-100 mb-3">
                                                 <span class="btn-inner--icon me-1">
                                                     <img class="w-5" src="../assets/img/logos/google-logo.svg"
                                                         alt="google-logo" />
                                                 </span>
                                                 <span class="btn-inner--text">Sign in with Google</span>
-                                            </button>
+                                            </a>
+                                            {{-- <a href="{{ url('auth/google') }}" style="margin-top: 0px !important;background: green;color: #ffffff;padding: 5px;border-radius:7px;" class="ml-2">
+                                                <strong>Google Login</strong> --}}
                                         </div>
                                     </form>
                                 </div>
