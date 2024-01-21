@@ -150,7 +150,7 @@
                                             <td >
                                                 <div class="text-sm text-dark font-weight-semibold mb-0">
                                                     <button type="button" class="btn btn-dark approveBtn" style="width: 110px; height: 40px;" data-bs-toggle="modal" data-id="{{$event->id}}" data-bs-target="#approveRequestModal" id="tableApprove">Approve</button>
-                                                    <button type="button" class="btn btn-danger rejectBtn" style="width: 110px; height: 40px;" data-id="{{$event->id}}">Reject</button>
+                                                    <button type="button" class="btn btn-danger rejectBtn" style="width: 110px; height: 40px;" data-id="{{$event->id}}" id="tableReject">Reject</button>
                                                 </div>
                                             </td>
                                             
@@ -192,8 +192,8 @@
                             @csrf
                             <div class="form-group">
                               <label for="exampleFormControlInput1">Name of the event</label>
-                              <input name="eventAuthId" type="text" class="form-control" id="eventAuthId" value={{Auth::user()->id}} hidden>
-                              <input name="eventApproveId" type="text" class="form-control" id="eventApproveId" hidden>
+                              <input name="eventAuthId" type="text" class="form-control" id="eventAuthId" value={{Auth::user()->id}} >
+                              <input name="eventApproveId" type="text" class="form-control" id="eventApproveId" >
                               <input name="eventApproveName" type="text" class="form-control" id="eventApproveName" disabled >
                             </div>
                             <div class="form-group">
@@ -236,7 +236,10 @@
     </main>
     
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="sweetalert2.all.min.js"></script>
+    <script src="sweetalert2.min.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
     <script type="text/javascript" src="/js/alert.js"></script>
     <script src="sweetalert2.all.min.js"></script>
+    <link rel="stylesheet" href="sweetalert2.min.css">
 </x-app-layout>

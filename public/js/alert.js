@@ -226,7 +226,7 @@ $(document).ready(function () {
                 // $ctable.row.add(data.customer).draw(false);
                 // // $etable.row.add(data.client).draw(false);
                 setTimeout(function () {
-                    window.location.href = '/myevents';
+                    window.location.href = '/myEvents';
                 }, 1500);
 
                 Swal.fire({
@@ -243,6 +243,7 @@ $(document).ready(function () {
         //Swal.fire('SweetAlert2 is working!')
     });//end create event
 
+    //REQUEST APPROVAL TABLE
     $("#eventTable tbody").on("click", 'button.approveBtn ', function (e) {
         $('#eventReject').hide();
         // alert('dshagd')
@@ -280,6 +281,7 @@ $(document).ready(function () {
         });
 
         console.log(id)
+        //PDF
         $.ajax({
             type: "GET",
             url: "/api/show/letter/" + id,
@@ -301,9 +303,81 @@ $(document).ready(function () {
                 console.log(error);
             },
         });
+
+
+        //EVENT APPROVE BUTTON
+        $("#eventApprove").on("click", async function (e) {
+            e.preventDefault();
+
+            // console.log($('#eventAuthId').val())
+            var user_id = $('#eventAuthId').val()
+            // var eventAppId = $('#eventApproveId').val()
+            // console.log(eventAppId);
+            // console.log(user_id);
+            // console.log($('#eventApproveVenue').val())
+            // alert('dshadahs')
+            $("#approveRequestModal").modal('hide');
+            const { value: password } = await Swal.fire({
+                title: "Enter your passcode to confirm approval",
+                input: "password",
+                inputLabel: "Passcode",
+                inputPlaceholder: "Enter your passcode",
+                inputAttributes: {
+                maxlength: "10",
+                autocapitalize: "off",
+                autocorrect: "off"
+                }
+            });
+
+            if (password) {   
+                console.log(password)
+                const dataToSend = {
+                    key1: password,
+                    key2: user_id
+                };
+                console.log(dataToSend);
+                $.ajax({
+                    type: "POST",
+                    url: "/api/request/approve/" + id,
+                    data: dataToSend,
+                    headers: {
+                        'Authorization': 'Bearer ' + sessionStorage.getItem('token'),
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function (data) {
+                        console.log(data);
+                        Swal.fire({
+                            icon: "success",
+                            title: "Request has been approved",
+                            showConfirmButton: false,
+                            timer: 1500
+                          });
+
+                    },
+                    error: function (error) {
+                        console.log('error');
+                        Swal.fire({
+                            icon: "error",
+                            title: "Oops...",
+                            text: "Something went wrong!",
+                            footer: '<a href="#">Why do I have this issue?</a>'
+                          });
+                        
+                    }
+                });
+
+                // Swal.fire(`Entered password: ${password}`);
+            }
+        });
+
+
+        
     });//end event table
 
-    $("#officialSubmit").on("click", function (e) {
+    
+
+     //CREATE OFFICIALS
+     $("#officialSubmit").on("click", function (e) {
 
         e.preventDefault();
         // $('#serviceSubmit').show()
@@ -352,27 +426,81 @@ $(document).ready(function () {
         //Swal.fire('SweetAlert2 is working!')
     });//end create official
 
-    
-    $("#eventApprove").on("click", async function (e) {
-        const { value: formValues } = await Swal.fire({
-            title: "Multiple inputs",
-            html: `
-                <input id="swal-input1" class="swal2-input">
-                <input id="swal-input2" class="swal2-input">
-            `,
-            focusConfirm: true, // Set focusConfirm to true if you want to focus on the "Confirm" button
-            preConfirm: () => {
-                return [
-                    document.getElementById("swal-input1").value,
-                    document.getElementById("swal-input2").value
-                ];
-            }
+    // CHECK MORE DATATABLE STATUS REQUEST
+    $("#eventStatus tbody").on("click", 'button.checkMore ', function (e) {
+        // alert('dshagd')
+        var id = $(this).data("id");
+        // e.preventDefault();
+
+        $.ajax({
+            type: "GET",
+            enctype: 'multipart/form-data',
+            processData: false, // Important!
+            contentType: false,
+            cache: false,
+            url: "/api/show/event/" + id,
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
+                    "content"
+                ),
+            },
+            dataType: "json",
+            success: function (data) {
+                var originalDate = new Date(data.events.event_date);
+                var origStime = moment(data.events.start_time, "HH:mm:ss")
+                var origEtime = moment(data.events.end_time, "HH:mm:ss")
+
+                var formattedSTime = origStime.format("h:mm A");
+                var formattedETime = origEtime.format("h:mm A");
+                
+                // Format the date using moment.js
+                var formattedDate = moment(originalDate).format("MMMM D, YYYY");
+                console.log(data);
+                $('#checkMoreModal').modal('show');
+                $('#eventStatusText').text(data.msg);
+                $('#eventStatusName').val(data.events.event_name);
+                $('#eventStatusDesc').val(data.events.description);
+                $('#eventStatusParticipants').val(data.events.participants);
+                $('#eventStatusVenue').val(data.venues.name);
+                $('#eventStatusDate').val(formattedDate);
+                $('#eventStatusSTime').val(formattedSTime);
+                $('#eventStatusETime').val(formattedETime);
+                // $("#venueEditImage").html(
+                // `<img src="/storage/${data.Venues.image}" width="100" class="img-fluid img-thumbnail">`);
+            },
+            error: function (error) {
+                console.log("error");
+            },
         });
-    
-        if (formValues) {
-            Swal.fire(JSON.stringify(formValues));
-        }
-    });
+
+        // console.log(id)
+        // $.ajax({
+        //     type: "GET",
+        //     url: "/api/show/letter/" + id,
+        //     headers: {
+        //         "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+        //     },
+        //     dataType: "json",
+        //     success: function (data) {
+        //         console.log(data);
+        //         var pdfLink = $('<a>', {
+        //             href: "/storage/" + data,
+        //             text: "Click here to view Request Letter",
+        //             target: "_blank",
+        //         });
+        //         // console.log(href)
+        //         $("#viewAnotherTab").empty().append(pdfLink);
+        //     },
+        //     error: function (error) {
+        //         console.log(error);
+        //     },
+        // });
+    });//end event status table
+
+    // $("#eventStatus tbody").on("click", 'button.checkMore ', function (e) {
+        
+    // });
+
 
     // Approve Request
     

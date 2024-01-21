@@ -47,10 +47,15 @@ Route::get('/events', function () {
     return view('event.events');
 })->name('events')->middleware('auth');
 
-// USER CREATE EVENT
-Route::get('/myevents', function () {
-    return view('event.myEvents');
-})->name('myEvents')->middleware('auth');
+// USER STATUS EVENT TABLE
+
+Route::get('/myEvents', [EventController::class, 'statusEvents'])
+    ->name('myEvents')
+    ->middleware('auth');
+
+Route::get('/myEvents/details', function () {
+        return view('event.myEventsStatus');
+    })->name('events.status')->middleware('auth');
 
 // USER CHECK VENUES
 Route::get('/venues', [VenueController::class, 'indexUser'])
@@ -164,7 +169,7 @@ Route::get('/texteditor', function () {
 // ADAA
 
 Route::get('/request', [RequestController::class, 'index'])
-    ->middleware('auth')
+    // ->middleware('auth')
     ->name('adaaRequest');
 
 //  STORE REQUEST APPROVAL

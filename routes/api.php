@@ -109,7 +109,6 @@ Route::get('/show/letter/{id}',[
 // ])->middleware('auth');
 
 
-
 ///////////////////// OFFICIALS ////////////////
 // ADD OFFICIALS
 Route::post('/admin/storeOfficial',[

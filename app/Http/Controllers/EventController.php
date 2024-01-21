@@ -105,6 +105,14 @@ class EventController extends Controller
         // return View::make('event.create', compact('venues'));
     }
 
+    public function statusEvents()
+    {   
+        $eventForUser = Event::orderBy('id')->where('user_id', Auth::id())->get();
+        
+        return View::make('event.myEvents', compact('eventForUser'));
+        
+    }
+
     /**
      * Display the specified resource.
      */
