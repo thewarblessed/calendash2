@@ -189,7 +189,7 @@ Route::get('/admin/createOfficials', [OfficialController::class, 'create'])
 
 // GOOGLE LOGIN 
 Route::get('auth/google', [GoogleSocialiteController::class, 'redirectToGoogle']);
-Route::get('/callback/google', [GoogleSocialiteController::class, 'handleCallback']);
+Route::get('/login/google/callback', [GoogleSocialiteController::class, 'handleCallback']);
 
 
 
