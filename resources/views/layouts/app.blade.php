@@ -66,6 +66,8 @@
     <link href="../assets/css/nucleo-svg.css" rel="stylesheet" />
     <!-- CSS Files -->
     <link id="pagestyle" href="../assets/css/corporate-ui-dashboard.css?v=1.0.0" rel="stylesheet" />
+    {{-- CALENDAR --}}
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js'></script>
 </head>
 
 <body class="g-sidenav-show  bg-gray-100">
@@ -175,7 +177,7 @@
     <script src="../assets/js/plugins/smooth-scrollbar.min.js"></script>
     <script src="../assets/js/plugins/chartjs.min.js"></script>
     <script src="../assets/js/plugins/swiper-bundle.min.js" type="text/javascript"></script>
-    <script src="../dist/fullcalendar/index.global.js"></script>
+    {{-- <script src="../dist/fullcalendar/index.global.js"></script> --}}
     <script>
         if (document.getElementsByClassName('mySwiper')) {
             var swiper = new Swiper(".mySwiper", {

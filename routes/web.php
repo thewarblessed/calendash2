@@ -69,9 +69,13 @@ Route::get('/venues', [VenueController::class, 'indexUser'])
 
 
 // USER CHECK CALENDAR
-Route::get('/calendar', [CalendarController::class, 'myCalendar'])
-    ->name('calendar')
-    ->middleware('auth');
+// Route::get('/calendar', [CalendarController::class, 'myCalendar'])
+//     ->name('calendar')
+//     ->middleware('auth');
+
+Route::get('/calendar', function () {
+    return view('mycalendar');
+})->name('calendar')->middleware('auth');
 
 Route::get('/wallet', function () {
     return view('wallet');
