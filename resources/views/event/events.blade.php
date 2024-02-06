@@ -15,15 +15,7 @@
                             </p>
 
                             <!-- Button trigger modal -->
-                            <button type="button"
-                                class="btn btn-outline-white btn-blur btn-icon d-flex align-items-center mb-0" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                                <span class="btn-inner--icon">
-                                    <i class="fa-solid fa-plus"></i>
-                                </span>
-                                &nbsp;&nbsp;
-                                <span class="btn-inner--text">Create Event</span>
-                            </button>
-                            <img src="../assets/img/3d-cube.png" alt="3d-cube"
+                            <img src="../assets/img/puzzle-iso-gradient.png" alt="3d-cube"
                                 class="position-absolute top-0 end-1 w-25 max-width-200 mt-n6 d-sm-block d-none" />
                         </div>
                     </div>
@@ -31,7 +23,7 @@
             </div>
             
             <!-- Create Event Modal -->
-            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            {{-- <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -72,7 +64,7 @@
                     </div>
                 </div>
                 </div>
-            </div>
+            </div> --}}
             <div class="row">
                 <div class="col-12">
                     <div class="card border shadow-xs mb-4">
