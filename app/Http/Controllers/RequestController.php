@@ -32,25 +32,27 @@ class RequestController extends Controller
         if($user_role === "section_head")
         {
             $pending = Event::orderBy('id')->get();
-            $PenEvents = Event::orderBy('id')->whereNull('sect_head', null)->get();
+            $PenEvents = Event::orderBy('id')->whereNull('sect_head')->get();
             // dd($PenEvents);
             return View::make('officials.secHead.request', compact('pending'));
         }     
         elseif($user_role === "department_head")
         {
             $pending = Event::orderBy('id')->get();
-            $events = Event::orderBy('id')->whereNotNull('sect_head', null)->get();
+            $events = Event::orderBy('id')->whereNotNull('sect_head')->get();
             return View::make('officials.secHead.request', compact('pending'));
         }
         elseif ($user_role === "osa")
         {
-            $pending = Event::orderBy('id')->whereNotNull('dept_head', null)
-                                        ->get();
+            $pending = Event::orderBy('id')->whereNotNull('dept_head')
+                            // ->where('status', 'PENDING')
+                            ->get();
+            // dd($pending);
             return View::make('officials.secHead.request', compact('pending'));
         }
         elseif ($user_role === "adaa")
         {
-            $pending = Event::orderBy('id')->whereNotNull('osa', null)->get();
+            $pending = Event::orderBy('id')->whereNotNull('osa')->get();
             return View::make('officials.secHead.request', compact('pending'));
         }
         elseif ($user_role === "atty")
@@ -66,7 +68,7 @@ class RequestController extends Controller
         elseif ($user_role === "campus_director")
         {
             // hindi dapat lalabas yung sa IT FUNCTION HALL na venue.
-            $pending = Event::orderBy('id')->whereNotNull('adaa', null)->get();
+            $pending = Event::orderBy('id')->whereNotNull('adaa')->get();
             return View::make('officials.secHead.request', compact('pending'));
         }
     }

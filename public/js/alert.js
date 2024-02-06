@@ -660,10 +660,10 @@ $(document).ready(function () {
 
         $('#eventBody tr').show();
 
-
         if (filterValue !== 'all') {
             $('#eventBody tr').each(function () {
-                var rowStatus = $(this).find('td:eq(4)').text().trim(); // Trim whitespace
+                var rowStatus = $(this).find('td:eq(5)').text().trim(); // Trim whitespace // td:eq(3) yung column!
+                console.log(rowStatus);
                 // Check if the row status matches the selected filter
                 if (rowStatus !== filterValue.trim()) {
                     $(this).hide();
