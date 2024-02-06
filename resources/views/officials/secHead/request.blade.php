@@ -7,50 +7,36 @@
                 <div class="col-12">
                     <div class="card border shadow-xs mb-4">
                         <div class="card-header border-bottom pb-0">
-                            <div class="d-sm-flex align-items-center">
+                            <div class="" style="text-align: center">
                                 <div>
                                     <strong><h3>Events list</h3></strong>
                                     <p class="text-sm">See information about all events</p>
-                                </div>
-                                <div class="ms-auto d-flex">
-                                    <button type="button" class="btn btn-sm btn-white me-2">
-                                        View all
-                                    </button>
-                                    <a type="button"
-                                    href="" class="btn btn-sm btn-dark btn-icon d-flex align-items-center me-2">
-                                        <span class="btn-inner--icon">
-                                            <svg width="16" height="16" xmlns="http://www.w3.org/2000/svg"
-                                                viewBox="0 0 24 24" fill="currentColor" class="d-block me-2">
-                                                <path
-                                                    d="M6.25 6.375a4.125 4.125 0 118.25 0 4.125 4.125 0 01-8.25 0zM3.25 19.125a7.125 7.125 0 0114.25 0v.003l-.001.119a.75.75 0 01-.363.63 13.067 13.067 0 01-6.761 1.873c-2.472 0-4.786-.684-6.76-1.873a.75.75 0 01-.364-.63l-.001-.122zM19.75 7.5a.75.75 0 00-1.5 0v2.25H16a.75.75 0 000 1.5h2.25v2.25a.75.75 0 001.5 0v-2.25H22a.75.75 0 000-1.5h-2.25V7.5z" />
-                                            </svg>
-                                        </span>
-                                        <span class="btn-inner--text">Add event</span>
-                                    </a>
                                 </div>
                             </div>
                         </div>
                         <div class="card-body px-0 py-0">
                             <div class="border-bottom py-3 px-3 d-sm-flex align-items-center">
-                                <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
-                                    
-                                    <input type="radio" class="btn-check" name="btnradiotable" id="btnradiotable1"
-                                        autocomplete="off" checked>
-                                    <label class="btn btn-white px-3 mb-0" for="btnradiotable1">Pending</label>
+                                <form id="radioForm">
+                                    <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                                        
+                                        <input type="radio" class="btn-check" name="btnradiotable" id="btnradiotable1" value="PENDING"
+                                            autocomplete="off" >
+                                        <label class="btn btn-white px-3 mb-0" for="btnradiotable1">Pending</label>
 
-                                    <input type="radio" class="btn-check" name="btnradiotable" id="btnradiotable2"
-                                        autocomplete="off">
-                                    <label class="btn btn-white px-3 mb-0" for="btnradiotable2">Approved by Me</label>
+                                        <input type="radio" class="btn-check" name="btnradiotable" id="btnradiotable2" value="appByMe"
+                                            autocomplete="off">
+                                        <label class="btn btn-white px-3 mb-0" for="btnradiotable2">Approved by Me</label>
 
-                                    <input type="radio" class="btn-check" name="btnradiotable" id="btnradiotable3"
-                                        autocomplete="off">
-                                    <label class="btn btn-white px-3 mb-0" for="btnradiotable3">Approved Events</label>
+                                        <input type="radio" class="btn-check" name="btnradiotable" id="btnradiotable3" value="APPROVED"
+                                            autocomplete="off">
+                                        <label class="btn btn-white px-3 mb-0" for="btnradiotable3">Approved Events</label>
 
-                                    <input type="radio" class="btn-check" name="btnradiotable" id="btnradiotable4"
-                                        autocomplete="off" >
-                                    <label class="btn btn-white px-3 mb-0" for="btnradiotable4">All</label>
+                                        <input type="radio" class="btn-check" name="btnradiotable" id="btnradiotable4" value="all"
+                                            autocomplete="off" checked>
+                                        <label class="btn btn-white px-3 mb-0" for="btnradiotable4">All</label>
 
-                                </div>
+                                    </div>
+                                </form>
 
                                 <div class="input-group w-sm-25 ms-auto">
                                     <span class="input-group-text text-body">
@@ -61,11 +47,12 @@
                                             </path>
                                         </svg>
                                     </span>
-                                    <input type="text" class="form-control" placeholder="Search">
+                                    <input type="text" class="form-control" placeholder="Search" id="searchEvent">
                                 </div>
                             </div>
                             <div class="table-responsive p-0">
                                 <table class="table align-items-center mb-0" id="eventTable">
+                                    
                                     <thead class="bg-gray-100">
                                         <tr>
                                             {{-- <th class="text-secondary text-xs font-weight-semibold opacity-15" >Event Name</th>
@@ -99,7 +86,7 @@
                                         </tr>
                                     </thead>
                                     <tbody id="eventBody">
-                                        @foreach($events as $event)
+                                        @foreach($pending as $event)
                                         <tr>
                                             {{-- <td>
                                                 <div class="d-flex px-2 py-1">
@@ -118,10 +105,6 @@
                                                 <p class="text-sm text-dark font-weight-semibold mb-0" style="margin-left: 16px">{{$event->event_name}}</p>
                                                 
                                             </td>
-                                            {{-- <td>
-                                                <p class="text-sm text-dark font-weight-semibold mb-0">{{$event->description}}</p>
-                                                
-                                            </td> --}}
                                             <td>
                                                 <p class="text-sm text-dark font-weight-semibold mb-0">{{Carbon\Carbon::parse($event->event_date)->format('j F, Y')}}</p>
                                                 
@@ -133,6 +116,9 @@
                                             <td>
                                                 <p class="text-sm text-dark font-weight-semibold mb-0">{{Carbon\Carbon::parse($event->end_time)->format('g:i A')}}</p>
                                                 
+                                            </td>
+                                            <td hidden>
+                                                <p class="text-sm text-dark font-weight-semibold mb-0">{{$event->sect_head}}</p>
                                             </td>
                                             <td class="align-middle text-center">
                                                 @if($event->status === "PENDING")
@@ -148,14 +134,19 @@
                                                 
                                             </td> --}}
                                             <td >
+                                                @if($event->status === "APPROVED")
+                                                <div class="text-sm text-dark font-weight-semibold mb-0">
+                                                    <button type="button" class="btn btn-dark viewDetailsBtn" style="width: 150px; height: 40px;" data-bs-toggle="modal" data-id="{{$event->id}}" data-bs-target="#viewDetailsModal" id="tableViewDetails">View Details</button>
+                                                </div>
+                                                @endif
+
+                                                @if($event->status === "PENDING")
                                                 <div class="text-sm text-dark font-weight-semibold mb-0">
                                                     <button type="button" class="btn btn-dark approveBtn" style="width: 110px; height: 40px;" data-bs-toggle="modal" data-id="{{$event->id}}" data-bs-target="#approveRequestModal" id="tableApprove">Approve</button>
                                                     <button type="button" class="btn btn-danger rejectBtn" style="width: 110px; height: 40px;" data-id="{{$event->id}}" id="tableReject">Reject</button>
                                                 </div>
+                                                @endif
                                             </td>
-                                            
-                                            
-                                            
                                         </tr>
                                         @endforeach
 
@@ -192,8 +183,8 @@
                             @csrf
                             <div class="form-group">
                               <label for="exampleFormControlInput1">Name of the event</label>
-                              <input name="eventAuthId" type="text" class="form-control" id="eventAuthId" value={{Auth::user()->id}} >
-                              <input name="eventApproveId" type="text" class="form-control" id="eventApproveId" >
+                              <input name="eventAuthId" type="text" class="form-control" id="eventAuthId" value={{Auth::user()->id}} hidden>
+                              <input name="eventApproveId" type="text" class="form-control" id="eventApproveId" hidden>
                               <input name="eventApproveName" type="text" class="form-control" id="eventApproveName" disabled >
                             </div>
                             <div class="form-group">
@@ -234,12 +225,11 @@
             {{-- <x-app.footer /> --}}
         </div>
     </main>
-    
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+    <script type="text/javascript" src="/js/alert.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="sweetalert2.all.min.js"></script>
     <script src="sweetalert2.min.js"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
-    <script type="text/javascript" src="/js/alert.js"></script>
     <script src="sweetalert2.all.min.js"></script>
     <link rel="stylesheet" href="sweetalert2.min.css">
 </x-app-layout>

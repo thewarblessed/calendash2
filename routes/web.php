@@ -141,6 +141,9 @@ Route::get('/laravel-examples/users-management', [UserController::class, 'index'
 //     return view('event.create');
 // })->name('createEvent')->middleware('auth');
 
+Route::get('/timeline', function () {
+    return view('timeline');
+})->name('timeline');
 
 // CREATE EVENT
 Route::get('/createEvent', [EventController::class, 'showVenues'])

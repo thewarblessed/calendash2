@@ -11,7 +11,7 @@
                     {{-- EVENT DETAILS --}}
                     <div class="tab d-none">
                         <h3 style="text-align: center">Event Details</h3>
-                            <input type="hidden" name="user_id" id="user_id" value="{{Auth::id()}}">
+                        <input type="hidden" name="user_id" id="user_id" value="{{ Auth::id() }}">
                         <div class="mb-3">
                             <label for="name" class="form-label">Event Name</label>
                             <input type="text" class="form-control" name="eventName" id="eventName"
@@ -90,8 +90,10 @@
                         </div>
                         <div class="mb-3 col-md-6" style="align-self: center">
                             <center>
-                            <label for="request_letter" class="form-label" style="font-size: 18px">Upload Request Letter</label>
-                            <input type="file" class="form-control" name="request_letter" id="request_letter" required>
+                                <label for="request_letter" class="form-label" style="font-size: 18px">Upload Request
+                                    Letter</label>
+                                <input type="file" class="form-control" name="request_letter" id="request_letter"
+                                    required>
                             </center>
                         </div>
 
@@ -103,34 +105,21 @@
                         <button type="button" id="back_button" class="btn btn-link" onclick="back()">Back</button>
                         <button type="button" id="next_button" class="btn btn-primary ms-auto"
                             onclick="next()">Next</button>
-                        <button type="submit" id="createEvent_submit" class="btn btn-primary ms-auto">Submit</button>
+                        <button type="submit" id="createEvent_submit"
+                            class="btn btn-primary ms-auto">Submit</button>
                     </div>
                 </div>
             </form>
         </div>
     </main>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
-    {{-- <script src="https://cdn.tiny.cloud/1/efy9kqrdbnc5rwfbz3ogkw1784y0tm6sphy6xvo6iq7azwcf/tinymce/6/tinymce.min.js"
-        referrerpolicy="origin"></script> --}}
+    <script src="https://cdn.tiny.cloud/1/efy9kqrdbnc5rwfbz3ogkw1784y0tm6sphy6xvo6iq7azwcf/tinymce/6/tinymce.min.js"
+        referrerpolicy="origin"></script>
     <script>
-        
         tinymce.init({
-            selector: '#editor',
-            plugins: 'ai tinycomments mentions anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount checklist mediaembed casechange export formatpainter pageembed permanentpen footnotes advtemplate advtable advcode editimage tableofcontents mergetags powerpaste tinymcespellchecker autocorrect a11ychecker typography inlinecss',
-            toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | align lineheight | tinycomments | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
-            tinycomments_mode: 'embedded',
-            tinycomments_author: 'Author name',
-            mergetags_list: [{
-                    value: 'First.Name',
-                    title: 'First Name'
-                },
-                {
-                    value: 'Email',
-                    title: 'Email'
-                },
-            ],
-            ai_request: (request, respondWith) => respondWith.string(() => Promise.reject(
-                "See docs to implement AI Assistant")),
+            selector: 'textarea',
+            plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
+            toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
         });
     </script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

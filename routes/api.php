@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\VenueController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\CalendarController;
+use App\Http\Controllers\RequestController;
 use App\Http\Controllers\Auth\LoginController;
 
 /*
@@ -100,6 +101,10 @@ Route::get('/show/letter/{id}',[
 //CALENDAR
 Route::get('/getCalendars', [CalendarController::class, 'myCalendar'])
     ->name('getCalendar');
+
+//CHECK STATUS BY USER
+Route::get('/myEventStatus/{id}', [RequestController::class, 'checkStatus'])
+    ->name('checkMyEventStatus');
 
 // SHOW EVENT BASED ON ROLE
 // Route::get('/show/event',[

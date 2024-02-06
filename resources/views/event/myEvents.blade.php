@@ -133,7 +133,10 @@
                                                         <div class="ms-2">
                                                             <button type="button" class="btn btn-dark btn-sm checkMore"
                                                                 data-bs-toggle="modal" data-id="{{ $event->id }}"
-                                                                data-bs-target="#checkMoreModal">Check Details</button>
+                                                                data-bs-target="#checkMoreModal">View Details</button>
+                                                            <button type="button" class="btn btn-dark btn-sm checkStatus"
+                                                                data-bs-toggle="modal" data-id="{{ $event->id }}"
+                                                                data-bs-target="#checkStatusModal">View Status</button>
                                                             {{-- <a type="button" class="btn btn-dark btn-sm checkMore" data-bs-toggle="modal" data-id="{{$event->id}}" data-bs-target="#checkMoreModal" id="checkMoreBtn">Check More</a> --}}
                                                             {{-- <button type="button" class="btn btn-dark approveBtn" style="width: 110px; height: 40px;" data-bs-toggle="modal" data-id="{{$event->id}}" data-bs-target="#approveRequestModal" id="tableApprove">Approve</button> --}}
                                                             {{-- <a class="text-dark text-sm mb-0">CHECK</a> --}}
@@ -192,20 +195,8 @@
                     </div>
                     <div class="modal-body">
 
-                        <div class="form-group">
-                            <label for="exampleFormControlInput1">Status</label>
-                            <span id="eventStatusText" name="eventStatusText" style="font-size: 16px"
-                                class="badge badge-sm border border-warning text-warning bg-warning">
-                                <svg width="12" height="12" xmlns="http://www.w3.org/2000/svg"
-                                    viewBox="0 0 24 24" fill="currentColor" class="me-1ca">
-                                    <path fill-rule="evenodd"
-                                        d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 6a.75.75 0 00-1.5 0v6c0 .414.336.75.75.75h4.5a.75.75 0 000-1.5h-3.75V6z"
-                                        clip-rule="evenodd" />
-                                </svg>
-                            </span>
-                            {{-- <input name="eventStatusText" type="text" class="form-control" id="eventStatusText"
-                                readonly> --}}
-                        </div>
+                        
+                        
                         <div class="form-group">
                             <label for="exampleFormControlInput1">Name of the event</label>
                             {{-- <input name="eventAuthId" type="text" class="form-control" id="eventAuthId" value={{Auth::user()->id}} hidden> --}}
@@ -263,6 +254,60 @@
                 </div>
             </div>
         </div>
+
+        <div class="modal fade" id="checkStatusModal" tabindex="-1" role="dialog"
+            aria-labelledby="checkStatusModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2 class="modal-title" id="createeventModalLabel">EVENT STATUS</h2>
+                        <button type="button" class="btn-close text-dark" data-bs-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+
+                        <div class="form-group">
+                            <label for="exampleFormControlInput1">Status</label>
+                            <span id="eventStatusText" name="eventStatusText" style="font-size: 16px"
+                                class="badge badge-sm border border-warning text-warning bg-warning">
+                                <svg width="12" height="12" xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 24 24" fill="currentColor" class="me-1ca">
+                                    <path fill-rule="evenodd"
+                                        d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 6a.75.75 0 00-1.5 0v6c0 .414.336.75.75.75h4.5a.75.75 0 000-1.5h-3.75V6z"
+                                        clip-rule="evenodd" />
+                                </svg>
+                            </span>
+                        </div>
+
+                        <div style="font-size: 14px; background-color:rgb(1, 49, 49); border-radius: 25px; ">
+                            <div class="rightbox">
+                                <div class="rb-container">
+                                  <ul class="rb" id="statusList">
+
+                                    <li class="rb-item" ng-repeat="itembx">
+                                      <div class="timestamp">
+                                        3rd May 2020<br> <span>7:00 PM</span>
+                                      </div>
+                                      <div class="item-title">Approved by OSA.</div>
+                                    </li>
+
+                                  </ul>
+                                </div>
+                              </div>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-white" data-bs-dismiss="modal"
+                                id="modalClose">Close</button>
+                            {{-- <a type="" class="btn btn-dark" id="eventApprove">Approve Request</a>
+                            <button type="button" class="btn btn-danger" id="eventReject">Reject</button> --}}
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
     </main>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
@@ -270,3 +315,67 @@
     <script type="text/javascript" src="/js/alert.js"></script>
     <script src="sweetalert2.all.min.js"></script>
 </x-app-layout>
+
+<style>
+    .rightbox {
+  padding: 0em 34rem 0em 0em;
+  height: 100%;
+}
+
+.rb-container {
+  font-family: "PT Sans", sans-serif;
+  width: 50%;
+  margin: auto;
+  display: block;
+  position: relative;
+}
+
+.rb-container ul.rb {
+  margin: 2.5em 0;
+  padding: 0;
+  display: inline-block;
+}
+
+.rb-container ul.rb li {
+  list-style: none;
+  margin: auto;
+  margin-left: 10em;
+  min-height: 50px;
+  border-left: 1px dashed #fff;
+  padding: 0 0 50px 30px;
+  position: relative;
+}
+
+.rb-container ul.rb li:last-child {
+  border-left: 0;
+}
+
+.rb-container ul.rb li::before {
+  position: absolute;
+  left: -18px;
+  top: -5px;
+  content: " ";
+  border: 8px solid rgba(255, 255, 255, 1);
+  border-radius: 500%;
+  background: #50d890;
+  height: 20px;
+  width: 20px;
+  transition: all 500ms ease-in-out;
+}
+
+.rb-container ul.rb li:hover::before {
+  border-color: #232931;
+  transition: all 1000ms ease-in-out;
+}
+
+ul.rb li .timestamp {
+  color: #00ff77;
+  position: relative;
+  width: 100px;
+  font-size: 12px;
+}
+
+.item-title {
+  color: #fff;
+}
+</style>

@@ -17,6 +17,7 @@ class CalendarController extends Controller
         // $events = Event::orderBy('id')->select('event_name as title','description','event_date as start',)->get();
         $events = Event::orderBy('id')->select('event_name as title','description','status')->selectRaw('CONCAT(event_date, "T", start_time) as start')->selectRaw('CONCAT(event_date, "T", end_time) as end')->get();
         
+        // dd($events);
 
         return response()->json($events);
 

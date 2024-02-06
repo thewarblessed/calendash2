@@ -27,11 +27,17 @@ return new class extends Migration
             $table->string('event_letter')->default('default.pdf');
             $table->text('status');
             $table->string('sect_head')->nullable();
+            $table->timestamp('approved_sec_head_at')->nullable();
             $table->string('dept_head')->nullable();
+            $table->timestamp('approved_dept_head_at')->nullable();
             $table->string('osa')->nullable();
+            $table->timestamp('approved_osa_at')->nullable();
             $table->string('adaa')->nullable();
+            $table->timestamp('approved_adaa_at')->nullable();
             $table->string('atty')->nullable();
+            $table->timestamp('approved_atty_at')->nullable();
             $table->string('campus_director')->nullable();
+            $table->timestamp('approved_campus_director_at')->nullable();
             $table->timestamps();
         });
     }

@@ -76,7 +76,6 @@
                 },
                 initialView: 'dayGridMonth',
                 events: 'api/getCalendars',
-
                 eventClick: function(info) {
                     Swal.fire('Event: ' + info.event.title);
                     // alert('Coordinates: ' + info.jsEvent.pageX + ',' + info.jsEvent.pageY);
@@ -84,29 +83,7 @@
 
                     // change the border color just for fun
                     info.el.style.borderColor = 'red';
-                }
-                // editable: true,
-                // events: [{
-                //         title: 'event1',
-                //         start: '2024-01-01'
-                //     },
-                //     {
-                //         title: 'event2',
-                //         start: '2024-01-05',
-                //         end: '2024-01-07'
-                //     },
-                //     {
-                //         title: 'New Event',
-                //         start: '2024-01-27T10:00:00', // Replace with the start date and time of your event
-                //         end: '2024-01-27T12:00:00', // Replace with the end date and time of your event
-                //         editable: true,
-                //     },
-                //     {
-                //         title: 'event3',
-                //         start: '2024-01-09T12:30:00',
-                //         allDay: false // will make the time show
-                //     }
-                // ]
+                },
 
             });
             calendar.render();
@@ -120,6 +97,4 @@
 
         });
     </script>
-
-
 </x-app-layout>
