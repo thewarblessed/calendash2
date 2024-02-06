@@ -77,7 +77,8 @@
                 initialView: 'dayGridMonth',
                 events: 'api/getCalendars',
                 eventClick: function(info) {
-                    Swal.fire('Event: ' + info.event.title);
+                    Swal.fire('Event: ' + info.event.title, 'Status: ' + info.event.extendedProps.status);
+                    // Swal.fire();
                     // alert('Coordinates: ' + info.jsEvent.pageX + ',' + info.jsEvent.pageY);
                     // alert('View: ' + info.view.type);
 
