@@ -101,6 +101,10 @@ Route::get('/show/letter/{id}',[
 //CALENDAR
 Route::get('/getCalendars', [CalendarController::class, 'myCalendar'])
     ->name('getCalendar');
+    
+//CALENDAR EVENT DETAILS
+Route::get('/getCalendarEvent/{id}', [CalendarController::class, 'myCalendarDetails'])
+->name('getCalendarEvent');
 
 //CHECK STATUS BY USER
 Route::get('/myEventStatus/{id}', [RequestController::class, 'checkStatus'])

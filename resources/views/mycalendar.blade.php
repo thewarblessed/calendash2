@@ -16,9 +16,10 @@
                             </p>
 
                             <!-- Button trigger modal -->
-                            
+
                             <img src="../assets/img/calender-iso-gradient.png" alt="3d-cube"
-                                class="position-absolute top-0 end-1 w-25 max-width-200 mt-n6 d-sm-block d-none" style="width: 350px; height: 300px;"/>
+                                class="position-absolute top-0 end-1 w-25 max-width-200 mt-n6 d-sm-block d-none"
+                                style="width: 350px; height: 250px;" />
                         </div>
                     </div>
                 </div>
@@ -69,14 +70,77 @@
                 initialView: 'dayGridMonth',
                 events: 'api/getCalendars',
                 eventClick: function(info) {
-                    Swal.fire('Event: ' + info.event.title, 'Status: ' + info.event.extendedProps.status);
-                    // Swal.fire();
-                    // alert('Coordinates: ' + info.jsEvent.pageX + ',' + info.jsEvent.pageY);
-                    // alert('View: ' + info.view.type);
-
-                    // change the border color just for fun
+                    console.log(info.event.id)
+                    var id = info.event.id;
+                    $.ajax({
+                        url: 'api/getCalendarEvent/' + id,
+                        method: 'GET',
+                        data: {
+                            eventId: info.event.id // Pass any necessary data, such as the event ID
+                        },
+                        success: function(response) {
+                            var data = response;
+                            console.log(data)
+                            // Handle the successful response from the server
+                            Swal.fire({
+                                title: 'Event Details',
+                                html:'Status: <strong>' + info.event.extendedProps.status +
+                                    '</strong><br>' +
+                                    'Event: <strong>' + info.event.title + '</strong><br>' +
+                                    'Start Time: <strong>' + info.event.start
+                                    .toLocaleTimeString([], {
+                                        hour: '2-digit',
+                                        minute: '2-digit'
+                                    }) + '</strong><br>' +
+                                    'End Time: <strong>' + info.event.end
+                                    .toLocaleTimeString([], {
+                                        hour: '2-digit',
+                                        minute: '2-digit'
+                                    }) + '</strong><br>' +
+                                    'Location: <strong>' + data.name + '</strong><br>' +
+                                    'Organization: <strong>' + data.studOrg + '</strong><br>' +
+                                    'Department: <strong>' + data.department +'</strong>',  
+                                showCloseButton: true,
+                                showConfirmButton: false,
+                            });
+                        },
+                        error: function(xhr, status, error) {
+                            // Handle errors
+                            console.error('Error fetching event data:', error);
+                        }
+                    });
                     info.el.style.borderColor = 'red';
                 },
+                eventContent: function(info) {
+                    // Create the basic event structure
+                    return {
+                        html: `
+                <span class="event-dot"></span>
+                <span class="event-${info.event.extendedProps.status}">${info.event.title}: ${info.event.extendedProps.status}</span> 
+                <span class="event-color"></span>
+            `,
+                        classList: ['event'], // Base class for all events
+                        extendedProps: event // Pass event data to the DOM node
+                    };
+                }
+                // eventColor: function(event) {
+                //     console.log(event.status);
+                //     if (event.status === 'Pending') {
+                //         return '#f9c275'; // Light orange for pending
+                //     } else if (event.status === 'Confirmed') {
+                //         return '#4caf50'; // Green for confirmed
+                //     } else if (event.status === 'Canceled') {
+                //         return '#d32f2f'; // Red for canceled
+                //     } else {
+                //         return '#ccc'; // Default color for unknown status
+                //     }
+                // },
+                // eventRender: function(info) {
+                //     if (info.event.status === 'Canceled') {
+                //         info.el.classList.add('strikethrough'); // Add strikethrough for canceled events
+                //     }
+                //     // Add more styles for other statuses if needed
+                // }
 
             });
             calendar.render();
@@ -90,4 +154,35 @@
 
         });
     </script>
+    <style>
+        .event {
+            display: flex;
+            align-items: center;
+        }
+
+        .event-dot {
+            width: 10px;
+            height: 10px;
+            margin-right: 5px;
+            border-radius: 50%;
+            background-color: #6119d6;
+        }
+
+        .event-PENDING {
+            font-size: 13px;
+            font-weight: 600;
+            padding: 5px;
+            border-radius: 5px;
+            background-color: #f9c275;
+        }
+
+        .event-APPROVED {
+            font-size: 13px;
+            font-weight: 600;
+            padding: 5px;
+            border-radius: 5px;
+            background-color: #f9c275;
+            background-color: #4caf50;
+        }
+    </style>
 </x-app-layout>
