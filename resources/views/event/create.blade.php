@@ -172,32 +172,138 @@
         }
 
         ////// DATE  ///////
-        const today = new Date().toISOString().split('T')[0];
-        document.getElementById('event_date').min = today;
+        // const today = new Date().toISOString().split('T')[0];
+        // document.getElementById('event_date').min = today;
+
+        const today = new Date();
+        const oneWeekLater = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000); // Calculate one week later
+        const minDate = oneWeekLater.toISOString().split('T')[0];
+        document.getElementById('event_date').min = minDate;
+
+        // $(function() {
+        //     var minDate = new Date();
+        //     minDate.setDate(today.getDate() + 7); // Set min date to 7 days ahead
+
+        //     $("#event_date").datepicker({
+        //         minDate: minDate
+        //     });
+        // });
 
         //// TIME /////
-        function isDisabledTime(time) {
-            // Add your condition here
-            // For example, let's disable times between 12:00 PM and 1:00 PM
-            const disabledStart = '12:00';
-            const disabledEnd = '13:00';
+        var blockedTimeRanges = [{
+                start: '01:00',
+                end: '05:00'
+            }, // Block from 1:00 AM to 5:00 AM
+            {
+                start: '19:00',
+                end: '23:00'
+            }, // Block from 7:00 PM to 11:00 PM
+            // Add more time ranges as needed
+        ]; // For example
 
-            return time >= disabledStart && time <= disabledEnd;
+        function isTimeInRange(time, ranges) {
+            var selectedTime = time.split(':').map(Number); // Convert selected time to hours and minutes
+
+            for (var i = 0; i < ranges.length; i++) {
+                var startTime = ranges[i].start.split(':').map(Number);
+                var endTime = ranges[i].end.split(':').map(Number);
+
+                // Check if selected time falls within the current range
+                if (
+                    selectedTime[0] > startTime[0] ||
+                    (selectedTime[0] === startTime[0] && selectedTime[1] >= startTime[1])
+                ) {
+                    if (
+                        selectedTime[0] < endTime[0] ||
+                        (selectedTime[0] === endTime[0] && selectedTime[1] < endTime[1])
+                    ) {
+                        return true; // Time is within blocked range
+                    }
+                }
+            }
+
+            return false; // Time is not within any blocked range
         }
 
-        // Attach an event listener to the time picker
-        document.getElementById('start_time').addEventListener('input', function() {
-            const selectedTime = this.value;
-
-            // Check if the selected time is disabled
-            if (isDisabledTime(selectedTime)) {
-                Swal.fire({
-                    icon: "error",
-                    title: "Oops...",
-                    text: "That time is not available!"
-                });
-                this.value = ''; // Clear the input value
-            }
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('start_time').addEventListener('change', function() {
+                var selectedTime = this.value;
+                if (isTimeInRange(selectedTime, blockedTimeRanges)) {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Oops...",
+                        text: "Thats beyond the school timeframe!"
+                    });
+                    this.value = '';
+                    // Reset the value or perform other actions as needed
+                }
+            });
         });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('end_time').addEventListener('change', function() {
+                var selectedTime = this.value;
+                if (isTimeInRange(selectedTime, blockedTimeRanges)) {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Oops...",
+                        text: "Thats beyond the school timeframe!"
+                    });
+                    this.value = '';
+                    // Reset the value or perform other actions as needed
+                }
+            });
+        });
+
+        // Function to check if a time is blocked
+        // function isBlockedTime(time) {
+        //     return blockedTimeRanges.includes(time);
+        // }
+
+        // // Handle timepicker change event
+        // document.getElementById('start_time').addEventListener('change', function() {
+        //     var selectedTime = this.value;
+        //     if (isBlockedTime(selectedTime)) {
+        //         // Time is blocked, reset to a default value or display a message
+        //         this.value = ''; // Reset to empty value
+        //         alert('This time is blocked.');
+        //     }
+        // });
+
+        // document.getElementById('end_time').addEventListener('change', function() {
+        //     var selectedTime = this.value;
+        //     if (isBlockedTime(selectedTime)) {
+        //         // Time is blocked, reset to a default value or display a message
+        //         this.value = ''; // Reset to empty value
+        //         alert('This time is blocked.');
+        //     }
+        // });
+
+
+
+
+        // function isDisabledTime(time) {
+        //     // Add your condition here
+        //     // For example, let's disable times between 12:00 PM and 1:00 PM
+        //     const disabledStart = '12:00';
+        //     const disabledEnd = '13:00';
+
+        //     return time >= disabledStart && time <= disabledEnd;
+        // }
+
+        // // Attach an event listener to the time picker
+        // document.getElementById('start_time').addEventListener('input', function() {
+        //     const selectedTime = this.value;
+
+        //     // Check if the selected time is disabled
+        //     if (isDisabledTime(selectedTime)) {
+        //         Swal.fire({
+        //             icon: "error",
+        //             title: "Oops...",
+        //             text: "That time is not available!"
+        //         });
+        //         this.value = ''; // Clear the input value
+        //     }
+        // });
     </script>
 </x-app-layout>
