@@ -62,6 +62,11 @@ Route::get('/venues', [VenueController::class, 'indexUser'])
     ->name('venues.indexUser')
     ->middleware('auth');
 
+// COMPLETE PROFILE
+Route::get('/completeProfile', function () {
+    return view('completeProfile');
+})->name('completeProfile')->middleware('auth');
+
         // FOR REFERENCE SEARCH
 // Route::get('/search', function () {
 //     return view('event.new');

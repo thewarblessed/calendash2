@@ -123,25 +123,6 @@
                         extendedProps: event // Pass event data to the DOM node
                     };
                 }
-                // eventColor: function(event) {
-                //     console.log(event.status);
-                //     if (event.status === 'Pending') {
-                //         return '#f9c275'; // Light orange for pending
-                //     } else if (event.status === 'Confirmed') {
-                //         return '#4caf50'; // Green for confirmed
-                //     } else if (event.status === 'Canceled') {
-                //         return '#d32f2f'; // Red for canceled
-                //     } else {
-                //         return '#ccc'; // Default color for unknown status
-                //     }
-                // },
-                // eventRender: function(info) {
-                //     if (info.event.status === 'Canceled') {
-                //         info.el.classList.add('strikethrough'); // Add strikethrough for canceled events
-                //     }
-                //     // Add more styles for other statuses if needed
-                // }
-
             });
             calendar.render();
 
@@ -160,7 +141,7 @@
             align-items: center;
         }
 
-        .event-dot {
+        .event-dot{
             width: 10px;
             height: 10px;
             margin-right: 5px;
