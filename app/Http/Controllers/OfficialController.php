@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use App\Models\Official;
@@ -57,8 +58,9 @@ class OfficialController extends Controller
         
         $files = $request->file('image');
         $officials->esign = 'images/'.time().'-'.$files->getClientOriginalName();
-        Storage::put('public/images/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
         $officials->save();
+        Storage::put('public/images/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
+        
         // dd($officials);
 
         return response()->json(["user" => $user, "officials" => $officials, "status" => 200]);
