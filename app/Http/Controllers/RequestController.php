@@ -29,10 +29,17 @@ class RequestController extends Controller
             
         $user_role = Auth::user()->role;
         
-        if($user_role === "section_head")
+        if($user_role === "org_adviser")
         {
             $pending = Event::orderBy('id')->get();
-            $PenEvents = Event::orderBy('id')->whereNull('sect_head')->get();
+            $PenEvents = Event::orderBy('id')->whereNull('org_adviser')->get();
+            // dd($PenEvents);
+            return View::make('officials.secHead.request', compact('pending'));
+        }   
+        elseif($user_role === "section_head")
+        {
+            $pending = Event::orderBy('id')->get();
+            $PenEvents = Event::orderBy('id')->whereNotNull('org_adviser')->get();
             // dd($PenEvents);
             return View::make('officials.secHead.request', compact('pending'));
         }     
@@ -109,7 +116,27 @@ class RequestController extends Controller
         // if ($role->)
         if($venue === 'IT HALL')
         {
-            if($role === 'section_head')
+            if($role === 'org_adviser')
+                {
+                    if ($hashedPasswordFromDatabase && Hash::check($password, $hashedPasswordFromDatabase->hash)) {
+                        // Passwords match, proceed with authentication logic
+                        // echo "Password Match";
+                        $users = User::find($user_id);
+                        $officials = Official::join('users', 'users.id', 'officials.user_id')->where('users.id', $user_id)->first();
+                        $events = Event::find($event_id);
+                        $events->sect_head = $officials->hash;
+                        $events->updated_at = now();
+                        $events->save();
+                        return response()->json(["message" => 'Request handled successfully']);
+                        // return response()->json(['message' => 'Request handled successfully']);
+                    } else {
+                        // Passwords do not match, handle invalid password
+                        // echo "Password Does Not Match";
+                        return response()->json(['error' => 'Invalid passcode'], 422);
+                    }
+            
+                }
+            elseif($role === 'section_head')
                 {
                     if ($hashedPasswordFromDatabase && Hash::check($password, $hashedPasswordFromDatabase->hash)) {
                         // Passwords match, proceed with authentication logic
@@ -222,7 +249,27 @@ class RequestController extends Controller
         }
         else
         {
-            if($role === 'section_head')
+            if($role === 'org_adviser')
+                {
+                    if ($hashedPasswordFromDatabase && Hash::check($password, $hashedPasswordFromDatabase->hash)) {
+                        // Passwords match, proceed with authentication logic
+                        // echo "Password Match";
+                        $users = User::find($user_id);
+                        $officials = Official::join('users', 'users.id', 'officials.user_id')->where('users.id', $user_id)->first();
+                        $events = Event::find($event_id);
+                        $events->sect_head = $officials->hash;
+                        $events->approved_sec_head_at = now();
+                        $events->save();
+                        return response()->json(["message" => 'Request handled successfully']);
+                        // return response()->json(['message' => 'Request handled successfully']);
+                    } else {
+                        // Passwords do not match, handle invalid password
+                        // echo "Password Does Not Match";
+                        return response()->json(['error' => 'Invalid passcode'], 422);
+                    }
+            
+                }
+             elseif($role === 'section_head')
                 {
                     if ($hashedPasswordFromDatabase && Hash::check($password, $hashedPasswordFromDatabase->hash)) {
                         // Passwords match, proceed with authentication logic

@@ -39,10 +39,11 @@
                                     <div class="form-group">
                                     <label>Position</label>
                                     <select class="form-control form-control-lg" id="official_role" name="official_role">
+                                        <option value="org_adviser">Organization Head</option>
                                         <option value="section_head">Section Head</option>
                                         <option value="department_head">Department Head</option>
                                         <option value="osa">OSA</option>
-                                        <option value="atty">Atty</option>
+                                        <option value="atty">ATTY</option>
                                         <option value="adaa">ADAA</option>
                                         <option value="campus_director">Campus Director</option>
                                       </select>

@@ -14,7 +14,7 @@
                 <a class="nav-link  {{ is_current_route('dashboard') ? 'active' : '' }}"
                     href="{{ route('dashboard') }}">
                     <i class="fa-solid fa-gauge" style="color: {{ is_current_route('dashboard') ? '#774dd3' : 'defaultColor' }};font-size: 18px;"></i>
-                    <span class="nav-link-text ms-1">Dashboard</span>
+                    <span class="nav-link-text ms-1">DASHBOARD</span>
                 </a>
             </li>
             

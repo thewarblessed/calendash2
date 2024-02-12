@@ -26,6 +26,8 @@ return new class extends Migration
             $table->text('target_dept');
             $table->string('event_letter')->default('default.pdf');
             $table->text('status');
+            $table->string('org_adviser')->nullable();
+            $table->timestamp('approved_org_adviser_at')->nullable();
             $table->string('sect_head')->nullable();
             $table->timestamp('approved_sec_head_at')->nullable();
             $table->string('dept_head')->nullable();

@@ -28,6 +28,7 @@ class Event extends Model
         "target_dept",
         "event_letter",
         "status",
+        "org_adviser",
         "sect_head",
         "dept_head",
         "osa",
