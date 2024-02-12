@@ -54,6 +54,10 @@ class OfficialController extends Controller
         $officials = new Official();
         $officials->user_id = $lastid;
         $officials->hash = Hash::make($request->passcode);
+        
+        $files = $request->file('image');
+        $officials->esign = 'images/'.time().'-'.$files->getClientOriginalName();
+        Storage::put('public/images/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
         $officials->save();
         // dd($officials);
 

@@ -53,6 +53,11 @@
                                         <label>Desired Passcode</label>
                                       <input type="password" class="form-control" name="passcode" id="passcode" required>
                                     </div>
+
+                                    <div class="form-group">
+                                        <label>Upload Image</label>
+                                      <input type="file" class="form-control" id="image" name="image"required>
+                                    </div>  
                                 
                                 {{-- <div class="row">
                                   <div class="col-md-6">

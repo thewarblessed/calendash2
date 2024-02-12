@@ -17,6 +17,7 @@ class Official extends Model
 
     protected $fillable = [
         "user_id",
+        "esign",
         "hash"
     ];
 
