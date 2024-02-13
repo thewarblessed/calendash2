@@ -11,21 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('students', function (Blueprint $table) {
+        Schema::create('pending_users', function (Blueprint $table) {
             $table->increments('id');
-            $table->text('tupID');
-            $table->text('lastname');
-            $table->text('firstname');
-            $table->text('course')->nullable();
+            $table->string('lastname');
+            $table->string('firstname');
             $table->text('department');
-            $table->text('studOrg');
-            $table->text('yearlevel')->nullable();
-            $table->text('section')->nullable();
-            $table->string('image')->default('student.jpg');
+            $table->text('organization');
+            $table->text('tupID');
             $table->integer('user_id')->unsigned()->nullable();
             $table->foreign('user_id')->references('id')->on('users');
+            $table->string('role');
+            $table->rememberToken();
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 
@@ -34,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('students');
+        Schema::dropIfExists('pending_users');
     }
 };

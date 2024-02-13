@@ -26,7 +26,7 @@
                         <div class="card mb-4">
                             <div class="card-header">Profile Details</div>
                             <div class="card-body">
-                                <form>
+                                <form role="form" id="compeleteProfileForm" enctype="multipart/form-data">
                                     <!-- Form Group (username)-->
                                     {{-- <div class="mb-3">
                                         <label class="small mb-1" for="inputUsername">Username (how your name will appear to other users on the site)</label>
@@ -37,34 +37,41 @@
                                         <!-- Form Group (first name)-->
                                         <div class="col-md-6">
                                             <label class="small mb-1" for="inputFirstName">First name</label> 
-                                            <input class="form-control" id="inputFirstName" name="fname" type="text" placeholder="Enter your first name" value="">
+                                            <input class="form-control" id="inputFirstName" name="firstname" type="text" placeholder="Enter your first name" value="{{Auth::user()->name}}" required>
+                                            <input class="form-control" id="inputFirstName" name="user_id" type="text" placeholder="Enter your first name" value="{{Auth::user()->id}}" hidden>
                                         </div>
                                         <!-- Form Group (last name)-->
                                         <div class="col-md-6">
                                             <label class="small mb-1" for="inputLastName">Last name</label>
-                                            <input class="form-control" id="inputLastName" name="lname" type="text" placeholder="Enter your last name" value="">
+                                            <input class="form-control" id="inputLastName" name="lastname" type="text" placeholder="Enter your last name" value="" required>
                                         </div>
                                     </div>
                                     <!-- Form Row        -->
                                     <div class="row gx-3 mb-3">
+                                        <!-- Form Group (department)-->
+                                        <div class="col-md-6">
+                                            <label class="small mb-1" for="inputDepartment">Select Department</label>
+                                            <select class="form-control form-control-lg" id="department" name="department">
+                                                <option value="BASD">BASD</option>
+                                                <option value="CAAD">CAAD</option>
+                                                <option value="EAAD">EAAD</option>
+                                                <option value="MAAD">MAAD</option>
+                                                <option value="STAFF">STAFF/ADMIN</option>
+                                              </select>
+                                        </div>
                                         <!-- Form Group (organization name)-->
                                         <div class="col-md-6">
                                             <label class="small mb-1" for="inputOrgName">Organization name</label>
-                                            <input class="form-control" id="inputOrgName" type="text" placeholder="Enter your organization name" value="">
-                                        </div>
-                                        <!-- Form Group (location)-->
-                                        <div class="col-md-6">
-                                            <label class="small mb-1" for="inputLocation">Location</label>
-                                            <input class="form-control" id="inputLocation" type="text" placeholder="Enter your location" value="">
+                                            <input class="form-control" id="inputOrgName" name="organization" type="text" placeholder="Enter your organization name" value="" required>
                                         </div>
                                     </div>
                                     <!-- Form Group (email address)-->
                                     <div class="mb-3">
-                                        <label class="small mb-1" for="inputEmailAddress">Email address</label>
-                                        <input class="form-control" id="inputEmailAddress" type="email" placeholder="Enter your email address" value="">
+                                        <label class="small mb-1" for="inputEmailAddress">TUP ID</label>
+                                        <input class="form-control" id="inputEmailAddress" name="tupID" type="text" placeholder="Enter your TUP ID (ex. TUPT-XX-XXXX)" value="" required>
                                     </div>
                                     <!-- Form Row-->
-                                    <div class="row gx-3 mb-3">
+                                    {{-- <div class="row gx-3 mb-3">
                                         <!-- Form Group (phone number)-->
                                         <div class="col-md-6">
                                             <label class="small mb-1" for="inputPhone">Phone number</label>
@@ -75,9 +82,9 @@
                                             <label class="small mb-1" for="inputBirthday">Birthday</label>
                                             <input class="form-control" id="inputBirthday" type="text" name="birthday" placeholder="Enter your birthday" value="">
                                         </div>
-                                    </div>
+                                    </div> --}}
                                     <!-- Save changes button-->
-                                    <button class="btn btn-primary" type="button">Save changes</button>
+                                    <button class="btn btn-primary" type="button" id="completeProfileSubmit">Save changes</button>
                                 </form>
                             </div>
                         </div>
@@ -86,5 +93,7 @@
             </div>
         </div>
     </main>
-
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+    <script type="text/javascript" src="/js/alert.js"></script>
 </x-app-layout>

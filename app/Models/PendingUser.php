@@ -5,11 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Student extends Model
+class PendingUser extends Model
 {
     use HasFactory;
 
-    public $table = "students";
+    public $table = "pending_users";
     public $timestamps = false;
     public $primaryKey = "id";
     public $guarded = [
@@ -20,15 +20,8 @@ class Student extends Model
         "firstname",
         "lastname",
         "tupId",
-        "course",
-        "yearLevel",
         "department",
-        "section",
-        "studOrg",
+        "organization",
         "user_id"
     ];
-
-    public function user() {
-        return $this->belongsTo('App\Models\User');
-    }
 }

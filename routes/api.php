@@ -135,6 +135,27 @@ Route::post('/request/approve/{id}',[
         'as' => 'showEventRole',
 ]);
 
+///////////////////// USERS ////////////////
+// COMPLETION OF USER PROFILES
+Route::post('/users/storeCompleteProfile',[
+        'uses' => 'UserController@completeProfile',
+        'as' => 'userCompleteProfile',
+]);
+
+Route::post('/admin/confirmPendingUsers/{id}',[
+        'uses' => 'UserController@confirmPendingUsers',
+        'as' => 'approveAccount',
+]);
+// get single User
+Route::get('/admin/getUser/{id}',[
+        'uses' => 'UserController@getUser',
+        'as' => 'getSingleUser',
+]);
+// edit role
+Route::post('/admin/editRole/{id}',[
+        'uses' => 'UserController@editRole',
+        'as' => 'updateUserRole',
+]);
 
 ////////////////================ MOBILE ROUTES ================//////////////////
 //REGISTRATION MOBILE

@@ -199,6 +199,16 @@ Route::get('/admin/createOfficials', [OfficialController::class, 'create'])
     ->middleware('auth')
     ->name('AdminCreateOfficials');
 
+    /////////////////////// COMPLETE USER PROFILES FOR ADMIN /////////////
+// GET ALL OFFICIALS
+Route::get('/admin/pendingUsers', [UserController::class, 'pendingUsers'])
+->name('pendingUsers');
+// // CREATE OFFICIALS
+// Route::get('/admin/createOfficials', [OfficialController::class, 'create'])
+// ->middleware('auth')
+// ->name('AdminCreateOfficials');
+
+
 // GOOGLE LOGIN 
 Route::get('auth/google', [GoogleSocialiteController::class, 'redirectToGoogle']);
 Route::get('/login/google/callback', [GoogleSocialiteController::class, 'handleCallback']);

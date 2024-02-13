@@ -370,11 +370,7 @@ $(document).ready(function () {
             }
         });
 
-
-
     });//end event table
-
-
 
     //CREATE OFFICIALS
     $("#officialSubmit").on("click", function (e) {
@@ -647,8 +643,6 @@ $(document).ready(function () {
         });
     });
 
-
-
     $('#radioForm input').change(function () {
         // alert($('input[name=btnradiotable]:checked', '#radioForm').val());
 
@@ -679,143 +673,169 @@ $(document).ready(function () {
         }
     });
 
-    // if (filterValue === 'PENDING') {
-    //     $('#eventBody tr').each(function () {
-    //         var rowStatus = $(this).find('td:eq(4)').text(); // Assuming status is in the 5th column
-    //         // Check if the row status matches the selected filter
-    //         if (rowStatus !== filterValue) {
-    //             $(this).show();
-    //         }
-    //     });
-    // }
+    $("#completeProfileSubmit").on("click", function (e) {
 
+        e.preventDefault();
+        var data = $('#compeleteProfileForm')[0];
+        console.log(data);
+        let formData = new FormData($('#compeleteProfileForm')[0]);
+        console.log(formData);
 
-    // $('#eventBody tr').each(function () {
-    //     var rowText = $(this).text().toLowerCase();
-    //     console.log(rowText);
-    //     // If the row contains the search term and matches the selected course, show the row; otherwise, hide it
-    //     if (rowText.includes(searchTerm) && (selectedCourse === 'all' || rowText.includes(selectedCourse))) {
-    //         $(this).show();
-    //     } else {
-    //         $(this).hide();
-    //     }
-    // });
-
-    // $("#searchEvent").on("keyup", function () {
-    //     console.log('test')
-    // });
-
-    // if (filterValue === 'pending') {
-
-    //     // alert('pending');
-    // }
-    // else if (filterValue === 'appByMe')
-    // {
-    //     // alert('appByMe');
-    // }
-    // else if (filterValue === 'appEvents')
-    // {
-    //     // alert('appEvents');
-    // }
-    // else
-    // {
-    //     // alert('all');
-    // }
-
-
-
-
-
-
-    // Handle the filter based on the selected radio button
-    // if (filterValue === '1') {
-    //     // Handle Pending filter
-    // } else if (filterValue === '2') {
-    //     // Handle Approved by Me filter
-    // } else if (filterValue === '3') {
-    //     // Handle Approved Events filter
-    // } else if (filterValue === '4') {
-    //     // Handle All filter
-    // }
-
-
-    // $('#btnradiotable1').on("click", function (e) {
-    //     alert('dsasda');
-    // })
-
-    $('#eventApprovalForm input').change(function () {
-
-        alert($('input[name=btnradiotable]:checked', '#eventApprovalForm').val());
-        // alert('dshagd')
-        var filterValue = $(this).attr('id').substring(14); // Extract the filter value from the radio button id
-
-        // Handle the filter based on the selected radio button
-        if (filterValue === '1') {
-            alert(1);
-            // Handle Pending filter
-            // Perform actions, update UI, or make AJAX request as needed
-        } else if (filterValue === '2') {
-            alert(1);
-            // Handle Approved by Me filter
-            // Perform actions, update UI, or make AJAX request as needed
-        } else if (filterValue === '3') {
-            alert(1);
-            // Handle Approved Events filter
-            // Perform actions, update UI, or make AJAX request as needed
-        } else if (filterValue === '4') {
-            alert(1);
-            // Handle All filter
-            // Perform actions, update UI, or make AJAX request as needed
+        for (var pair of formData.entries()) {
+            console.log(pair[0] + ',' + pair[1]);
         }
+        console.log(formData)
+        $.ajax({
+            type: "POST",
+            url: "/api/users/storeCompleteProfile",
+            data: formData,
+            contentType: false,
+            processData: false,
+            headers: {
+                'Authorization': 'Bearer ' + sessionStorage.getItem('token'),
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            dataType: "json",
+            success: function (data) {
+                console.log(data);
+                Swal.fire({
+                    icon: "success",
+                    title: "Account approval is underway. Your patience is appreciated as we verify the details you've provided.",
+                    showConfirmButton: false,
+                    timer: 4500
+                  });
+                // var $ctable = $('#ctable').DataTable();
+                // $ctable.ajax.reload();
+                // $ctable.row.add(data.customer).draw(false);
+                // // $etable.row.add(data.client).draw(false);
+                setTimeout(function () {
+                    window.location.href = '/dashboard';
+                }, 2500);
+            },
+            error: function (error) {
+                console.log('error');
+            }
+        });
+        
+    });//end create
+
+    $("#pendingUsersTable tbody").on("click", 'button.approveAccount ', function (e) {
+        var id = $(this).data("id");
         // e.preventDefault();
+        console.log(id);
+        $.ajax({
+            type: "POST",
+            enctype: 'multipart/form-data',
+            processData: false, // Important!
+            contentType: false,
+            cache: false,
+            url: "/api/admin/confirmPendingUsers/" + id,
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
+                    "content"
+                ),
+            },
+            dataType: "json",
+            success: function (data) {
+                console.log(data);
+                Swal.fire({
+                    icon: "success",
+                    title: "Account verified!",
+                    showConfirmButton: false,
+                    timer: 1500
+                  });
+                
+                  setTimeout(function () {
+                    window.location.href = '/admin/pendingUsers';
+                }, 1500);
+            },
+            error: function (error) {
+                console.log("error");
+            },
+        });
+    });
 
-        // $.ajax({
-        //     type: "GET",
-        //     enctype: 'multipart/form-data',
-        //     processData: false, // Important!
-        //     contentType: false,
-        //     cache: false,
-        //     url: "/api/show/event/" + id,
-        //     headers: {
-        //         "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
-        //             "content"
-        //         ),
-        //     },
-        //     dataType: "json",
-        //     success: function (data) {
-        //         var originalDate = new Date(data.events.event_date);
-        //         var origStime = moment(data.events.start_time, "HH:mm:ss")
-        //         var origEtime = moment(data.events.end_time, "HH:mm:ss")
+    $("#pendingUsersTable tbody").on("click", 'button.editRole ', function (e) {
+        var id = $(this).data("id");
+        console.log(id);
+        // e.preventDefault();
+        $.ajax({
+            type: "GET",
+            enctype: 'multipart/form-data',
+            processData: false, // Important!
+            contentType: false,
+            cache: false,
+            url: "/api/admin/getUser/" + id ,
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
+                    "content"
+                ),
+            },
+            dataType: "json",
+            success: function (data) {
+                console.log(data);
+            //     $('#createVenueModal').modal('show');
+                $('#userId').val(data.user.id);
+                $('#userLastname').val(data.user.lastname);
+                $('#userFirstname').val(data.user.firstname);
+                $('#userOrganization').val(data.user.organization);
+                $('#userDepartment').val(data.user.department);
+            //     $("#venueEditImage").html(
+            //         `<img src="/storage/${data.Venues.image}" width="100" class="img-fluid img-thumbnail">`);
+            },
+            error: function (error) {
+                console.log("error");
+            },
+        });
+    });
 
-        //         var formattedSTime = origStime.format("h:mm A");
-        //         var formattedETime = origEtime.format("h:mm A");
+    $("#roleUpdate").on("click", function (e) {
 
-        //         // Format the date using moment.js
-        //         var formattedDate = moment(originalDate).format("MMMM D, YYYY");
-        //         console.log(data);
-        //         $('#checkMoreModal').modal('show');
-        //         $('#eventStatusText').text(data.msg);
-        //         $('#eventStatusName').val(data.events.event_name);
-        //         $('#eventStatusDesc').val(data.events.description);
-        //         $('#eventStatusParticipants').val(data.events.participants);
-        //         $('#eventStatusVenue').val(data.venues.name);
-        //         $('#eventStatusDate').val(formattedDate);
-        //         $('#eventStatusSTime').val(formattedSTime);
-        //         $('#eventStatusETime').val(formattedETime);
-        //         // $("#venueEditImage").html(
-        //         // `<img src="/storage/${data.Venues.image}" width="100" class="img-fluid img-thumbnail">`);
-        //     },
-        //     error: function (error) {
-        //         console.log("error");
-        //     },
-        // });
-    });//end event status table
+        e.preventDefault();
+        var data = $('#roleUpdateForm')[0];
+        var id = $("#userId").val();
+        // console.log(id);    
+        let formData = new FormData($('#roleUpdateForm')[0]);
+        console.log(formData);
 
-
-
-
-
-
+        for (var pair of formData.entries()) {
+            console.log(pair[0] + ',' + pair[1]);
+        }
+        console.log(formData)
+        $.ajax({
+            type: "POST",
+            url: "/api/admin/editRole/" + id,
+            data: formData,
+            contentType: false,
+            processData: false,
+            headers: {
+                'Authorization': 'Bearer ' + sessionStorage.getItem('token'),
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            dataType: "json",
+            success: function (data) {
+                console.log(data);
+                Swal.fire({
+                    icon: "success",
+                    title: "Role Updated!",
+                    showConfirmButton: false,
+                    timer: 1500
+                  });
+                // var $ctable = $('#ctable').DataTable();
+                // $ctable.ajax.reload();
+                // $ctable.row.add(data.customer).draw(false);
+                // // $etable.row.add(data.client).draw(false);
+                // setTimeout(function () {
+                //     window.location.href = '/admin/pendingUsers';
+                // }, 1500);
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+        
+    });//end create
+    
     // Approve Request
 
 

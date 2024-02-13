@@ -36,8 +36,17 @@ class GoogleSocialiteController extends Controller
             if($finduser){
      
                 Auth::login($finduser);
-    
-                return redirect('/dashboard');
+                // dd($finduser);
+                
+                if ($finduser->email_verified_at === null)
+                {
+                    return redirect('/completeProfile');
+                }
+                else
+                {
+                    return redirect('/dashboard');
+                }
+
      
             }else{
                 $newUser = User::create([
@@ -51,7 +60,7 @@ class GoogleSocialiteController extends Controller
                 
                 Auth::login($newUser);
      
-                return redirect('/dashboard');
+                return redirect('/completeProfile');
             }
     
         } catch (Exception $e) {
