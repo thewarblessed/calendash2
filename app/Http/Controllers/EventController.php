@@ -416,6 +416,7 @@ class EventController extends Controller
     {   
         $events = Event::join('venues','events.venue_id','venues.id')
                         ->orderBy('events.id')->get();
+
                         // dd($events);
         // $user_id = $events->user_id;
         // $user = User::find($user_id);

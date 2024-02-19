@@ -43,7 +43,10 @@
                                     <thead class="bg-gray-100">
                                         <tr>
                                             <th class="text-secondary text-xs font-weight-semibold opacity-7">Event Name</th>
-                                            <th class="text-secondary text-xs font-weight-semibold opacity-7 ps-2">Date</th>
+                                            <th class="text-secondary text-xs font-weight-semibold opacity-7 ps-2">Venue</th>
+                                            <th class="text-secondary text-xs font-weight-semibold opacity-7 ps-2">Event Type</th>
+                                            <th class="text-secondary text-xs font-weight-semibold opacity-7 ps-2">Start Date</th>
+                                            <th class="text-secondary text-xs font-weight-semibold opacity-7 ps-2">End Date</th>
                                             <th class="text-center text-secondary text-xs font-weight-semibold opacity-7">Start Time</th>
                                             <th class="text-center text-secondary text-xs font-weight-semibold opacity-7">End Time</th>
                                             <th class="text-center text-secondary text-xs font-weight-semibold opacity-7">Department</th>
@@ -51,6 +54,7 @@
                                             <th class="text-center text-secondary text-xs font-weight-semibold opacity-7">Status</th>
                                             <th class="text-secondary opacity-7"></th>
                                             <th class="text-secondary opacity-7"></th>
+                                            
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -60,13 +64,30 @@
                                                 <div class="d-flex px-2 py-1">
                                                     
                                                     <div class="d-flex flex-column justify-content-center ms-1">
-                                                        <strong><h5 >{{$event->event_name}}</h5></strong>
+                                                        <strong><h6>{{$event->event_name}}</h6></strong>
                                                         {{-- <p class="text-sm text-secondary mb-0">laurent@creative-tim.com</p> --}}
                                                     </div>
                                                 </div>
                                             </td>
+                                            <td class="align-left">
+                                                <p class="text-sm text-dark font-weight-semibold mb-0">{{ $event->name }}</p>
+                                            </td>
                                             <td>
-                                                <p class="text-sm text-dark font-weight-semibold mb-0">{{ Carbon\Carbon::parse($event->event_date)->format('j F, Y') }}</p>
+                                                @if ($event->type === 'whole_day')
+                                                <p class="text-sm text-dark font-weight-semibold mb-0">Whole Day</p>
+                                                @endif
+                                                @if ($event->type === 'whole_week')
+                                                <p class="text-sm text-dark font-weight-semibold mb-0">Whole Week</p>
+                                                @endif
+                                                @if ($event->type === 'within_day')
+                                                <p class="text-sm text-dark font-weight-semibold mb-0">Within the Day</p>
+                                                @endif
+                                            </td>
+                                            <td>
+                                                <p class="text-sm text-dark font-weight-semibold mb-0">{{ Carbon\Carbon::parse($event->start_date)->format('j F, Y') }}</p>
+                                            </td>
+                                            <td>
+                                                <p class="text-sm text-dark font-weight-semibold mb-0">{{ Carbon\Carbon::parse($event->end_date)->format('j F, Y') }}</p>
                                             </td>
                                             <td class="align-middle text-center text-sm">
                                                 <p class="text-sm text-dark font-weight-semibold mb-0">{{ Carbon\Carbon::parse($event->start_time)->format('g:i A') }}</p>
