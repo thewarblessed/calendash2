@@ -73,8 +73,9 @@ Route::delete('/admin/venue/{id}',[
 // FILTER VENUES WHILE CREATING EVENT
 Route::get('/create/venueFilter',[
         'uses' => 'EventController@searchVenues',
-        'as' => 'searchVenue',
+        'as' => 'searchVenue.store',
         ]);
+
 // create Event
 Route::post('/create/newEvent',[
     'uses' => 'EventController@store',
@@ -156,6 +157,9 @@ Route::post('/admin/editRole/{id}',[
         'uses' => 'UserController@editRole',
         'as' => 'updateUserRole',
 ]);
+
+Route::post('/admin/postCreateMyEvent', [EventController::class, 'storeMyEventsAdmin'])
+    ->name('postCreateMyEvent');
 
 ////////////////================ MOBILE ROUTES ================//////////////////
 //REGISTRATION MOBILE

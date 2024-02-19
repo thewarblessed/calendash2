@@ -19,11 +19,14 @@ return new class extends Migration
             $table->foreign('venue_id')->references('id')->on('venues');
             $table->text('event_name');
             $table->text('description');
-            $table->date('event_date');
-            $table->time('start_time');
-            $table->time('end_time');
+            $table->enum('type', ['whole_day', 'within_day', 'whole_week']);
+            $table->date('start_date')->nullable();
+            $table->time('start_time')->nullable();
+            $table->date('end_date')->nullable();
+            $table->time('end_time')->nullable();
             $table->integer('participants');
             $table->text('target_dept');
+            $table->text('target_org');
             $table->string('event_letter')->default('default.pdf');
             $table->text('status');
             $table->string('org_adviser')->nullable();
@@ -40,6 +43,7 @@ return new class extends Migration
             $table->timestamp('approved_atty_at')->nullable();
             $table->string('campus_director')->nullable();
             $table->timestamp('approved_campus_director_at')->nullable();
+            $table->text('color');
             $table->timestamps();
         });
     }

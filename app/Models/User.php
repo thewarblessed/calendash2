@@ -85,7 +85,7 @@ class User extends Authenticatable implements JWTSubject
     }
 
     public function staff() {
-        return $this->hasOne('App\Models\Customer', 'user_id');
+        return $this->hasOne('App\Models\Staff', 'user_id');
     }
 
     public function event() {

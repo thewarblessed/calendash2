@@ -98,8 +98,8 @@
                                         minute: '2-digit'
                                     }) + '</strong><br>' +
                                     'Location: <strong>' + data.name + '</strong><br>' +
-                                    'Organization: <strong>' + data.studOrg + '</strong><br>' +
-                                    'Department: <strong>' + data.department +'</strong>',  
+                                    'Organization: <strong>' + data.target_org + '</strong><br>' +
+                                    'Department: <strong>' + data.target_dept +'</strong>',  
                                 showCloseButton: true,
                                 showConfirmButton: false,
                             });
@@ -111,18 +111,7 @@
                     });
                     info.el.style.borderColor = 'red';
                 },
-                eventContent: function(info) {
-                    // Create the basic event structure
-                    return {
-                        html: `
-                <span class="event-dot"></span>
-                <span class="event-${info.event.extendedProps.status}">${info.event.title}: ${info.event.extendedProps.status}</span> 
-                <span class="event-color"></span>
-            `,
-                        classList: ['event'], // Base class for all events
-                        extendedProps: event // Pass event data to the DOM node
-                    };
-                }
+                eventTextColor: 'black'
             });
             calendar.render();
 

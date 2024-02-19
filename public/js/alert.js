@@ -1,5 +1,8 @@
 $(document).ready(function () {
-    // $("#viewAnotherTab").hide();
+    // $("#withinTheDayDiv").hide();
+    // $("#wholeDayDiv").hide();
+    // $("#wholeWeekDiv").hide();
+    
 
     $("#venueSubmit").on("click", function (e) {
 
@@ -193,6 +196,86 @@ $(document).ready(function () {
 
 
     });//end filter venue
+
+    //SETTING DATE FOR USER
+    $('.radiobuttonsuser input[type="radio"]').change(function() {
+        
+        const withinDayDiv = document.getElementById('withinTheDayDivUser');
+        const wholeDayDiv = document.getElementById('wholeDayDivUser');
+        const wholeWeekDiv = document.getElementById('wholeWeekDivUser');
+
+        const eventDate = document.getElementById('event_date_withinDayUser');
+        const startTimeWithinDay = document.getElementById('start_time_withinDayUser');
+        const endTimeWithinDay = document.getElementById('end_time_withinDayUser');
+        const WholeDay = document.getElementById('event_date_wholeDayUser');
+        const WholeWeek = document.getElementById('event_date_wholeWeekUser');
+        if ($(this).is(':checked')) {
+
+            if ($(this).val() === 'withinDay')
+            {
+                console.log('labasDate');
+                // $("#withinTheDayDiv").show();
+                // $("#wholeDayDiv").hide();
+                // $("#wholeWeekDiv").hide();
+
+                
+                WholeDay.removeAttribute('required');
+                WholeWeek.removeAttribute('required');
+
+                eventDate.value = "";
+                startTimeWithinDay.value = "";
+                endTimeWithinDay.value = "";
+
+                withinDayDiv.style.display = 'block';
+                wholeDayDiv.style.display = 'none';
+                wholeWeekDiv.style.display = 'none';
+
+                startTimeWithinDay.setAttribute('required', true);
+                endTimeWithinDay.setAttribute('required', true);
+                eventDate.setAttribute('required', true); 
+
+
+
+
+            }
+            else if($(this).val() === 'wholeDay')
+            {
+                console.log('wholeDayLangTalaga');
+                startTimeWithinDay.removeAttribute('required');
+                    endTimeWithinDay.removeAttribute('required');
+                    eventDate.removeAttribute('required');
+
+                    WholeWeek.removeAttribute('required');
+
+                    WholeDay.value = "";
+
+                    wholeWeekDiv.style.display = 'none';
+                    withinDayDiv.style.display = 'none';
+                    wholeDayDiv.style.display = 'block';
+                    WholeDay.setAttribute('required', true);
+            }
+            else
+            {
+                console.log('wholeWeekNa')
+                startTimeWithinDay.removeAttribute('required');
+                    endTimeWithinDay.removeAttribute('required');
+                    eventDate.removeAttribute('required');
+
+                    WholeDay.removeAttribute('required');
+
+                    WholeWeek.value = "";
+
+                    wholeWeekDiv.style.display = 'block';
+                    withinDayDiv.style.display = 'none';
+                    wholeDayDiv.style.display = 'none';
+
+                    WholeWeek.setAttribute('required', true);
+            }
+            // console.log('Selected value:', $(this).val());
+        }
+
+    });
+
 
     $("#createEvent_submit").on("click", function (e) {
         console.log(data);
@@ -775,7 +858,7 @@ $(document).ready(function () {
             success: function (data) {
                 console.log(data);
             //     $('#createVenueModal').modal('show');
-                $('#userId').val(data.user.id);
+                $('#userId').val(id);
                 $('#userLastname').val(data.user.lastname);
                 $('#userFirstname').val(data.user.firstname);
                 $('#userOrganization').val(data.user.organization);
@@ -792,15 +875,15 @@ $(document).ready(function () {
     $("#roleUpdate").on("click", function (e) {
 
         e.preventDefault();
-        var data = $('#roleUpdateForm')[0];
+        // var data = $('#roleUpdateForm')[0];
         var id = $("#userId").val();
-        // console.log(id);    
+        console.log(id);    
         let formData = new FormData($('#roleUpdateForm')[0]);
-        console.log(formData);
+        // console.log(formData);
 
-        for (var pair of formData.entries()) {
-            console.log(pair[0] + ',' + pair[1]);
-        }
+        // for (var pair of formData.entries()) {
+        //     console.log(pair[0] + ',' + pair[1]);
+        // }
         console.log(formData)
         $.ajax({
             type: "POST",
@@ -825,9 +908,9 @@ $(document).ready(function () {
                 // $ctable.ajax.reload();
                 // $ctable.row.add(data.customer).draw(false);
                 // // $etable.row.add(data.client).draw(false);
-                // setTimeout(function () {
-                //     window.location.href = '/admin/pendingUsers';
-                // }, 1500);
+                setTimeout(function () {
+                    window.location.href = '/admin/pendingUsers';
+                }, 1500);
             },
             error: function (error) {
                 console.log(error);
@@ -836,6 +919,128 @@ $(document).ready(function () {
         
     });//end create
     
+    // ADMIN SETTING DATE
+    // $('.radiobuttons input[type="radio"]').change(function() {
+    //     const withinDayDiv = document.getElementById('withinTheDayDiv');
+    //     const wholeDayDiv = document.getElementById('wholeDayDiv');
+    //     const wholeWeekDiv = document.getElementById('wholeWeekDiv');
+
+    //     const eventDate = document.getElementById('event_date');
+    //     const startTimeWithinDay = document.getElementById('start_time_withinDay');
+    //     const endTimeWithinDay = document.getElementById('end_time_withinDay');
+    //     const WholeDay = document.getElementById('event_date_wholeDay');
+    //     const WholeWeek = document.getElementById('event_date_wholeWeek');
+    //     if ($(this).is(':checked')) {
+
+    //         if ($(this).val() === 'withinDay')
+    //         {
+    //             console.log('labasDate');
+    //             // $("#withinTheDayDiv").show();
+    //             // $("#wholeDayDiv").hide();
+    //             // $("#wholeWeekDiv").hide();
+
+                
+    //             WholeDay.removeAttribute('required');
+    //             WholeWeek.removeAttribute('required');
+
+    //             eventDate.value = "";
+    //             startTimeWithinDay.value = "";
+    //             endTimeWithinDay.value = "";
+
+    //             withinDayDiv.style.display = 'block';
+    //             wholeDayDiv.style.display = 'none';
+    //             wholeWeekDiv.style.display = 'none';
+
+    //             startTimeWithinDay.setAttribute('required', true);
+    //             endTimeWithinDay.setAttribute('required', true);
+    //             eventDate.setAttribute('required', true); 
+
+
+
+
+    //         }
+    //         else if($(this).val() === 'wholeDay')
+    //         {
+    //             console.log('wholeDayLangTalaga');
+    //             startTimeWithinDay.removeAttribute('required');
+    //                 endTimeWithinDay.removeAttribute('required');
+    //                 eventDate.removeAttribute('required');
+
+    //                 WholeWeek.removeAttribute('required');
+
+    //                 WholeDay.value = "";
+
+    //                 wholeWeekDiv.style.display = 'none';
+    //                 withinDayDiv.style.display = 'none';
+    //                 wholeDayDiv.style.display = 'block';
+    //                 WholeDay.setAttribute('required', true);
+    //         }
+    //         else
+    //         {
+    //             console.log('wholeWeekNa')
+    //             startTimeWithinDay.removeAttribute('required');
+    //                 endTimeWithinDay.removeAttribute('required');
+    //                 eventDate.removeAttribute('required');
+
+    //                 WholeDay.removeAttribute('required');
+
+    //                 WholeWeek.value = "";
+
+    //                 wholeWeekDiv.style.display = 'block';
+    //                 withinDayDiv.style.display = 'none';
+    //                 wholeDayDiv.style.display = 'none';
+
+    //                 WholeWeek.setAttribute('required', true);
+    //         }
+    //         // console.log('Selected value:', $(this).val());
+    //     }
+
+    // });
+
+    $("#createAdminEvent_submit").on("click", function (e) {
+        console.log(data);
+        e.preventDefault();
+        // $('#serviceSubmit').show()
+        var data = $('#createEventFormAdmin')[0];
+        console.log(data);
+        let formData = new FormData($('#createEventFormAdmin')[0]);
+        console.log(formData);
+
+        for (var pair of formData.entries()) {
+            console.log(pair[0] + ',' + pair[1]);
+        }
+        console.log(formData)
+        $.ajax({
+            type: "POST",
+            url: "/api/admin/postCreateMyEvent",
+            data: formData,
+            contentType: false,
+            processData: false,
+            headers: {
+                'Authorization': 'Bearer ' + sessionStorage.getItem('token'),
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            dataType: "json",
+            success: function (data) {
+                console.log(data);
+                setTimeout(function () {
+                    window.location.href = '/admin/allEvents';
+                }, 1500);
+
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Event has been Added!',
+                    showConfirmButton: false,
+                    timer: 3000
+                })
+            },
+            error: function (error) {
+                console.log('error');
+            }
+        });
+        //Swal.fire('SweetAlert2 is working!')
+    });//end create event
+
     // Approve Request
 
 

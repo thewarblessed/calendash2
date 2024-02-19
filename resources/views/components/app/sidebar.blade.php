@@ -58,6 +58,16 @@
                         <span class="nav-link-text ms-1">EVENT CALENDAR</span>
                     </a>
                 </li>
+
+                <li class="nav-item">
+                    <a class="nav-link  {{ is_current_route('AdminAllEvents') ? 'active' : '' }}"
+                        href="{{ route('AdminAllEvents') }}">
+                        {{-- <i class="fa-solid fa-calendar-days"></i> --}}
+                        <i class="fa-regular fa-calendar-check"
+                            style="color: {{ is_current_route('AdminAllEvents') ? '#774dd3' : 'defaultColor' }};font-size: 18px;"></i>
+                        <span class="nav-link-text ms-1">EVENTS</span>
+                    </a>
+                </li>
             @endif
 
             @if (auth()->user()->hasRole(['student', 'professor']))

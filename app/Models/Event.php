@@ -21,11 +21,14 @@ class Event extends Model
         "venue_id",
         "event_name",
         "description",
-        "event_date",
+        "type",
+        "start_date",
         "start_time",
+        "end_date",
         "end_time",
         "participants",
         "target_dept",
+        "target_org",
         "event_letter",
         "status",
         "org_adviser",
@@ -34,7 +37,8 @@ class Event extends Model
         "osa",
         "adaa",
         "atty",
-        "campus_director"
+        "campus_director",
+        "color"
 
     ];
 

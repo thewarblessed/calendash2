@@ -189,10 +189,24 @@ Route::post('/request/approve/{id}', [RequestController::class, 'store'])
 ->middleware('auth')
 ->name('EventApproval');
 
+/////////////////////// CREATE EVENTS FOR ADMIN /////////////
+
+Route::get('/admin/allEvents', [EventController::class, 'showAdminEvents'])
+    ->name('AdminAllEvents');
+
+Route::get('/admin/createEvent', [EventController::class, 'createAdminEvents'])
+    ->name('createAdminEvents');
+
+Route::get('/mycreateevent', function () {
+    return view('myevents');
+})->name('myeventsexample');
+
+// Route::post('/postCreateMyEvent', [EventController::class, 'storeMyEventsAdmin'])
+//     ->name('postCreateMyEvent');
+
 /////////////////////// CREATE OFFICIALS FOR ADMIN /////////////
 // GET ALL OFFICIALS
 Route::get('/admin/officials', [OfficialController::class, 'index'])
-
     ->name('AdminAllOfficials');
 // CREATE OFFICIALS
 Route::get('/admin/createOfficials', [OfficialController::class, 'create'])

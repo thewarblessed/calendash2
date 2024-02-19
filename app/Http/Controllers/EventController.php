@@ -6,9 +6,15 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use App\Models\Venue;
 use App\Models\Event;
+use App\Models\MyEvent;
 use App\Models\User;
+use App\Models\Prof;
+use App\Models\Student;
+use App\Models\Staff;
 use View;
 use Auth;
+use Carbon\Carbon;
+use Illuminate\Support\Str;
 
 
 class EventController extends Controller
@@ -50,43 +56,351 @@ class EventController extends Controller
     public function store(Request $request)
     {
         //
+        $user = User::where('id',$request->user_id)->first();
+        $role = $user->role;
+        $inputType = $request->input('event_type');
         // dd($request->all());
-        $event = new Event();
-        $event->user_id = $request->user_id;
-        $event->venue_id = $request->event_venue;
-        $event->event_name = $request->eventName;
-        $event->description = $request->eventDesc;
-        $event->event_date = $request->event_date;
-        $event->start_time = $request->start_time;
-        $event->end_time = $request->end_time;
-        $event->participants = $request->numParticipants;
-        $event->target_dept = 'MTICS';
-        $event->status = "PENDING";
+        if ($role === 'student')
+        {
+            $student = Student::where('user_id',$request->user_id)->first();
 
-        $request->validate([
-            'request_letter' => 'required|mimes:pdf|max:2048', // PDF file validation
-        ]);
-
-        // $pdfFile = $request->file('request_letter');
-        // $pdfFileName = time() . '' . $pdfFile->getClientOriginalName();
-        // $pdfFile->move(public_path('uploads/pdf'), $pdfFileName);
-
-        // $file->research_file = $pdfFileName;
-
-        $files = $request->file('request_letter');
-        $event->event_letter = 'pdf/'.time().'-'.$files->getClientOriginalName();
-        // $venues->save();
-        Storage::put('public/pdf/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
-
-        // $event->event_letter = "default.pdf";
-        // $event->dept_head = 0;
-        // $event->adaa = 0;
-        // $event->atty = 0;
-        // $event->osa = 0;
+            $target_dept = $student->department;
+            $target_org = $student->studOrg;
+            //EVENT DATE TYPE
+            if ($inputType === 'wholeWeek') {
+                $weekDate = $request->input('event_date_wholeWeekUser');
+                // dd($weekDate);
+                list($year, $week) = explode("-W", $weekDate);
+                $startDate = Carbon::now()->setISODate($year, $week, 1)->toDateString();
+                $endDate = Carbon::now()->setISODate($year, $week, 7)->toDateString();
+    
+                $request->validate([
+                    'request_letter' => 'required|mimes:pdf|max:2048', // PDF file validation
+                ]);
         
-        // dd($event);
-        $event->save();
-        return response()->json(["success" => "Event Created Successfully.", "Event" => $event, "status" => 200]);
+                $files = $request->file('request_letter');
+                $event_letter = 'pdf/'.time().'-'.$files->getClientOriginalName();
+                // $venues->save();
+                Storage::put('public/pdf/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
+    
+                Event::create([
+                    'user_id' => $request->user_id,
+                    'event_name' => $request->eventName,
+                    'description' => $request->eventDesc,
+                    'type' => 'whole_week',
+                    'venue_id' => $request->event_venue,
+                    'start_date' => $startDate,
+                    'end_date' => $endDate,
+                    'start_time' => '00:00:00',
+                    'end_time' => '00:00:00',
+                    'whole_week' => true,
+                    'participants' => $request->numParticipants,
+                    'target_dept' => $target_dept,
+                    'target_org' => $target_org,
+                    'event_letter' => $event_letter,
+                    'status' => 'PENDING',
+                    'color' => '#31B4F2'
+                ]);
+                
+                return response()->json(["success" => "Event Created Successfully.", "status" => 200]);
+            }
+            elseif ($inputType === 'withinDay') {
+                // Handle whole_day or within_day events
+                $date = $request->event_date_withinDayUser;
+                $start_time = $request->start_time_withinDayUser;
+                $end_time = $request->end_time_withinDayUser;
+    
+                $request->validate([
+                    'request_letter' => 'required|mimes:pdf|max:2048', // PDF file validation
+                ]);
+        
+                $files = $request->file('request_letter');
+                $event_letter = 'pdf/'.time().'-'.$files->getClientOriginalName();
+                // $venues->save();
+                Storage::put('public/pdf/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
+    
+                Event::create([
+                    'user_id' => $request->user_id,
+                    'event_name' => $request->eventName,
+                    'description' => $request->eventDesc,
+                    'type' => 'within_day',
+                    'venue_id' => $request->event_venue,
+                    'start_date' => $date,
+                    'end_date' => $date,
+                    'start_time' => $start_time,
+                    'end_time' => $end_time,
+                    'participants' => $request->numParticipants,
+                    'target_dept' => $target_dept,
+                    'target_org' => $target_org,
+                    'event_letter' => $event_letter,
+                    'whole_week' => false,
+                    'status' => 'PENDING',
+                    'color' => '#31B4F2'
+                ]);
+                return response()->json(["success" => "Event Created Successfully.", "status" => 200]);
+            }   
+            else if ($inputType === 'wholeDay'){
+                //whole day
+                $date = $request->event_date_wholeDayUser;
+                
+                $request->validate([
+                    'request_letter' => 'required|mimes:pdf|max:2048', // PDF file validation
+                ]);
+        
+                $files = $request->file('request_letter');
+                $event_letter = 'pdf/'.time().'-'.$files->getClientOriginalName();
+                // $venues->save();
+                Storage::put('public/pdf/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
+                
+                Event::create([
+                    'user_id' => $request->user_id,
+                    'event_name' => $request->eventName,
+                    'description' => $request->eventDesc,
+                    'type' => 'whole_day',
+                    'venue_id' => $request->event_venue,
+                    'start_date' => $date,
+                    'end_date' => $date,
+                    'start_time' => '05:00:00',
+                    'end_time' => '21:00:00',
+                    'participants' => $request->numParticipants,
+                    'target_dept' => $target_dept,
+                    'target_org' => $target_org,
+                    'event_letter' => $event_letter,
+                    'whole_week' => false,
+                    'status' => 'PENDING',
+                    'color' => '#31B4F2'
+                ]);
+                return response()->json(["success" => "Event Created Successfully.", "status" => 200]);
+            }
+
+        }
+        elseif($role === 'professor')
+        {
+            $professor = Prof::where('user_id',$request->user_id)->first();
+            // dd($professor);
+            $target_dept = $professor->department;
+            $target_org = $professor->organization;
+
+            if ($inputType === 'wholeWeek') {
+                $weekDate = $request->input('event_date_wholeWeekUser');
+                // dd($weekDate);
+                list($year, $week) = explode("-W", $weekDate);
+                $startDate = Carbon::now()->setISODate($year, $week, 1)->toDateString();
+                $endDate = Carbon::now()->setISODate($year, $week, 7)->toDateString();
+    
+                $request->validate([
+                    'request_letter' => 'required|mimes:pdf|max:2048', // PDF file validation
+                ]);
+        
+                $files = $request->file('request_letter');
+                $event_letter = 'pdf/'.time().'-'.$files->getClientOriginalName();
+                // $venues->save();
+                Storage::put('public/pdf/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
+    
+                Event::create([
+                    'user_id' => $request->user_id,
+                    'event_name' => $request->eventName,
+                    'description' => $request->eventDesc,
+                    'type' => 'whole_week',
+                    'venue_id' => $request->event_venue,
+                    'start_date' => $startDate,
+                    'end_date' => $endDate,
+                    'start_time' => '00:00:00',
+                    'end_time' => '00:00:00',
+                    'whole_week' => true,
+                    'participants' => $request->numParticipants,
+                    'target_dept' => $target_dept,
+                    'target_org' => $target_org,
+                    'event_letter' => $event_letter,
+                    'status' => 'PENDING',
+                    'color' => '#31B4F2'
+                ]);
+                
+                return response()->json(["success" => "Event Created Successfully.", "status" => 200]);
+            }
+            elseif ($inputType === 'withinDay') {
+                // Handle whole_day or within_day events
+                $date = $request->event_date_withinDayUser;
+                $start_time = $request->start_time_withinDayUser;
+                $end_time = $request->end_time_withinDayUser;
+    
+                $request->validate([
+                    'request_letter' => 'required|mimes:pdf|max:2048', // PDF file validation
+                ]);
+        
+                $files = $request->file('request_letter');
+                $event_letter = 'pdf/'.time().'-'.$files->getClientOriginalName();
+                // $venues->save();
+                Storage::put('public/pdf/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
+    
+                Event::create([
+                    'user_id' => $request->user_id,
+                    'event_name' => $request->eventName,
+                    'description' => $request->eventDesc,
+                    'type' => 'within_day',
+                    'venue_id' => $request->event_venue,
+                    'start_date' => $date,
+                    'end_date' => $date,
+                    'start_time' => $start_time,
+                    'end_time' => $end_time,
+                    'participants' => $request->numParticipants,
+                    'target_dept' => $target_dept,
+                    'target_org' => $target_org,
+                    'event_letter' => $event_letter,
+                    'whole_week' => false,
+                    'status' => 'PENDING',
+                    'color' => '#31B4F2'
+                ]);
+                return response()->json(["success" => "Event Created Successfully.", "status" => 200]);
+            }   
+            else if ($inputType === 'wholeDay'){
+                //whole day
+                $date = $request->event_date_wholeDayUser;
+                
+                $request->validate([
+                    'request_letter' => 'required|mimes:pdf|max:2048', // PDF file validation
+                ]);
+        
+                $files = $request->file('request_letter');
+                $event_letter = 'pdf/'.time().'-'.$files->getClientOriginalName();
+                // $venues->save();
+                Storage::put('public/pdf/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
+                
+                Event::create([
+                    'user_id' => $request->user_id,
+                    'event_name' => $request->eventName,
+                    'description' => $request->eventDesc,
+                    'type' => 'whole_day',
+                    'venue_id' => $request->event_venue,
+                    'start_date' => $date,
+                    'end_date' => $date,
+                    'start_time' => '00:00:00',
+                    'end_time' => '00:00:00',
+                    'participants' => $request->numParticipants,
+                    'target_dept' => $target_dept,
+                    'target_org' => $target_org,
+                    'event_letter' => $event_letter,
+                    'whole_week' => false,
+                    'status' => 'PENDING',
+                    'color' => '#31B4F2'
+                ]);
+                return response()->json(["success" => "Event Created Successfully.", "status" => 200]);
+            }
+        }
+        elseif($role === 'staff')
+        {
+            $staff = Staff::where('user_id',$request->user_id)->first();
+
+            $target_dept = $staff->department;
+            $target_org = $staff->organization;
+
+            if ($inputType === 'wholeWeek') {
+                $weekDate = $request->input('event_date_wholeWeekUser');
+                // dd($weekDate);
+                list($year, $week) = explode("-W", $weekDate);
+                $startDate = Carbon::now()->setISODate($year, $week, 1)->toDateString();
+                $endDate = Carbon::now()->setISODate($year, $week, 7)->toDateString();
+    
+                $request->validate([
+                    'request_letter' => 'required|mimes:pdf|max:2048', // PDF file validation
+                ]);
+        
+                $files = $request->file('request_letter');
+                $event_letter = 'pdf/'.time().'-'.$files->getClientOriginalName();
+                // $venues->save();
+                Storage::put('public/pdf/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
+    
+                Event::create([
+                    'user_id' => $request->user_id,
+                    'event_name' => $request->eventName,
+                    'description' => $request->eventDesc,
+                    'type' => 'whole_week',
+                    'venue_id' => $request->event_venue,
+                    'start_date' => $startDate,
+                    'end_date' => $endDate,
+                    'start_time' => '00:00:00',
+                    'end_time' => '00:00:00',
+                    'whole_week' => true,
+                    'participants' => $request->numParticipants,
+                    'target_dept' => $target_dept,
+                    'target_org' => $target_org,
+                    'event_letter' => $event_letter,
+                    'status' => 'PENDING',
+                    'color' => '#31B4F2'
+                ]);
+                
+                return response()->json(["success" => "Event Created Successfully.", "status" => 200]);
+            }
+            elseif ($inputType === 'withinDay') {
+                // Handle whole_day or within_day events
+                $date = $request->event_date_withinDayUser;
+                $start_time = $request->start_time_withinDayUser;
+                $end_time = $request->end_time_withinDayUser;
+    
+                $request->validate([
+                    'request_letter' => 'required|mimes:pdf|max:2048', // PDF file validation
+                ]);
+        
+                $files = $request->file('request_letter');
+                $event_letter = 'pdf/'.time().'-'.$files->getClientOriginalName();
+                // $venues->save();
+                Storage::put('public/pdf/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
+    
+                Event::create([
+                    'user_id' => $request->user_id,
+                    'event_name' => $request->eventName,
+                    'description' => $request->eventDesc,
+                    'type' => 'within_day',
+                    'venue_id' => $request->event_venue,
+                    'start_date' => $date,
+                    'end_date' => $date,
+                    'start_time' => $start_time,
+                    'end_time' => $end_time,
+                    'participants' => $request->numParticipants,
+                    'target_dept' => $target_dept,
+                    'target_org' => $target_org,
+                    'event_letter' => $event_letter,
+                    'whole_week' => false,
+                    'status' => 'PENDING',
+                    'color' => '#31B4F2'
+                ]);
+                return response()->json(["success" => "Event Created Successfully.", "status" => 200]);
+            }   
+            else if ($inputType === 'wholeDay'){
+                //whole day
+                $date = $request->event_date_wholeDayUser;
+                
+                $request->validate([
+                    'request_letter' => 'required|mimes:pdf|max:2048', // PDF file validation
+                ]);
+        
+                $files = $request->file('request_letter');
+                $event_letter = 'pdf/'.time().'-'.$files->getClientOriginalName();
+                // $venues->save();
+                Storage::put('public/pdf/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
+                
+                Event::create([
+                    'user_id' => $request->user_id,
+                    'event_name' => $request->eventName,
+                    'description' => $request->eventDesc,
+                    'type' => 'whole_day',
+                    'venue_id' => $request->event_venue,
+                    'start_date' => $date,
+                    'end_date' => $date,
+                    'start_time' => '00:00:00',
+                    'end_time' => '00:00:00',
+                    'participants' => $request->numParticipants,
+                    'target_dept' => $target_dept,
+                    'target_org' => $target_org,
+                    'event_letter' => $event_letter,
+                    'whole_week' => false,
+                    'status' => 'PENDING',
+                    'color' => '#31B4F2'
+                ]);
+                return response()->json(["success" => "Event Created Successfully.", "status" => 200]);
+            }
+        }
+        // return response()->json(["success" => "Event Created Successfully.", "status" => 200]);
     }
 
     public function showLetter(string $id)
@@ -97,6 +411,24 @@ class EventController extends Controller
         return response()->json($request_letter);
     }
 
+                //ADMIN
+    public function showAdminEvents()
+    {   
+        $events = Event::join('venues','events.venue_id','venues.id')
+                        ->orderBy('events.id')->get();
+                        // dd($events);
+        // $user_id = $events->user_id;
+        // $user = User::find($user_id);
+        // dd($user);
+        // return response()->json($events);
+        return View::make('admin.event.index', compact('events'));
+    }
+
+    public function createAdminEvents()
+    {   
+        $venues = Venue::all();
+        return View::make('admin.event.create', compact('venues'));
+    }
 
     public function showEvents()
     {   
@@ -143,6 +475,118 @@ class EventController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function storeMyEventsAdmin(Request $request)
+    {
+        $inputType = $request->input('event_type');
+        // $randomColor = '#' . Str::random(6);
+        // dd($inputType);
+        if ($inputType === 'wholeWeek') {
+            $weekDate = $request->input('event_date_wholeWeek');
+            // dd($weekDate);
+            list($year, $week) = explode("-W", $weekDate);
+            $startDate = Carbon::now()->setISODate($year, $week, 1)->toDateString();
+            $endDate = Carbon::now()->setISODate($year, $week, 7)->toDateString();
+
+            $request->validate([
+                'request_letter' => 'required|mimes:pdf|max:2048', // PDF file validation
+            ]);
+    
+            $files = $request->file('request_letter');
+            $event_letter = 'pdf/'.time().'-'.$files->getClientOriginalName();
+            // $venues->save();
+            Storage::put('public/pdf/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
+
+            Event::create([
+                'event_name' => $request->eventName,
+                'description' => $request->eventDesc,
+                'type' => 'whole_week',
+                'venue_id' => $request->event_venue,
+                'start_date' => $startDate,
+                'end_date' => $endDate,
+                'start_time' => '00:00:00',
+                'end_time' => '00:00:00',
+                'whole_week' => true,
+                'participants' => $request->numParticipants,
+                'target_dept' => $request->event_dept,
+                'target_org' => $request->event_org,
+                'description' => $request->eventDesc,
+                'event_letter' => $event_letter,
+                'status' => 'APPROVED',
+                'color' => '#31B4F2'
+            ]);
+
+            return response()->json(["success" => "Event Created Successfully.", "status" => 200]);
+        }
+        elseif ($inputType === 'withinDay') {
+            // Handle whole_day or within_day events
+            $date = $request->event_date;
+            $start_time = $request->start_time_withinDay;
+            $end_time = $request->end_time_withinDay;
+
+            $request->validate([
+                'request_letter' => 'required|mimes:pdf|max:2048', // PDF file validation
+            ]);
+    
+            $files = $request->file('request_letter');
+            $event_letter = 'pdf/'.time().'-'.$files->getClientOriginalName();
+            // $venues->save();
+            Storage::put('public/pdf/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
+
+            Event::create([
+                'event_name' => $request->eventName,
+                'description' => $request->eventDesc,
+                'type' => 'within_day',
+                'venue_id' => $request->event_venue,
+                'start_date' => $date,
+                'end_date' => $date,
+                'start_time' => $start_time,
+                'end_time' => $end_time,
+                'participants' => $request->numParticipants,
+                'target_dept' => $request->event_dept,
+                'target_org' => $request->event_org,
+                'description' => $request->eventDesc,
+                'event_letter' => $event_letter,
+                'whole_week' => false,
+                'status' => 'APPROVED',
+                'color' => '#31B4F2'
+            ]);
+            return response()->json(["success" => "Event Created Successfully.", "status" => 200]);
+        }   
+        else if ($inputType === 'wholeDay'){
+            //whole day
+            $date = $request->event_date_wholeDay;
+            
+            $request->validate([
+                'request_letter' => 'required|mimes:pdf|max:2048', // PDF file validation
+            ]);
+    
+            $files = $request->file('request_letter');
+            $event_letter = 'pdf/'.time().'-'.$files->getClientOriginalName();
+            // $venues->save();
+            Storage::put('public/pdf/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
+            
+            Event::create([
+                'event_name' => $request->eventName,
+                'description' => $request->eventDesc,
+                'type' => 'whole_day',
+                'venue_id' => $request->event_venue,
+                'start_date' => $date,
+                'end_date' => $date,
+                'start_time' => '00:00:00',
+                'end_time' => '00:00:00',
+                'participants' => $request->numParticipants,
+                'target_dept' => $request->event_dept,
+                'target_org' => $request->event_org,
+                'description' => $request->eventDesc,
+                'event_letter' => $event_letter,
+                'whole_week' => false,
+                'status' => 'APPROVED',
+                'color' => '#31B4F2'
+            ]);
+            return response()->json(["success" => "Event Created Successfully.", "status" => 200]);
+        }
     }
 
     /////////////// MOBILE ////////////////////

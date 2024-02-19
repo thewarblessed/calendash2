@@ -5,13 +5,13 @@
     <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg" id="main">
         <x-app.navbar />
         <div class="container" style="margin-top: 30px">
-            <form class="card" id="createEventForm" enctype="multipart/form-data">
+            <form class="card" id="createEventFormAdmin" enctype="multipart/form-data">
                 @csrf
                 <div class="card-body">
                     {{-- EVENT DETAILS --}}
                     <div class="tab d-none">
                         <h3 style="text-align: center">Event Details</h3>
-                        <input type="hidden" name="user_id" id="user_id" value="{{ Auth::id() }}">
+
                         <div class="mb-3">
                             <label for="name" class="form-label">Event Name</label>
                             <input type="text" class="form-control" name="eventName" id="eventName"
@@ -27,6 +27,21 @@
                             <input type="number" class="form-control" name="numParticipants" id="numParticipants"
                                 placeholder="Please enter no. of participants (ex. 100)" required>
                         </div>
+
+                        <h3 style="text-align: center">Department Details</h3>
+
+
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Department</label>
+                            <input type="text" class="form-control" name="event_dept" id="event_dept"
+                                placeholder="Please enter department name" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="eventDesc" class="form-label">Organization</label>
+                            <input type="text" class="form-control" name="event_org" id="event_org"
+                                placeholder="Please enter organization name" required>
+                        </div>
                     </div>
 
                     {{-- VENUE DETAILS --}}
@@ -35,26 +50,26 @@
                         <div class="container">
                             <div class="row">
                                 @foreach ($venues as $venue)
-                                    <div class="col-sm">
-                                        <div id="venue{{ $venue->id }}" data-capacity="{{ $venue->capacity }}"
-                                            class="card_capacity"
-                                            style="width: 15rem; margin-top: 30px; box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px; border-radius: 8px">
-                                            <img src="{{ asset('storage/' . $venue->image) }}" height="180"
-                                                class="card-img-top" alt="...">
-                                            <div class="card-body">
-                                                <h5 class="card-title">{{ $venue->name }}</h5>
-                                                <p class="card-text">{{ $venue->description }}</p>
-                                                <p class="card-text">Capacity: {{ $venue->capacity }}</p>
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="radio" name="event_venue"
-                                                        id="event_venue" value= "{{ $venue->id }}" required>
-                                                    <label class="custom-control-label" for="event_venue"
-                                                        style="color: blue; font-size: 18px"><strong>SELECT</strong>
-                                                    </label>
-                                                </div>
+                                <div class="col-sm">
+                                    <div id="venue{{ $venue->id }}" data-capacity="{{ $venue->capacity }}"
+                                        class="card_capacity"
+                                        style="width: 15rem; margin-top: 30px; box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px; border-radius: 8px">
+                                        <img src="{{ asset('storage/' . $venue->image) }}" height="180"
+                                            class="card-img-top" alt="...">
+                                        <div class="card-body">
+                                            <h5 class="card-title">{{ $venue->name }}</h5>
+                                            <p class="card-text">{{ $venue->description }}</p>
+                                            <p class="card-text">Capacity: {{ $venue->capacity }}</p>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="event_venue"
+                                                    id="event_venue" value="{{ $venue->id }}" required>
+                                                <label class="custom-control-label" for="event_venue"
+                                                    style="color: blue; font-size: 18px"><strong>SELECT</strong>
+                                                </label>
                                             </div>
                                         </div>
                                     </div>
+                                </div>
                                 @endforeach
                             </div>
                         </div>
@@ -62,28 +77,12 @@
 
                     {{-- SET DATE DETAILS --}}
                     <div class="tab d-none">
-                        {{-- <h3 style="text-align: center">Set Date and Time</h3>
-                        <div class="mb-3">
-                            <label for="company_name" class="form-label">Set Date</label>
-                            <input type="date" class="form-control" name="event_date" id="event_date" required>
-                        </div> --}}
 
-                        {{-- <div class="row">
-                            <div class="mb-3 col-md-6">
-                                <label for="start_time" class="form-label">Set Start Time</label>
-                                <input type="time" class="form-control" name="start_time" id="start_time" required>
-                            </div>
-                            <div class="mb-3 col-md-6">
-                                <label for="end_time" class="form-label">Set End Time</label>
-                                <input type="time" class="form-control" name="end_time" id="end_time" required>
-                            </div>
-                        </div> --}}
-
-                        {{-- /////////////////////////////////////////////////////////////////// --}}
-
+                        
+                        
                         <h3 style="text-align: center">Set Date and Time</h3>
 
-                        <div class="radiobuttonsuser">
+                        <div class="radiobuttons">
                             <div class="form-check">
                                 <input class="form-check-input" type="radio" name="event_type" value="withinDay" id="withinDay" required>
                                 <label class="custom-control-label" for="withinDay">Within the Day</label>
@@ -100,60 +99,59 @@
                             </div>
                         </div>
                         
-                        <div id="withinTheDayDivUser" class="withinTheDay" style="display:none;">
+                        <div id="withinTheDayDiv" class="withinTheDay" style="display:none;">
                             <h5 style="text-align: center">Within the Day</h5>
                             <div class="form-group">
                                 <label for="example-datetime-local-input" class="form-control-label">Datetime</label>
-                                <input class="form-control" type="date" value="" name="event_date_withinDayUser" id="event_date_withinDayUser">
+                                <input class="form-control" type="date" value="" name="event_date" id="event_date">
                             </div>
                             <div class="row">
                                 <div class="mb-3 col-md-6">
                                     <label for="start_time" class="form-label">Set Start Time</label>
-                                    <input type="time" class="form-control" name="start_time_withinDayUser" id="start_time_withinDayUser" required>
+                                    <input type="time" class="form-control" name="start_time_withinDay" id="start_time_withinDay" required>
                                 </div>
                                 <div class="mb-3 col-md-6">
                                     <label for="end_time" class="form-label">Set End Time</label>
-                                    <input type="time" class="form-control" name="end_time_withinDayUser" id="end_time_withinDayUser" required>
+                                    <input type="time" class="form-control" name="end_time_withinDay" id="end_time_withinDay" required>
                                 </div>
                             </div>
                         </div>
 
-                        <div id="wholeDayDivUser" class="wholeDay" style="display:none;">
+                        <div id="wholeDayDiv" class="wholeDay" style="display:none;">
                             <h5 style="text-align: center">Whole Day</h5>
                             <div class="mb-3">
                                 <label for="company_name" class="form-label">Set Date</label>
-                                <input type="date" class="form-control" name="event_date_wholeDayUser" id="event_date_wholeDayUser">
+                                <input type="date" class="form-control" name="event_date_wholeDay" id="event_date_wholeDay">
                             </div>
                         </div>
 
-                        <div id="wholeWeekDivUser" class="wholeWeek" style="display:none;">
+                        <div id="wholeWeekDiv" class="wholeWeek" style="display:none;">
                             <h5 style="text-align: center">Whole Week</h5>
                             <div class="form-group">
                                 <label for="example-week-input" class="form-control-label">Week</label>
-                                <input class="form-control" type="week" name="event_date_wholeWeekUser" id="event_date_wholeWeekUser">
+                                <input class="form-control" type="week" name="event_date_wholeWeek" id="event_date_wholeWeek">
                             </div>
                         </div>
-
-
-
 
                     </div>
 
                     {{-- GENERATE LETTER DETAILS --}}
                     <div class="tab d-none">
                         <h3>Generate Letter</h3>
-                        <p>All Set! Please submit to continue. Thank you</p>
-
+                        <p>To save the Letter in you've created, please these steps.</p>
+                        <ul style="list-style-type: decimal; font-size: 14px">
+                            <li>File</li>
+                            <li>Print</li>
+                            <li>Select the Destination to "Save as PDF"</li>
+                            <li>then click "Save"</li>
+                            <li>then upload it to the bottom of this form</li>
+                        </ul>
                         <div class="container p-4 ">
                             <textarea name="letter_generator" id="editor"></textarea>
                         </div>
-                        <div class="mb-3 col-md-6" style="align-self: center">
-                            <center>
-                                <label for="request_letter" class="form-label" style="font-size: 18px">Upload Request
-                                    Letter</label>
-                                <input type="file" class="form-control" name="request_letter" id="request_letter"
-                                    required>
-                            </center>
+                        <div class="" style="align-self: center">
+                                <label for="request_letter" class="form-label" style="font-size: 25px; text-align:center; color:blueviolet" >Upload Request Letter</label>
+                                <input type="file" class="form-control" name="request_letter" id="request_letter" required>
                         </div>
 
                     </div>
@@ -164,14 +162,14 @@
                         <button type="button" id="back_button" class="btn btn-link" onclick="back()">Back</button>
                         <button type="button" id="next_button" class="btn btn-primary ms-auto"
                             onclick="next()">Next</button>
-                        <button type="submit" id="createEvent_submit"
-                            class="btn btn-primary ms-auto">Submit</button>
+                        <button type="submit" id="createAdminEvent_submit" class="btn btn-primary ms-auto">Submit</button>
                     </div>
                 </div>
             </form>
         </div>
     </main>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js">
+    </script>
     <script src="https://cdn.tiny.cloud/1/efy9kqrdbnc5rwfbz3ogkw1784y0tm6sphy6xvo6iq7azwcf/tinymce/6/tinymce.min.js"
         referrerpolicy="origin"></script>
     <script>
@@ -193,7 +191,7 @@
     </script>
     <script type="text/javascript" src="/js/alert.js"></script>
     <script>
-        $("#createEvent_submit").hide()
+        $("#createAdminEvent_submit").hide()
         var current = 0;
         var tabs = $(".tab");
         var tabs_pill = $(".tab-pills");
@@ -206,7 +204,7 @@
             $(tabs[n]).removeClass("d-none");
             $("#back_button").attr("disabled", n == 0 ? true : false);
             n == tabs.length - 1 ?
-                $("#next_button").hide() && $("#createEvent_submit").show() :
+                $("#next_button").hide() && $("#createAdminEvent_submit").show() :
                 $("#next_button")
                 .attr("type", "button")
                 .text("Next")
@@ -225,7 +223,7 @@
             $(tabs[current]).addClass("d-none");
             $(tabs_pill[current]).removeClass("active");
             $("#next_button").show()
-            $("#createEvent_submit").hide()
+            $("#createAdminEvent_submit").hide()
             current--;
             loadFormData(current);
         }
@@ -233,24 +231,15 @@
         ////// DATE  ///////
         // const today = new Date().toISOString().split('T')[0];
         // document.getElementById('event_date').min = today;
+         // Get the current date and time in ISO format
 
+        /// FOR INPUT TYPE DATE ONLY
         const today = new Date();
         const oneWeekLater = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000); // Calculate one week later
-        // const minDate = oneWeekLater.toISOString().split('T')[0];
-        const minDateWholeDay = oneWeekLater.toISOString().split('T')[0];
-        const minDateWithinDay = oneWeekLater.toISOString().split('T')[0];
-        // document.getElementById('event_date').min = minDate;
-        document.getElementById('event_date_withinDayUser').min = minDateWholeDay;
-        document.getElementById('event_date_wholeDayUser').min = minDateWithinDay;
-        
-        // $(function() {
-        //     var minDate = new Date();
-        //     minDate.setDate(today.getDate() + 7); // Set min date to 7 days ahead
-
-        //     $("#event_date").datepicker({
-        //         minDate: minDate
-        //     });
-        // });
+        const minDate = oneWeekLater.toISOString().split('T')[0];
+        document.getElementById('event_date_withinDay').min = minDate;
+        document.getElementById('event_date_wholeDay').min = minDate;
+        document.getElementById('event_date_wholeWeek').min = minDate;
 
         //// TIME /////
         var blockedTimeRanges = [{
@@ -318,55 +307,5 @@
             });
         });
 
-        // Function to check if a time is blocked
-        // function isBlockedTime(time) {
-        //     return blockedTimeRanges.includes(time);
-        // }
-
-        // // Handle timepicker change event
-        // document.getElementById('start_time').addEventListener('change', function() {
-        //     var selectedTime = this.value;
-        //     if (isBlockedTime(selectedTime)) {
-        //         // Time is blocked, reset to a default value or display a message
-        //         this.value = ''; // Reset to empty value
-        //         alert('This time is blocked.');
-        //     }
-        // });
-
-        // document.getElementById('end_time').addEventListener('change', function() {
-        //     var selectedTime = this.value;
-        //     if (isBlockedTime(selectedTime)) {
-        //         // Time is blocked, reset to a default value or display a message
-        //         this.value = ''; // Reset to empty value
-        //         alert('This time is blocked.');
-        //     }
-        // });
-
-
-
-
-        // function isDisabledTime(time) {
-        //     // Add your condition here
-        //     // For example, let's disable times between 12:00 PM and 1:00 PM
-        //     const disabledStart = '12:00';
-        //     const disabledEnd = '13:00';
-
-        //     return time >= disabledStart && time <= disabledEnd;
-        // }
-
-        // // Attach an event listener to the time picker
-        // document.getElementById('start_time').addEventListener('input', function() {
-        //     const selectedTime = this.value;
-
-        //     // Check if the selected time is disabled
-        //     if (isDisabledTime(selectedTime)) {
-        //         Swal.fire({
-        //             icon: "error",
-        //             title: "Oops...",
-        //             text: "That time is not available!"
-        //         });
-        //         this.value = ''; // Clear the input value
-        //     }
-        // });
     </script>
 </x-app-layout>
