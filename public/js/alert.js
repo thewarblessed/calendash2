@@ -920,82 +920,82 @@ $(document).ready(function () {
     });//end create
     
     // ADMIN SETTING DATE
-    // $('.radiobuttons input[type="radio"]').change(function() {
-    //     const withinDayDiv = document.getElementById('withinTheDayDiv');
-    //     const wholeDayDiv = document.getElementById('wholeDayDiv');
-    //     const wholeWeekDiv = document.getElementById('wholeWeekDiv');
+    $('.radiobuttons input[type="radio"]').change(function() {
+        const withinDayDiv = document.getElementById('withinTheDayDiv');
+        const wholeDayDiv = document.getElementById('wholeDayDiv');
+        const wholeWeekDiv = document.getElementById('wholeWeekDiv');
 
-    //     const eventDate = document.getElementById('event_date');
-    //     const startTimeWithinDay = document.getElementById('start_time_withinDay');
-    //     const endTimeWithinDay = document.getElementById('end_time_withinDay');
-    //     const WholeDay = document.getElementById('event_date_wholeDay');
-    //     const WholeWeek = document.getElementById('event_date_wholeWeek');
-    //     if ($(this).is(':checked')) {
+        const eventDate = document.getElementById('event_date');
+        const startTimeWithinDay = document.getElementById('start_time_withinDay');
+        const endTimeWithinDay = document.getElementById('end_time_withinDay');
+        const WholeDay = document.getElementById('event_date_wholeDay');
+        const WholeWeek = document.getElementById('event_date_wholeWeek');
+        if ($(this).is(':checked')) {
 
-    //         if ($(this).val() === 'withinDay')
-    //         {
-    //             console.log('labasDate');
-    //             // $("#withinTheDayDiv").show();
-    //             // $("#wholeDayDiv").hide();
-    //             // $("#wholeWeekDiv").hide();
+            if ($(this).val() === 'withinDay')
+            {
+                console.log('labasDate');
+                // $("#withinTheDayDiv").show();
+                // $("#wholeDayDiv").hide();
+                // $("#wholeWeekDiv").hide();
 
                 
-    //             WholeDay.removeAttribute('required');
-    //             WholeWeek.removeAttribute('required');
+                WholeDay.removeAttribute('required');
+                WholeWeek.removeAttribute('required');
 
-    //             eventDate.value = "";
-    //             startTimeWithinDay.value = "";
-    //             endTimeWithinDay.value = "";
+                eventDate.value = "";
+                startTimeWithinDay.value = "";
+                endTimeWithinDay.value = "";
 
-    //             withinDayDiv.style.display = 'block';
-    //             wholeDayDiv.style.display = 'none';
-    //             wholeWeekDiv.style.display = 'none';
+                withinDayDiv.style.display = 'block';
+                wholeDayDiv.style.display = 'none';
+                wholeWeekDiv.style.display = 'none';
 
-    //             startTimeWithinDay.setAttribute('required', true);
-    //             endTimeWithinDay.setAttribute('required', true);
-    //             eventDate.setAttribute('required', true); 
-
-
+                startTimeWithinDay.setAttribute('required', true);
+                endTimeWithinDay.setAttribute('required', true);
+                eventDate.setAttribute('required', true); 
 
 
-    //         }
-    //         else if($(this).val() === 'wholeDay')
-    //         {
-    //             console.log('wholeDayLangTalaga');
-    //             startTimeWithinDay.removeAttribute('required');
-    //                 endTimeWithinDay.removeAttribute('required');
-    //                 eventDate.removeAttribute('required');
 
-    //                 WholeWeek.removeAttribute('required');
 
-    //                 WholeDay.value = "";
+            }
+            else if($(this).val() === 'wholeDay')
+            {
+                console.log('wholeDayLangTalaga');
+                startTimeWithinDay.removeAttribute('required');
+                    endTimeWithinDay.removeAttribute('required');
+                    eventDate.removeAttribute('required');
 
-    //                 wholeWeekDiv.style.display = 'none';
-    //                 withinDayDiv.style.display = 'none';
-    //                 wholeDayDiv.style.display = 'block';
-    //                 WholeDay.setAttribute('required', true);
-    //         }
-    //         else
-    //         {
-    //             console.log('wholeWeekNa')
-    //             startTimeWithinDay.removeAttribute('required');
-    //                 endTimeWithinDay.removeAttribute('required');
-    //                 eventDate.removeAttribute('required');
+                    WholeWeek.removeAttribute('required');
 
-    //                 WholeDay.removeAttribute('required');
+                    WholeDay.value = "";
 
-    //                 WholeWeek.value = "";
+                    wholeWeekDiv.style.display = 'none';
+                    withinDayDiv.style.display = 'none';
+                    wholeDayDiv.style.display = 'block';
+                    WholeDay.setAttribute('required', true);
+            }
+            else
+            {
+                console.log('wholeWeekNa')
+                startTimeWithinDay.removeAttribute('required');
+                    endTimeWithinDay.removeAttribute('required');
+                    eventDate.removeAttribute('required');
 
-    //                 wholeWeekDiv.style.display = 'block';
-    //                 withinDayDiv.style.display = 'none';
-    //                 wholeDayDiv.style.display = 'none';
+                    WholeDay.removeAttribute('required');
 
-    //                 WholeWeek.setAttribute('required', true);
-    //         }
-    //         // console.log('Selected value:', $(this).val());
-    //     }
+                    WholeWeek.value = "";
 
-    // });
+                    wholeWeekDiv.style.display = 'block';
+                    withinDayDiv.style.display = 'none';
+                    wholeDayDiv.style.display = 'none';
+
+                    WholeWeek.setAttribute('required', true);
+            }
+            // console.log('Selected value:', $(this).val());
+        }
+
+    });
 
     $("#createAdminEvent_submit").on("click", function (e) {
         console.log(data);
