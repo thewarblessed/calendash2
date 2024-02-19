@@ -65,7 +65,6 @@
                                             <th class="text-secondary text-xs font-weight-semibold opacity-15 ps-15">Organization</th>
                                             <th class="text-secondary text-xs font-weight-semibold opacity-15 ps-15">Department</th>
                                             <th class="text-center text-secondary text-xs font-weight-semibold opacity-15">Role</th>
-                                            <th class="text-secondary text-xs font-weight-semibold opacity-7 ps-2">Action</th>
                                             <th class="text-secondary opacity-7"></th>
                                         </tr>
                                     </thead>
@@ -93,10 +92,9 @@
                                                     class="text-sm text-dark font-weight-semibold mb-0">{{$pendingUser->department}}</span>
                                             </td>
                                             <td class="align-middle text-center text-sm">
-                                                <span
-                                                    class="text-sm text-dark font-weight-semibold mb-0">{{$pendingUser->role}}</span>
+                                                <span class="text-sm text-dark font-weight-semibold mb-0">{{$pendingUser->role}}</span>
                                             </td> 
-                                                  
+                                            
                                             <td class="align-middle text-center text-sm">
                                                 {{-- <span class="text-sm text-dark font-weight-semibold mb-0">{{$pendingUser->role}}</span> --}}
                                                 <button type="button" class="btn btn-dark btn-sm editRole"

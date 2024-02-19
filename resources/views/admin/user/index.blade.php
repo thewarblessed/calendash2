@@ -63,7 +63,6 @@
                                             </th>
                                             <th class="text-secondary text-xs font-weight-semibold opacity-15 ps-15">Email</th>
                                             <th class="text-center text-secondary text-xs font-weight-semibold opacity-15">Position</th>
-                                            
                                             <th class="text-secondary opacity-7"></th>
                                         </tr>
                                     </thead>
