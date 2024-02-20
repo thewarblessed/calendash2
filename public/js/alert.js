@@ -1039,7 +1039,8 @@ $(document).ready(function () {
         });
         //Swal.fire('SweetAlert2 is working!')
     });//end create event
-
+    
+    //ADMIN IN-TABLE VIEW OF REQUEST LETTER 
     $("#viewRequestLetter").on("click", function (e) {
         e.preventDefault();
         var id = $(this).data("id");
