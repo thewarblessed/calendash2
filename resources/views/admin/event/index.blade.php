@@ -26,14 +26,11 @@
                         
                             <div class="border-bottom py-3 px-3 d-sm-flex align-items-center">
                                 <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
-                                    <input type="radio" class="btn-check" name="btnradiotable" id="btnradiotable1"
-                                        autocomplete="off" checked>
+                                    <input type="radio" class="btn-check" name="btnradiotable" id="btnradiotable1" autocomplete="off" checked>
                                     <label class="btn btn-white px-3 mb-0" for="btnradiotable1">All</label>
-                                    <input type="radio" class="btn-check" name="btnradiotable" id="btnradiotable2"
-                                        autocomplete="off">
+                                    <input type="radio" class="btn-check" name="btnradiotable" id="btnradiotable2" autocomplete="off">
                                     <label class="btn btn-white px-3 mb-0" for="btnradiotable2">Approved</label>
-                                    <input type="radio" class="btn-check" name="btnradiotable" id="btnradiotable3"
-                                        autocomplete="off">
+                                    <input type="radio" class="btn-check" name="btnradiotable" id="btnradiotable3" autocomplete="off">
                                     <label class="btn btn-white px-3 mb-0" for="btnradiotable3">Pending</label>
                                 </div>
                             </div>
@@ -52,12 +49,13 @@
                                             <th class="text-center text-secondary text-xs font-weight-semibold opacity-7">Department</th>
                                             <th class="text-center text-secondary text-xs font-weight-semibold opacity-7">Organization</th>
                                             <th class="text-center text-secondary text-xs font-weight-semibold opacity-7">Status</th>
+                                            <th class="text-center text-secondary text-xs font-weight-semibold opacity-7">Request Letter</th>
                                             <th class="text-secondary opacity-7"></th>
                                             <th class="text-secondary opacity-7"></th>
                                             
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    <tbody id="table-body">
                                         @foreach($events as $event)
                                         <tr>
                                             <td>
@@ -101,6 +99,7 @@
                                             <td class="align-middle text-center text-sm">
                                                 <p class="text-sm text-dark font-weight-semibold mb-0">{{$event->target_org}}</p>
                                             </td>
+                                            
                                             <td class="align-middle text-center text-sm">
                                                 @if ($event->status === 'APPROVED')
                                                         <span
@@ -131,7 +130,12 @@
                                                         {{-- <p class="text-secondary text-sm mb-0">{{$status}}</p> --}}
                                                     @endif
                                             </td>
-                                           
+
+                                            <td class="align-middle text-center text-sm">
+                                                {{-- <p class="text-sm text-dark font-weight-semibold mb-0" id="viewRequestLetter">Request Letter</p> --}}
+                                                <u><strong><a href="#" style="color: black" id="viewRequestLetter" data-id="{{$event->id}}" >Request Letter</a></strong>
+                                            </td>
+
                                             <td class="align-middle">
                                                 <a href="javascript:;" class="text-secondary font-weight-bold "
                                                     data-bs-toggle="tooltip" data-bs-title="Edit event">
@@ -187,12 +191,12 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <div class="border-top py-3 px-3 d-flex align-items-center">
-                                <p class="font-weight-semibold mb-0 text-dark text-sm">Page 1 of 10</p>
+                            {{-- <div class="pagination"></div> --}}
+                            <div class="border-top py-3 px-3 d-flex align-items-center" id="pagination">
+                                <p class="font-weight-semibold mb-0 text-dark text-sm" id="page-info">Page 1 of 10</p>
                                 <div class="ms-auto">
-                                    <button class="btn btn-sm btn-white mb-0">Previous</button>
-                                    <button class="btn btn-sm btn-white mb-0">Next</button>
-                                </div>
+                                  <button class="btn btn-sm btn-white mb-0" id="previous-btn">Previous</button>
+                                  <button class="btn btn-sm btn-white mb-0" id="next-btn">Next</button>
                             </div>
                         </div>
                     </div>
@@ -245,5 +249,75 @@
             <x-app.footer />
         </div>
     </main>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" src="/js/alert.js"></script>
+    <script>
+        // $(document).ready(function() {
+        //   var events = <?php echo json_encode($events); ?>;
+        //   console.log(events)
+        //   var itemsPerPage = 5;
+        //   var totalPages = Math.ceil(events.length / itemsPerPage);
+        //   var currentPage = 1;
+      
+        //   function showItems(page) {
+        //     var startIndex = (page - 1) * itemsPerPage;
+        //     var endIndex = startIndex + itemsPerPage;
+        //     var slicedEvents = events.slice(startIndex, endIndex);
+      
+        //     $('#table-body').empty();
+        //     slicedEvents.forEach(function(event) {
+        //       var row = `
+        //         <tr>
+        //           <td class"align-left">${event.event_name}</td>
+        //           <td>${event.name}</td>
+        //           <td>${event.type}</td>
+        //           <td>${event.start_date}</td>
+        //           <td>${event.end_date}</td>
+        //           <td>${event.start_time}</td>
+        //           <td>${event.end_time}</td>
+        //           <td>${event.target_dept}</td>
+        //           <td>${event.target_org}</td>
+        //           <td>${event.status}</td>
+        //           <td><a href="#" class="edit-event">Edit</a></td>
+        //           <td><a href="#" class="delete-event">Delete</a></td>
+        //         </tr>
+        //       `;
+        //       $('#table-body').append(row);
+        //     });
+        //   }
+      
+        //   function updatePageInfo() {
+        //     $('#page-info').text('Page ' + currentPage + ' of ' + totalPages);
+        //   }
+      
+        //   function updatePaginationButtons() {
+        //     $('#previous-btn').prop('disabled', currentPage === 1);
+        //     $('#next-btn').prop('disabled', currentPage === totalPages);
+        //   }
+      
+        //   $('#previous-btn').click(function() {
+        //     if (currentPage > 1) {
+        //       currentPage--;
+        //       showItems(currentPage);
+        //       updatePageInfo();
+        //       updatePaginationButtons();
+        //     }
+        //   });
+      
+        //   $('#next-btn').click(function() {
+        //     if (currentPage < totalPages) {
+        //       currentPage++;
+        //       showItems(currentPage);
+        //       updatePageInfo();
+        //       updatePaginationButtons();
+        //     }
+        //   });
+      
+        //   showItems(currentPage);
+        //   updatePageInfo();
+        //   updatePaginationButtons();
+        // });
+      
+        </script>
 
 </x-app-layout>

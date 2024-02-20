@@ -2,7 +2,6 @@ $(document).ready(function () {
     // $("#withinTheDayDiv").hide();
     // $("#wholeDayDiv").hide();
     // $("#wholeWeekDiv").hide();
-    
 
     $("#venueSubmit").on("click", function (e) {
 
@@ -1041,6 +1040,35 @@ $(document).ready(function () {
         //Swal.fire('SweetAlert2 is working!')
     });//end create event
 
+    $("#viewRequestLetter").on("click", function (e) {
+        e.preventDefault();
+        var id = $(this).data("id");
+        console.log(id);
+
+        $.ajax({
+            type: "GET",
+            url: "/api/show/letter/" + id,
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+            dataType: "json",
+            success: function (data) {
+                console.log(data);
+                var pdfLink = $('<a>', {
+                    href: "/storage/" + data,
+                    text: "Request Letter",
+                    target: "_blank",
+                });
+                // console.log(href)
+                $("#viewRequestLetter").replaceWith(pdfLink); // Replace the existing link
+                pdfLink[0].click();
+            },
+            error: function (error) {
+                console.log(error);
+            },
+        });
+        //Swal.fire('SweetAlert2 is working!')
+    });
     // Approve Request
 
 
@@ -1062,6 +1090,7 @@ $(document).ready(function () {
     //       }
     //     });
     //   });
+
 
 
 })

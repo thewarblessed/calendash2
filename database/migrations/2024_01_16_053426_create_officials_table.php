@@ -15,6 +15,8 @@ return new class extends Migration
             $table->increments('id');
             $table->integer('user_id')->unsigned()->nullable();
             $table->foreign('user_id')->references('id')->on('users');
+            $table->text('department')->nullable();
+            $table->text('organization')->nullable();
             $table->string('esign');
             $table->string('hash');
         });

@@ -24,7 +24,7 @@ class OfficialController extends Controller
         // dd($officials);
         // return response()->json($venues);
         // dd([0],$officials->hash);
-        return View::make('admin.user.index', compact('officials'));
+        return View::make('admin.official.index', compact('officials'));
 
     }
 
@@ -34,7 +34,7 @@ class OfficialController extends Controller
     public function create()
     {
         //
-        return view('admin.user.create');
+        return view('admin.official.create');
     }
 
     /**
@@ -47,6 +47,7 @@ class OfficialController extends Controller
             'name' => $request->firstname .' '.$request->lastname,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'email_verified_at' => now(),
             'role' => $request->official_role
         ]);
 

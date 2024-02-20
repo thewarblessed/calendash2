@@ -100,10 +100,10 @@
                                             <td class="align-middle text-center text-sm">
                                                 {{-- <span class="text-sm text-dark font-weight-semibold mb-0">{{$pendingUser->role}}</span> --}}
                                                 <button type="button" class="btn btn-dark btn-sm editRole"
-                                                            data-bs-toggle="modal" data-id="{{ $pendingUser->id }}"
+                                                            data-bs-toggle="modal" data-id="{{ $pendingUser->user_id }}"
                                                             data-bs-target="#checkStatusModal">Edit Role</button>
                                                 @if($pendingUser->email_verified_at === null)
-                                                <button type="button" class="btn btn-dark btn-sm approveAccount" data-id="{{ $pendingUser->id }}">Approve Account</button>
+                                                <button type="button" class="btn btn-dark btn-sm approveAccount" data-id="{{ $pendingUser->user_id }}">Approve Account</button>
                                                 @endif
                                             </td> 
                                         </tr>

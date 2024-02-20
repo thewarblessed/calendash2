@@ -77,15 +77,17 @@ class UserController extends Controller
         // $pendingUsers = PendingUser::join('users', 'pending_users.user_id','users.id')->get();
         // $user = User::find($id);
         $user = User::join('pending_users', 'pending_users.user_id','users.id')->where('users.id', $id)->first();
+        // $pendingUser = PendingUser::
         $forUser = User::where('id', $id)->first();
 
+        // dd($user->id);
         $student = new Student();
         $student->tupID = $user->tupID;
         $student->lastname = $user->lastname;
         $student->firstname = $user->firstname;
         $student->department = $user->department;
         $student->studOrg = $user->organization;
-        $student->user_id = $user->id;
+        $student->user_id = $user->user_id;
         // $student->role = 'student';
         $student->save();
 

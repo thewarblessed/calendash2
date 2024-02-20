@@ -228,24 +228,6 @@ class RequestController extends Controller
                         return response()->json(['error' => 'Invalid passcode'], 422);
                     }
                 }
-            elseif($role === 'campus_director')
-                {
-                    if ($hashedPasswordFromDatabase && Hash::check($password, $hashedPasswordFromDatabase->hash)) {
-                        // Passwords match, proceed with authentication logic
-                        // echo "Password Match";
-                        $users = User::find($user_id);
-                        $officials = Official::join('users', 'users.id', 'officials.user_id')->where('users.id', $user_id)->first();
-                        $events = Event::find($event_id);
-                        $events->campus_director = $officials->hash;
-                        $events->save();
-                        return response()->json(["message" => 'Request handled successfully']);
-                        // return response()->json(['message' => 'Request handled successfully']);
-                    } else {
-                        // Passwords do not match, handle invalid password
-                        // echo "Password Does Not Match";
-                        return response()->json(['error' => 'Invalid passcode'], 422);
-                    }
-                }
         }
         else
         {
@@ -389,6 +371,7 @@ class RequestController extends Controller
     {
         $events = Event::find($id);
         $venues = Venue::find($events->venue_id);
+        $orgAdviser = $events->org_adviser;
         $secHead = $events->sect_head;
         $depHead = $events->dept_head;
         $osa = $events->osa;
@@ -397,11 +380,24 @@ class RequestController extends Controller
         $cd = $events->campus_director;
 
         $message = 'Your Request is on Process';
-        if ($secHead === null && $depHead === null && $osa === null && $adaa === null && $atty === null && $cd === null)
+        if ($orgAdviser === null && $secHead === null && $depHead === null && $osa === null && $adaa === null && $atty === null && $cd === null)
        {
         // $appSecDate = $events->approved_sec_head_at;
         $message = 'Your Request is on Process';
         return response()->json(["msg" => $message, "status" => 200]);
+       }
+        elseif ($orgAdviser !== null && $secHead === null && $depHead === null && $osa === null && $adaa === null && $atty === null && $cd === null)
+       {
+        // $appSecDate = $events->approved_sec_head_at;
+        $approvalDates = [
+            $events->approved_org_adviser_at,
+        ];
+        
+        $approvalMessage = [
+            'APPROVED BY ORGANIZATION ADVISER',
+        ];
+        $pendingMsg = 'Waiting for Approval of Department Head';
+        return response()->json(["dates" => $approvalDates, "msg" => $approvalMessage, "pendingMsg" => $pendingMsg, "status" => 200]);
        }
        elseif ($secHead !== null && $depHead === null && $osa === null && $adaa === null && $atty === null && $cd === null)
        {
@@ -519,6 +515,7 @@ class RequestController extends Controller
     $events = Event::find($id);
     $venues = Venue::find($events->venue_id);
     // dd($events);
+    $orgAdviser = $events->org_adviser;
     $secHead = $events->sect_head;
     $depHead = $events->dept_head;
     $osa = $events->osa;
@@ -528,8 +525,11 @@ class RequestController extends Controller
 
     // Initialize $Message with a default value
     $Message = 'No approval status available.';
-
-    if($secHead === null && $depHead === null && $osa === null && $adaa === null && $atty === null && $cd === null)
+    if($orgAdviser === null && $secHead === null && $depHead === null && $osa === null && $adaa === null && $atty === null && $cd === null)
+    {
+        $Message = 'Waiting for approval of organization adviser';
+    }
+    elseif($secHead === null && $depHead === null && $osa === null && $adaa === null && $atty === null && $cd === null)
     {
         $Message = 'Waiting for approval of section head';
     }

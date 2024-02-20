@@ -78,8 +78,21 @@
                                                     class="text-sm text-dark font-weight-semibold mb-0">{{$official->email}}</span>
                                             </td>
                                             <td class="align-middle text-center text-sm">
-                                                <span
-                                                    class="text-sm text-dark font-weight-semibold mb-0">{{$official->role}}</span>
+                                                @if($official->role === 'org_adviser')
+                                                <span class="text-sm text-dark font-weight-semibold mb-0">Organization Adviser</span>
+                                                @elseif($official->role === 'section_head')
+                                                <span class="text-sm text-dark font-weight-semibold mb-0">Section Head</span>
+                                                @elseif($official->role === 'department_head')
+                                                <span class="text-sm text-dark font-weight-semibold mb-0">Department Head</span>
+                                                @elseif($official->role === 'osa')
+                                                <span class="text-sm text-dark font-weight-semibold mb-0">OSA</span>
+                                                @elseif($official->role === 'atty')
+                                                <span class="text-sm text-dark font-weight-semibold mb-0">ATTY</span>
+                                                @elseif($official->role === 'adaa')
+                                                <span class="text-sm text-dark font-weight-semibold mb-0">ADAA</span>
+                                                @elseif($official->role === 'campus_director')
+                                                <span class="text-sm text-dark font-weight-semibold mb-0">Campus Director</span>
+                                                @endif
                                             </td>
 
                                             {{-- <td class="align-middle text-center">

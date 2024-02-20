@@ -63,7 +63,7 @@ class EventController extends Controller
         if ($role === 'student')
         {
             $student = Student::where('user_id',$request->user_id)->first();
-
+            // dd($request->user_id);
             $target_dept = $student->department;
             $target_org = $student->studOrg;
             //EVENT DATE TYPE
@@ -99,7 +99,7 @@ class EventController extends Controller
                     'target_org' => $target_org,
                     'event_letter' => $event_letter,
                     'status' => 'PENDING',
-                    'color' => '#31B4F2'
+                    'color' => '#D6AD60'
                 ]);
                 
                 return response()->json(["success" => "Event Created Successfully.", "status" => 200]);
@@ -135,7 +135,7 @@ class EventController extends Controller
                     'event_letter' => $event_letter,
                     'whole_week' => false,
                     'status' => 'PENDING',
-                    'color' => '#31B4F2'
+                    'color' => '#D6AD60'
                 ]);
                 return response()->json(["success" => "Event Created Successfully.", "status" => 200]);
             }   
@@ -168,7 +168,7 @@ class EventController extends Controller
                     'event_letter' => $event_letter,
                     'whole_week' => false,
                     'status' => 'PENDING',
-                    'color' => '#31B4F2'
+                    'color' => '#D6AD60'
                 ]);
                 return response()->json(["success" => "Event Created Successfully.", "status" => 200]);
             }
@@ -213,7 +213,7 @@ class EventController extends Controller
                     'target_org' => $target_org,
                     'event_letter' => $event_letter,
                     'status' => 'PENDING',
-                    'color' => '#31B4F2'
+                    'color' => '#D6AD60'
                 ]);
                 
                 return response()->json(["success" => "Event Created Successfully.", "status" => 200]);
@@ -249,7 +249,7 @@ class EventController extends Controller
                     'event_letter' => $event_letter,
                     'whole_week' => false,
                     'status' => 'PENDING',
-                    'color' => '#31B4F2'
+                    'color' => '#D6AD60'
                 ]);
                 return response()->json(["success" => "Event Created Successfully.", "status" => 200]);
             }   
@@ -282,7 +282,7 @@ class EventController extends Controller
                     'event_letter' => $event_letter,
                     'whole_week' => false,
                     'status' => 'PENDING',
-                    'color' => '#31B4F2'
+                    'color' => '#D6AD60'
                 ]);
                 return response()->json(["success" => "Event Created Successfully.", "status" => 200]);
             }
@@ -326,7 +326,7 @@ class EventController extends Controller
                     'target_org' => $target_org,
                     'event_letter' => $event_letter,
                     'status' => 'PENDING',
-                    'color' => '#31B4F2'
+                    'color' => '#D6AD60'
                 ]);
                 
                 return response()->json(["success" => "Event Created Successfully.", "status" => 200]);
@@ -362,7 +362,7 @@ class EventController extends Controller
                     'event_letter' => $event_letter,
                     'whole_week' => false,
                     'status' => 'PENDING',
-                    'color' => '#31B4F2'
+                    'color' => '#D6AD60'
                 ]);
                 return response()->json(["success" => "Event Created Successfully.", "status" => 200]);
             }   
@@ -395,7 +395,7 @@ class EventController extends Controller
                     'event_letter' => $event_letter,
                     'whole_week' => false,
                     'status' => 'PENDING',
-                    'color' => '#31B4F2'
+                    'color' => '#D6AD60'
                 ]);
                 return response()->json(["success" => "Event Created Successfully.", "status" => 200]);
             }
