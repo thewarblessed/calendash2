@@ -151,7 +151,7 @@
 
 
             {{-- FOR OFFICIALS --}}
-            @if (auth()->user()->hasRole(['organization_head', 'section_head', 'department_head', 'osa', 'adaa', 'atty', 'campus_director']))
+            @if (auth()->user()->hasRole(['org_adviser', 'section_head', 'department_head', 'osa', 'adaa', 'atty', 'campus_director']))
                 <li class="nav-item">
                     <a class="nav-link  {{ is_current_route('adaaRequest') ? 'active' : '' }}"
                         href="{{ route('adaaRequest') }}">

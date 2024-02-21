@@ -197,8 +197,8 @@ $(document).ready(function () {
     });//end filter venue
 
     //SETTING DATE FOR USER
-    $('.radiobuttonsuser input[type="radio"]').change(function() {
-        
+    $('.radiobuttonsuser input[type="radio"]').change(function () {
+
         const withinDayDiv = document.getElementById('withinTheDayDivUser');
         const wholeDayDiv = document.getElementById('wholeDayDivUser');
         const wholeWeekDiv = document.getElementById('wholeWeekDivUser');
@@ -210,14 +210,13 @@ $(document).ready(function () {
         const WholeWeek = document.getElementById('event_date_wholeWeekUser');
         if ($(this).is(':checked')) {
 
-            if ($(this).val() === 'withinDay')
-            {
+            if ($(this).val() === 'withinDay') {
                 console.log('labasDate');
                 // $("#withinTheDayDiv").show();
                 // $("#wholeDayDiv").hide();
                 // $("#wholeWeekDiv").hide();
 
-                
+
                 WholeDay.removeAttribute('required');
                 WholeWeek.removeAttribute('required');
 
@@ -231,44 +230,42 @@ $(document).ready(function () {
 
                 startTimeWithinDay.setAttribute('required', true);
                 endTimeWithinDay.setAttribute('required', true);
-                eventDate.setAttribute('required', true); 
+                eventDate.setAttribute('required', true);
 
 
 
 
             }
-            else if($(this).val() === 'wholeDay')
-            {
+            else if ($(this).val() === 'wholeDay') {
                 console.log('wholeDayLangTalaga');
                 startTimeWithinDay.removeAttribute('required');
-                    endTimeWithinDay.removeAttribute('required');
-                    eventDate.removeAttribute('required');
+                endTimeWithinDay.removeAttribute('required');
+                eventDate.removeAttribute('required');
 
-                    WholeWeek.removeAttribute('required');
+                WholeWeek.removeAttribute('required');
 
-                    WholeDay.value = "";
+                WholeDay.value = "";
 
-                    wholeWeekDiv.style.display = 'none';
-                    withinDayDiv.style.display = 'none';
-                    wholeDayDiv.style.display = 'block';
-                    WholeDay.setAttribute('required', true);
+                wholeWeekDiv.style.display = 'none';
+                withinDayDiv.style.display = 'none';
+                wholeDayDiv.style.display = 'block';
+                WholeDay.setAttribute('required', true);
             }
-            else
-            {
+            else {
                 console.log('wholeWeekNa')
                 startTimeWithinDay.removeAttribute('required');
-                    endTimeWithinDay.removeAttribute('required');
-                    eventDate.removeAttribute('required');
+                endTimeWithinDay.removeAttribute('required');
+                eventDate.removeAttribute('required');
 
-                    WholeDay.removeAttribute('required');
+                WholeDay.removeAttribute('required');
 
-                    WholeWeek.value = "";
+                WholeWeek.value = "";
 
-                    wholeWeekDiv.style.display = 'block';
-                    withinDayDiv.style.display = 'none';
-                    wholeDayDiv.style.display = 'none';
+                wholeWeekDiv.style.display = 'block';
+                withinDayDiv.style.display = 'none';
+                wholeDayDiv.style.display = 'none';
 
-                    WholeWeek.setAttribute('required', true);
+                WholeWeek.setAttribute('required', true);
             }
             // console.log('Selected value:', $(this).val());
         }
@@ -331,6 +328,7 @@ $(document).ready(function () {
         // alert('dshagd')
         var id = $(this).data("id");
         // alert(id);
+        console.log(id);
         e.preventDefault();
 
         $.ajax({
@@ -362,8 +360,8 @@ $(document).ready(function () {
             },
         });
 
-        console.log(id)
-        //PDF
+        // console.log(id)
+        // //PDF
         $.ajax({
             type: "GET",
             url: "/api/show/letter/" + id,
@@ -387,7 +385,7 @@ $(document).ready(function () {
         });
 
 
-        //EVENT APPROVE BUTTON
+        // //EVENT APPROVE BUTTON
         $("#eventApprove").on("click", async function (e) {
             e.preventDefault();
 
@@ -428,6 +426,11 @@ $(document).ready(function () {
                     },
                     success: function (data) {
                         console.log(data);
+
+                        setTimeout(function () {
+                            window.location.href = '/request';
+                        }, 1500);
+
                         Swal.fire({
                             icon: "success",
                             title: "Request has been approved",
@@ -524,7 +527,8 @@ $(document).ready(function () {
             },
             dataType: "json",
             success: function (data) {
-                var originalDate = new Date(data.events.event_date);
+                var originalSDate = new Date(data.events.start_date);
+                var originalEDate = new Date(data.events.end_date);
                 var origStime = moment(data.events.start_time, "HH:mm:ss")
                 var origEtime = moment(data.events.end_time, "HH:mm:ss")
 
@@ -532,8 +536,19 @@ $(document).ready(function () {
                 var formattedETime = origEtime.format("h:mm A");
 
                 // Format the date using moment.js
-                var formattedDate = moment(originalDate).format("MMMM D, YYYY");
-                console.log(data);
+                var formattedSDate = moment(originalSDate).format("MMMM D, YYYY");
+                var formattedEDate = moment(originalEDate).format("MMMM D, YYYY");
+
+                var dateType = data.events.type;
+                var dType;
+                if (dateType === 'within_day') {
+                    dType = 'Within the Day';
+                } else if (dateType === 'whole_day') {
+                    dType = 'Whole Day';
+                } else {
+                    dType = 'Whole Week';
+                }
+                // console.log(dType);
 
                 $('#checkMoreModal').modal('show');
                 $('#eventStatusText').text(data.msg);
@@ -541,7 +556,9 @@ $(document).ready(function () {
                 $('#eventStatusDesc').val(data.events.description);
                 $('#eventStatusParticipants').val(data.events.participants);
                 $('#eventStatusVenue').val(data.venues.name);
-                $('#eventStatusDate').val(formattedDate);
+                $('#eventStatusDateType').val(dType);
+                $('#eventStatusStartDate').val(formattedSDate);
+                $('#eventStatusEndDate').val(formattedEDate);
                 $('#eventStatusSTime').val(formattedSTime);
                 $('#eventStatusETime').val(formattedETime);
 
@@ -566,34 +583,6 @@ $(document).ready(function () {
             },
         });
 
-        // console.log(id)
-        // $.ajax({
-        //     type: "GET",
-        //     url: "/api/show/letter/" + id,
-        //     headers: {
-        //         "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
-        //     },
-        //     dataType: "json",
-        //     success: function (data) {
-        //         console.log(data);
-        //         var pdfLink = $('<a>', {
-        //             href: "/storage/" + data,
-        //             text: "Click here to view Request Letter",
-        //             target: "_blank",
-        //         });
-        //         // console.log(href)
-        //         $("#viewAnotherTab").empty().append(pdfLink);
-        //     },
-        //     error: function (error) {
-        //         console.log(error);
-        //     },
-        // });
-    });//end event status table
-
-    $("#eventStatus tbody").on("click", 'button.checkStatus ', function (e) {
-        var id = $(this).data("id");
-        // e.preventDefault();
-
         $.ajax({
             type: "GET",
             enctype: 'multipart/form-data',
@@ -610,7 +599,7 @@ $(document).ready(function () {
             success: function (data) {
                 console.log(data);
                 $('#statusList').empty();
-                $('#checkStatusModal').modal('show');
+                // $('#checkStatusModal').modal('show');
                 $('#eventStatusText').text(data.pendingMsg);
 
                 var statusElement = $('#eventStatusText');
@@ -636,52 +625,16 @@ $(document).ready(function () {
                 $.each(data.dates, function (index, item) {
                     // console.log(item);
                     console.log(index);
+                    console.log(item)
                     console.log(data.msg);
                     var formattedDate = moment(item, 'YYYY-MM-DD HH:mm:ss').format('MMMM D, YYYY');
                     var formattedTime = moment(item, 'YYYY-MM-DD HH:mm:ss').format('h:mm A');
                     console.log(formattedTime);
 
-                    // Now, formattedDate contains the formatted date
-                    
-                    // var date = data.dates;
-                    // console.log(date);
-
-                    // $.each(date, function (index, item) {
-                    //     // Assuming item is a date string, modify the format as needed
-                    //     var formattedDate = moment(item, 'YYYY-MM-DD HH:mm:ss').format('MMMM D, YYYY h:mm A');
-
-                    //     // Now, formattedDate contains the formatted date
-                    //     console.log(formattedDate);
-                    // });
-
-                    // Use formattedDate as needed in your application
-                    // var approvedDate = new Date(date);
-                    // var formattedDate = approvedDate.toLocaleDateString('en-US', {
-                    //     year: 'numeric',
-                    //     month: 'long',
-                    //     day: 'numeric'
-                    // });
-                    // console.log(formattedDate);
-                    // var formattedTime = approvedDate.toLocaleTimeString('en-US', {
-                    //     hour: 'numeric',
-                    //     minute: 'numeric'
-                    // });
-
-                    // $.each(data.msg, function(msgIndex, msgItem) {
-                    //     console.log(msg)
-                    //     var listItem = `
-                    //         <li class="rb-item">
-                    //             <div class="timestamp">
-                    //                 ${formattedDate}<br> <span>${formattedTime}</span>
-                    //             </div>
-                    //             <div class="item-title">${msgItem}</div>
-                    //         </li>
-                    //     `;
-                    //     $('#statusList').prepend(listItem);
-                    // });
+                   
                     if (data.msg && data.msg[index]) {
                         var msgItem = data.msg[index];
-                
+
                         // Create a list item for each date and message
                         var listItem = `
                             <li class="rb-item">
@@ -691,39 +644,101 @@ $(document).ready(function () {
                                 <div class="item-title">${msgItem}</div>
                             </li>
                         `;
-                
+
                         $('#statusList').prepend(listItem);
                     }
 
-                    // console.log(msgItem);
-                    // var listItem = `
-                    //     <li class="rb-item">
-                    //         <div class="timestamp">
-                    //             ${formattedDate}<br> <span>${formattedTime}</span>
-                    //         </div>
-                    //         <div class="item-title">${msgItem}</div>
-                    //     </li>
-                    // `;
-                    // $('#statusList').prepend(listItem);
+               
                 });
 
 
-                //     var listItem = `
-                //         <li class="rb-item">
-                //             <div class="timestamp">
-                //                 ${formattedDate}<br> <span>${formattedTime}</span>
-                //             </div>
-                //             <div class="item-title">${data.approvedSecHeadMsg}</div>
-                //         </li>
-                //     `;
-                //     $('#statusList').prepend(listItem);
 
             },
             error: function (error) {
                 console.log("error");
             },
         });
-    });
+    });//end event status table
+
+    // $("#eventStatus tbody").on("click", 'button.checkStatus ', function (e) {
+    //     var id = $(this).data("id");
+    //     // e.preventDefault();
+    //     console.log(id);
+    //     $.ajax({
+    //         type: "GET",
+    //         enctype: 'multipart/form-data',
+    //         processData: false, // Important!
+    //         contentType: false,
+    //         cache: false,
+    //         url: "/api/myEventStatus/" + id,
+    //         headers: {
+    //             "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
+    //                 "content"
+    //             ),
+    //         },
+    //         dataType: "json",
+    //         success: function (data) {
+    //             console.log(data);
+    //             $('#statusList').empty();
+    //             $('#checkStatusModal').modal('show');
+    //             $('#eventStatusText').text(data.pendingMsg);
+
+    //             var statusElement = $('#eventStatusText');
+    //             // console.log(statusElement)
+    //             // Get the value from the element's text content
+    //             var statusValue = $('#eventStatusText').text();
+
+    //             statusElement.removeClass();
+    //             // Apply styling based on the value
+    //             if (statusValue === 'APPROVED') {
+    //                 statusElement.addClass('badge badge-sm border border-success text-success');
+    //             } else {
+    //                 statusElement.addClass('badge badge-sm border border-warning text-warning');
+    //             }
+    //             // $("#venueEditImage").html(
+    //             // `<img src="/storage/${data.Venues.image}" width="100" class="img-fluid img-thumbnail">`);
+
+    //             // var status = 1;
+    //             // $.each(data, function(index, item) {
+
+    //             // });
+
+    //             $.each(data.dates, function (index, item) {
+    //                 // console.log(item);
+    //                 console.log(index);
+    //                 console.log(data.msg);
+    //                 var formattedDate = moment(item, 'YYYY-MM-DD HH:mm:ss').format('MMMM D, YYYY');
+    //                 var formattedTime = moment(item, 'YYYY-MM-DD HH:mm:ss').format('h:mm A');
+    //                 console.log(formattedTime);
+
+                   
+    //                 if (data.msg && data.msg[index]) {
+    //                     var msgItem = data.msg[index];
+
+    //                     // Create a list item for each date and message
+    //                     var listItem = `
+    //                         <li class="rb-item">
+    //                             <div class="timestamp">
+    //                                 ${formattedDate}<br> <span>${formattedTime}</span>
+    //                             </div>
+    //                             <div class="item-title">${msgItem}</div>
+    //                         </li>
+    //                     `;
+
+    //                     $('#statusList').prepend(listItem);
+    //                 }
+
+               
+    //             });
+
+
+
+    //         },
+    //         error: function (error) {
+    //             console.log("error");
+    //         },
+    //     });
+    // });
 
     $('#radioForm input').change(function () {
         // alert($('input[name=btnradiotable]:checked', '#radioForm').val());
@@ -738,7 +753,7 @@ $(document).ready(function () {
 
         if (filterValue !== 'all') {
             $('#eventBody tr').each(function () {
-                var rowStatus = $(this).find('td:eq(5)').text().trim(); // Trim whitespace // td:eq(3) yung column!
+                var rowStatus = $(this).find('td:eq(7)').text().trim(); // Trim whitespace // td:eq(3) yung column!
                 console.log(rowStatus);
                 // Check if the row status matches the selected filter
                 if (rowStatus !== filterValue.trim()) {
@@ -785,7 +800,7 @@ $(document).ready(function () {
                     title: "Account approval is underway. Your patience is appreciated as we verify the details you've provided.",
                     showConfirmButton: false,
                     timer: 4500
-                  });
+                });
                 // var $ctable = $('#ctable').DataTable();
                 // $ctable.ajax.reload();
                 // $ctable.row.add(data.customer).draw(false);
@@ -798,7 +813,7 @@ $(document).ready(function () {
                 console.log('error');
             }
         });
-        
+
     });//end create
 
     $("#pendingUsersTable tbody").on("click", 'button.approveAccount ', function (e) {
@@ -825,9 +840,9 @@ $(document).ready(function () {
                     title: "Account verified!",
                     showConfirmButton: false,
                     timer: 1500
-                  });
-                
-                  setTimeout(function () {
+                });
+
+                setTimeout(function () {
                     window.location.href = '/admin/pendingUsers';
                 }, 1500);
             },
@@ -847,7 +862,7 @@ $(document).ready(function () {
             processData: false, // Important!
             contentType: false,
             cache: false,
-            url: "/api/admin/getUser/" + id ,
+            url: "/api/admin/getUser/" + id,
             headers: {
                 "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
                     "content"
@@ -856,14 +871,14 @@ $(document).ready(function () {
             dataType: "json",
             success: function (data) {
                 console.log(data);
-            //     $('#createVenueModal').modal('show');
+                //     $('#createVenueModal').modal('show');
                 $('#userId').val(id);
                 $('#userLastname').val(data.user.lastname);
                 $('#userFirstname').val(data.user.firstname);
                 $('#userOrganization').val(data.user.organization);
                 $('#userDepartment').val(data.user.department);
-            //     $("#venueEditImage").html(
-            //         `<img src="/storage/${data.Venues.image}" width="100" class="img-fluid img-thumbnail">`);
+                //     $("#venueEditImage").html(
+                //         `<img src="/storage/${data.Venues.image}" width="100" class="img-fluid img-thumbnail">`);
             },
             error: function (error) {
                 console.log("error");
@@ -876,7 +891,7 @@ $(document).ready(function () {
         e.preventDefault();
         // var data = $('#roleUpdateForm')[0];
         var id = $("#userId").val();
-        console.log(id);    
+        console.log(id);
         let formData = new FormData($('#roleUpdateForm')[0]);
         // console.log(formData);
 
@@ -902,7 +917,7 @@ $(document).ready(function () {
                     title: "Role Updated!",
                     showConfirmButton: false,
                     timer: 1500
-                  });
+                });
                 // var $ctable = $('#ctable').DataTable();
                 // $ctable.ajax.reload();
                 // $ctable.row.add(data.customer).draw(false);
@@ -915,11 +930,11 @@ $(document).ready(function () {
                 console.log(error);
             }
         });
-        
+
     });//end create
-    
+
     // ADMIN SETTING DATE
-    $('.radiobuttons input[type="radio"]').change(function() {
+    $('.radiobuttons input[type="radio"]').change(function () {
         const withinDayDiv = document.getElementById('withinTheDayDiv');
         const wholeDayDiv = document.getElementById('wholeDayDiv');
         const wholeWeekDiv = document.getElementById('wholeWeekDiv');
@@ -931,14 +946,13 @@ $(document).ready(function () {
         const WholeWeek = document.getElementById('event_date_wholeWeek');
         if ($(this).is(':checked')) {
 
-            if ($(this).val() === 'withinDay')
-            {
+            if ($(this).val() === 'withinDay') {
                 console.log('labasDate');
                 // $("#withinTheDayDiv").show();
                 // $("#wholeDayDiv").hide();
                 // $("#wholeWeekDiv").hide();
 
-                
+
                 WholeDay.removeAttribute('required');
                 WholeWeek.removeAttribute('required');
 
@@ -952,44 +966,42 @@ $(document).ready(function () {
 
                 startTimeWithinDay.setAttribute('required', true);
                 endTimeWithinDay.setAttribute('required', true);
-                eventDate.setAttribute('required', true); 
+                eventDate.setAttribute('required', true);
 
 
 
 
             }
-            else if($(this).val() === 'wholeDay')
-            {
+            else if ($(this).val() === 'wholeDay') {
                 console.log('wholeDayLangTalaga');
                 startTimeWithinDay.removeAttribute('required');
-                    endTimeWithinDay.removeAttribute('required');
-                    eventDate.removeAttribute('required');
+                endTimeWithinDay.removeAttribute('required');
+                eventDate.removeAttribute('required');
 
-                    WholeWeek.removeAttribute('required');
+                WholeWeek.removeAttribute('required');
 
-                    WholeDay.value = "";
+                WholeDay.value = "";
 
-                    wholeWeekDiv.style.display = 'none';
-                    withinDayDiv.style.display = 'none';
-                    wholeDayDiv.style.display = 'block';
-                    WholeDay.setAttribute('required', true);
+                wholeWeekDiv.style.display = 'none';
+                withinDayDiv.style.display = 'none';
+                wholeDayDiv.style.display = 'block';
+                WholeDay.setAttribute('required', true);
             }
-            else
-            {
+            else {
                 console.log('wholeWeekNa')
                 startTimeWithinDay.removeAttribute('required');
-                    endTimeWithinDay.removeAttribute('required');
-                    eventDate.removeAttribute('required');
+                endTimeWithinDay.removeAttribute('required');
+                eventDate.removeAttribute('required');
 
-                    WholeDay.removeAttribute('required');
+                WholeDay.removeAttribute('required');
 
-                    WholeWeek.value = "";
+                WholeWeek.value = "";
 
-                    wholeWeekDiv.style.display = 'block';
-                    withinDayDiv.style.display = 'none';
-                    wholeDayDiv.style.display = 'none';
+                wholeWeekDiv.style.display = 'block';
+                withinDayDiv.style.display = 'none';
+                wholeDayDiv.style.display = 'none';
 
-                    WholeWeek.setAttribute('required', true);
+                WholeWeek.setAttribute('required', true);
             }
             // console.log('Selected value:', $(this).val());
         }
@@ -1039,9 +1051,40 @@ $(document).ready(function () {
         });
         //Swal.fire('SweetAlert2 is working!')
     });//end create event
-    
+
     //ADMIN IN-TABLE VIEW OF REQUEST LETTER 
-    $("#viewRequestLetter").on("click", function (e) {
+    // $("#viewRequestLetter").on("click", function (e) {
+    //     e.preventDefault();
+    //     var id = $(this).data("id");
+    //     console.log(id);
+
+    //     $.ajax({
+    //         type: "GET",
+    //         url: "/api/show/letter/" + id,
+    //         headers: {
+    //             "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+    //         },
+    //         dataType: "json",
+    //         success: function (data) {
+    //             console.log(data);
+    //             var pdfLink = $('<a>', {
+    //                 href: "/storage/" + data,
+    //                 text: "Request Letter",
+    //                 target: "_blank",
+    //             });
+    //             // console.log(href)
+    //             $("#viewRequestLetter").replaceWith(pdfLink); // Replace the existing link
+    //             pdfLink[0].click();
+    //         },
+    //         error: function (error) {
+    //             console.log(error);
+    //         },
+    //     });
+    //     //Swal.fire('SweetAlert2 is working!')
+    // });
+
+
+    $("#adminAllEvents tbody").on("click", 'a.viewRequestLetter ', function (e) {
         e.preventDefault();
         var id = $(this).data("id");
         console.log(id);
@@ -1068,7 +1111,6 @@ $(document).ready(function () {
                 console.log(error);
             },
         });
-        //Swal.fire('SweetAlert2 is working!')
     });
     // Approve Request
 

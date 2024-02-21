@@ -36,7 +36,7 @@
                             </div>
                 
                             <div class="table-responsive p-0">
-                                <table class="table align-items-center mb-0">
+                                <table class="table align-items-center mb-0" id="adminAllEvents">
                                     <thead class="bg-gray-100">
                                         <tr>
                                             <th class="text-secondary text-xs font-weight-semibold opacity-7">Event Name</th>
@@ -133,7 +133,7 @@
 
                                             <td class="align-middle text-center text-sm">
                                                 {{-- <p class="text-sm text-dark font-weight-semibold mb-0" id="viewRequestLetter">Request Letter</p> --}}
-                                                <u><strong><a href="#" style="color: black" id="viewRequestLetter" data-id="{{$event->id}}" >Request Letter</a></strong>
+                                                <u><strong><a href="#" style="color: black" id="reqLetter" class="viewRequestLetter" data-id="{{$event->id}}" >Request Letter</a></strong>
                                             </td>
 
                                             <td class="align-middle">

@@ -414,8 +414,7 @@ class EventController extends Controller
                 //ADMIN
     public function showAdminEvents()
     {   
-        $events = Event::join('venues','events.venue_id','venues.id')
-                        ->orderBy('events.id')->get();
+        $events = Event::with('venue')->get();
 
                         // dd($events);
         // $user_id = $events->user_id;

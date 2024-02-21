@@ -66,12 +66,16 @@
 
                                             <th class="text-secondary text-xs font-weight-semibold opacity-7">Event Name</th>
                                             {{-- <th class="text-secondary text-xs font-weight-semibold opacity-7 ps-2">Description</th> --}}
-                                            <th class="text-secondary text-xs font-weight-semibold opacity-7 ps-2">Event Date</th>
+                                            <th class="text-secondary text-xs font-weight-semibold opacity-7 ps-2">Venue</th>
+                                            <th class="text-secondary text-xs font-weight-semibold opacity-7 ps-2">Type</th>
+                                            <th class="text-secondary text-xs font-weight-semibold opacity-7 ps-2">Start Date</th>
+                                            <th class="text-secondary text-xs font-weight-semibold opacity-7 ps-2">End Date</th>
                                             <th class="text-secondary text-xs font-weight-semibold opacity-7 ps-2">Start Time</th>
                                             <th class="text-secondary text-xs font-weight-semibold opacity-7 ps-2">End Time</th>
-                                            <th class="text-secondary text-xs font-weight-semibold opacity-7 ps-9">Status</th>
-                                            <th class="text-secondary text-xs font-weight-semibold opacity-7 ps-7">Action</th>
+                                            <th class="text-secondary text-xs font-weight-semibold opacity-7 ps-2">Status</th>
+                                            {{-- <th class="text-secondary text-xs font-weight-semibold opacity-7 ps-7">Action</th> --}}
                                             <th class="text-secondary opacity-7"></th>
+                                            
 
 
                                             {{-- <th class="text-secondary text-xs font-weight-semibold opacity-15 ps-2">Description</th>
@@ -103,10 +107,29 @@
                                             </td> --}}
                                             <td>
                                                 <p class="text-sm text-dark font-weight-semibold mb-0" style="margin-left: 16px">{{$event->event_name}}</p>
+                                            </td>
+                                            <td>
+                                                <p class="text-sm text-dark font-weight-semibold mb-0">{{$event->name}}</p>
                                                 
                                             </td>
                                             <td>
-                                                <p class="text-sm text-dark font-weight-semibold mb-0">{{Carbon\Carbon::parse($event->event_date)->format('j F, Y')}}</p>
+                                                @if ($event->type === 'whole_day')
+                                                <p class="text-sm text-dark font-weight-semibold mb-0">Whole Day</p>
+                                                @endif
+                                                @if ($event->type === 'whole_week')
+                                                <p class="text-sm text-dark font-weight-semibold mb-0">Whole Week</p>
+                                                @endif
+                                                @if ($event->type === 'within_day')
+                                                <p class="text-sm text-dark font-weight-semibold mb-0">Within the Day</p>
+                                                @endif
+                                                {{-- <p class="text-sm text-dark font-weight-semibold mb-0">{{$event->type}}</p> --}}
+                                            </td>
+                                            <td>
+                                                <p class="text-sm text-dark font-weight-semibold mb-0">{{Carbon\Carbon::parse($event->start_date)->format('j F, Y')}}</p>
+                                                
+                                            </td>
+                                            <td>
+                                                <p class="text-sm text-dark font-weight-semibold mb-0">{{Carbon\Carbon::parse($event->end_date)->format('j F, Y')}}</p>
                                                 
                                             </td>
                                             <td>
@@ -121,9 +144,18 @@
                                                 <p class="text-sm text-dark font-weight-semibold mb-0">{{$event->sect_head}}</p>
                                             </td>
                                             <td class="align-middle text-center">
+                                                
                                                 @if($event->status === "PENDING")
-                                                <span class="badge badge-sm border border-warning text-warning bg-warning border-radius-sm ms-sm-3 px-2">{{$event->status}}</span>
+                                                    <span class="badge badge-sm border border-warning text-warning bg-warning border-radius-sm ms-sm-3 px-2">{{$event->status}}</span>
+                                                @endif 
+
+                                                @if($event->status === "PENDING" && Auth::user()->role === 'org_adviser' && $event->org_adviser !== null)
+                                                <span class="badge badge-sm border border-success text-success bg-success border-radius-sm ms-sm-3 px-2">APPROVED BY YOU</span>
                                                 @endif
+
+                                                {{-- @if($event->status === "PENDING" && Auth::user()->role === 'org_adviser' && $event->org_adviser !== null)
+                                                <span class="badge badge-sm border border-success text-success bg-success border-radius-sm ms-sm-3 px-2">APPROVED BY YOU</span>
+                                                @endif --}}
 
                                                 @if($event->status === "APPROVED")
                                                 <span class="badge badge-sm border border-success text-success bg-success border-radius-sm ms-sm-3 px-2">{{$event->status}}</span>
@@ -133,19 +165,23 @@
                                                 <span class="text-secondary text-sm font-weight-normal">{{$event->name}}</span>
                                                 
                                             </td> --}}
-                                            <td >
-                                                @if($event->status === "APPROVED")
+                                            <td>
+                                                @if($event->status === "APPROVED") 
                                                 <div class="text-sm text-dark font-weight-semibold mb-0">
                                                     <button type="button" class="btn btn-dark viewDetailsBtn" style="width: 150px; height: 40px;" data-bs-toggle="modal" data-id="{{$event->id}}" data-bs-target="#viewDetailsModal" id="tableViewDetails">View Details</button>
                                                 </div>
-                                                @endif
 
-                                                @if($event->status === "PENDING")
+                                                @else
                                                 <div class="text-sm text-dark font-weight-semibold mb-0">
                                                     <button type="button" class="btn btn-dark approveBtn" style="width: 110px; height: 40px;" data-bs-toggle="modal" data-id="{{$event->id}}" data-bs-target="#approveRequestModal" id="tableApprove">Approve</button>
                                                     <button type="button" class="btn btn-danger rejectBtn" style="width: 110px; height: 40px;" data-id="{{$event->id}}" id="tableReject">Reject</button>
                                                 </div>
                                                 @endif
+
+                                                {{-- @if(Auth::user()->role === 'org_adviser' && $event->org_adviser !== null)
+                                                    <div>IKAW AY ORG ADIVSER</div>
+                                                    <span>IKAW AY ORG ADIVSER</span>
+                                                @endif --}}
                                             </td>
                                         </tr>
                                         @endforeach
