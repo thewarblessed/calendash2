@@ -433,7 +433,7 @@ class RequestController extends Controller
        }
        elseif ($orgAdviser !== null && $secHead !== null && $depHead !== null && $osa !== null && $adaa === null && $atty === null && $cd === null) 
        {
-       $approvalDates = [
+        $approvalDates = [
             $events->approved_org_adviser_at,
             $events->approved_sec_head_at, 
             $events->approved_dept_head_at,
@@ -491,16 +491,14 @@ class RequestController extends Controller
         $pendingMsg = 'Waiting for Approval of Campus Director';
         return response()->json(["dates" => $approvalDates, "msg" => $approvalMessage, "pendingMsg" => $pendingMsg, "status" => 200]);
        }
-       elseif ($orgAdviser !== null && $secHead !== null && $depHead !== null && $osa !== null && $adaa !== null && $atty !== null && $cd !== null) 
+       elseif ($orgAdviser !== null && $secHead !== null && $depHead !== null && $osa !== null && $adaa !== null && $cd !== null) 
        {
-        
         $approvalDates = [
             $events->approved_org_adviser_at,
             $events->approved_sec_head_at, 
             $events->approved_dept_head_at,
             $events->approved_osa_at,
             $events->approved_adaa_at,
-            $events->approved_atty_at,
             $events->approved_campus_director_at,
         ];
        
@@ -510,7 +508,6 @@ class RequestController extends Controller
             'APPROVED BY DEPARTMENT HEAD',
             'APPROVED BY OSA',
             'APPROVED BY ADAA',
-            'APPROVED BY ATTY',
             'APPROVED BY CAMPUS DIRECTOR',
         ];
         
