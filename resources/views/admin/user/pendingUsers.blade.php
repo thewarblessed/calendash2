@@ -103,7 +103,7 @@
                                                             data-bs-toggle="modal" data-id="{{ $pendingUser->user_id }}"
                                                             data-bs-target="#checkStatusModal">Edit Role</button>
                                                 @if($pendingUser->email_verified_at === null)
-                                                <button type="button" class="btn btn-dark btn-sm approveAccount" data-id="{{ $pendingUser->user_id }}">Approve Account</button>
+                                                <button type="button" class="btn btn-dark btn-sm approveAccounts" data-id="{{ $pendingUser->user_id }}" data-bs-toggle="modal" data-bs-target="#approveUserModal">Approve Account</button>
                                                 @endif
                                             </td> 
                                         </tr>
@@ -164,6 +164,81 @@
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-white" data-bs-dismiss="modal">Close</button>
                                 <button type="submit" class="btn btn-dark" id="roleUpdate">Save changes</button>
+                            </div>
+                        </form>
+                    </div>
+                    
+                </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="approveUserModal" tabindex="-1" role="dialog" aria-labelledby="createVenueModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h2 class="modal-title" id="createVenueModalLabel" >User Details</h2>
+                    <button type="button" class="btn-close text-dark" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="roleUpdateForm" enctype="multipart/form-data">
+                            @csrf
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="exampleFormControlInput1">Last Name:</label>
+                                        <input name="userId" type="text" class="form-control" id="userApproveId" hidden>
+                                        <p style="color: black" id="userApproveLastname" ></p>
+                                      </div>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="exampleFormControlInput1">First Name:</label>
+                                        <p style="color: black" id="userApproveFirstname" ></p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="exampleFormControlInput1">Organization:</label>
+                                        <p style="color: black" id="userApproveOrganization" ></p>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="exampleFormControlInput1">Department:</label>
+                                        <p style="color: black" id="userApproveDepartment" ></p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="exampleFormControlInput1">Role:</label>
+                                <p style="color: black" id="userApproveRole" ></p>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="exampleFormControlInput1">TUP ID:</label>
+                                <p style="color: black" id="userApproveTupID" ></p>
+                            </div>
+
+                              <div class="form-group text-center">
+                                <label for="exampleFormControlInput1">TUP ID PHOTO:</label>
+                                <div class="d-flex justify-content-center">
+                                    <div id="userApproveTupIDPhoto"></div>
+                                </div>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-white" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-danger" id="rejectAccount">Reject account</button>
+                                <button type="submit" class="btn btn-dark" id="approveAccount">Approve account</button>
                             </div>
                         </form>
                     </div>

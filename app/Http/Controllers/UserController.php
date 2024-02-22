@@ -9,6 +9,7 @@ use App\Models\Prof;
 use App\Models\Staff;
 use App\Models\PendingUser;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
@@ -59,7 +60,10 @@ class UserController extends Controller
         $pendingUsers->department =  $request->department;
         $pendingUsers->role = "student";
         // dd($pendingUsers);
+        $files = $request->file('image');
+        $pendingUsers->image = 'images/'.time().'-'.$files->getClientOriginalName();
         $pendingUsers->save();
+        Storage::put('public/images/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
         return response()->json(["data" => $pendingUsers, "status" => 200]);
         
     }

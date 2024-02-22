@@ -816,10 +816,66 @@ $(document).ready(function () {
 
     });//end create
 
-    $("#pendingUsersTable tbody").on("click", 'button.approveAccount ', function (e) {
+    $("#pendingUsersTable tbody").on("click", 'button.approveAccounts ', function (e) {
         var id = $(this).data("id");
         // e.preventDefault();
         console.log(id);
+
+        $.ajax({
+            type: "GET",
+            enctype: 'multipart/form-data',
+            processData: false, // Important!
+            contentType: false,
+            cache: false,
+            url: "/api/admin/getUser/" + id,
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
+                    "content"
+                ),
+            },
+            dataType: "json",
+            success: function (data) {
+                var role = data.user.role;
+                var newrole;
+                if (role ==='student')
+                {
+                    newrole = 'Student';
+                }
+                else if(role ==='professor')
+                {
+                    newrole = 'Faculty';
+                }
+                else
+                {   
+                    newrole = 'Staff/Admin';
+                }
+
+                console.log(data);
+                //     $('#createVenueModal').modal('show');
+                $('#userApproveId').val(id);
+                $('#userApproveLastname').text(data.user.lastname);
+                $('#userApproveFirstname').text(data.user.firstname);
+                $('#userApproveOrganization').text(data.user.organization);
+                $('#userApproveDepartment').text(data.user.department);
+                $('#userApproveRole').text(newrole);
+                $('#userApproveTupID').text(data.user.tupID);
+                $("#userApproveTupIDPhoto").html(
+                        `<img src="/storage/${data.user.image}" width="400" height="400" style="border-radius: 20px;">`);
+            },
+            error: function (error) {
+                console.log("error");
+            },
+        });
+
+    });
+
+    $("#approveAccount").on("click", function (e) {
+
+        e.preventDefault();
+        // var data = $('#roleUpdateForm')[0];
+        var id = $("#userApproveId").val();
+        console.log(id);
+
         $.ajax({
             type: "POST",
             enctype: 'multipart/form-data',
@@ -850,7 +906,8 @@ $(document).ready(function () {
                 console.log("error");
             },
         });
-    });
+
+    });//end create
 
     $("#pendingUsersTable tbody").on("click", 'button.editRole ', function (e) {
         var id = $(this).data("id");

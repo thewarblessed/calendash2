@@ -21,6 +21,7 @@ return new class extends Migration
             $table->integer('user_id')->unsigned()->nullable();
             $table->foreign('user_id')->references('id')->on('users');
             $table->string('role');
+            $table->string('image');
             $table->rememberToken();
             $table->timestamps();
         });

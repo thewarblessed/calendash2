@@ -22,6 +22,7 @@ class PendingUser extends Model
         "tupId",
         "department",
         "organization",
+        "image",
         "user_id"
     ];
 }
