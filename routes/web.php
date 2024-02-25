@@ -173,6 +173,11 @@ Route::get('/admin/createVenue', [VenueController::class, 'create'])
     ->middleware('auth')
     ->name('adminVenueCreate');
 
+// route to rulesreg
+Route::get('/rulesreg/{id}', [VenueController::class, 'rulesreg'])
+    ->middleware('auth')
+    ->name('venueRulesreg');
+
 Route::get('/texteditor', function () {
     return view('event.editor');
 })->name('multiform')->middleware('auth');

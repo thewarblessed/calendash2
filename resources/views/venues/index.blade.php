@@ -17,22 +17,22 @@
                             <div class="form-group">
                                 <div class="container">
                                     <div class="row">
-                                        @foreach($venues as $venue)
-                                            <div class="col-sm">
-                                                <div class="card" style="width: 15rem; margin-bottom: 30px; border: 2px solid rgb(216, 200, 231)">
-                                                    <img src="{{asset('storage/'.$venue->image)}}" height="200" class="card-img-top" alt="...">
-                                                    <div class="card-body">
-                                                    <h5 class="card-title">{{$venue->name}}</h5>
-                                                    <p class="card-text">{{$venue->description}}</p>
-                                                    <a href="#" class="btn btn-info">Info</a>
-                                                    <a href="#" class="btn btn-primary">Check</a>
-                                                    </div>
-                                                </div>       
+                                        @foreach ($venues as $venue)
+                                        <div class="col-sm">
+                                            <div class="card" style="width: 15rem; margin-bottom: 30px; border: 2px solid rgb(216, 200, 231)">
+                                                <img src="{{ asset('storage/'.$venue->image) }}" height="200" class="card-img-top" alt="...">
+                                                <div class="card-body">
+                                                    <h5 class="card-title">{{ $venue->name }}</h5>
+                                                        <a href="{{ route('venueRulesreg', ['id' => $venue->id]) }}" class="btn btn-info mr-2" style="flex: 1;">Policies</a>
+                                                        <a href="#" class="btn btn-primary ml-2" style="flex: 1;">Event List</a>
+                                                   </div>
                                             </div>
+                                        </div>   
                                         @endforeach
                                     </div>
                                 </div>
-                          </div>
+                            </div>
+                            
                         </div>
                     </div>
                 </div>

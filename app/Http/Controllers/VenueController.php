@@ -41,6 +41,13 @@ class VenueController extends Controller
         return view('admin.venue.create');
     }
 
+    public function rulesreg(string $id)
+    {
+        $venues = Venue::where('id',$id)->get();
+        // dd($venues);
+        return view('venues.rulesreg', compact('venues'));
+    }
+
     /**
      * Store a newly created resource in storage.
      */

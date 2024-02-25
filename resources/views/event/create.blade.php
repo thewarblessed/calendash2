@@ -42,8 +42,15 @@
                                             <img src="{{ asset('storage/' . $venue->image) }}" height="180"
                                                 class="card-img-top" alt="...">
                                             <div class="card-body">
-                                                <h5 class="card-title">{{ $venue->name }}</h5>
-                                                <p class="card-text">{{ $venue->description }}</p>
+                                                <h4 class="card-title">{{ $venue->name }}</h4>
+                                                <p1 class="card-subtitle mb-2 text-muted">Rules and Regulations</p1>
+                                                <div class="card-text">
+                                                    <ul>
+                                                        @foreach (explode("\n", $venue->description) as $item)
+                                                            <li>{{ $item }}</li>
+                                                        @endforeach
+                                                    </ul>
+                                                </div>
                                                 <p class="card-text">Capacity: {{ $venue->capacity }}</p>
                                                 <div class="form-check">
                                                     <input class="form-check-input" type="radio" name="event_venue"
@@ -62,41 +69,24 @@
 
                     {{-- SET DATE DETAILS --}}
                     <div class="tab d-none">
-                        {{-- <h3 style="text-align: center">Set Date and Time</h3>
-                        <div class="mb-3">
-                            <label for="company_name" class="form-label">Set Date</label>
-                            <input type="date" class="form-control" name="event_date" id="event_date" required>
-                        </div> --}}
-
-                        {{-- <div class="row">
-                            <div class="mb-3 col-md-6">
-                                <label for="start_time" class="form-label">Set Start Time</label>
-                                <input type="time" class="form-control" name="start_time" id="start_time" required>
-                            </div>
-                            <div class="mb-3 col-md-6">
-                                <label for="end_time" class="form-label">Set End Time</label>
-                                <input type="time" class="form-control" name="end_time" id="end_time" required>
-                            </div>
-                        </div> --}}
-
-                        {{-- /////////////////////////////////////////////////////////////////// --}}
-
-                        <h3 style="text-align: center">Set Date and Time</h3>
-
+                        <div class="card-body">
+                            <h3 style="text-align: center">Set Date and Time</h3>
+      
                         <div class="radiobuttonsuser">
+                            <h4 style="text-align: left">Select preferred Date and Time</h4>
                             <div class="form-check">
                                 <input class="form-check-input" type="radio" name="event_type" value="withinDay" id="withinDay" required>
-                                <label class="custom-control-label" for="withinDay">Within the Day</label>
+                                <label class="custom-control-label" for="withinDay" style="font-size: 16px;">Within the Day</label>
                             </div>
                         
                             <div class="form-check">
                                 <input class="form-check-input" type="radio" name="event_type" value="wholeDay" id="wholeDay" required>
-                                <label class="custom-control-label" for="wholeDay">Whole Day</label>
+                                <label class="custom-control-label" for="wholeDay" style="font-size: 16px;">Whole Day</label>
                             </div>
                         
                             <div class="form-check">
                                 <input class="form-check-input" type="radio" name="event_type" value="wholeWeek" id="wholeWeek" required>
-                                <label class="custom-control-label" for="wholeWeek">Whole Week</label>
+                                <label class="custom-control-label" for="wholeWeek" style="font-size: 16px;">Whole Week</label>
                             </div>
                         </div>
                         
@@ -134,10 +124,20 @@
                             </div>
                         </div>
 
-
-
-
+                        <div class="card-body">
+                            {{-- <h4 style="text-align: left">Terms and Conditions</h4> --}}
+                            <div class="col-md-12">
+                                <p>*Take note regarding the allotted time for Ingress and Egress.</p>
+                                <ul>
+                                    <li>Allotted time for Ingress: The time allocated for entering the premises.</li>
+                                    <li>Allotted time for Egress: The time allocated for exiting the premises.</li>
+                                    <li>Ensure that you adhere to the specified Ingress and Egress timings.</li>
+                                    <li>Failure to comply with the allotted timings may result in penalties or restrictions.</li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
+                </div>
 
                     {{-- GENERATE LETTER DETAILS --}}
                     <div class="tab d-none">
