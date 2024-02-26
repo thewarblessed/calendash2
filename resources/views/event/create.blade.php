@@ -42,8 +42,15 @@
                                             <img src="{{ asset('storage/' . $venue->image) }}" height="180"
                                                 class="card-img-top" alt="...">
                                             <div class="card-body">
-                                                <h5 class="card-title">{{ $venue->name }}</h5>
-                                                <p class="card-text">{{ $venue->description }}</p>
+                                                <h4 class="card-title">{{ $venue->name }}</h4>
+                                                <p1 class="card-subtitle mb-2 text-muted">Rules and Regulations</p1>
+                                                <div class="card-text">
+                                                    <ul>
+                                                        @foreach (explode("\n", $venue->description) as $item)
+                                                            <li>{{ $item }}</li>
+                                                        @endforeach
+                                                    </ul>
+                                                </div>
                                                 <p class="card-text">Capacity: {{ $venue->capacity }}</p>
                                                 <div class="form-check">
                                                     <input class="form-check-input" type="radio" name="event_venue"
@@ -65,75 +72,93 @@
                         <div class="card-body">
                             <h3 style="text-align: center">Set Date and Time</h3>
       
-                        <div class="radiobuttonsuser">
-                            <h4 style="text-align: left">Select preferred Date and Time</h4>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="event_type" value="withinDay" id="withinDay" required>
-                                <label class="custom-control-label" for="withinDay">Within the Day</label>
-                            </div>
-
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="event_type" value="wholeDay" id="wholeDay" required>
-                                <label class="custom-control-label" for="wholeDay">Whole Day</label>
-                            </div>
-
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="event_type" value="wholeWeek" id="wholeWeek" required>
-                                <label class="custom-control-label" for="wholeWeek">Whole Week</label>
-                            </div>
-
-                            <div class="form-check">
-                                {{-- <input class="form-check-input" type="radio" name="event_type" value="dateRange"
-                                    id="dateRange" required> --}}
-                                <input class="form-check-input" type="radio" name="event_type" value="dateRanges"
-                                    id="dateRanges" required>
-                                <label class="custom-control-label" for="dateRanges">Date Range</label>
-                            </div>
-                        </div>
-
-                        <div id="withinTheDayDivUser" class="withinTheDay" style="display:none;">
-                            <h5 style="text-align: center">Within the Day</h5>
-                            <div class="form-group">
-                                <label for="example-datetime-local-input" class="form-control-label">Datetime</label>
-                                <input class="form-control" type="date" value="" name="event_date_withinDayUser"
-                                    id="event_date_withinDayUser">
-                            </div>
-                            <div class="row">
-                                <div class="mb-3 col-md-6">
-                                    <label for="start_time" class="form-label">Set Start Time</label>
-                                    <input type="time" class="form-control" name="start_time_withinDayUser"
-                                        id="start_time_withinDayUser" required>
+                            <div class="radiobuttonsuser">
+                                <h4 style="text-align: left">Select preferred Date and Time</h4>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="event_type" value="withinDay" id="withinDay" required>
+                                    <label class="custom-control-label" for="withinDay" style="font-size: 16px;">Within the Day</label>
                                 </div>
-                                <div class="mb-3 col-md-6">
-                                    <label for="end_time" class="form-label">Set End Time</label>
-                                    <input type="time" class="form-control" name="end_time_withinDayUser"
-                                        id="end_time_withinDayUser" required>
+
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="event_type" value="wholeDay" id="wholeDay" required>
+                                    <label class="custom-control-label" for="wholeDay" style="font-size: 16px;">Whole Day</label>
+                                </div>
+
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="event_type" value="wholeWeek" id="wholeWeek" required>
+                                    <label class="custom-control-label" for="wholeWeek" style="font-size: 16px;">Whole Week</label>
+                                </div>
+
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="event_type" value="dateRanges"
+                                        id="dateRanges" required>
+                                    <label class="custom-control-label" for="dateRanges" style="font-size: 16px;">Date Range</label>
                                 </div>
                             </div>
-                        </div>
 
-                        <div id="wholeDayDivUser" class="wholeDay" style="display:none;">
-                            <h5 style="text-align: center">Whole Day</h5>
-                            <div class="mb-3">
-                                <label for="company_name" class="form-label">Set Date</label>
-                                <input type="date" class="form-control" name="event_date_wholeDayUser"
-                                    id="event_date_wholeDayUser">
+                            <div id="withinTheDayDivUser" class="withinTheDay" style="display:none;">
+                                <h5 style="text-align: center">Within the Day</h5>
+                                <div class="form-group">
+                                    <label for="example-datetime-local-input" class="form-control-label">Datetime</label>
+                                    <input class="form-control" type="date" value="" name="event_date_withinDayUser"
+                                        id="event_date_withinDayUser">
+                                </div>
+                                <div class="row">
+                                    <div class="mb-3 col-md-6">
+                                        <label for="start_time" class="form-label">Set Start Time</label>
+                                        <input type="time" class="form-control" name="start_time_withinDayUser"
+                                            id="start_time_withinDayUser" required>
+                                    </div>
+                                    <div class="mb-3 col-md-6">
+                                        <label for="end_time" class="form-label">Set End Time</label>
+                                        <input type="time" class="form-control" name="end_time_withinDayUser"
+                                            id="end_time_withinDayUser" required>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="wholeDayDivUser" class="wholeDay" style="display:none;">
+                                <h5 style="text-align: center">Whole Day</h5>
+                                <div class="mb-3">
+                                    <label for="company_name" class="form-label">Set Date</label>
+                                    <input type="date" class="form-control" name="event_date_wholeDayUser"
+                                        id="event_date_wholeDayUser">
+                                </div>
+                            </div>
+
+                            <div id="wholeWeekDivUser" class="wholeWeek" style="display:none;">
+                                <h5 style="text-align: center">Whole Week</h5>
+                                <div class="form-group">
+                                    <label for="example-week-input" class="form-control-label">Week</label>
+                                    <input class="form-control" type="week" name="event_date_wholeWeekUser"
+                                        id="event_date_wholeWeekUser">
+                                </div>
+                            </div>
+
+                            <div id="dateRangeDivUser" class="dateRanges" style="display:none;">
+                                <h5 style="text-align: center">Date Range</h5>
+                                <div class="form-group" style="text-align: center">
+                                    <label for="example-week-input" class="form-control-label"></label>
+                                    <input type="text" name="daterange" value="" id="date_range_User"/>
+                                </div>
                             </div>
                         </div>
 
-                        <div id="wholeWeekDivUser" class="wholeWeek" style="display:none;">
-                            <h5 style="text-align: center">Whole Week</h5>
-                            <div class="form-group">
-                                <label for="example-week-input" class="form-control-label">Week</label>
-                                <input class="form-control" type="week" name="event_date_wholeWeekUser"
-                                    id="event_date_wholeWeekUser">
+                        <div class="card-body">
+                            {{-- <h4 style="text-align: left">Terms and Conditions</h4> --}}
+                            <div class="col-md-12">
+                                <p>*Take note regarding the allotted time for Ingress and Egress.</p>
+                                <ul>
+                                    <li>Allotted time for Ingress: The time allocated for entering the premises.</li>
+                                    <li>Allotted time for Egress: The time allocated for exiting the premises.</li>
+                                    <li>Ensure that you adhere to the specified Ingress and Egress timings.</li>
+                                    <li>Failure to comply with the allotted timings may result in penalties or restrictions.</li>
+                                </ul>
                             </div>
                         </div>
-
-
-
-
+                        
                     </div>
+   
 
                     {{-- GENERATE LETTER DETAILS --}}
                     <div class="tab d-none">
@@ -144,30 +169,26 @@
                             <textarea name="letter_generator" id="editor"></textarea>
                         </div>
                         <div class="mb-3 col-md-6" style="align-self: center">
-                            <center>
                                 <label for="request_letter" class="form-label" style="font-size: 18px">Upload Request
                                     Letter</label>
-                                <input type="file" class="form-control" name="request_letter" id="request_letter"
-                                    required>
-                            </center>
+                                <input type="file" class="form-control" name="request_letter" id="request_letter" required>
                         </div>
 
                     </div>
-                </div>
 
-                <div class="card-footer text-end">
-                    <div class="d-flex">
-                        <button type="button" id="back_button" class="btn btn-link" onclick="back()">Back</button>
-                        <button type="button" id="next_button" class="btn btn-primary ms-auto"
-                            onclick="next()">Next</button>
-                        <button type="submit" id="createEvent_submit" class="btn btn-primary ms-auto">Submit</button>
+                    <div class="card-footer text-end">
+                        <div class="d-flex">
+                            <button type="button" id="back_button" class="btn btn-link" onclick="back()">Back</button>
+                            <button type="button" id="next_button" class="btn btn-primary ms-auto"
+                                onclick="next()">Next</button>
+                            <button type="submit" id="createEvent_submit" class="btn btn-primary ms-auto">Submit</button>
+                        </div>
                     </div>
-                </div>
             </form>
         </div>
     </main>
-
     {{-- tinyMCE --}}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
     <script src="https://cdn.tiny.cloud/1/efy9kqrdbnc5rwfbz3ogkw1784y0tm6sphy6xvo6iq7azwcf/tinymce/6/tinymce.min.js"
         referrerpolicy="origin"></script>
     <script>
@@ -314,56 +335,6 @@
             });
         });
 
-        // Function to check if a time is blocked
-        // function isBlockedTime(time) {
-        //     return blockedTimeRanges.includes(time);
-        // }
-
-        // // Handle timepicker change event
-        // document.getElementById('start_time').addEventListener('change', function() {
-        //     var selectedTime = this.value;
-        //     if (isBlockedTime(selectedTime)) {
-        //         // Time is blocked, reset to a default value or display a message
-        //         this.value = ''; // Reset to empty value
-        //         alert('This time is blocked.');
-        //     }
-        // });
-
-        // document.getElementById('end_time').addEventListener('change', function() {
-        //     var selectedTime = this.value;
-        //     if (isBlockedTime(selectedTime)) {
-        //         // Time is blocked, reset to a default value or display a message
-        //         this.value = ''; // Reset to empty value
-        //         alert('This time is blocked.');
-        //     }
-        // });
-
-
-
-
-        // function isDisabledTime(time) {
-        //     // Add your condition here
-        //     // For example, let's disable times between 12:00 PM and 1:00 PM
-        //     const disabledStart = '12:00';
-        //     const disabledEnd = '13:00';
-
-        //     return time >= disabledStart && time <= disabledEnd;
-        // }
-
-        // // Attach an event listener to the time picker
-        // document.getElementById('start_time').addEventListener('input', function() {
-        //     const selectedTime = this.value;
-
-        //     // Check if the selected time is disabled
-        //     if (isDisabledTime(selectedTime)) {
-        //         Swal.fire({
-        //             icon: "error",
-        //             title: "Oops...",
-        //             text: "That time is not available!"
-        //         });
-        //         this.value = ''; // Clear the input value
-        //     }
-        // });
     </script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>

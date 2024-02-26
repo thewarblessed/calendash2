@@ -42,7 +42,7 @@
                         <div class="form-group">
                             <div class="container">
                                 <div class="row">
-                                    @foreach ($venues as $venue)
+                                    {{-- @foreach ($venues as $venue)
                                         <div class="col-sm">
                                             <div id="venue{{ $venue->id }}" class="card"
                                                 style="width: 15rem; margin-bottom: 20px; border: 4px solid rgb(53, 9, 86)">
@@ -65,7 +65,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                    @endforeach
+                                    @endforeach --}}
                                 </div>
                             </div>
                         </div>

@@ -11,6 +11,8 @@ use App\Models\User;
 use App\Models\Prof;
 use App\Models\Student;
 use App\Models\Staff;
+use App\Models\Organization;
+use App\Models\Department;
 use View;
 use Auth;
 use Carbon\Carbon;
@@ -156,8 +158,15 @@ class EventController extends Controller
         {
             $student = Student::where('user_id',$request->user_id)->first();
             // dd($request->user_id);
-            $target_dept = $student->department;
-            $target_org = $student->studOrg;
+            // dd($student);
+            $depID = $student->department_id;
+            $orgID = $student->organization_id;
+            $td = Department::where('id',$depID)->first();
+            $to = Organization::where('id',$orgID)->first();
+            // dd($to);
+
+            $target_dept = $td->department;
+            $target_org = $to->organization;
             //EVENT DATE TYPE
             if ($inputType === 'wholeWeek') {
                 $weekDate = $request->input('event_date_wholeWeekUser');

@@ -705,7 +705,8 @@ $(document).ready(function () {
         
         // You can perform any other actions you need here
     });
-    //Within the Day
+
+    //Within the Day TRAPPING
     $('#end_time_withinDayUser').change(function() {
         var selectedDate = $('#event_date_withinDayUser').val();
         var selectedVenueID = $("input[name='event_venue']:checked").val();
@@ -843,7 +844,7 @@ $(document).ready(function () {
         });
 
     });
-
+    //end TRAPPING
     $('#radioForm input').change(function () {
         // alert($('input[name=btnradiotable]:checked', '#radioForm').val());
 

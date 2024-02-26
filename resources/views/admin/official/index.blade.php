@@ -92,6 +92,8 @@
                                                 <span class="text-sm text-dark font-weight-semibold mb-0">ADAA</span>
                                                 @elseif($official->role === 'campus_director')
                                                 <span class="text-sm text-dark font-weight-semibold mb-0">Campus Director</span>
+                                                @elseif($official->role === 'business_manager')
+                                                <span class="text-sm text-dark font-weight-semibold mb-0">Business Manager</span>
                                                 @endif
                                             </td>
 
