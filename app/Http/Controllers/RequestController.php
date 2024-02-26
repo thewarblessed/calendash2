@@ -31,7 +31,7 @@ class RequestController extends Controller
         
         if($user_role === "org_adviser")
         {
-            $pending = Venue::join('events','events.venue_id','venues.id')->orderBy('events.status')->get();
+            $pending = Venue::join('events','events.venue_id','venues.id')->orderBy('events.status')->orderByDesc('events.id')->get();
             // dd($pending);
             $PenEvents = Event::orderBy('id')->whereNull('org_adviser')->get();
             // dd($PenEvents);
@@ -39,15 +39,15 @@ class RequestController extends Controller
         }   
         elseif($user_role === "section_head")
         {
-            $pending = Event::orderBy('id')->get();
-            $PenEvents = Event::orderBy('id')->whereNotNull('org_adviser')->get();
+            // $pending = Event::orderBy('id')->get();
+            $pending = Event::orderBy('id')->whereNotNull('org_adviser')->get();
             // dd($PenEvents);
             return View::make('officials.secHead.request', compact('pending'));
         }     
         elseif($user_role === "department_head")
         {
-            $pending = Event::orderBy('id')->get();
-            $events = Event::orderBy('id')->whereNotNull('sect_head')->get();
+            // $pending = Event::orderBy('id')->get();
+            $pending = Event::orderBy('id')->whereNotNull('sect_head')->get();
             return View::make('officials.secHead.request', compact('pending'));
         }
         elseif ($user_role === "osa")
@@ -68,7 +68,7 @@ class RequestController extends Controller
             // $pending = Event::orderBy('id')->whereNotNull('adaa', null);
             $pending = Event::join('venues', 'venues.id', 'events.venue_id')
             ->orderBy('events.id')
-            ->where('venues.name', 'It Hall')
+            ->where('venues.name', 'IT Auditorium')
             ->whereNotNull('adaa')
             ->get();
             return View::make('officials.secHead.request', compact('pending'));
@@ -76,7 +76,11 @@ class RequestController extends Controller
         elseif ($user_role === "campus_director")
         {
             // hindi dapat lalabas yung sa IT FUNCTION HALL na venue.
-            $pending = Event::orderBy('id')->whereNotNull('adaa')->get();
+            $pending = Event::join('venues', 'venues.id', 'events.venue_id')
+            ->orderBy('events.id')
+            ->where('venues.name', '!=', 'IT Auditorium')
+            ->whereNotNull('adaa')
+            ->get();
             return View::make('officials.secHead.request', compact('pending'));
         }
     }
@@ -115,7 +119,7 @@ class RequestController extends Controller
         // dd($hashedPassword);
 
         // if ($role->)
-        if($venue === 'IT HALL')
+        if($venue === 'IT Auditorium')
         {
             if($role === 'org_adviser')
                 {
@@ -468,7 +472,7 @@ class RequestController extends Controller
                     'APPROVED BY OSA',
                     'APPROVED BY ADAA',
                 ];
-                $pendingMsg = 'Waiting for Approval of ATTY';
+                $pendingMsg = 'Waiting for approval of ATTY';
                 return response()->json(["dates" => $approvalDates, "msg" => $approvalMessage, "pendingMsg" => $pendingMsg, "status" => 200]);
             }
             elseif ($orgAdviser !== null && $secHead !== null && $depHead !== null && $osa !== null && $adaa !== null && $atty !== null) 
@@ -494,140 +498,120 @@ class RequestController extends Controller
                 return response()->json(["dates" => $approvalDates, "msg" => $approvalMessage, "pendingMsg" => $pendingMsg, "status" => 200]);
             }
         }
+        else
+        {
+            if ($orgAdviser === null && $secHead === null && $depHead === null && $osa === null && $adaa === null && $cd === null)
+            {
+                // $appSecDate = $events->approved_sec_head_at;
+                $message = 'Your Request is on Process';
+                return response()->json(["msg" => $message, "status" => 200]);
+            }
+            elseif ($orgAdviser !== null && $secHead === null && $depHead === null && $osa === null && $adaa === null && $cd === null)
+            {
+                // $appSecDate = $events->approved_sec_head_at;
+                $approvalDates = [
+                    $events->approved_org_adviser_at,
+                ];
+                
+                $approvalMessage = [
+                    'APPROVED BY ORGANIZATION ADVISER',
+                ];
+                $pendingMsg = 'Waiting for Approval of Section Head';
+                return response()->json(["dates" => $approvalDates, "msg" => $approvalMessage, "pendingMsg" => $pendingMsg, "status" => 200]);
+            }
+            elseif ($orgAdviser !== null && $secHead !== null && $depHead === null && $osa === null && $adaa === null && $cd === null)
+            {
+                $approvalDates = [
+                    $events->approved_org_adviser_at,
+                    $events->approved_sec_head_at,
+                ];
+                
+                $approvalMessage = [
+                    'APPROVED BY ORGANIZATION ADVISER',
+                    'APPROVED BY SECTION HEAD',
+                ];
 
-        if ($orgAdviser === null && $secHead === null && $depHead === null && $osa === null && $adaa === null && $atty === null && $cd === null)
-       {
-        // $appSecDate = $events->approved_sec_head_at;
-        $message = 'Your Request is on Process';
-        return response()->json(["msg" => $message, "status" => 200]);
-       }
-        elseif ($orgAdviser !== null && $secHead === null && $depHead === null && $osa === null && $adaa === null && $atty === null && $cd === null)
-       {
-        // $appSecDate = $events->approved_sec_head_at;
-        $approvalDates = [
-            $events->approved_org_adviser_at,
-        ];
-        
-        $approvalMessage = [
-            'APPROVED BY ORGANIZATION ADVISER',
-        ];
-        $pendingMsg = 'Waiting for Approval of Section Head';
-        return response()->json(["dates" => $approvalDates, "msg" => $approvalMessage, "pendingMsg" => $pendingMsg, "status" => 200]);
-       }
-       elseif ($orgAdviser !== null && $secHead !== null && $depHead === null && $osa === null && $adaa === null && $atty === null && $cd === null)
-       {
-        $approvalDates = [
-            $events->approved_org_adviser_at,
-            $events->approved_sec_head_at,
-        ];
-        
-        $approvalMessage = [
-            'APPROVED BY ORGANIZATION ADVISER',
-            'APPROVED BY SECTION HEAD',
-        ];
-
-        $pendingMsg = 'Waiting for Approval of Department Head';
-        return response()->json(["dates" => $approvalDates, "msg" => $approvalMessage, "pendingMsg" => $pendingMsg, "status" => 200]);
-       }
-       elseif ($orgAdviser !== null && $secHead !== null && $depHead !== null && $osa === null && $adaa === null && $atty === null && $cd === null) 
-       {
-        $approvalDates = [
-            $events->approved_org_adviser_at,
-            $events->approved_sec_head_at, 
-            $events->approved_dept_head_at,
-        ];
-        
-        $approvalMessage = [
-            'APPROVED BY ORGANIZATION ADVISER',
-            'APPROVED BY SECTION HEAD',
-            'APPROVED BY DEPARTMENT HEAD',
-        ];
-        $pendingMsg = 'Waiting for Approval OSA';
-        return response()->json(["dates" => $approvalDates, "msg" => $approvalMessage, "pendingMsg" => $pendingMsg, "status" => 200]);
-       }
-       elseif ($orgAdviser !== null && $secHead !== null && $depHead !== null && $osa !== null && $adaa === null && $atty === null && $cd === null) 
-       {
-        $approvalDates = [
-            $events->approved_org_adviser_at,
-            $events->approved_sec_head_at, 
-            $events->approved_dept_head_at,
-            $events->approved_osa_at,
-        ];
-        
-        $approvalMessage = [
-            'APPROVED BY ORGANIZATION ADVISER',
-            'APPROVED BY SECTION HEAD',
-            'APPROVED BY DEPARTMENT HEAD',
-            'APPROVED BY OSA',
-        ];
-        $pendingMsg = 'Waiting for Approval of ADAA';
-        return response()->json(["dates" => $approvalDates, "msg" => $approvalMessage, "pendingMsg" => $pendingMsg, "status" => 200]);
+                $pendingMsg = 'Waiting for Approval of Department Head';
+                return response()->json(["dates" => $approvalDates, "msg" => $approvalMessage, "pendingMsg" => $pendingMsg, "status" => 200]);
+            }
+            elseif ($orgAdviser !== null && $secHead !== null && $depHead !== null && $osa === null && $adaa === null && $cd === null) 
+            {
+                $approvalDates = [
+                    $events->approved_org_adviser_at,
+                    $events->approved_sec_head_at, 
+                    $events->approved_dept_head_at,
+                ];
+                
+                $approvalMessage = [
+                    'APPROVED BY ORGANIZATION ADVISER',
+                    'APPROVED BY SECTION HEAD',
+                    'APPROVED BY DEPARTMENT HEAD',
+                ];
+                $pendingMsg = 'Waiting for Approval OSA';
+                return response()->json(["dates" => $approvalDates, "msg" => $approvalMessage, "pendingMsg" => $pendingMsg, "status" => 200]);
+            }
+            elseif ($orgAdviser !== null && $secHead !== null && $depHead !== null && $osa !== null && $adaa === null && $cd === null) 
+            {
+                $approvalDates = [
+                    $events->approved_org_adviser_at,
+                    $events->approved_sec_head_at, 
+                    $events->approved_dept_head_at,
+                    $events->approved_osa_at,
+                ];
+                
+                $approvalMessage = [
+                    'APPROVED BY ORGANIZATION ADVISER',
+                    'APPROVED BY SECTION HEAD',
+                    'APPROVED BY DEPARTMENT HEAD',
+                    'APPROVED BY OSA',
+                ];
+                $pendingMsg = 'Waiting for Approval of ADAA';
+                return response()->json(["dates" => $approvalDates, "msg" => $approvalMessage, "pendingMsg" => $pendingMsg, "status" => 200]);
+                }
+            elseif ($orgAdviser !== null && $secHead !== null && $depHead !== null && $osa !== null && $adaa !== null && $cd === null) 
+            {
+                $approvalDates = [
+                    $events->approved_org_adviser_at,
+                    $events->approved_sec_head_at, 
+                    $events->approved_dept_head_at,
+                    $events->approved_osa_at,
+                    $events->approved_adaa_at,
+                ];
+            
+                $approvalMessage = [
+                    'APPROVED BY ORGANIZATION ADVISER',
+                    'APPROVED BY SECTION HEAD',
+                    'APPROVED BY DEPARTMENT HEAD',
+                    'APPROVED BY OSA',
+                    'APPROVED BY ADAA',
+                ];
+                $pendingMsg = 'Waiting for Approval of Campus Director';
+                return response()->json(["dates" => $approvalDates, "msg" => $approvalMessage, "pendingMsg" => $pendingMsg, "status" => 200]);
+            }
+            elseif ($orgAdviser !== null && $secHead !== null && $depHead !== null && $osa !== null && $adaa !== null && $cd !== null) 
+            {
+                $approvalDates = [
+                    $events->approved_org_adviser_at,
+                    $events->approved_sec_head_at, 
+                    $events->approved_dept_head_at,
+                    $events->approved_osa_at,
+                    $events->approved_adaa_at,
+                    $events->approved_campus_director_at,
+                ];
+            
+                $approvalMessage = [
+                    'APPROVED BY ORGANIZATION ADVISER',
+                    'APPROVED BY SECTION HEAD',
+                    'APPROVED BY DEPARTMENT HEAD',
+                    'APPROVED BY OSA',
+                    'APPROVED BY ADAA',
+                    'APPROVED BY CAMPUS DIRECTOR',
+                ];
+                
+                $pendingMsg = 'APPROVED';
+                return response()->json(["dates" => $approvalDates, "msg" => $approvalMessage, "pendingMsg" => $pendingMsg, "status" => 200]);
+            }
         }
-       elseif ($orgAdviser !== null && $secHead !== null && $depHead !== null && $osa !== null && $adaa !== null && $atty === null && $cd === null) 
-       {
-        $approvalDates = [
-            $events->approved_org_adviser_at,
-            $events->approved_sec_head_at, 
-            $events->approved_dept_head_at,
-            $events->approved_osa_at,
-            $events->approved_adaa_at,
-        ];
-    
-        $approvalMessage = [
-            'APPROVED BY ORGANIZATION ADVISER',
-            'APPROVED BY SECTION HEAD',
-            'APPROVED BY DEPARTMENT HEAD',
-            'APPROVED BY OSA',
-            'APPROVED BY ADAA',
-        ];
-        $pendingMsg = 'Waiting for Approval of ATTY';
-        return response()->json(["dates" => $approvalDates, "msg" => $approvalMessage, "pendingMsg" => $pendingMsg, "status" => 200]);
-       }
-       elseif ($orgAdviser !== null && $secHead !== null && $depHead !== null && $osa !== null && $adaa !== null && $atty !== null && $cd === null) 
-       {
-        $approvalDates = [
-            $events->approved_org_adviser_at,
-            $events->approved_sec_head_at, 
-            $events->approved_dept_head_at,
-            $events->approved_osa_at,
-            $events->approved_adaa_at,
-            $events->approved_atty_at,
-        ];
-        
-        $approvalMessage = [
-            'APPROVED BY ORGANIZATION ADVISER',
-            'APPROVED BY SECTION HEAD',
-            'APPROVED BY DEPARTMENT HEAD',
-            'APPROVED BY OSA',
-            'APPROVED BY ADAA',
-            'APPROVED BY ATTY',
-        ];
-        $pendingMsg = 'Waiting for Approval of Campus Director';
-        return response()->json(["dates" => $approvalDates, "msg" => $approvalMessage, "pendingMsg" => $pendingMsg, "status" => 200]);
-       }
-       elseif ($orgAdviser !== null && $secHead !== null && $depHead !== null && $osa !== null && $adaa !== null && $cd !== null) 
-       {
-        $approvalDates = [
-            $events->approved_org_adviser_at,
-            $events->approved_sec_head_at, 
-            $events->approved_dept_head_at,
-            $events->approved_osa_at,
-            $events->approved_adaa_at,
-            $events->approved_campus_director_at,
-        ];
-       
-        $approvalMessage = [
-            'APPROVED BY ORGANIZATION ADVISER',
-            'APPROVED BY SECTION HEAD',
-            'APPROVED BY DEPARTMENT HEAD',
-            'APPROVED BY OSA',
-            'APPROVED BY ADAA',
-            'APPROVED BY CAMPUS DIRECTOR',
-        ];
-        
-        $pendingMsg = 'APPROVED';
-        return response()->json(["dates" => $approvalDates, "msg" => $approvalMessage, "pendingMsg" => $pendingMsg, "status" => 200]);
-       }
 
     }
 
@@ -647,8 +631,10 @@ class RequestController extends Controller
     $atty = $events->atty;
     $cd = $events->campus_director;
 
+    // dd($events->);
     // Initialize $Message with a default value
     $Message = 'No approval status available.';
+    
     if($orgAdviser === null && $secHead === null && $depHead === null && $osa === null && $adaa === null && $atty === null && $cd === null)
     {
         $Message = 'Waiting for approval of organization adviser';
@@ -667,20 +653,16 @@ class RequestController extends Controller
     }
     elseif ($adaa === null && $atty === null && $cd === null)
     {
-        $approvedOsaDate = $events->approved_osa_at;
-        $approvedOsaMsg = 'APPROVED BY OSA';
         $Message = 'Waiting for approval of ADAA';
     }
-    elseif ($atty === null && $cd === null)
+    elseif ($atty === null && $venues->name === 'IT Auditorium')
     {
-        $approvedAdaaDate = $events->approved_adaa_at;
-        $approvedAdaaMsg = 'APPROVED BY ADAA';
+        // $approvedAdaaMsg = 'APPROVED BY ADAA';
         $Message = 'Waiting for approval of ATTY';
     }
-    elseif ($cd === null)
+    elseif ($cd === null && $venues->name !== 'IT Auditorium')
     {
-        $approvedAttyDate = $events->approved_atty_at;
-        $approvedAttyMsg = 'APPROVED BY ATTY';
+        // $approvedAttyMsg = 'APPROVED BY ATTY';
         $Message = 'Waiting for approval of Campus Director';
     }
     else

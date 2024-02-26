@@ -13,6 +13,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\GoogleSocialiteController;
+use App\Http\Controllers\MailController;
 
 /*
 |--------------------------------------------------------------------------
@@ -62,10 +63,13 @@ Route::get('/venues', [VenueController::class, 'indexUser'])
     ->name('venues.indexUser')
     ->middleware('auth');
 
+Route::get('/completeProfile', [UserController::class, 'viewCompleteProfile'])
+    ->name('completeProfile')
+    ->middleware('auth');
 // COMPLETE PROFILE
-Route::get('/completeProfile', function () {
-    return view('completeProfile');
-})->name('completeProfile')->middleware('auth');
+// Route::get('/completeProfile', function () {
+//     return view('completeProfile');
+// })->name('completeProfile')->middleware('auth');
 
         // FOR REFERENCE SEARCH
 // Route::get('/search', function () {
@@ -226,6 +230,9 @@ Route::get('/admin/pendingUsers', [UserController::class, 'pendingUsers'])
 // GOOGLE LOGIN 
 Route::get('auth/google', [GoogleSocialiteController::class, 'redirectToGoogle']);
 Route::get('/login/google/callback', [GoogleSocialiteController::class, 'handleCallback']);
+
+// GMAIL NOTIFICATION
+Route::get('/sendmail', [MailController::class, 'index']);
 
 
 

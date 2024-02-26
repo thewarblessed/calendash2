@@ -21,18 +21,11 @@ class OfficialSeeder extends Seeder
         foreach ($users as $user) {
             $department = null;
 
-            if ($user->role === 'department_head') {
-                $department = 'EAAD';
-            }
-            elseif($user->role === 'org_adviser'){
-                $department = 'MTICS';
-            }
-            
-
             Official::create([
                 'user_id' => $user->id,
                 'esign' => 'esign.jpg',
-                'department' => $department,
+                'role' => $user->role,
+                // 'department' => $department,
                 'hash' => Hash::make('passcode'),
             ]);
         }

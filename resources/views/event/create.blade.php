@@ -35,26 +35,26 @@
                         <div class="container">
                             <div class="row">
                                 @foreach ($venues as $venue)
-                                    <div class="col-sm">
-                                        <div id="venue{{ $venue->id }}" data-capacity="{{ $venue->capacity }}"
-                                            class="card_capacity"
-                                            style="width: 15rem; margin-top: 30px; box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px; border-radius: 8px">
-                                            <img src="{{ asset('storage/' . $venue->image) }}" height="180"
-                                                class="card-img-top" alt="...">
-                                            <div class="card-body">
-                                                <h5 class="card-title">{{ $venue->name }}</h5>
-                                                <p class="card-text">{{ $venue->description }}</p>
-                                                <p class="card-text">Capacity: {{ $venue->capacity }}</p>
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="radio" name="event_venue"
-                                                        id="event_venue" value= "{{ $venue->id }}" required>
-                                                    <label class="custom-control-label" for="event_venue"
-                                                        style="color: blue; font-size: 18px"><strong>SELECT</strong>
-                                                    </label>
-                                                </div>
+                                <div class="col-sm">
+                                    <div id="venue{{ $venue->id }}" data-capacity="{{ $venue->capacity }}"
+                                        class="card_capacity"
+                                        style="width: 15rem; margin-top: 30px; box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px; border-radius: 8px">
+                                        <img src="{{ asset('storage/' . $venue->image) }}" height="180"
+                                            class="card-img-top" alt="...">
+                                        <div class="card-body">
+                                            <h5 class="card-title">{{ $venue->name }}</h5>
+                                            <p class="card-text">{{ $venue->description }}</p>
+                                            <p class="card-text">Capacity: {{ $venue->capacity }}</p>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="event_venue"
+                                                    id="event_venue" value="{{ $venue->id }}" required>
+                                                <label class="custom-control-label" for="event_venue"
+                                                    style="color: blue; font-size: 18px"><strong>SELECT</strong>
+                                                </label>
                                             </div>
                                         </div>
                                     </div>
+                                </div>
                                 @endforeach
                             </div>
                         </div>
@@ -85,35 +85,49 @@
 
                         <div class="radiobuttonsuser">
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="event_type" value="withinDay" id="withinDay" required>
+                                <input class="form-check-input" type="radio" name="event_type" value="withinDay"
+                                    id="withinDay" required>
                                 <label class="custom-control-label" for="withinDay">Within the Day</label>
                             </div>
-                        
+
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="event_type" value="wholeDay" id="wholeDay" required>
+                                <input class="form-check-input" type="radio" name="event_type" value="wholeDay"
+                                    id="wholeDay" required>
                                 <label class="custom-control-label" for="wholeDay">Whole Day</label>
                             </div>
-                        
+
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="event_type" value="wholeWeek" id="wholeWeek" required>
+                                <input class="form-check-input" type="radio" name="event_type" value="wholeWeek"
+                                    id="wholeWeek" required>
                                 <label class="custom-control-label" for="wholeWeek">Whole Week</label>
                             </div>
+
+                            <div class="form-check">
+                                {{-- <input class="form-check-input" type="radio" name="event_type" value="dateRange"
+                                    id="dateRange" required> --}}
+                                <input class="form-check-input" type="radio" name="event_type" value="dateRanges"
+                                    id="dateRanges" required>
+                                <label class="custom-control-label" for="dateRanges">Date Range</label>
+                            </div>
                         </div>
-                        
+
                         <div id="withinTheDayDivUser" class="withinTheDay" style="display:none;">
                             <h5 style="text-align: center">Within the Day</h5>
                             <div class="form-group">
                                 <label for="example-datetime-local-input" class="form-control-label">Datetime</label>
-                                <input class="form-control" type="date" value="" name="event_date_withinDayUser" id="event_date_withinDayUser">
+                                <input class="form-control" type="date" value="" name="event_date_withinDayUser"
+                                    id="event_date_withinDayUser">
                             </div>
                             <div class="row">
                                 <div class="mb-3 col-md-6">
                                     <label for="start_time" class="form-label">Set Start Time</label>
-                                    <input type="time" class="form-control" name="start_time_withinDayUser" id="start_time_withinDayUser" required>
+                                    <input type="time" class="form-control" name="start_time_withinDayUser"
+                                        id="start_time_withinDayUser" required>
                                 </div>
                                 <div class="mb-3 col-md-6">
                                     <label for="end_time" class="form-label">Set End Time</label>
-                                    <input type="time" class="form-control" name="end_time_withinDayUser" id="end_time_withinDayUser" required>
+                                    <input type="time" class="form-control" name="end_time_withinDayUser"
+                                        id="end_time_withinDayUser" required>
                                 </div>
                             </div>
                         </div>
@@ -122,7 +136,8 @@
                             <h5 style="text-align: center">Whole Day</h5>
                             <div class="mb-3">
                                 <label for="company_name" class="form-label">Set Date</label>
-                                <input type="date" class="form-control" name="event_date_wholeDayUser" id="event_date_wholeDayUser">
+                                <input type="date" class="form-control" name="event_date_wholeDayUser"
+                                    id="event_date_wholeDayUser">
                             </div>
                         </div>
 
@@ -130,12 +145,18 @@
                             <h5 style="text-align: center">Whole Week</h5>
                             <div class="form-group">
                                 <label for="example-week-input" class="form-control-label">Week</label>
-                                <input class="form-control" type="week" name="event_date_wholeWeekUser" id="event_date_wholeWeekUser">
+                                <input class="form-control" type="week" name="event_date_wholeWeekUser"
+                                    id="event_date_wholeWeekUser">
                             </div>
                         </div>
 
-
-
+                        <div id="dateRangeDivUser" class="dateRanges" style="display:none;">
+                            <h5 style="text-align: center">Date Range</h5>
+                            <div class="form-group" style="text-align: center">
+                                <label for="example-week-input" class="form-control-label"></label>
+                                <input type="text" name="daterange" value="" id="date_range_User"/>
+                            </div>
+                        </div>
 
                     </div>
 
@@ -164,14 +185,14 @@
                         <button type="button" id="back_button" class="btn btn-link" onclick="back()">Back</button>
                         <button type="button" id="next_button" class="btn btn-primary ms-auto"
                             onclick="next()">Next</button>
-                        <button type="submit" id="createEvent_submit"
-                            class="btn btn-primary ms-auto">Submit</button>
+                        <button type="submit" id="createEvent_submit" class="btn btn-primary ms-auto">Submit</button>
                     </div>
                 </div>
             </form>
         </div>
     </main>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+
+    {{-- tinyMCE --}}
     <script src="https://cdn.tiny.cloud/1/efy9kqrdbnc5rwfbz3ogkw1784y0tm6sphy6xvo6iq7azwcf/tinymce/6/tinymce.min.js"
         referrerpolicy="origin"></script>
     <script>
@@ -368,5 +389,23 @@
         //         this.value = ''; // Clear the input value
         //     }
         // });
+    </script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js">
+    </script>
+    <script>
+        $(function() {
+            $('input[name="daterange"]').daterangepicker({
+            opens: 'right',
+            minDate: moment().add(1, 'weeks').startOf('day'), // Set minDate to start of day one week from now
+            locale: {
+                format: 'YYYY-MM-DD'
+            }
+            }, function(start, end, label) {
+            console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+            });
+        });
     </script>
 </x-app-layout>

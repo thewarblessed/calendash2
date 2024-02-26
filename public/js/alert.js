@@ -202,21 +202,24 @@ $(document).ready(function () {
         const withinDayDiv = document.getElementById('withinTheDayDivUser');
         const wholeDayDiv = document.getElementById('wholeDayDivUser');
         const wholeWeekDiv = document.getElementById('wholeWeekDivUser');
+        const dateRangeDiv = document.getElementById('dateRangeDivUser');
 
         const eventDate = document.getElementById('event_date_withinDayUser');
         const startTimeWithinDay = document.getElementById('start_time_withinDayUser');
         const endTimeWithinDay = document.getElementById('end_time_withinDayUser');
         const WholeDay = document.getElementById('event_date_wholeDayUser');
         const WholeWeek = document.getElementById('event_date_wholeWeekUser');
+        const dateRange = document.getElementById('date_range_User')
+
         if ($(this).is(':checked')) {
 
             if ($(this).val() === 'withinDay') {
-                console.log('labasDate');
+                // console.log('labasDate');
                 // $("#withinTheDayDiv").show();
                 // $("#wholeDayDiv").hide();
                 // $("#wholeWeekDiv").hide();
 
-
+                dateRange.removeAttribute('required');
                 WholeDay.removeAttribute('required');
                 WholeWeek.removeAttribute('required');
 
@@ -227,6 +230,7 @@ $(document).ready(function () {
                 withinDayDiv.style.display = 'block';
                 wholeDayDiv.style.display = 'none';
                 wholeWeekDiv.style.display = 'none';
+                dateRangeDiv.style.display = 'none';
 
                 startTimeWithinDay.setAttribute('required', true);
                 endTimeWithinDay.setAttribute('required', true);
@@ -237,11 +241,11 @@ $(document).ready(function () {
 
             }
             else if ($(this).val() === 'wholeDay') {
-                console.log('wholeDayLangTalaga');
+                // console.log('wholeDayLangTalaga');
                 startTimeWithinDay.removeAttribute('required');
                 endTimeWithinDay.removeAttribute('required');
                 eventDate.removeAttribute('required');
-
+                dateRange.removeAttribute('required');
                 WholeWeek.removeAttribute('required');
 
                 WholeDay.value = "";
@@ -249,14 +253,16 @@ $(document).ready(function () {
                 wholeWeekDiv.style.display = 'none';
                 withinDayDiv.style.display = 'none';
                 wholeDayDiv.style.display = 'block';
+                dateRangeDiv.style.display = 'none';
+
                 WholeDay.setAttribute('required', true);
             }
-            else {
-                console.log('wholeWeekNa')
+            else if ($(this).val() === 'wholeWeek'){
+                // console.log('wholeWeekNa')
                 startTimeWithinDay.removeAttribute('required');
                 endTimeWithinDay.removeAttribute('required');
                 eventDate.removeAttribute('required');
-
+                dateRange.removeAttribute('required');
                 WholeDay.removeAttribute('required');
 
                 WholeWeek.value = "";
@@ -264,8 +270,26 @@ $(document).ready(function () {
                 wholeWeekDiv.style.display = 'block';
                 withinDayDiv.style.display = 'none';
                 wholeDayDiv.style.display = 'none';
+                dateRangeDiv.style.display = 'none';
 
                 WholeWeek.setAttribute('required', true);
+            }
+            else
+            {
+                startTimeWithinDay.removeAttribute('required');
+                endTimeWithinDay.removeAttribute('required');
+                eventDate.removeAttribute('required');
+                WholeWeek.removeAttribute('required');
+                WholeDay.removeAttribute('required');
+
+                dateRange.value = "";
+
+                wholeWeekDiv.style.display = 'none';
+                withinDayDiv.style.display = 'none';
+                wholeDayDiv.style.display = 'none';
+                dateRangeDiv.style.display = 'block';
+
+                dateRange.setAttribute('required', true);
             }
             // console.log('Selected value:', $(this).val());
         }
@@ -531,14 +555,21 @@ $(document).ready(function () {
                 var originalEDate = new Date(data.events.end_date);
                 var origStime = moment(data.events.start_time, "HH:mm:ss")
                 var origEtime = moment(data.events.end_time, "HH:mm:ss")
+                var origCreatedDate = new Date(data.events.created_at);
 
                 var formattedSTime = origStime.format("h:mm A");
                 var formattedETime = origEtime.format("h:mm A");
 
+                // var formattedCreatedTime = origCreatedDate.format("h:mm A");
+
                 // Format the date using moment.js
                 var formattedSDate = moment(originalSDate).format("MMMM D, YYYY");
                 var formattedEDate = moment(originalEDate).format("MMMM D, YYYY");
+                var formattedCreatedDate = moment(origCreatedDate).format("MMMM D, YYYY");
 
+                var formattedCreatedTime = moment(origCreatedDate).format("h:mm A");
+
+                console.log(formattedCreatedTime);
                 var dateType = data.events.type;
                 var dType;
                 if (dateType === 'within_day') {
@@ -549,9 +580,10 @@ $(document).ready(function () {
                     dType = 'Whole Week';
                 }
                 // console.log(dType);
-
+                // console.log(data);
                 $('#checkMoreModal').modal('show');
                 $('#eventStatusText').text(data.msg);
+                $('#eventDateRequestedText').text(formattedCreatedDate +' '+ formattedCreatedTime);
                 $('#eventStatusName').val(data.events.event_name);
                 $('#eventStatusDesc').val(data.events.description);
                 $('#eventStatusParticipants').val(data.events.participants);
@@ -660,85 +692,157 @@ $(document).ready(function () {
         });
     });//end event status table
 
-    // $("#eventStatus tbody").on("click", 'button.checkStatus ', function (e) {
-    //     var id = $(this).data("id");
-    //     // e.preventDefault();
-    //     console.log(id);
-    //     $.ajax({
-    //         type: "GET",
-    //         enctype: 'multipart/form-data',
-    //         processData: false, // Important!
-    //         contentType: false,
-    //         cache: false,
-    //         url: "/api/myEventStatus/" + id,
-    //         headers: {
-    //             "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
-    //                 "content"
-    //             ),
-    //         },
-    //         dataType: "json",
-    //         success: function (data) {
-    //             console.log(data);
-    //             $('#statusList').empty();
-    //             $('#checkStatusModal').modal('show');
-    //             $('#eventStatusText').text(data.pendingMsg);
+    $('#event_date_withinDayUser').change(function() {
+        // Your code here
+        // var selectedDate = $(this).val();
+        // var selectedVenueID = $("input[name='event_venue']:checked").val();
 
-    //             var statusElement = $('#eventStatusText');
-    //             // console.log(statusElement)
-    //             // Get the value from the element's text content
-    //             var statusValue = $('#eventStatusText').text();
+        // console.log('Selected venue:', selectedVenueID);
+        // console.log('Selected date:', selectedDate);
+        // var venue = $('#event_venue').val()
+        // console.log(venue);  
+    
+        
+        // You can perform any other actions you need here
+    });
+    //Within the Day
+    $('#end_time_withinDayUser').change(function() {
+        var selectedDate = $('#event_date_withinDayUser').val();
+        var selectedVenueID = $("input[name='event_venue']:checked").val();
+        var selectedStartTime = $('#start_time_withinDayUser').val();
+        var selectedEndTime = $(this).val();
+        console.log(selectedDate);
+        console.log(selectedVenueID);
+        console.log(selectedStartTime);
+        console.log(selectedEndTime);
 
-    //             statusElement.removeClass();
-    //             // Apply styling based on the value
-    //             if (statusValue === 'APPROVED') {
-    //                 statusElement.addClass('badge badge-sm border border-success text-success');
-    //             } else {
-    //                 statusElement.addClass('badge badge-sm border border-warning text-warning');
-    //             }
-    //             // $("#venueEditImage").html(
-    //             // `<img src="/storage/${data.Venues.image}" width="100" class="img-fluid img-thumbnail">`);
+        $.ajax({
+            url: '/api/check-event-conflict',
+            type: 'POST',
+            data: {
+                event_type:'withinDay',
+                date: selectedDate,
+                start_time: selectedStartTime,
+                end_time: selectedEndTime,
+                venue_id: selectedVenueID
+            },
+            success: function(response) {
+                if (response.conflict) {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Oops...",
+                        html: "There is an existing event with the <strong>same venue and time</strong>. Please check the calendar for available dates and time.",
+                    });
+                    // alert('');
+                    $('#event_date_withinDayUser').val('');
+                    $('#start_time_withinDayUser').val('');
+                    $('#end_time_withinDayUser').val('');
+                }
+                
+            },
+            error: function(xhr, status, error) {
+                console.error('Error checking event conflict:', error);
+            }
+        });
 
-    //             // var status = 1;
-    //             // $.each(data, function(index, item) {
+    });
 
-    //             // });
+    $('#event_date_wholeDayUser').change(function() {
+        var selectedVenueID = $("input[name='event_venue']:checked").val();
+        var selectedWholeDay = $(this).val();
+        console.log(selectedWholeDay);
+        
+        $.ajax({
+            url: '/api/check-event-conflict',
+            type: 'POST',
+            data: {
+                event_type:'wholeDay',
+                date: selectedWholeDay,
+                venue_id: selectedVenueID
+            },
+            success: function(response) {
+                if (response.conflict) {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Oops...",
+                        html: "There is an existing event with the <strong>same venue and time</strong>. Please check the calendar for available dates and time.",
+                    });
+                    // alert('');
+                    $('#event_date_wholeDayUser').val('');
+                }
+                
+            },
+            error: function(xhr, status, error) {
+                console.error('Error checking event conflict:', error);
+            }
+        });
 
-    //             $.each(data.dates, function (index, item) {
-    //                 // console.log(item);
-    //                 console.log(index);
-    //                 console.log(data.msg);
-    //                 var formattedDate = moment(item, 'YYYY-MM-DD HH:mm:ss').format('MMMM D, YYYY');
-    //                 var formattedTime = moment(item, 'YYYY-MM-DD HH:mm:ss').format('h:mm A');
-    //                 console.log(formattedTime);
+    });
 
-                   
-    //                 if (data.msg && data.msg[index]) {
-    //                     var msgItem = data.msg[index];
+    $('#event_date_wholeWeekUser').change(function() {
+        var selectedVenueID = $("input[name='event_venue']:checked").val();
+        var selectedWeek = $(this).val();
+        console.log(selectedWeek);
 
-    //                     // Create a list item for each date and message
-    //                     var listItem = `
-    //                         <li class="rb-item">
-    //                             <div class="timestamp">
-    //                                 ${formattedDate}<br> <span>${formattedTime}</span>
-    //                             </div>
-    //                             <div class="item-title">${msgItem}</div>
-    //                         </li>
-    //                     `;
+        $.ajax({
+            url: '/api/check-event-conflict',
+            type: 'POST',
+            data: {
+                event_type:'wholeWeek',
+                date: selectedWeek,
+                venue_id: selectedVenueID
+            },
+            success: function(response) {
+                if (response.conflict) {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Oops...",
+                        html: "There is an existing event with the <strong>same venue and time</strong>. Please check the calendar for available dates and time.",
+                    });
+                    // alert('');
+                    $('#event_date_wholeWeekUser').val('');
+                }
+                
+            },
+            error: function(xhr, status, error) {
+                console.error('Error checking event conflict:', error);
+            }
+        });
 
-    //                     $('#statusList').prepend(listItem);
-    //                 }
+    });
 
-               
-    //             });
+    $('#date_range_User').change(function() {
+        // dateRanges
+        var selectedVenueID = $("input[name='event_venue']:checked").val();
+        var selectedRange = $(this).val();
+        console.log(selectedRange);
 
+        $.ajax({
+            url: '/api/check-event-conflict',
+            type: 'POST',
+            data: {
+                event_type:'dateRanges',
+                daterange: selectedRange,
+                venue_id: selectedVenueID
+            },
+            success: function(response) {
+                if (response.conflict) {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Oops...",
+                        html: "There is an existing event with the <strong>same venue and time</strong>. Please check the calendar for available dates and time.",
+                    });
+                    // alert('');
+                    $('#date_range_User').val('');
+                }
+                
+            },
+            error: function(xhr, status, error) {
+                console.error('Error checking event conflict:', error);
+            }
+        });
 
-
-    //         },
-    //         error: function (error) {
-    //             console.log("error");
-    //         },
-    //     });
-    // });
+    });
 
     $('#radioForm input').change(function () {
         // alert($('input[name=btnradiotable]:checked', '#radioForm').val());
@@ -1108,6 +1212,31 @@ $(document).ready(function () {
         });
         //Swal.fire('SweetAlert2 is working!')
     });//end create event
+
+    //SELECT ROLE FOR ORG AND DEPT
+    $('#official_role').change(function() {
+        var selectedValue = $(this).val();
+        const orgDiv = document.getElementById('selectOrgDiv');
+        const deptDiv = document.getElementById('selectDeptDiv');
+
+        // Perform actions based on the selected value
+        console.log(selectedValue);
+        if (selectedValue === 'org_adviser')
+        {
+            orgDiv.style.display = 'block';
+            deptDiv.style.display = 'none';
+        }
+        else if(selectedValue === 'department_head')
+        {
+            orgDiv.style.display = 'none';
+            deptDiv.style.display = 'block';
+        }
+        else
+        {
+            orgDiv.style.display = 'none';
+            deptDiv.style.display = 'none';
+        }
+    });
 
     //ADMIN IN-TABLE VIEW OF REQUEST LETTER 
     // $("#viewRequestLetter").on("click", function (e) {

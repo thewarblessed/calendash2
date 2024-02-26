@@ -208,6 +208,13 @@
                             </span>
                         </div>
 
+                        <div class="form-group">
+                            <label for="exampleFormControlInput1">Date Requested:</label>
+                            <span id="eventDateRequestedText" name="eventStatusText" style="font-size: 16px">
+                                
+                            </span>
+                        </div>
+
                         <div style="font-size: 14px; background-color:rgb(2, 36, 36); border-radius: 25px; ">
                             <div class="rightbox">
                                 <div class="rb-container">

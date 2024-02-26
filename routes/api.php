@@ -111,11 +111,11 @@ Route::get('/getCalendarEvent/{id}', [CalendarController::class, 'myCalendarDeta
 Route::get('/myEventStatus/{id}', [RequestController::class, 'checkStatus'])
     ->name('checkMyEventStatus');
 
-// SHOW EVENT BASED ON ROLE
-// Route::get('/show/event',[
-//         'uses' => 'RequestController@store',
-//         'as' => 'showEventRole',
-// ]);
+//CHECK EVENT CONFLICT
+Route::post('/check-event-conflict',[
+        'uses' => 'EventController@checkEventConflict',
+        'as' => 'checkEventConflict',
+]);
 
 // APPROVE REQUEST
 // Route::post('/request/approve/{id}',[

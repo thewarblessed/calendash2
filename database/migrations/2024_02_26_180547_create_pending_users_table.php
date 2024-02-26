@@ -15,8 +15,10 @@ return new class extends Migration
             $table->increments('id');
             $table->string('lastname');
             $table->string('firstname');
-            $table->text('department');
-            $table->text('organization');
+            $table->integer('department_id')->unsigned()->nullable();
+            $table->foreign('department_id')->references('id')->on('departments');
+            $table->integer('organization_id')->unsigned()->nullable();
+            $table->foreign('organization_id')->references('id')->on('organizations');
             $table->text('tupID');
             $table->integer('user_id')->unsigned()->nullable();
             $table->foreign('user_id')->references('id')->on('users');

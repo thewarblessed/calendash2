@@ -7,6 +7,9 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use App\Models\Official;
 use App\Models\User;
+use App\Models\Organization;
+use App\Models\Department;
+use App\Models\Section;
 use View;
 use DB;
 
@@ -34,7 +37,12 @@ class OfficialController extends Controller
     public function create()
     {
         //
-        return view('admin.official.create');
+        $organizations = Organization::pluck('organization', 'id');
+
+        $departments = Department::pluck('department', 'id');
+        // $organizations = Organization::pluck('organization', 'id');
+        // dd($org->organization);
+        return view('admin.official.create', compact('organizations','departments'));
     }
 
     /**
@@ -53,18 +61,54 @@ class OfficialController extends Controller
 
         $lastid = DB::getPdo()->lastInsertId();
 
-        $officials = new Official();
-        $officials->user_id = $lastid;
-        $officials->hash = Hash::make($request->passcode);
-        
-        $files = $request->file('image');
-        $officials->esign = 'images/'.time().'-'.$files->getClientOriginalName();
-        $officials->save();
-        Storage::put('public/images/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
-        
-        // dd($officials);
+        if ($request->official_role === 'org_adviser')
+        {
+            $officials = new Official();
+            $officials->user_id = $lastid;
+            $officials->hash = Hash::make($request->passcode);
+            $officials->organization_id = $request->organization_id;
+            $officials->role = 'org_adviser';
+            $files = $request->file('image');
+            $officials->esign = 'images/'.time().'-'.$files->getClientOriginalName();
+            $officials->save();
+            Storage::put('public/images/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
+            
+            // dd($officials);
 
-        return response()->json(["user" => $user, "officials" => $officials, "status" => 200]);
+            return response()->json(["user" => $user, "officials" => $officials, "status" => 200]);
+        }
+        elseif($request->official_role === 'department_head')
+        {
+            $officials = new Official();
+            $officials->user_id = $lastid;
+            $officials->hash = Hash::make($request->passcode);
+            $officials->department_id = $request->department_id;
+            $officials->role = 'department_head';
+            $files = $request->file('image');
+            $officials->esign = 'images/'.time().'-'.$files->getClientOriginalName();
+            $officials->save();
+            Storage::put('public/images/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
+            
+            // dd($officials);
+
+            return response()->json(["user" => $user, "officials" => $officials, "status" => 200]);
+        }
+        else
+        {
+            $officials = new Official();
+            $officials->user_id = $lastid;
+            $officials->hash = Hash::make($request->passcode);
+            $files = $request->file('image');
+            $officials->role = $request->official_role;
+            $officials->esign = 'images/'.time().'-'.$files->getClientOriginalName();
+            $officials->save();
+            Storage::put('public/images/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
+            
+            // dd($officials);
+
+            return response()->json(["user" => $user, "officials" => $officials, "status" => 200]);
+        }
+        
     }
 
     /**

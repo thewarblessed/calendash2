@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Models\Student;
 use App\Models\Prof;
 use App\Models\Staff;
+use App\Models\Organization;
+use App\Models\Department;
 use App\Models\PendingUser;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -17,6 +19,15 @@ class UserController extends Controller
     {
         $users = User::all();
         return view('laravel-examples.users-management', compact('users'));
+    }
+
+    public function viewCompleteProfile()
+    {
+        $organizations = Organization::pluck('organization', 'id');
+
+        $departments = Department::pluck('department', 'id');
+
+        return view('completeProfile', compact('organizations','departments'));
     }
 
     public function getProfile($id)
@@ -56,8 +67,8 @@ class UserController extends Controller
         $pendingUsers->tupID =  $request->tupID;
         $pendingUsers->firstname =  $request->firstname;
         $pendingUsers->lastname =  $request->lastname;
-        $pendingUsers->organization =  $request->organization;
-        $pendingUsers->department =  $request->department;
+        $pendingUsers->organization_id =  $request->organization_id_user;
+        $pendingUsers->department_id =  $request->department_id_user;
         $pendingUsers->role = "student";
         // dd($pendingUsers);
         $files = $request->file('image');
@@ -71,7 +82,10 @@ class UserController extends Controller
     public function pendingUsers(Request $request)
     {
         // $pendingUsers = PendingUser::all();  
-        $pendingUsers = PendingUser::join('users', 'pending_users.user_id','users.id')->get();
+        $pendingUsers = PendingUser::join('users', 'pending_users.user_id','users.id')
+                                    ->join('organizations', 'pending_users.organization_id','organizations.id')
+                                    ->join('departments', 'pending_users.department_id','departments.id')
+                                    ->get();
         return view('admin.user.pendingUsers', compact('pendingUsers'));
         
     }
@@ -89,8 +103,8 @@ class UserController extends Controller
         $student->tupID = $user->tupID;
         $student->lastname = $user->lastname;
         $student->firstname = $user->firstname;
-        $student->department = $user->department;
-        $student->studOrg = $user->organization;
+        $student->department_id = $user->department_id;
+        $student->organization_id = $user->organization_id;
         $student->user_id = $user->user_id;
         // $student->role = 'student';
         $student->save();
@@ -235,7 +249,10 @@ class UserController extends Controller
     {
         // $pendingUsers = PendingUser::join('users', 'pending_users.user_id','users.id')->get();
         // $user = User::find($id);
-        $user = User::join('pending_users', 'pending_users.user_id','users.id')->where('users.id', $id)->first();
+        $user = User::join('pending_users', 'pending_users.user_id','users.id')
+                        ->join('organizations', 'pending_users.organization_id','organizations.id')
+                        ->join('departments', 'pending_users.department_id','departments.id')
+                        ->where('users.id', $id)->first();
         // dd($user);
         
         // $student = new Student();

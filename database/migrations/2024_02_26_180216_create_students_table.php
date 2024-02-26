@@ -17,8 +17,10 @@ return new class extends Migration
             $table->text('lastname');
             $table->text('firstname');
             $table->text('course')->nullable();
-            $table->text('department');
-            $table->text('studOrg');
+            $table->integer('department_id')->unsigned()->nullable();
+            $table->foreign('department_id')->references('id')->on('departments');
+            $table->integer('organization_id')->unsigned()->nullable();
+            $table->foreign('organization_id')->references('id')->on('organizations');
             $table->text('yearlevel')->nullable();
             $table->text('section')->nullable();
             $table->string('image')->default('student.jpg');

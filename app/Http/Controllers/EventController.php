@@ -27,6 +27,98 @@ class EventController extends Controller
         //
     }
 
+    public function checkEventConflict(Request $request)
+    {
+        $event_type = $request->input('event_type');
+        if($event_type ==='withinDay')
+        {
+            $date = $request->input('date');
+            $startTime = $request->input('start_time');
+            $endTime = $request->input('end_time');
+            $venueId = $request->input('venue_id');
+
+            // Check if there are any events with the same venue and overlapping time
+            $conflict = Event::where('venue_id', $venueId)
+                ->where(function ($query) use ($date, $startTime, $endTime) {
+                    $query->where(function ($q) use ($date, $startTime, $endTime) {
+                        $q->where('start_date', $date)
+                            ->where('start_time', '<', $endTime)
+                            ->where('end_time', '>', $startTime);
+                    })->orWhere(function ($q) use ($date, $startTime, $endTime) {
+                        $q->where('start_date', '<', $date)
+                            ->where('end_date', '>', $date);
+                    });
+                })
+                ->exists();
+
+            return response()->json(['conflict' => $conflict]);
+        }
+        elseif($event_type ==='wholeDay')
+        {   
+            $date = $request->input('date');
+            $venueId = $request->input('venue_id');
+
+            // Check if there are any events with the same venue and overlapping date
+            $conflict = Event::where('venue_id', $venueId)
+                ->where(function ($query) use ($date) {
+                    $query->where('start_date', '<=', $date)
+                        ->where('end_date', '>=', $date);
+                })
+                ->exists();
+
+            return response()->json(['conflict' => $conflict]);
+        }
+        elseif($event_type ==='wholeWeek')
+        {
+            $week = $request->input('date');
+            $year = substr($week, 0, 4);
+            $weekNumber = substr($week, 6);
+
+            // Convert week format to start and end dates
+            $startDate = date("Y-m-d", strtotime($year . "W" . $weekNumber));
+            $endDate = date("Y-m-d", strtotime($year . "W" . $weekNumber . "7"));
+
+            $venueId = $request->input('venue_id');
+
+            // Check if there are any events with the same venue and overlapping dates
+            $conflict = Event::where('venue_id', $venueId)
+                ->where(function ($query) use ($startDate, $endDate) {
+                    $query->where('start_date', '<=', $endDate)
+                        ->where('end_date', '>=', $startDate);
+                })
+                ->exists();
+            // dd($conflict);
+            return response()->json(['conflict' => $conflict]);
+        }
+        else
+        {
+            $venueId = $request->input('venue_id');
+            $dateRange = $request->input('daterange');
+            [$startDate, $endDate] = explode(' - ', $dateRange);
+            
+            // dd($endDate);
+
+            // Check if there are any events with the same venue and overlapping date range
+            $conflict = Event::where('venue_id', $venueId)
+                ->where(function ($query) use ($startDate, $endDate) {
+                    $query->where(function ($q) use ($startDate, $endDate) {
+                        $q->where('start_date', '<=', $endDate)
+                            ->where('end_date', '>=', $startDate);
+                    })->orWhere(function ($q) use ($startDate, $endDate) {
+                        $q->where('start_date', '>=', $startDate)
+                            ->where('end_date', '<=', $endDate);
+                    })->orWhere(function ($q) use ($startDate, $endDate) {
+                        $q->where('start_date', '<=', $startDate)
+                            ->where('end_date', '>=', $endDate);
+                    });
+                })
+                ->exists();
+
+            return response()->json(['conflict' => $conflict]);
+        }
+        
+    }
+
     public function showVenues()
     {
         $venues = Venue::orderBy('id')->get();
@@ -99,7 +191,8 @@ class EventController extends Controller
                     'target_org' => $target_org,
                     'event_letter' => $event_letter,
                     'status' => 'PENDING',
-                    'color' => '#D6AD60'
+                    'color' => '#D6AD60',
+                    'created_at' => now()
                 ]);
                 
                 return response()->json(["success" => "Event Created Successfully.", "status" => 200]);
@@ -135,7 +228,8 @@ class EventController extends Controller
                     'event_letter' => $event_letter,
                     'whole_week' => false,
                     'status' => 'PENDING',
-                    'color' => '#D6AD60'
+                    'color' => '#D6AD60',
+                    'created_at' => now()
                 ]);
                 return response()->json(["success" => "Event Created Successfully.", "status" => 200]);
             }   
@@ -168,7 +262,43 @@ class EventController extends Controller
                     'event_letter' => $event_letter,
                     'whole_week' => false,
                     'status' => 'PENDING',
-                    'color' => '#D6AD60'
+                    'color' => '#D6AD60',
+                    'created_at' => now()
+                ]);
+                return response()->json(["success" => "Event Created Successfully.", "status" => 200]);
+            }
+            else
+            {
+                $dateRange = $request->daterange;
+                [$startDate, $endDate] = explode(' - ', $dateRange);
+                // dd($startDate);
+                $request->validate([
+                    'request_letter' => 'required|mimes:pdf|max:2048', // PDF file validation
+                ]);
+        
+                $files = $request->file('request_letter');
+                $event_letter = 'pdf/'.time().'-'.$files->getClientOriginalName();
+                // $venues->save();
+                Storage::put('public/pdf/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
+                
+                Event::create([
+                    'user_id' => $request->user_id,
+                    'event_name' => $request->eventName,
+                    'description' => $request->eventDesc,
+                    'type' => 'whole_day',
+                    'venue_id' => $request->event_venue,
+                    'start_date' => $startDate,
+                    'end_date' => $endDate,
+                    'start_time' => '05:00:00',
+                    'end_time' => '21:00:00',
+                    'participants' => $request->numParticipants,
+                    'target_dept' => $target_dept,
+                    'target_org' => $target_org,
+                    'event_letter' => $event_letter,
+                    'whole_week' => false,
+                    'status' => 'PENDING',
+                    'color' => '#D6AD60',
+                    'created_at' => now()
                 ]);
                 return response()->json(["success" => "Event Created Successfully.", "status" => 200]);
             }
@@ -213,7 +343,8 @@ class EventController extends Controller
                     'target_org' => $target_org,
                     'event_letter' => $event_letter,
                     'status' => 'PENDING',
-                    'color' => '#D6AD60'
+                    'color' => '#D6AD60',
+                    'created_at' => now()
                 ]);
                 
                 return response()->json(["success" => "Event Created Successfully.", "status" => 200]);
@@ -249,7 +380,8 @@ class EventController extends Controller
                     'event_letter' => $event_letter,
                     'whole_week' => false,
                     'status' => 'PENDING',
-                    'color' => '#D6AD60'
+                    'color' => '#D6AD60',
+                    'created_at' => now()
                 ]);
                 return response()->json(["success" => "Event Created Successfully.", "status" => 200]);
             }   
@@ -282,7 +414,43 @@ class EventController extends Controller
                     'event_letter' => $event_letter,
                     'whole_week' => false,
                     'status' => 'PENDING',
-                    'color' => '#D6AD60'
+                    'color' => '#D6AD60',
+                    'created_at' => now()
+                ]);
+                return response()->json(["success" => "Event Created Successfully.", "status" => 200]);
+            }
+            else
+            {
+                $dateRange = $request->daterange;
+                [$startDate, $endDate] = explode(' - ', $dateRange);
+
+                $request->validate([
+                    'request_letter' => 'required|mimes:pdf|max:2048', // PDF file validation
+                ]);
+        
+                $files = $request->file('request_letter');
+                $event_letter = 'pdf/'.time().'-'.$files->getClientOriginalName();
+                // $venues->save();
+                Storage::put('public/pdf/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
+                
+                Event::create([
+                    'user_id' => $request->user_id,
+                    'event_name' => $request->eventName,
+                    'description' => $request->eventDesc,
+                    'type' => 'whole_day',
+                    'venue_id' => $request->event_venue,
+                    'start_date' => $startDate,
+                    'end_date' => $endDate,
+                    'start_time' => '05:00:00',
+                    'end_time' => '21:00:00',
+                    'participants' => $request->numParticipants,
+                    'target_dept' => $target_dept,
+                    'target_org' => $target_org,
+                    'event_letter' => $event_letter,
+                    'whole_week' => false,
+                    'status' => 'PENDING',
+                    'color' => '#D6AD60',
+                    'created_at' => now()
                 ]);
                 return response()->json(["success" => "Event Created Successfully.", "status" => 200]);
             }
@@ -326,7 +494,8 @@ class EventController extends Controller
                     'target_org' => $target_org,
                     'event_letter' => $event_letter,
                     'status' => 'PENDING',
-                    'color' => '#D6AD60'
+                    'color' => '#D6AD60',
+                    'created_at' => now()
                 ]);
                 
                 return response()->json(["success" => "Event Created Successfully.", "status" => 200]);
@@ -362,7 +531,8 @@ class EventController extends Controller
                     'event_letter' => $event_letter,
                     'whole_week' => false,
                     'status' => 'PENDING',
-                    'color' => '#D6AD60'
+                    'color' => '#D6AD60',
+                    'created_at' => now()
                 ]);
                 return response()->json(["success" => "Event Created Successfully.", "status" => 200]);
             }   
@@ -395,7 +565,43 @@ class EventController extends Controller
                     'event_letter' => $event_letter,
                     'whole_week' => false,
                     'status' => 'PENDING',
-                    'color' => '#D6AD60'
+                    'color' => '#D6AD60',
+                    'created_at' => now()
+                ]);
+                return response()->json(["success" => "Event Created Successfully.", "status" => 200]);
+            }
+            else
+            {
+                $dateRange = $request->daterange;
+                [$startDate, $endDate] = explode(' - ', $dateRange);
+
+                $request->validate([
+                    'request_letter' => 'required|mimes:pdf|max:2048', // PDF file validation
+                ]);
+        
+                $files = $request->file('request_letter');
+                $event_letter = 'pdf/'.time().'-'.$files->getClientOriginalName();
+                // $venues->save();
+                Storage::put('public/pdf/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
+                
+                Event::create([
+                    'user_id' => $request->user_id,
+                    'event_name' => $request->eventName,
+                    'description' => $request->eventDesc,
+                    'type' => 'whole_day',
+                    'venue_id' => $request->event_venue,
+                    'start_date' => $startDate,
+                    'end_date' => $endDate,
+                    'start_time' => '05:00:00',
+                    'end_time' => '21:00:00',
+                    'participants' => $request->numParticipants,
+                    'target_dept' => $target_dept,
+                    'target_org' => $target_org,
+                    'event_letter' => $event_letter,
+                    'whole_week' => false,
+                    'status' => 'PENDING',
+                    'color' => '#D6AD60',
+                    'created_at' => now()
                 ]);
                 return response()->json(["success" => "Event Created Successfully.", "status" => 200]);
             }
@@ -439,8 +645,8 @@ class EventController extends Controller
 
     public function statusEvents()
     {   
-        $eventForUser = Event::orderBy('id')->where('user_id', Auth::id())->get();
-        
+        $eventForUser = Event::orderByDesc('id')->where('user_id', Auth::id())->get();
+            
         return View::make('event.myEvents', compact('eventForUser'));
         
     }

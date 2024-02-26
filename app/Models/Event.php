@@ -38,7 +38,8 @@ class Event extends Model
         "adaa",
         "atty",
         "campus_director",
-        "color"
+        "color",
+        "created_at"
 
     ];
 
