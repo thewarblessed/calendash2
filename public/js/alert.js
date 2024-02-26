@@ -1401,6 +1401,57 @@ $(document).ready(function () {
     });//end create
     // Approve Request
 
+    $("#requestRoomButton").on("click", function (e) {
+        console.log('napindot')
+        e.preventDefault();
+        // event_venue
+        $("#event_venue").css('display', 'block')
+        $("#venuesButton").css('display', 'block')
+
+        $("#roomDiv").css('display', 'block')
+        $("#venueDiv").css('display', 'none')
+        $("#requestRoomButton").css('display', 'none')
+    });
+
+    $("#venuesButton").on("click", function (e) {
+        console.log('napindot')
+        e.preventDefault();
+        $("#requestRoomButton").css('display', 'block')
+
+        $("#roomDiv").css('display', 'none')
+        $("#venueDiv").css('display', 'block')
+        $("#venuesButton").css('display', 'none')
+    });
+
+    //VENUES RDB
+    $('.radiobuttonsuser input[name="event_place"]').change(function () {
+        const venueDiv = document.getElementById('venueDiv');
+        const roomDiv = document.getElementById('roomDiv');
+
+        // const eventDate = document.getElementById('event_date');
+        // const startTimeWithinDay = document.getElementById('start_time_withinDay');
+        // const endTimeWithinDay = document.getElementById('end_time_withinDay');
+        // const WholeDay = document.getElementById('event_date_wholeDay');
+        // const WholeWeek = document.getElementById('event_date_wholeWeek');
+        if ($(this).is(':checked')) {
+
+            if ($(this).val() === 'venue') {
+                console.log('venue');
+                venueDiv.style.display = 'block';
+                roomDiv.style.display = 'none';
+
+            }
+            else {
+                console.log('rroom');
+                venueDiv.style.display = 'none';
+                roomDiv.style.display = 'block';
+                
+            }
+            // console.log('Selected value:', $(this).val());
+        }
+
+    });
+
 
 
     // document.getElementById("search").addEventListener("click", () => {

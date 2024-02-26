@@ -17,6 +17,8 @@ return new class extends Migration
             $table->foreign('user_id')->references('id')->on('users');
             $table->integer('venue_id')->unsigned()->nullable();
             $table->foreign('venue_id')->references('id')->on('venues');
+            $table->integer('room_id')->unsigned()->nullable();
+            $table->foreign('room_id')->references('id')->on('rooms');
             $table->text('event_name');
             $table->text('description');
             $table->enum('type', ['whole_day', 'within_day', 'whole_week']);

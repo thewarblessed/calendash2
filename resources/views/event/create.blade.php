@@ -33,37 +33,91 @@
                     <div class="tab d-none">
                         <h3 style="text-align: center">Choose Available Venues</h3>
                         <div class="container">
-                            <div class="row">
-                                @foreach ($venues as $venue)
-                                    <div class="col-sm">
-                                        <div id="venue{{ $venue->id }}" data-capacity="{{ $venue->capacity }}"
-                                            class="card_capacity"
-                                            style="width: 15rem; margin-top: 30px; box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px; border-radius: 8px">
-                                            <img src="{{ asset('storage/' . $venue->image) }}" height="180"
-                                                class="card-img-top" alt="...">
-                                            <div class="card-body">
-                                                <h4 class="card-title">{{ $venue->name }}</h4>
-                                                <p1 class="card-subtitle mb-2 text-muted">Rules and Regulations</p1>
-                                                <div class="card-text">
-                                                    <ul>
-                                                        @foreach (explode("\n", $venue->description) as $item)
-                                                            <li>{{ $item }}</li>
-                                                        @endforeach
-                                                    </ul>
-                                                </div>
-                                                <p class="card-text">Capacity: {{ $venue->capacity }}</p>
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="radio" name="event_venue"
-                                                        id="event_venue" value= "{{ $venue->id }}" required>
-                                                    <label class="custom-control-label" for="event_venue"
-                                                        style="color: blue; font-size: 18px"><strong>SELECT</strong>
-                                                    </label>
+                            
+                            {{-- <button type="button" id="requestRoomButton" class="btn btn-link" >Request Rooms</button>
+                            <button type="button" id="venuesButton" class="btn btn-link" style="display: none;">Venue</button> --}}
+
+                            <div class="radiobuttonsuser">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="event_place" value="venue" id="venue" required>
+                                    <label class="custom-control-label" for="event_place" style="font-size: 16px;">VENUES</label>
+                                </div>
+
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="event_place" value="room" id="room" required>
+                                    <label class="custom-control-label" for="event_place" style="font-size: 16px;">REQUEST ROOMS</label>
+                                </div>
+                            </div>
+
+                            <div style="display: block;" id="venueDiv">
+                                <div class="row" >
+                                    @foreach ($venues as $venue)
+                                        <div class="col-sm" style="display: block;" id="venueDiv">
+                                            <div id="venue{{ $venue->id }}" data-capacity="{{ $venue->capacity }}"
+                                                class="card_capacity"
+                                                style="width: 15rem; margin-top: 30px; box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px; border-radius: 8px">
+                                                <img src="{{ asset('storage/' . $venue->image) }}" height="180"
+                                                    class="card-img-top" alt="...">
+                                                <div class="card-body">
+                                                    <h4 class="card-title">{{ $venue->name }}</h4>
+                                                    <p1 class="card-subtitle mb-2 text-muted">Rules and Regulations</p1>
+                                                    <div class="card-text">
+                                                        <ul>
+                                                            @foreach (explode("\n", $venue->description) as $item)
+                                                                <li>{{ $item }}</li>
+                                                            @endforeach
+                                                        </ul>
+                                                    </div>
+                                                    <p class="card-text">Capacity: {{ $venue->capacity }}</p>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio" name="event_venue"
+                                                            id="event_venue" value= "{{ $venue->id }}" required>
+                                                        <label class="custom-control-label" for="event_venue"
+                                                            style="color: blue; font-size: 18px"><strong>SELECT</strong>
+                                                        </label>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                @endforeach
+                                    @endforeach
+                                </div>
                             </div>
+
+                            <div style="display: none;" id="roomDiv">
+                                <div class="row" >
+                                    @foreach ($rooms as $room)
+                                        <div class="col-sm">
+                                            <div id="venue{{ $room->id }}" data-capacity="{{ $room->capacity }}"
+                                                class="card_capacity"
+                                                style="width: 15rem; margin-top: 30px; box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px; border-radius: 8px">
+                                                <img src="{{ asset('storage/' . $room->image) }}" height="180"
+                                                    class="card-img-top" alt="...">
+                                                <div class="card-body">
+                                                    <h4 class="card-title">{{ $room->name }}</h4>
+                                                    <p1 class="card-subtitle mb-2 text-muted">Rules and Regulations</p1>
+                                                    <div class="card-text">
+                                                        <ul>
+                                                            @foreach (explode("\n", $room->description) as $item)
+                                                                <li>{{ $item }}</li>
+                                                            @endforeach
+                                                        </ul>
+                                                    </div>
+                                                    <p class="card-text">Capacity: {{ $room->capacity }}</p>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio" name="event_venue"
+                                                            id="event_venue" value= "{{ $room->id }}" required>
+                                                        <label class="custom-control-label" for="event_venue"
+                                                            style="color: blue; font-size: 18px"><strong>SELECT</strong>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                           
+
                         </div>
                     </div>
 

@@ -14,6 +14,7 @@ use App\Models\Staff;
 use App\Models\Organization;
 use App\Models\Official;
 use App\Models\Department;
+use App\Models\Room;
 use View;
 use Auth;
 use Carbon\Carbon;
@@ -127,8 +128,12 @@ class EventController extends Controller
     public function showVenues()
     {
         $venues = Venue::orderBy('id')->get();
+        $rooms = Room::orderBy('id')->get();
+        // dd($rooms)
+        // dd($rooms)
+        // $departments = 
         // return response()->json($venues);
-        return View::make('event.create', compact('venues'));
+        return View::make('event.create', compact('venues','rooms'));
     }
 
     public function searchVenues()
@@ -172,11 +177,13 @@ class EventController extends Controller
             $target_org = $orgID;
             
             $official = Official::where('organization_id',$orgID)->first();
+            // dd($official);
             $user = User::where('id',$official->user_id)->first();
             $email = $user->email;
             // dd($user);
             // $orgAdviser = 
             //EVENT DATE TYPE
+            
             if ($inputType === 'wholeWeek') {
                 $weekDate = $request->input('event_date_wholeWeekUser');
                 // dd($weekDate);
@@ -192,27 +199,53 @@ class EventController extends Controller
                 $event_letter = 'pdf/'.time().'-'.$files->getClientOriginalName();
                 // $venues->save();
                 Storage::put('public/pdf/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
+                
+                if ($request->event_place === 'room')
+                {
+                    Event::create([
+                        'user_id' => $request->user_id,
+                        'event_name' => $request->eventName,
+                        'description' => $request->eventDesc,
+                        'type' => 'whole_week',
+                        'room_id' => $request->event_venue,
+                        'start_date' => $startDate,
+                        'end_date' => $endDate,
+                        'start_time' => '00:00:00',
+                        'end_time' => '00:00:00',
+                        'whole_week' => true,
+                        'participants' => $request->numParticipants,
+                        'target_dept' => $target_dept,
+                        'target_org' => $target_org,
+                        'event_letter' => $event_letter,
+                        'status' => 'PENDING',
+                        'color' => '#D6AD60',
+                        'created_at' => now()
+                    ]);
+                }
+                else
+                {
+                    Event::create([
+                        'user_id' => $request->user_id,
+                        'event_name' => $request->eventName,
+                        'description' => $request->eventDesc,
+                        'type' => 'whole_week',
+                        'venue_id' => $request->event_venue,
+                        'start_date' => $startDate,
+                        'end_date' => $endDate,
+                        'start_time' => '00:00:00',
+                        'end_time' => '00:00:00',
+                        'whole_week' => true,
+                        'participants' => $request->numParticipants,
+                        'target_dept' => $target_dept,
+                        'target_org' => $target_org,
+                        'event_letter' => $event_letter,
+                        'status' => 'PENDING',
+                        'color' => '#D6AD60',
+                        'created_at' => now()
+                    ]);
     
-                Event::create([
-                    'user_id' => $request->user_id,
-                    'event_name' => $request->eventName,
-                    'description' => $request->eventDesc,
-                    'type' => 'whole_week',
-                    'venue_id' => $request->event_venue,
-                    'start_date' => $startDate,
-                    'end_date' => $endDate,
-                    'start_time' => '00:00:00',
-                    'end_time' => '00:00:00',
-                    'whole_week' => true,
-                    'participants' => $request->numParticipants,
-                    'target_dept' => $target_dept,
-                    'target_org' => $target_org,
-                    'event_letter' => $event_letter,
-                    'status' => 'PENDING',
-                    'color' => '#D6AD60',
-                    'created_at' => now()
-                ]);
-
+                }
+                
                 $data = [
                     "subject" => "Calendash Pending Request",
                     "body" => "Hello {$user->name}!, You have a new pending approval request!"
@@ -241,6 +274,7 @@ class EventController extends Controller
                     'description' => $request->eventDesc,
                     'type' => 'within_day',
                     'venue_id' => $request->event_venue,
+                    'room_id' => $request->event_venue,
                     'start_date' => $date,
                     'end_date' => $date,
                     'start_time' => $start_time,
@@ -280,6 +314,7 @@ class EventController extends Controller
                     'description' => $request->eventDesc,
                     'type' => 'whole_day',
                     'venue_id' => $request->event_venue,
+                    'room_id' => $request->event_venue,
                     'start_date' => $date,
                     'end_date' => $date,
                     'start_time' => '05:00:00',
@@ -321,6 +356,7 @@ class EventController extends Controller
                     'description' => $request->eventDesc,
                     'type' => 'whole_day',
                     'venue_id' => $request->event_venue,
+                    'room_id' => $request->event_venue,
                     'start_date' => $startDate,
                     'end_date' => $endDate,
                     'start_time' => '05:00:00',
@@ -372,6 +408,7 @@ class EventController extends Controller
                     'description' => $request->eventDesc,
                     'type' => 'whole_week',
                     'venue_id' => $request->event_venue,
+                    'room_id' => $request->event_venue,
                     'start_date' => $startDate,
                     'end_date' => $endDate,
                     'start_time' => '00:00:00',
@@ -409,6 +446,7 @@ class EventController extends Controller
                     'description' => $request->eventDesc,
                     'type' => 'within_day',
                     'venue_id' => $request->event_venue,
+                    'room_id' => $request->event_venue,
                     'start_date' => $date,
                     'end_date' => $date,
                     'start_time' => $start_time,
@@ -443,6 +481,7 @@ class EventController extends Controller
                     'description' => $request->eventDesc,
                     'type' => 'whole_day',
                     'venue_id' => $request->event_venue,
+                    'room_id' => $request->event_venue,
                     'start_date' => $date,
                     'end_date' => $date,
                     'start_time' => '00:00:00',
@@ -478,6 +517,7 @@ class EventController extends Controller
                     'description' => $request->eventDesc,
                     'type' => 'whole_day',
                     'venue_id' => $request->event_venue,
+                    'room_id' => $request->event_venue,
                     'start_date' => $startDate,
                     'end_date' => $endDate,
                     'start_time' => '05:00:00',
@@ -523,6 +563,7 @@ class EventController extends Controller
                     'description' => $request->eventDesc,
                     'type' => 'whole_week',
                     'venue_id' => $request->event_venue,
+                    'room_id' => $request->event_venue,
                     'start_date' => $startDate,
                     'end_date' => $endDate,
                     'start_time' => '00:00:00',
@@ -560,6 +601,7 @@ class EventController extends Controller
                     'description' => $request->eventDesc,
                     'type' => 'within_day',
                     'venue_id' => $request->event_venue,
+                    'room_id' => $request->event_venue,
                     'start_date' => $date,
                     'end_date' => $date,
                     'start_time' => $start_time,
@@ -594,6 +636,7 @@ class EventController extends Controller
                     'description' => $request->eventDesc,
                     'type' => 'whole_day',
                     'venue_id' => $request->event_venue,
+                    'room_id' => $request->event_venue,
                     'start_date' => $date,
                     'end_date' => $date,
                     'start_time' => '00:00:00',
@@ -629,6 +672,7 @@ class EventController extends Controller
                     'description' => $request->eventDesc,
                     'type' => 'whole_day',
                     'venue_id' => $request->event_venue,
+                    'room_id' => $request->event_venue,
                     'start_date' => $startDate,
                     'end_date' => $endDate,
                     'start_time' => '05:00:00',
@@ -751,6 +795,7 @@ class EventController extends Controller
                 'description' => $request->eventDesc,
                 'type' => 'whole_week',
                 'venue_id' => $request->event_venue,
+                'room_id' => $request->event_venue,
                 'start_date' => $startDate,
                 'end_date' => $endDate,
                 'start_time' => '00:00:00',
@@ -787,6 +832,7 @@ class EventController extends Controller
                 'description' => $request->eventDesc,
                 'type' => 'within_day',
                 'venue_id' => $request->event_venue,
+                'room_id' => $request->event_venue,
                 'start_date' => $date,
                 'end_date' => $date,
                 'start_time' => $start_time,
@@ -820,6 +866,7 @@ class EventController extends Controller
                 'description' => $request->eventDesc,
                 'type' => 'whole_day',
                 'venue_id' => $request->event_venue,
+                'room_id' => $request->event_venue,
                 'start_date' => $date,
                 'end_date' => $date,
                 'start_time' => '00:00:00',
@@ -844,6 +891,7 @@ class EventController extends Controller
         $event = new Event();
         $event->user_id = $request->user_id;
         $event->venue_id = $request->venue_id;
+        $event->room_id = $request->venue_id;
         $event->event_name = $request->eventname;
         $event->description = $request->description;
         $event->event_date = $request->date;
