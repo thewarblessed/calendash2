@@ -6,6 +6,7 @@
             <div class="row">
                 <div class="col-12">
                     <div class="card border shadow-xs mb-4">
+
                         <div class="card-header border-bottom pb-0">
                             <div class="d-sm-flex align-items-center">
                                 <div>
@@ -13,9 +14,8 @@
                                     <p class="text-sm">See information about all events</p>
                                 </div>
                                 <div class="ms-auto d-flex">
-                                <a type="button"
-                                    href="{{ route('createAdminEvents') }}" 
-                                    class="btn btn-sm btn-dark btn-icon d-flex align-items-center me-2">
+                                    <a type="button" href="{{ route('createAdminEvents') }}"
+                                        class="btn btn-sm btn-dark btn-icon d-flex align-items-center me-2">
                                         <span class="btn-inner--text">Add/Create Event</span>
                                     </a>
                                 </div>
@@ -23,85 +23,128 @@
                         </div>
                         <div class="card-body px-0 py-0">
 
-                        
+
                             <div class="border-bottom py-3 px-3 d-sm-flex align-items-center">
                                 <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
-                                    <input type="radio" class="btn-check" name="btnradiotable" id="btnradiotable1" autocomplete="off" checked>
+                                    <input type="radio" class="btn-check" name="btnradiotable" id="btnradiotable1"
+                                        autocomplete="off" checked>
                                     <label class="btn btn-white px-3 mb-0" for="btnradiotable1">All</label>
-                                    <input type="radio" class="btn-check" name="btnradiotable" id="btnradiotable2" autocomplete="off">
+                                    <input type="radio" class="btn-check" name="btnradiotable" id="btnradiotable2"
+                                        autocomplete="off">
                                     <label class="btn btn-white px-3 mb-0" for="btnradiotable2">Approved</label>
-                                    <input type="radio" class="btn-check" name="btnradiotable" id="btnradiotable3" autocomplete="off">
+                                    <input type="radio" class="btn-check" name="btnradiotable" id="btnradiotable3"
+                                        autocomplete="off">
                                     <label class="btn btn-white px-3 mb-0" for="btnradiotable3">Pending</label>
-                                </div>
+                                </div>              
                             </div>
-                
+
                             <div class="table-responsive p-0">
                                 <table class="table align-items-center mb-0" id="adminAllEvents">
                                     <thead class="bg-gray-100">
                                         <tr>
-                                            <th class="text-secondary text-xs font-weight-semibold opacity-7">Event Name</th>
-                                            <th class="text-secondary text-xs font-weight-semibold opacity-7 ps-2">Venue</th>
-                                            <th class="text-secondary text-xs font-weight-semibold opacity-7 ps-2">Event Type</th>
-                                            <th class="text-secondary text-xs font-weight-semibold opacity-7 ps-2">Start Date</th>
-                                            <th class="text-secondary text-xs font-weight-semibold opacity-7 ps-2">End Date</th>
-                                            <th class="text-center text-secondary text-xs font-weight-semibold opacity-7">Start Time</th>
-                                            <th class="text-center text-secondary text-xs font-weight-semibold opacity-7">End Time</th>
-                                            <th class="text-center text-secondary text-xs font-weight-semibold opacity-7">Department</th>
-                                            <th class="text-center text-secondary text-xs font-weight-semibold opacity-7">Organization</th>
-                                            <th class="text-center text-secondary text-xs font-weight-semibold opacity-7">Status</th>
-                                            <th class="text-center text-secondary text-xs font-weight-semibold opacity-7">Request Letter</th>
+                                            <th class="text-secondary text-xs font-weight-semibold opacity-7">Event
+                                                Name
+                                            </th>
+                                            <th class="text-secondary text-xs font-weight-semibold opacity-7 ps-2">
+                                                Venue
+                                            </th>
+                                            <th class="text-secondary text-xs font-weight-semibold opacity-7 ps-2">
+                                                Event
+                                                Type</th>
+                                            <th class="text-secondary text-xs font-weight-semibold opacity-7 ps-2">
+                                                Start
+                                                Date</th>
+                                            <th class="text-secondary text-xs font-weight-semibold opacity-7 ps-2">
+                                                End
+                                                Date</th>
+                                            <th
+                                                class="text-center text-secondary text-xs font-weight-semibold opacity-7">
+                                                Start Time</th>
+                                            <th
+                                                class="text-center text-secondary text-xs font-weight-semibold opacity-7">
+                                                End Time</th>
+                                            <th
+                                                class="text-center text-secondary text-xs font-weight-semibold opacity-7">
+                                                Department</th>
+                                            <th
+                                                class="text-center text-secondary text-xs font-weight-semibold opacity-7">
+                                                Organization</th>
+                                            <th
+                                                class="text-center text-secondary text-xs font-weight-semibold opacity-7">
+                                                Status</th>
+                                            <th
+                                                class="text-center text-secondary text-xs font-weight-semibold opacity-7">
+                                                Request Letter</th>
                                             <th class="text-secondary opacity-7"></th>
                                             <th class="text-secondary opacity-7"></th>
-                                            
+
                                         </tr>
                                     </thead>
                                     <tbody id="table-body">
-                                        @foreach($events as $event)
-                                        <tr>
-                                            <td>
-                                                <div class="d-flex px-2 py-1">
-                                                    
-                                                    <div class="d-flex flex-column justify-content-center ms-1">
-                                                        <strong><h6>{{$event->event_name}}</h6></strong>
-                                                        {{-- <p class="text-sm text-secondary mb-0">laurent@creative-tim.com</p> --}}
+                                        @foreach ($events as $event)
+                                            <tr>
+                                                <td>
+                                                    <div class="d-flex px-2 py-1">
+
+                                                        <div class="d-flex flex-column justify-content-center ms-1">
+                                                            <strong>
+                                                                <h6>{{ $event->event_name }}</h6>
+                                                            </strong>
+                                                            {{-- <p class="text-sm text-secondary mb-0">laurent@creative-tim.com</p> --}}
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            </td>
-                                            <td class="align-left">
-                                                <p class="text-sm text-dark font-weight-semibold mb-0">{{ $event->name }}</p>
-                                            </td>
-                                            <td>
-                                                @if ($event->type === 'whole_day')
-                                                <p class="text-sm text-dark font-weight-semibold mb-0">Whole Day</p>
-                                                @endif
-                                                @if ($event->type === 'whole_week')
-                                                <p class="text-sm text-dark font-weight-semibold mb-0">Whole Week</p>
-                                                @endif
-                                                @if ($event->type === 'within_day')
-                                                <p class="text-sm text-dark font-weight-semibold mb-0">Within the Day</p>
-                                                @endif
-                                            </td>
-                                            <td>
-                                                <p class="text-sm text-dark font-weight-semibold mb-0">{{ Carbon\Carbon::parse($event->start_date)->format('j F, Y') }}</p>
-                                            </td>
-                                            <td>
-                                                <p class="text-sm text-dark font-weight-semibold mb-0">{{ Carbon\Carbon::parse($event->end_date)->format('j F, Y') }}</p>
-                                            </td>
-                                            <td class="align-middle text-center text-sm">
-                                                <p class="text-sm text-dark font-weight-semibold mb-0">{{ Carbon\Carbon::parse($event->start_time)->format('g:i A') }}</p>
-                                            </td>
-                                            <td class="align-middle text-center text-sm">
-                                                <p class="text-sm text-dark font-weight-semibold mb-0">{{ Carbon\Carbon::parse($event->end_time)->format('g:i A') }}</p>
-                                            </td>
-                                            <td class="align-middle text-center text-sm">
-                                                <p class="text-sm text-dark font-weight-semibold mb-0">{{$event->target_dept}}</p>
-                                            </td>
-                                            <td class="align-middle text-center text-sm">
-                                                <p class="text-sm text-dark font-weight-semibold mb-0">{{$event->target_org}}</p>
-                                            </td>
-                                            
-                                            <td class="align-middle text-center text-sm">
-                                                @if ($event->status === 'APPROVED')
+                                                </td>
+                                                <td class="align-left">
+                                                    <p class="text-sm text-dark font-weight-semibold mb-0">
+                                                        {{ $event->name }}</p>
+                                                </td>
+                                                <td>
+                                                    @if ($event->type === 'whole_day')
+                                                        <p class="text-sm text-dark font-weight-semibold mb-0">Whole
+                                                            Day
+                                                        </p>
+                                                    @endif
+                                                    @if ($event->type === 'whole_week')
+                                                        <p class="text-sm text-dark font-weight-semibold mb-0">Whole
+                                                            Week</p>
+                                                    @endif
+                                                    @if ($event->type === 'within_day')
+                                                        <p class="text-sm text-dark font-weight-semibold mb-0">
+                                                            Within
+                                                            the Day</p>
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    <p class="text-sm text-dark font-weight-semibold mb-0">
+                                                        {{ Carbon\Carbon::parse($event->start_date)->format('j F, Y') }}
+                                                    </p>
+                                                </td>
+                                                <td>
+                                                    <p class="text-sm text-dark font-weight-semibold mb-0">
+                                                        {{ Carbon\Carbon::parse($event->end_date)->format('j F, Y') }}
+                                                    </p>
+                                                </td>
+                                                <td class="align-middle text-center text-sm">
+                                                    <p class="text-sm text-dark font-weight-semibold mb-0">
+                                                        {{ Carbon\Carbon::parse($event->start_time)->format('g:i A') }}
+                                                    </p>
+                                                </td>
+                                                <td class="align-middle text-center text-sm">
+                                                    <p class="text-sm text-dark font-weight-semibold mb-0">
+                                                        {{ Carbon\Carbon::parse($event->end_time)->format('g:i A') }}
+                                                    </p>
+                                                </td>
+                                                <td class="align-middle text-center text-sm">
+                                                    <p class="text-sm text-dark font-weight-semibold mb-0">
+                                                        {{ $event->target_dept }}</p>
+                                                </td>
+                                                <td class="align-middle text-center text-sm">
+                                                    <p class="text-sm text-dark font-weight-semibold mb-0">
+                                                        {{ $event->target_org }}</p>
+                                                </td>
+
+                                                <td class="align-middle text-center text-sm">
+                                                    @if ($event->status === 'APPROVED')
                                                         <span
                                                             class="badge badge-sm border border-success text-success bg-success">
                                                             <svg width="9" height="9" viewBox="0 0 10 9"
@@ -129,26 +172,30 @@
                                                         </span>
                                                         {{-- <p class="text-secondary text-sm mb-0">{{$status}}</p> --}}
                                                     @endif
-                                            </td>
+                                                </td>
 
-                                            <td class="align-middle text-center text-sm">
-                                                {{-- <p class="text-sm text-dark font-weight-semibold mb-0" id="viewRequestLetter">Request Letter</p> --}}
-                                                <u><strong><a href="#" style="color: black" id="reqLetter" class="viewRequestLetter" data-id="{{$event->id}}" >Request Letter</a></strong>
-                                            </td>
+                                                <td class="align-middle text-center text-sm">
+                                                    {{-- <p class="text-sm text-dark font-weight-semibold mb-0" id="viewRequestLetter">Request Letter</p> --}}
+                                                    <u><strong><a href="#" style="color: black" id="reqLetter"
+                                                                class="viewRequestLetter"
+                                                                data-id="{{ $event->id }}">Request
+                                                                Letter</a></strong>
+                                                </td>
 
-                                            <td class="align-middle">
-                                                <a href="javascript:;" class="text-secondary font-weight-bold "
-                                                    data-bs-toggle="tooltip" data-bs-title="Edit event">
-                                                    <i class="fa-solid fa-pen-to-square fa-xl" style="color:#774dd3"></i>
-                                                </a>
-                                            </td>
-                                            <td class="align-middle">
-                                                <a href="javascript:;" class="text-secondary font-weight-bold "
-                                                    data-bs-toggle="tooltip" data-bs-title="Delete event">
-                                                    <i class="fa-solid fa-trash fa-xl" style="color:red"></i>
-                                                </a>
-                                            </td>
-                                        </tr>
+                                                <td class="align-middle">
+                                                    <a href="javascript:;" class="text-secondary font-weight-bold "
+                                                        data-bs-toggle="tooltip" data-bs-title="Edit event">
+                                                        <i class="fa-solid fa-pen-to-square fa-xl"
+                                                            style="color:#774dd3"></i>    
+                                                    </a>
+                                                </td>
+                                                <td class="align-middle">
+                                                    <a href="javascript:;" class="text-secondary font-weight-bold "
+                                                        data-bs-toggle="tooltip" data-bs-title="Delete event">
+                                                        <i class="fa-solid fa-trash fa-xl" style="color:red"></i>
+                                                    </a>
+                                                </td>
+                                            </tr>
                                         @endforeach
                                         {{-- <tr>
                                             <td>
@@ -193,61 +240,64 @@
                             </div>
                             {{-- <div class="pagination"></div> --}}
                             <div class="border-top py-3 px-3 d-flex align-items-center" id="pagination">
-                                <p class="font-weight-semibold mb-0 text-dark text-sm" id="page-info">Page 1 of 10</p>
+                                <p class="font-weight-semibold mb-0 text-dark text-sm" id="page-info">Page 1 of 10
+                                </p>
                                 <div class="ms-auto">
-                                  <button class="btn btn-sm btn-white mb-0" id="previous-btn">Previous</button>
-                                  <button class="btn btn-sm btn-white mb-0" id="next-btn">Next</button>
+                                    <button class="btn btn-sm btn-white mb-0" id="previous-btn">Previous</button>
+                                    <button class="btn btn-sm btn-white mb-0" id="next-btn">Next</button>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="modal fade" id="createVenueModal" tabindex="-1" role="dialog" aria-labelledby="createVenueModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                    <h5 class="modal-title" id="createVenueModalLabel">Create Event</h5>
-                    <button type="button" class="btn-close text-dark" data-bs-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                    </div>
-                    <div class="modal-body">
-                        <form>
-                            <div class="form-group">
-                              <label for="exampleFormControlInput1">Name of the event</label>
-                              <input type="text" class="form-control" id="eventName">
+                <div class="modal fade" id="createVenueModal" tabindex="-1" role="dialog"
+                    aria-labelledby="createVenueModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="createVenueModalLabel">Create Event</h5>
+                                <button type="button" class="btn-close text-dark" data-bs-dismiss="modal"
+                                    aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
                             </div>
-                            <div class="form-group">
-                                <label for="exampleFormControlInput1">No. of participants</label>
-                                <input type="text" class="form-control" id="eventName">
+                            <div class="modal-body">
+                                <form>
+                                    <div class="form-group">
+                                        <label for="exampleFormControlInput1">Name of the event</label>
+                                        <input type="text" class="form-control" id="eventName">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="exampleFormControlInput1">No. of participants</label>
+                                        <input type="text" class="form-control" id="eventName">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="exampleFormControlSelect2">Example multiple select</label>
+                                        <select multiple class="form-control" id="exampleFormControlSelect2">
+                                            <option>1</option>
+                                            <option>2</option>
+                                            <option>3</option>
+                                            <option>4</option>
+                                            <option>5</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="exampleFormControlTextarea1">Example textarea</label>
+                                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                                    </div>
+                                </form>
                             </div>
-                            <div class="form-group">
-                              <label for="exampleFormControlSelect2">Example multiple select</label>
-                              <select multiple class="form-control" id="exampleFormControlSelect2">
-                                <option>1</option>
-                                <option>2</option>
-                                <option>3</option>
-                                <option>4</option>
-                                <option>5</option>
-                              </select>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-white" data-bs-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-dark">Save changes</button>
                             </div>
-                            <div class="form-group">
-                              <label for="exampleFormControlTextarea1">Example textarea</label>
-                              <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-                            </div>
-                          </form>
-                    </div>
-                    <div class="modal-footer">
-                    <button type="button" class="btn btn-white" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-dark">Save changes</button>
+                        </div>
                     </div>
                 </div>
-                </div>
+
+                <x-app.footer />
             </div>
-           
-            <x-app.footer />
-        </div>
     </main>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script type="text/javascript" src="/js/alert.js"></script>
@@ -258,43 +308,43 @@
         //   var itemsPerPage = 5;
         //   var totalPages = Math.ceil(events.length / itemsPerPage);
         //   var currentPage = 1;
-      
+
         //   function showItems(page) {
         //     var startIndex = (page - 1) * itemsPerPage;
         //     var endIndex = startIndex + itemsPerPage;
         //     var slicedEvents = events.slice(startIndex, endIndex);
-      
+
         //     $('#table-body').empty();
         //     slicedEvents.forEach(function(event) {
         //       var row = `
-        //         <tr>
-        //           <td class"align-left">${event.event_name}</td>
-        //           <td>${event.name}</td>
-        //           <td>${event.type}</td>
-        //           <td>${event.start_date}</td>
-        //           <td>${event.end_date}</td>
-        //           <td>${event.start_time}</td>
-        //           <td>${event.end_time}</td>
-        //           <td>${event.target_dept}</td>
-        //           <td>${event.target_org}</td>
-        //           <td>${event.status}</td>
-        //           <td><a href="#" class="edit-event">Edit</a></td>
-        //           <td><a href="#" class="delete-event">Delete</a></td>
-        //         </tr>
-        //       `;
+    //         <tr>
+    //           <td class"align-left">${event.event_name}</td>
+    //           <td>${event.name}</td>
+    //           <td>${event.type}</td>
+    //           <td>${event.start_date}</td>
+    //           <td>${event.end_date}</td>
+    //           <td>${event.start_time}</td>
+    //           <td>${event.end_time}</td>
+    //           <td>${event.target_dept}</td>
+    //           <td>${event.target_org}</td>
+    //           <td>${event.status}</td>
+    //           <td><a href="#" class="edit-event">Edit</a></td>
+    //           <td><a href="#" class="delete-event">Delete</a></td>
+    //         </tr>
+    //       `;
         //       $('#table-body').append(row);
         //     });
         //   }
-      
+
         //   function updatePageInfo() {
         //     $('#page-info').text('Page ' + currentPage + ' of ' + totalPages);
         //   }
-      
+
         //   function updatePaginationButtons() {
         //     $('#previous-btn').prop('disabled', currentPage === 1);
         //     $('#next-btn').prop('disabled', currentPage === totalPages);
         //   }
-      
+
         //   $('#previous-btn').click(function() {
         //     if (currentPage > 1) {
         //       currentPage--;
@@ -303,7 +353,7 @@
         //       updatePaginationButtons();
         //     }
         //   });
-      
+
         //   $('#next-btn').click(function() {
         //     if (currentPage < totalPages) {
         //       currentPage++;
@@ -312,12 +362,11 @@
         //       updatePaginationButtons();
         //     }
         //   });
-      
+
         //   showItems(currentPage);
         //   updatePageInfo();
         //   updatePaginationButtons();
         // });
-      
-        </script>
+    </script>
 
 </x-app-layout>

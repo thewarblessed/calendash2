@@ -58,17 +58,20 @@
                             <div class="table-responsive p-0">
                                 <table class="table align-items-center mb-0" id="venueTable">
                                     <thead class="bg-gray-100">
-                                        <tr>
+                                        <tr>       
                                             <th class="text-secondary text-xs font-weight-semibold opacity-15" >VENUE NAME
                                             </th>
                                             <th class="text-secondary text-xs font-weight-semibold opacity-15 ps-2">
-                                                Description</th>
-                                            <th
-                                                class="text-center text-secondary text-xs font-weight-semibold opacity-15">
+                                                Description
+                                            </th>
+               
+                                            <th class="text-center text-secondary text-xs font-weight-semibold opacity-15">
                                                 Capacity</th>
                                             
                                             <th class="text-secondary opacity-7"></th>
+                                            
                                         </tr>
+                                        
                                     </thead>
                                     <tbody id="venueBody">
                                         @foreach($venues as $venue)
@@ -87,8 +90,13 @@
                                                 </div>
                                             </td>
                                             <td>
-                                                <p class="text-sm text-dark font-weight-semibold mb-0">{{$venue->description}}</p>
-                                                
+                                                <p class="text-sm text-dark font-weight-semibold mb-0">
+                                                    <ul>
+                                                        @foreach (explode("\n", $venue->description) as $bullet)
+                                                            <li>{{ $bullet }}</li>
+                                                        @endforeach
+                                                    </ul>
+                                                </p>
                                             </td>
                                             <td class="align-middle text-center text-sm">
                                                 <span
@@ -146,10 +154,17 @@
                               <input name="venueEditId" type="text" class="form-control" id="venueEditId" hidden>
                               <input name="venueEditName" type="text" class="form-control" id="venueEditName" required>
                             </div>
-                            <div class="form-group">
+                            {{-- <div class="form-group">
                                 <label for="exampleFormControlInput1">Description</label>
                                 <input name="venueEditDesc" type="text" class="form-control" id="venueEditDesc" required>
-                            </div>
+                            </div>   --}}
+                             
+                                <div class="form-group">
+                                    <label>Description</label>
+                                    <textarea class="form-control" name="venueEditDesc" id="venueEditDesc" rows="20" required></textarea>
+                                </div>
+
+                            
                             <div class="form-group">
                                 <label for="exampleFormControlInput1">Capacity</label>
                                 <input name="venueEditCapacity" type="text" class="form-control" id="venueEditCapacity" required>

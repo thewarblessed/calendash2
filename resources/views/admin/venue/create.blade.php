@@ -2,6 +2,7 @@
 
     <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
         <x-app.navbar />
+
         <div class="container-fluid py-4 px-5">
             <div class="row">
                 <div class="col-12">
@@ -11,26 +12,49 @@
                             {{-- method="POST" action="{{ route('storeVenue') }}" enctype="multipart/form-data" --}}
                             <form role="form" id="vForm" enctype="multipart/form-data">
                                 @csrf
-                                    <div class="form-group">
-                                        <label>Name of the Venue</label>
-                                      <input type="text" class="form-control" name="venueName" id="venueName" required>
-                                    </div>
-                                
-                                    <div class="form-group">
-                                        <label>Description</label>
-                                      <input type="text" class="form-control" name="venueDesc" id="venueDesc" required/>
-                                    </div>
-                            
-                                    <div class="form-group">
-                                        <label>Capacity</label>
-                                      <input type="number" class="form-control" name="venueCapacity" id="venueCapacity" required>
-                                    </div>
-                                 
-                                    <div class="form-group">
-                                        <label>Upload Image</label>
-                                      <input type="file" class="form-control" id="image" name="image"required>
-                                    </div>  
-                                
+                                <div class="form-group">
+                                    <label>Name of the Venue</label>
+                                    <input type="text" class="form-control" name="venueName" id="venueName" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Description</label>
+                                    <textarea class="form-control" name="venueDesc" id="venueDesc" rows="20" required></textarea>
+                                </div>
+
+
+                                <div class="form-group">
+                                    <label>Capacity</label>
+                                    <input type="number" class="form-control" name="venueCapacity" id="venueCapacity"
+                                        required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Upload Image</label>
+                                    <input type="file" class="form-control" id="image" name="image"required>
+                                </div>
+
+                                <style>
+                                    #venueDesc {
+                                        resize: none;
+                                        /* Prevent resizing of textarea */
+                                    }
+
+                                    #venueDesc::before {
+                                        content: "\2022";
+                                        /* Bullet point character */
+                                        margin-right: 5px;
+                                        /* Spacing between bullet point and text */
+                                        display: block;
+                                        float: left;
+                                        font-size: 1.2em;
+                                    }
+
+                                    /* Adjust spacing between bullet points */
+                                    #venueDesc+#venueDesc::before {
+                                        margin-top: 10px;
+                                    }
+                                </style>
                                 {{-- <div class="row">
                                   <div class="col-md-6">
                                     <div class="form-group has-success">
@@ -43,7 +67,8 @@
                                     </div>
                                   </div>
                                 </div> --}}
-                                <button type="submit" class="btn btn-primary btn-lg w-100" id="venueSubmit">SAVE</button>
+                                <button type="submit" class="btn btn-primary btn-lg w-100"
+                                    id="venueSubmit">SAVE</button>
                             </form>
                         </div>
                     </div>

@@ -35,26 +35,26 @@
                         <div class="container">
                             <div class="row">
                                 @foreach ($venues as $venue)
-                                <div class="col-sm">
-                                    <div id="venue{{ $venue->id }}" data-capacity="{{ $venue->capacity }}"
-                                        class="card_capacity"
-                                        style="width: 15rem; margin-top: 30px; box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px; border-radius: 8px">
-                                        <img src="{{ asset('storage/' . $venue->image) }}" height="180"
-                                            class="card-img-top" alt="...">
-                                        <div class="card-body">
-                                            <h5 class="card-title">{{ $venue->name }}</h5>
-                                            <p class="card-text">{{ $venue->description }}</p>
-                                            <p class="card-text">Capacity: {{ $venue->capacity }}</p>
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="event_venue"
-                                                    id="event_venue" value="{{ $venue->id }}" required>
-                                                <label class="custom-control-label" for="event_venue"
-                                                    style="color: blue; font-size: 18px"><strong>SELECT</strong>
-                                                </label>
+                                    <div class="col-sm">
+                                        <div id="venue{{ $venue->id }}" data-capacity="{{ $venue->capacity }}"
+                                            class="card_capacity"
+                                            style="width: 15rem; margin-top: 30px; box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px; border-radius: 8px">
+                                            <img src="{{ asset('storage/' . $venue->image) }}" height="180"
+                                                class="card-img-top" alt="...">
+                                            <div class="card-body">
+                                                <h5 class="card-title">{{ $venue->name }}</h5>
+                                                <p class="card-text">{{ $venue->description }}</p>
+                                                <p class="card-text">Capacity: {{ $venue->capacity }}</p>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="event_venue"
+                                                        id="event_venue" value= "{{ $venue->id }}" required>
+                                                    <label class="custom-control-label" for="event_venue"
+                                                        style="color: blue; font-size: 18px"><strong>SELECT</strong>
+                                                    </label>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
                                 @endforeach
                             </div>
                         </div>
@@ -62,43 +62,23 @@
 
                     {{-- SET DATE DETAILS --}}
                     <div class="tab d-none">
-                        {{-- <h3 style="text-align: center">Set Date and Time</h3>
-                        <div class="mb-3">
-                            <label for="company_name" class="form-label">Set Date</label>
-                            <input type="date" class="form-control" name="event_date" id="event_date" required>
-                        </div> --}}
-
-                        {{-- <div class="row">
-                            <div class="mb-3 col-md-6">
-                                <label for="start_time" class="form-label">Set Start Time</label>
-                                <input type="time" class="form-control" name="start_time" id="start_time" required>
-                            </div>
-                            <div class="mb-3 col-md-6">
-                                <label for="end_time" class="form-label">Set End Time</label>
-                                <input type="time" class="form-control" name="end_time" id="end_time" required>
-                            </div>
-                        </div> --}}
-
-                        {{-- /////////////////////////////////////////////////////////////////// --}}
-
-                        <h3 style="text-align: center">Set Date and Time</h3>
-
+                        <div class="card-body">
+                            <h3 style="text-align: center">Set Date and Time</h3>
+      
                         <div class="radiobuttonsuser">
+                            <h4 style="text-align: left">Select preferred Date and Time</h4>
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="event_type" value="withinDay"
-                                    id="withinDay" required>
+                                <input class="form-check-input" type="radio" name="event_type" value="withinDay" id="withinDay" required>
                                 <label class="custom-control-label" for="withinDay">Within the Day</label>
                             </div>
 
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="event_type" value="wholeDay"
-                                    id="wholeDay" required>
+                                <input class="form-check-input" type="radio" name="event_type" value="wholeDay" id="wholeDay" required>
                                 <label class="custom-control-label" for="wholeDay">Whole Day</label>
                             </div>
 
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="event_type" value="wholeWeek"
-                                    id="wholeWeek" required>
+                                <input class="form-check-input" type="radio" name="event_type" value="wholeWeek" id="wholeWeek" required>
                                 <label class="custom-control-label" for="wholeWeek">Whole Week</label>
                             </div>
 
@@ -150,13 +130,8 @@
                             </div>
                         </div>
 
-                        <div id="dateRangeDivUser" class="dateRanges" style="display:none;">
-                            <h5 style="text-align: center">Date Range</h5>
-                            <div class="form-group" style="text-align: center">
-                                <label for="example-week-input" class="form-control-label"></label>
-                                <input type="text" name="daterange" value="" id="date_range_User"/>
-                            </div>
-                        </div>
+
+
 
                     </div>
 
