@@ -12,11 +12,14 @@ use App\Models\Prof;
 use App\Models\Student;
 use App\Models\Staff;
 use App\Models\Organization;
+use App\Models\Official;
 use App\Models\Department;
 use View;
 use Auth;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
+use Mail;
+use App\Mail\MailNotify;
 
 
 class EventController extends Controller
@@ -161,12 +164,18 @@ class EventController extends Controller
             // dd($student);
             $depID = $student->department_id;
             $orgID = $student->organization_id;
-            $td = Department::where('id',$depID)->first();
-            $to = Organization::where('id',$orgID)->first();
-            // dd($to);
-
-            $target_dept = $td->department;
-            $target_org = $to->organization;
+            // $td = Department::where('id',$depID)->first();
+            // $to = Organization::where('id',$orgID)->first();
+            // dd($depID);
+            
+            $target_dept = $depID;
+            $target_org = $orgID;
+            
+            $official = Official::where('organization_id',$orgID)->first();
+            $user = User::where('id',$official->user_id)->first();
+            $email = $user->email;
+            // dd($user);
+            // $orgAdviser = 
             //EVENT DATE TYPE
             if ($inputType === 'wholeWeek') {
                 $weekDate = $request->input('event_date_wholeWeekUser');
@@ -203,7 +212,12 @@ class EventController extends Controller
                     'color' => '#D6AD60',
                     'created_at' => now()
                 ]);
-                
+
+                $data = [
+                    "subject" => "Calendash Pending Request",
+                    "body" => "Hello {$user->name}!, You have a new pending approval request!"
+                ];
+                Mail::to($email)->send(new MailNotify($data));
                 return response()->json(["success" => "Event Created Successfully.", "status" => 200]);
             }
             elseif ($inputType === 'withinDay') {
@@ -240,6 +254,11 @@ class EventController extends Controller
                     'color' => '#D6AD60',
                     'created_at' => now()
                 ]);
+                $data = [
+                    "subject" => "Calendash Pending Request",
+                    "body" => "Hello {$user->name}!, You have a new pending approval request!"
+                ];
+                Mail::to($email)->send(new MailNotify($data));
                 return response()->json(["success" => "Event Created Successfully.", "status" => 200]);
             }   
             else if ($inputType === 'wholeDay'){
@@ -274,6 +293,12 @@ class EventController extends Controller
                     'color' => '#D6AD60',
                     'created_at' => now()
                 ]);
+                $data = [
+                    "subject" => "Calendash Pending Request",
+                    "body" => "Hello {$user->name}!, You have a new pending approval request!"
+                ];
+                Mail::to($email)->send(new MailNotify($data));
+                Mail::to($email)->send(new MailNotify($data));
                 return response()->json(["success" => "Event Created Successfully.", "status" => 200]);
             }
             else
@@ -309,6 +334,11 @@ class EventController extends Controller
                     'color' => '#D6AD60',
                     'created_at' => now()
                 ]);
+                $data = [
+                    "subject" => "Calendash Pending Request",
+                    "body" => "Hello {$user->name}!, You have a new pending approval request!"
+                ];
+                Mail::to($email)->send(new MailNotify($data));
                 return response()->json(["success" => "Event Created Successfully.", "status" => 200]);
             }
 
@@ -629,8 +659,11 @@ class EventController extends Controller
                 //ADMIN
     public function showAdminEvents()
     {   
-        $events = Event::join('venues','venues.id','events.venue_id')->get();
-
+        $events = Event::join('venues','venues.id','events.venue_id')
+                        ->join('departments','departments.id','events.target_dept')
+                        ->join('organizations','organizations.id','events.target_org')
+                        ->get();
+        // dd($events)
         //dd($events);
         // $user_id = $events->user_id;
         // $user = User::find($user_id);

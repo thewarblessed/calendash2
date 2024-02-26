@@ -190,8 +190,8 @@ Route::get('/texteditor', function () {
 // ADAA
 
 Route::get('/request', [RequestController::class, 'index'])
-    // ->middleware('auth')
-    ->name('adaaRequest');
+    ->name('adaaRequest')
+    ->middleware('auth');
 
 //  STORE REQUEST APPROVAL
 Route::post('/request/approve/{id}', [RequestController::class, 'store'])

@@ -136,11 +136,11 @@
                                                 </td>
                                                 <td class="align-middle text-center text-sm">
                                                     <p class="text-sm text-dark font-weight-semibold mb-0">
-                                                        {{ $event->target_dept }}</p>
+                                                        {{ $event->department }}</p>
                                                 </td>
                                                 <td class="align-middle text-center text-sm">
                                                     <p class="text-sm text-dark font-weight-semibold mb-0">
-                                                        {{ $event->target_org }}</p>
+                                                        {{ $event->organization }}</p>
                                                 </td>
 
                                                 <td class="align-middle text-center text-sm">

@@ -31,6 +31,8 @@ class CalendarController extends Controller
         // $events = Event::orderBy('id')->select('event_name as title','description','event_date as start',)->get();
         // IF STUDENT
         $events = Event::join('venues', 'events.venue_id','venues.id')
+                        ->join('departments', 'departments.id','events.target_dept')
+                        ->join('organizations', 'organizations.id','events.target_org')
                         ->where('events.id', $id)
                         ->first();
         // dd($events);

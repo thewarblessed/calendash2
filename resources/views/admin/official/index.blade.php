@@ -56,7 +56,7 @@
                                 </div>
                             </div>
                             <div class="table-responsive p-0">
-                                <table class="table align-items-center mb-0" id="venueTable">
+                                <table class="table align-items-center mb-0" id="officialTable">
                                     <thead class="bg-gray-100">
                                         <tr>
                                             <th class="text-secondary text-xs font-weight-semibold opacity-15" >NAME
@@ -66,7 +66,7 @@
                                             <th class="text-secondary opacity-7"></th>
                                         </tr>
                                     </thead>
-                                    <tbody id="venueBody">
+                                    <tbody id="officialBody">
                                         @foreach($officials as $official)
                                         <tr>
                                             <td>
@@ -97,10 +97,19 @@
                                                 @endif
                                             </td>
 
-                                            {{-- <td class="align-middle text-center">
-                                                <span class="text-secondary text-sm font-weight-normal">{{$venue->name}}</span>
-                                                
-                                            </td> --}}
+                                            <td class="align-middle">
+                                                <a href="javascript:;" class="text-secondary font-weight-bold editOfficial"
+                                                    data-bs-toggle="tooltip" data-id="{{$official->id}}" data-bs-title="Edit event">
+                                                    <i class="fa-solid fa-pen-to-square fa-xl"
+                                                        style="color:#774dd3"></i>    
+                                                </a>
+                                            </td>
+                                            <td class="align-middle">
+                                                <a href="javascript:;" class="text-secondary font-weight-bold deleteOfficial"
+                                                    data-bs-toggle="tooltip" data-id="{{$official->id}}" data-bs-title="Delete event">
+                                                    <i class="fa-solid fa-trash fa-xl" style="color:red"></i>
+                                                </a>
+                                            </td>
                                             
                                             
                                         </tr>
@@ -121,38 +130,61 @@
                 </div>
             </div>
 
-            <div class="modal fade" id="createVenueModal" tabindex="-1" role="dialog" aria-labelledby="createVenueModalLabel" aria-hidden="true">
+            <div class="modal fade" id="editOfficialModal" tabindex="-1" role="dialog" aria-labelledby="createVenueModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                    <h2 class="modal-title" id="createVenueModalLabel" >Edit Venue</h2>
+                    <h2 class="modal-title" id="createVenueModalLabel" >Edit Official</h2>
                     <button type="button" class="btn-close text-dark" data-bs-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                     </div>
                     <div class="modal-body">
-                        <form id="venueUpdateForm" enctype="multipart/form-data">
+                        <form id="officialUpdateForm" enctype="multipart/form-data">
                             @csrf
                             <div class="form-group">
-                              <label for="exampleFormControlInput1">Name of the venue</label>
-                              <input name="venueEditId" type="text" class="form-control" id="venueEditId" hidden>
-                              <input name="venueEditName" type="text" class="form-control" id="venueEditName" required>
+                              <label for="exampleFormControlInput1">Name</label>
+                              <input name="officialEditId" type="text" class="form-control" id="officialEditId" hidden>
+                              <input name="officialEditName" type="text" class="form-control" id="officialEditName" required>
                             </div>
                             <div class="form-group">
-                                <label for="exampleFormControlInput1">Description</label>
-                                <input name="venueEditDesc" type="text" class="form-control" id="venueEditDesc" required>
+                                <label for="exampleFormControlInput1">Email</label>
+                                <input name="officialEditEmail" type="text" class="form-control" id="officialEditEmail" required>
                             </div>
+                            
+
+                            {{-- <div class="form-group">
+                                <label for="exampleFormControlInput1">Department</label>
+                                <input name="officialEditDepartment" type="text" class="form-control" id="officialEditDepartment" required>
+                            </div>
+
                             <div class="form-group">
-                                <label for="exampleFormControlInput1">Capacity</label>
-                                <input name="venueEditCapacity" type="text" class="form-control" id="venueEditCapacity" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="exampleFormControlInput1">Upload Image</label>
-                                <input name="venueEditImage" type="file" class="form-control" id="venueEditImage" required>
-                            </div>
+                                <label for="exampleFormControlInput1">Organization</label>
+                                <input name="officialEditOrganization" type="text" class="form-control" id="officialEditOrganization" required>
+                            </div> --}}
+
+                            <div class="form-group" style="display: ;" id="officialSelectOrgDiv">
+                                <label for="organization_id">Organization</label>
+                                <select class="form-control" id="organization_id" name="organization_id">
+                                  @foreach ($organizations as $id => $organization)
+                                  <option value="{{ $id }}">{{ $organization }}</option>
+                                  @endforeach
+                                </select>
+                              </div>
+              
+                              <div class="form-group" style="display: ;" id="officialSelectDeptDiv">
+                                <label for="organization_id">Department</label>
+                                <select class="form-control" id="department_id" name="department_id">
+                                  @foreach ($departments as $id => $department)
+                                  <option value="{{ $id }}">{{ $department }}</option>
+                                  @endforeach
+                                </select>
+                              </div>
+                            
+                          
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-white" data-bs-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-dark" id="venueUpdate">Save changes</button>
+                                <button type="submit" class="btn btn-dark" id="officialUpdate">Save changes</button>
                             </div>
                         </form>
                     </div>

@@ -130,6 +130,16 @@ Route::post('/admin/storeOfficial',[
         'uses' => 'OfficialController@store',
         'as' => 'storeOfficial',
 ]);
+// EDIT OFFICIALS
+Route::get('/admin/official/{id}/edit',[
+        'uses' => 'OfficialController@edit',
+        'as' => 'editOfficials',
+        ]);
+// UPDATE OFFICIALS
+Route::post('/admin/official/{id}',[
+        'uses' => 'OfficialController@update',
+        'as' => 'updateOfficials',
+        ]);
 
 Route::post('/request/approve/{id}',[
         'uses' => 'RequestController@store',

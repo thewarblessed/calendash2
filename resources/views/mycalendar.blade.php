@@ -98,8 +98,8 @@
                                         minute: '2-digit'
                                     }) + '</strong><br>' +
                                     'Location: <strong>' + data.name + '</strong><br>' +
-                                    'Organization: <strong>' + data.target_org + '</strong><br>' +
-                                    'Department: <strong>' + data.target_dept +'</strong>',  
+                                    'Organization: <strong>' + data.organization + '</strong><br>' +
+                                    'Department: <strong>' + data.department +'</strong>',  
                                 showCloseButton: true,
                                 showConfirmButton: false,
                             });

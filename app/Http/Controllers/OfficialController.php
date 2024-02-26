@@ -22,12 +22,16 @@ class OfficialController extends Controller
     {
         //
         // $officials = Official::orderBy('id')->get();
+        $organizations = Organization::pluck('organization', 'id');
+
+        $departments = Department::pluck('department', 'id');
+
         $officials = Official::join('users', 'users.id', 'officials.user_id')->orderBy('officials.id')->get();
         // $withUser = User::orderBy('id')->select('')->get();
         // dd($officials);
         // return response()->json($venues);
         // dd([0],$officials->hash);
-        return View::make('admin.official.index', compact('officials'));
+        return View::make('admin.official.index', compact('officials','organizations','departments'));
 
     }
 
@@ -125,6 +129,8 @@ class OfficialController extends Controller
     public function edit(string $id)
     {
         //
+        $officials = Official::join('users','users.id','officials.user_id')->where('officials.id',$id)->first();
+        return response()->json(["officials" => $officials, "status" => 200]);
     }
 
     /**
@@ -133,6 +139,50 @@ class OfficialController extends Controller
     public function update(Request $request, string $id)
     {
         //
+        $offID = $request->officialEditId;
+        $officials = Official::where('id',$offID)->first();
+        // dd($officials);
+        $user = User::where('id',$officials->id)->first();
+        // dd($officials->name);
+        $role = $officials->role;
+
+        if($role ==='org_adviser')
+        {
+            $officials->organization_id = $request->organization_id;
+            $user->name = $request->officialEditName;
+            $user->email = $request->officialEditEmail;
+
+            $officials->update();
+            $user->update();
+            return response()->json(["success" => "Official Updated Successfully.", "officials" => $officials, "status" => 200]);
+        }
+        elseif($role ==='department_head')
+        {
+            $officials->department_id = $request->department_id;
+            $user->name = $request->officialEditName;
+            $user->email = $request->officialEditEmail;
+
+            $officials->update();
+            $user->update();
+            return response()->json(["success" => "Official Updated Successfully.", "officials" => $officials, "status" => 200]);
+        }
+        else
+        {
+            // $officials->department_id = $request->department_id;
+            $user->name = $request->officialEditName;
+            $user->email = $request->officialEditEmail;
+
+            $user->update();
+            return response()->json(["success" => "Official Updated Successfully.", "officials" => $officials, "status" => 200]);
+        }
+        // dd($request->all());
+        
+        
+        // $files = $request->file('venueEditImage');
+        // $venues->image = 'images/'.time().'-'.$files->getClientOriginalName();
+        // $venues->update();
+        // Storage::put('public/images/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
+        // return response()->json(["success" => "Venue Updated Successfully.", "Venues" => $venues, "status" => 200]);
     }
 
     /**

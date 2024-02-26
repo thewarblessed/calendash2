@@ -1299,6 +1299,106 @@ $(document).ready(function () {
             },
         });
     });
+
+    $("#officialTable tbody").on("click", 'a.editOfficial ', function (e) {
+        e.preventDefault();
+        var id = $(this).data("id");
+        console.log(id);
+
+        $.ajax({
+            type: "GET",
+            enctype: 'multipart/form-data',
+            processData: false, // Important!
+            contentType: false,
+            cache: false,
+            url: "/api/admin/official/" + id + "/edit",
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
+                    "content"
+                ),
+            },
+            dataType: "json",
+            success: function (data) {
+                console.log(data);
+                var role = data.officials.role;
+                console.log(role);
+                $('#editOfficialModal').modal('show');
+                if (role === 'org_adviser')
+                {
+                    $('#officialSelectOrgDiv').css('display', 'block');
+                    $('#officialSelectDeptDiv').css('display', 'none');
+                }
+                else if (role === 'department_head')
+                {
+                    $('#officialSelectOrgDiv').css('display', 'none');
+                    $('#officialSelectDeptDiv').css('display', 'block');
+                }
+                else
+                {   
+                    $('#officialSelectOrgDiv').css('display', 'none');
+                    $('#officialSelectDeptDiv').css('display', 'none');
+                }
+                $('#officialEditId').val(data.officials.id);
+                $('#officialEditName').val(data.officials.name);
+                $('#officialEditEmail').val(data.officials.email);
+                $('#officialEditDepartment').val(data.officials.department_id);
+                $('#officialEditOrganization').val(data.officials.organization_id);
+                // $("#venueEditImage").html(
+                //     `<img src="/storage/${data.Venues.image}" width="100" class="img-fluid img-thumbnail">`);
+            },
+            error: function (error) {
+                console.log("error");
+            },
+        });
+    });
+
+    $("#officialUpdate").on("click", function (e) {
+
+        e.preventDefault();
+        // var data = $('#roleUpdateForm')[0];
+        var id = $("#officialEditId").val();
+        console.log(id);
+        let formData = new FormData($('#officialUpdateForm')[0]);
+        // console.log(formData);
+
+        for (var pair of formData.entries()) {
+            console.log(pair[0] + ',' + pair[1]);
+        }
+        console.log(formData)
+        $.ajax({
+            
+            type: "POST",
+            url: "/api/admin/official/" + id,
+            data: formData,
+            contentType: false,
+            processData: false,
+            headers: {
+                'Authorization': 'Bearer ' + sessionStorage.getItem('token'),
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            dataType: "json",
+            success: function (data) {
+                console.log(data);
+                Swal.fire({
+                    icon: "success",
+                    title: "Official Updated!",
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+                // var $ctable = $('#ctable').DataTable();
+                // $ctable.ajax.reload();
+                // $ctable.row.add(data.customer).draw(false);
+                // // $etable.row.add(data.client).draw(false);
+                setTimeout(function () {
+                    window.location.href = '/admin/officials';
+                }, 1500);
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+
+    });//end create
     // Approve Request
 
 

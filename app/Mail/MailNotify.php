@@ -30,7 +30,8 @@ class MailNotify extends Mailable
     public function build()
     {
         return $this->from('calendash_events@calendash.com', 'Calendash')
-        ->subject($this->data["subject"])
-        ->view('mail.index')->with("data",$this->data);
+            ->subject($this->data["subject"])
+            ->view('mail.index')
+            ->with("data", $this->data);
     }
 }
