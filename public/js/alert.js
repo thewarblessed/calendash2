@@ -875,6 +875,7 @@ $(document).ready(function () {
         }
     });
 
+    //complete profile 
     $("#completeProfileSubmit").on("click", function (e) {
 
         e.preventDefault();
@@ -920,6 +921,34 @@ $(document).ready(function () {
         });
 
     });//end create
+
+    $('#user_role').change(function() {
+        var selectedValue = $(this).val();
+        const orgDiv = document.getElementById('orgDivCompleteProfile');
+        const deptDiv = document.getElementById('depDivCompleteProfile');
+        const deptDivStaff = document.getElementById('depDivStaffCompleteProfile');
+
+        // Perform actions based on the selected value
+        console.log(selectedValue);
+        if (selectedValue === 'student')
+        {
+            orgDiv.style.display = 'block';
+            deptDiv.style.display = 'block';
+            deptDivStaff.style.display = 'none';
+        }
+        else if(selectedValue === 'professor')
+        {
+            orgDiv.style.display = 'none';
+            deptDiv.style.display = 'none';
+            deptDivStaff.style.display = 'none';
+        }
+        else
+        {
+            deptDivStaff.style.display = 'block';
+            orgDiv.style.display = 'none';
+            deptDiv.style.display = 'none';
+        }
+    });
 
     $("#pendingUsersTable tbody").on("click", 'button.approveAccounts ', function (e) {
         var id = $(this).data("id");
@@ -1100,7 +1129,9 @@ $(document).ready(function () {
         const withinDayDiv = document.getElementById('withinTheDayDiv');
         const wholeDayDiv = document.getElementById('wholeDayDiv');
         const wholeWeekDiv = document.getElementById('wholeWeekDiv');
+        const dateRangeDiv = document.getElementById('dateRangeDiv');
 
+        const dateRange = document.getElementById('date_range');
         const eventDate = document.getElementById('event_date');
         const startTimeWithinDay = document.getElementById('start_time_withinDay');
         const endTimeWithinDay = document.getElementById('end_time_withinDay');
@@ -1109,14 +1140,13 @@ $(document).ready(function () {
         if ($(this).is(':checked')) {
 
             if ($(this).val() === 'withinDay') {
-                console.log('labasDate');
+                // console.log('labasDate');
                 // $("#withinTheDayDiv").show();
                 // $("#wholeDayDiv").hide();
                 // $("#wholeWeekDiv").hide();
-
-
                 WholeDay.removeAttribute('required');
                 WholeWeek.removeAttribute('required');
+                dateRange.removeAttribute('required');
 
                 eventDate.value = "";
                 startTimeWithinDay.value = "";
@@ -1124,6 +1154,7 @@ $(document).ready(function () {
 
                 withinDayDiv.style.display = 'block';
                 wholeDayDiv.style.display = 'none';
+                dateRangeDiv.style.display = 'none';
                 wholeWeekDiv.style.display = 'none';
 
                 startTimeWithinDay.setAttribute('required', true);
@@ -1139,7 +1170,7 @@ $(document).ready(function () {
                 startTimeWithinDay.removeAttribute('required');
                 endTimeWithinDay.removeAttribute('required');
                 eventDate.removeAttribute('required');
-
+                dateRange.removeAttribute('required');
                 WholeWeek.removeAttribute('required');
 
                 WholeDay.value = "";
@@ -1147,14 +1178,16 @@ $(document).ready(function () {
                 wholeWeekDiv.style.display = 'none';
                 withinDayDiv.style.display = 'none';
                 wholeDayDiv.style.display = 'block';
+                dateRangeDiv.style.display = 'none';
+
                 WholeDay.setAttribute('required', true);
             }
-            else {
+            else if ($(this).val() === 'wholeWeek') {
                 console.log('wholeWeekNa')
                 startTimeWithinDay.removeAttribute('required');
                 endTimeWithinDay.removeAttribute('required');
                 eventDate.removeAttribute('required');
-
+                dateRange.removeAttribute('required');
                 WholeDay.removeAttribute('required');
 
                 WholeWeek.value = "";
@@ -1162,8 +1195,24 @@ $(document).ready(function () {
                 wholeWeekDiv.style.display = 'block';
                 withinDayDiv.style.display = 'none';
                 wholeDayDiv.style.display = 'none';
+                dateRangeDiv.style.display = 'none';
 
                 WholeWeek.setAttribute('required', true);
+            }
+            else{
+                startTimeWithinDay.removeAttribute('required');
+                endTimeWithinDay.removeAttribute('required');
+                eventDate.removeAttribute('required');
+                WholeWeek.removeAttribute('required');
+                WholeDay.removeAttribute('required');
+
+                dateRange.value = "";
+
+                wholeWeekDiv.style.display = 'none';
+                withinDayDiv.style.display = 'none';
+                wholeDayDiv.style.display = 'none';
+                dateRangeDiv.style.display = 'block';
+
             }
             // console.log('Selected value:', $(this).val());
         }
@@ -1240,37 +1289,6 @@ $(document).ready(function () {
     });
 
     //ADMIN IN-TABLE VIEW OF REQUEST LETTER 
-    // $("#viewRequestLetter").on("click", function (e) {
-    //     e.preventDefault();
-    //     var id = $(this).data("id");
-    //     console.log(id);
-
-    //     $.ajax({
-    //         type: "GET",
-    //         url: "/api/show/letter/" + id,
-    //         headers: {
-    //             "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
-    //         },
-    //         dataType: "json",
-    //         success: function (data) {
-    //             console.log(data);
-    //             var pdfLink = $('<a>', {
-    //                 href: "/storage/" + data,
-    //                 text: "Request Letter",
-    //                 target: "_blank",
-    //             });
-    //             // console.log(href)
-    //             $("#viewRequestLetter").replaceWith(pdfLink); // Replace the existing link
-    //             pdfLink[0].click();
-    //         },
-    //         error: function (error) {
-    //             console.log(error);
-    //         },
-    //     });
-    //     //Swal.fire('SweetAlert2 is working!')
-    // });
-
-
     $("#adminAllEvents tbody").on("click", 'a.viewRequestLetter ', function (e) {
         e.preventDefault();
         var id = $(this).data("id");
@@ -1304,7 +1322,7 @@ $(document).ready(function () {
         e.preventDefault();
         var id = $(this).data("id");
         console.log(id);
-
+        // $('#officialEditId').val(data.officials.id);
         $.ajax({
             type: "GET",
             enctype: 'multipart/form-data',
@@ -1338,6 +1356,7 @@ $(document).ready(function () {
                     $('#officialSelectOrgDiv').css('display', 'none');
                     $('#officialSelectDeptDiv').css('display', 'none');
                 }
+                // console.log(data.officials.id);
                 $('#officialEditId').val(data.officials.id);
                 $('#officialEditName').val(data.officials.name);
                 $('#officialEditEmail').val(data.officials.email);
@@ -1401,6 +1420,160 @@ $(document).ready(function () {
     });//end create
     // Approve Request
 
+    //ROOM CRUD FOR ADMIN
+    $("#roomSubmit").on("click", function (e) {
+
+        e.preventDefault();
+        // var data = $('#roleUpdateForm')[0];
+        let formData = new FormData($('#roomForm')[0]);
+        // console.log(formData);
+
+        for (var pair of formData.entries()) {
+            console.log(pair[0] + ',' + pair[1]);
+        }
+        console.log(formData)
+        $.ajax({
+            
+            type: "POST",
+            url: "/api/admin/storeRoom",
+            data: formData,
+            contentType: false,
+            processData: false,
+            headers: {
+                'Authorization': 'Bearer ' + sessionStorage.getItem('token'),
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            dataType: "json",
+            success: function (data) {
+                console.log(data);
+                Swal.fire({
+                    icon: "success",
+                    title: "Room Added!",
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+                // var $ctable = $('#ctable').DataTable();
+                // $ctable.ajax.reload();
+                // $ctable.row.add(data.customer).draw(false);
+                // // $etable.row.add(data.client).draw(false);
+                setTimeout(function () {
+                    window.location.href = '/admin/rooms';
+                }, 1500);
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+
+    });
+    
+    $("#roomTable tbody").on("click", 'a.editBtn ', function (e) {
+        var id = $(this).data("id");
+        // e.preventDefault();
+        console.log(id);
+
+        $.ajax({
+            type: "GET",
+            enctype: 'multipart/form-data',
+            processData: false, // Important!
+            contentType: false,
+            cache: false,
+            url: "/api/admin/room/" + id + "/edit",
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
+                    "content"
+                ),
+            },
+            dataType: "json",
+            success: function (data) {
+                console.log(data);
+                $('#editRoomModal').modal('show');
+                $('#roomEditId').val(data.rooms.id);
+                $('#roomEditName').val(data.rooms.name);
+                $('#roomEditDesc').val(data.rooms.description);
+                $('#roomEditCapacity').val(data.rooms.capacity);
+                $("#roomEditImage").html(
+                    `<img src="/storage/${data.Venues.image}" width="100" class="img-fluid img-thumbnail">`);
+            },
+            error: function (error) {
+                console.log("error");
+            },
+        });
+
+    });
+
+    $("#roomTable tbody").on("click", 'a.deleteBtn ', function (e) {
+        var id = $(this).data("id");
+        // e.preventDefault();
+        console.log(id);
+
+        $.ajax({
+            type: "GET",
+            enctype: 'multipart/form-data',
+            processData: false, // Important!
+            contentType: false,
+            cache: false,
+            url: "/api/admin/getUser/" + id,
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
+                    "content"
+                ),
+            },
+            dataType: "json",
+            success: function (data) {
+                console.log(data);
+                // $('#editRoomModal').modal('show');
+                $('#roomEditId').val(data.rooms.id);
+                $('#roomEditName').val(data.rooms.name);
+                $('#roomEditDesc').val(data.rooms.description);
+                $('#roomEditCapacity').val(data.rooms.capacity);
+                $("#roomEditImage").html(
+                    `<img src="/storage/${data.Venues.image}" width="100" class="img-fluid img-thumbnail">`);
+            },
+            error: function (error) {
+                console.log("error");
+            },
+        });
+
+    });
+
+    $("#roomUpdate").on("click", function (e) {
+        e.preventDefault();
+        var id = $("#roomEditId").val();
+        let editformData = new FormData($("#roomUpdateForm")[0]);
+        for (var pair of editformData.entries()) {
+            console.log(pair[0] + ',' + pair[1]);
+        }
+        $.ajax({
+            type: "POST",
+            url: "/api/admin/room/" + id,
+            data: editformData,
+            contentType: false,
+            processData: false,
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+            dataType: "json",
+            success: function (data) {
+                console.log(data);
+                setTimeout(function () {
+                    window.location.href = '/admin/rooms';
+                }, 1500);
+
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Room Updated!',
+                    showConfirmButton: false,
+                    timer: 3000
+                })
+
+            },
+            error: function (error) {
+                console.log("error");
+            },
+        });
+    });
+
     $("#requestRoomButton").on("click", function (e) {
         console.log('napindot')
         e.preventDefault();
@@ -1451,27 +1624,6 @@ $(document).ready(function () {
         }
 
     });
-
-
-
-    // document.getElementById("search").addEventListener("click", () => {
-    //     //initializations
-    //     let searchInput = document.getElementById("search-input").value;
-    //     let elements = document.querySelectorAll(".product-name");
-    //     let cards = document.querySelectorAll(".card");
-    //     //loop through all elements
-    //     elements.forEach((element, index) => {
-    //       //check if text includes the search value
-    //       if (element.innerText.includes(searchInput.toUpperCase())) {
-    //         //display matching card
-    //         cards[index].classList.remove("hide");
-    //       } else {
-    //         //hide others
-    //         cards[index].classList.add("hide");
-    //       }
-    //     });
-    //   });
-
 
 
 })

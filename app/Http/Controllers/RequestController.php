@@ -376,6 +376,17 @@ class RequestController extends Controller
     {
         $events = Event::find($id);
         $venues = Venue::find($events->venue_id);
+
+        $orgID = $events->target_org;
+        $deptID = $events->target_dept;
+
+        $official_org = Official::where('organization_id',$orgID)->first();
+        $official_dept = Official::where('department_id',$deptID)->first();
+
+        $official_user = User::where('id',$official_org->user_id)->first();
+        $dept_user = User::where('id',$official_dept->user_id)->first();
+        // dd($official_user->name);
+
         $orgAdviser = $events->org_adviser;
         $secHead = $events->sect_head;
         $depHead = $events->dept_head;
@@ -401,7 +412,7 @@ class RequestController extends Controller
                 ];
                 
                 $approvalMessage = [
-                    'APPROVED BY ORGANIZATION ADVISER',
+                    'APPROVED BY ORGANIZATION ADVISER: ' . $official_user->name,
                 ];
                 $pendingMsg = 'Waiting for Approval of Section Head';
                 return response()->json(["dates" => $approvalDates, "msg" => $approvalMessage, "pendingMsg" => $pendingMsg, "status" => 200]);
@@ -514,7 +525,7 @@ class RequestController extends Controller
                 ];
                 
                 $approvalMessage = [
-                    'APPROVED BY ORGANIZATION ADVISER',
+                    'APPROVED BY ORGANIZATION ADVISER: ' . $official_user->name,
                 ];
                 $pendingMsg = 'Waiting for Approval of Section Head';
                 return response()->json(["dates" => $approvalDates, "msg" => $approvalMessage, "pendingMsg" => $pendingMsg, "status" => 200]);
@@ -527,7 +538,7 @@ class RequestController extends Controller
                 ];
                 
                 $approvalMessage = [
-                    'APPROVED BY ORGANIZATION ADVISER',
+                    'APPROVED BY ORGANIZATION ADVISER: ' . $official_user->name,
                     'APPROVED BY SECTION HEAD',
                 ];
 
@@ -543,7 +554,7 @@ class RequestController extends Controller
                 ];
                 
                 $approvalMessage = [
-                    'APPROVED BY ORGANIZATION ADVISER',
+                    'APPROVED BY ORGANIZATION ADVISER: ' . $official_user->name,
                     'APPROVED BY SECTION HEAD',
                     'APPROVED BY DEPARTMENT HEAD',
                 ];
@@ -560,7 +571,7 @@ class RequestController extends Controller
                 ];
                 
                 $approvalMessage = [
-                    'APPROVED BY ORGANIZATION ADVISER',
+                    'APPROVED BY ORGANIZATION ADVISER: ' . $official_user->name,
                     'APPROVED BY SECTION HEAD',
                     'APPROVED BY DEPARTMENT HEAD',
                     'APPROVED BY OSA',
@@ -579,7 +590,7 @@ class RequestController extends Controller
                 ];
             
                 $approvalMessage = [
-                    'APPROVED BY ORGANIZATION ADVISER',
+                    'APPROVED BY ORGANIZATION ADVISER: ' . $official_user->name,
                     'APPROVED BY SECTION HEAD',
                     'APPROVED BY DEPARTMENT HEAD',
                     'APPROVED BY OSA',
@@ -600,7 +611,7 @@ class RequestController extends Controller
                 ];
             
                 $approvalMessage = [
-                    'APPROVED BY ORGANIZATION ADVISER',
+                    'APPROVED BY ORGANIZATION ADVISER: ' . $official_user->name,
                     'APPROVED BY SECTION HEAD',
                     'APPROVED BY DEPARTMENT HEAD',
                     'APPROVED BY OSA',

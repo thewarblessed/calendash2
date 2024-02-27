@@ -97,6 +97,12 @@
                                 <input class="form-check-input" type="radio" name="event_type" value="wholeWeek" id="wholeWeek" required>
                                 <label class="custom-control-label" for="wholeWeek">Whole Week</label>
                             </div>
+
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="event_type" value="dateRanges"
+                                    id="dateRanges" required>
+                                <label class="custom-control-label" for="dateRanges" >Date Range</label>
+                            </div>
                         </div>
                         
                         <div id="withinTheDayDiv" class="withinTheDay" style="display:none;">
@@ -130,6 +136,14 @@
                             <div class="form-group">
                                 <label for="example-week-input" class="form-control-label">Week</label>
                                 <input class="form-control" type="week" name="event_date_wholeWeek" id="event_date_wholeWeek">
+                            </div>
+                        </div>
+
+                        <div id="dateRangeDiv" class="dateRanges" style="display:none;">
+                            <h5 style="text-align: center">Date Range</h5>
+                            <div class="form-group" style="text-align: center">
+                                <label for="example-week-input" class="form-control-label"></label>
+                                <input type="text" name="daterange" value="" id="date_range"/>
                             </div>
                         </div>
 
@@ -307,5 +321,24 @@
             });
         });
 
+    </script>
+
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js">
+    </script>
+    <script>
+        $(function() {
+            $('input[name="daterange"]').daterangepicker({
+            opens: 'right',
+            minDate: moment().add(1, 'weeks').startOf('day'), // Set minDate to start of day one week from now
+            locale: {
+                format: 'YYYY-MM-DD'
+            }
+            }, function(start, end, label) {
+            console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+            });
+        });
     </script>
 </x-app-layout>

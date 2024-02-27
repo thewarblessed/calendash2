@@ -69,6 +69,24 @@ Route::delete('/admin/venue/{id}',[
         'as' => 'deleteVenue',
         ]);
 
+//ROOM CRUD
+Route::post('/admin/storeRoom',[
+        'uses' => 'RoomController@store',
+        'as' => 'storeRoom',
+        ]);
+Route::post('/admin/room/{id}',[
+        'uses' => 'RoomController@update',
+        'as' => 'updateRoom',
+        ]);
+Route::get('/admin/room/{id}/edit',[
+        'uses' => 'RoomController@edit',
+        'as' => 'editRoom',
+        ]);
+Route::delete('/admin/room/{id}',[
+        'uses' => 'RoomController@destroy',
+        'as' => 'deleteRoom',
+        ]);
+
 // CREATE EVENT FOR VENUES
 // FILTER VENUES WHILE CREATING EVENT
 Route::get('/create/venueFilter',[

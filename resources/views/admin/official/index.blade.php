@@ -31,7 +31,7 @@
                             </div>
                         </div>
                         <div class="card-body px-0 py-0">
-                            <div class="border-bottom py-3 px-3 d-sm-flex align-items-center">
+                            {{-- <div class="border-bottom py-3 px-3 d-sm-flex align-items-center">
                                 <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
                                     <input type="radio" class="btn-check" name="btnradiotable" id="btnradiotable1"
                                         autocomplete="off" checked>
@@ -54,7 +54,7 @@
                                     </span>
                                     <input type="text" class="form-control" placeholder="Search">
                                 </div>
-                            </div>
+                            </div> --}}
                             <div class="table-responsive p-0">
                                 <table class="table align-items-center mb-0" id="officialTable">
                                     <thead class="bg-gray-100">
@@ -63,6 +63,9 @@
                                             </th>
                                             <th class="text-secondary text-xs font-weight-semibold opacity-15 ps-15">Email</th>
                                             <th class="text-center text-secondary text-xs font-weight-semibold opacity-15">Position</th>
+                                            <th class="text-center text-secondary text-xs font-weight-semibold opacity-15">Department</th>
+                                            <th class="text-center text-secondary text-xs font-weight-semibold opacity-15">Organization</th>
+                                            <th class="text-secondary opacity-7"></th>
                                             <th class="text-secondary opacity-7"></th>
                                         </tr>
                                     </thead>
@@ -97,16 +100,32 @@
                                                 @endif
                                             </td>
 
+                                            <td class="align-middle text-center text-sm">
+                                                @if($official->department === null)
+                                                <span class="text-sm text-dark font-weight-semibold mb-0">None</span>
+                                                @else
+                                                <span class="text-sm text-dark font-weight-semibold mb-0">{{$official->department}}</span>
+                                                @endif
+                                            </td>
+
+                                            <td class="align-middle text-center text-sm">
+                                                @if($official->organization === null)
+                                                <span class="text-sm text-dark font-weight-semibold mb-0">None</span>
+                                                @else
+                                                <span class="text-sm text-dark font-weight-semibold mb-0">{{$official->organization}}</span>
+                                                @endif
+                                            </td>
+
                                             <td class="align-middle">
                                                 <a href="javascript:;" class="text-secondary font-weight-bold editOfficial"
-                                                    data-bs-toggle="tooltip" data-id="{{$official->id}}" data-bs-title="Edit event">
+                                                    data-bs-toggle="tooltip" data-id="{{$official->id}}" data-bs-title="Edit official">
                                                     <i class="fa-solid fa-pen-to-square fa-xl"
                                                         style="color:#774dd3"></i>    
                                                 </a>
                                             </td>
                                             <td class="align-middle">
                                                 <a href="javascript:;" class="text-secondary font-weight-bold deleteOfficial"
-                                                    data-bs-toggle="tooltip" data-id="{{$official->id}}" data-bs-title="Delete event">
+                                                    data-bs-toggle="tooltip" data-id="{{$official->id}}" data-bs-title="Delete official">
                                                     <i class="fa-solid fa-trash fa-xl" style="color:red"></i>
                                                 </a>
                                             </td>
@@ -119,11 +138,11 @@
                                 </table>
                             </div>
                             <div class="border-top py-3 px-3 d-flex align-items-center">
-                                <p class="font-weight-semibold mb-0 text-dark text-sm">Page 1 of 10</p>
+                                {{-- <p class="font-weight-semibold mb-0 text-dark text-sm">Page 1 of 10</p>
                                 <div class="ms-auto">
                                     <button class="btn btn-sm btn-white mb-0">Previous</button>
                                     <button class="btn btn-sm btn-white mb-0">Next</button>
-                                </div>
+                                </div> --}}
                             </div>
                         </div>
                     </div>
@@ -176,7 +195,9 @@
                                 <label for="organization_id">Department</label>
                                 <select class="form-control" id="department_id" name="department_id">
                                   @foreach ($departments as $id => $department)
-                                  <option value="{{ $id }}">{{ $department }}</option>
+                                    @if ($id >= 1 && $id <= 5)
+                                            <option value="{{ $id }}">{{ $department }}</option>
+                                    @endif
                                   @endforeach
                                 </select>
                               </div>

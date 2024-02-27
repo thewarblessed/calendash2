@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\RoomController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VenueController;
 use App\Http\Controllers\EventController;
@@ -212,6 +213,16 @@ Route::get('/mycreateevent', function () {
 
 // Route::post('/postCreateMyEvent', [EventController::class, 'storeMyEventsAdmin'])
 //     ->name('postCreateMyEvent');
+
+///////////////////////// ROOM CRUD FOR ADMIN  /////////////////////////////
+
+Route::get('/admin/rooms', [RoomController::class, 'index'])
+    ->middleware('auth')
+    ->name('adminRooms');
+
+Route::get('/admin/createRoom', [RoomController::class, 'create'])
+    ->middleware('auth')
+    ->name('adminRoomCreate');
 
 /////////////////////// CREATE OFFICIALS FOR ADMIN /////////////
 // GET ALL OFFICIALS

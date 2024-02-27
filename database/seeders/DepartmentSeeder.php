@@ -28,5 +28,20 @@ class DepartmentSeeder extends Seeder
         Department::create([
             'department' => 'BENG - TEMPORARY'
         ]);
+        Department::create([
+            'department' => 'Clinic'
+        ]);
+        Department::create([
+            'department' => 'Registrar'
+        ]);
+        Department::create([
+            'department' => 'Library'
+        ]);
+        Department::create([
+            'department' => 'Accounting'
+        ]);
+        Department::create([
+            'department' => 'Faculty'
+        ]);
     }
 }

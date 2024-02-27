@@ -28,8 +28,8 @@
                     </div>
 
                 </div>
-                <div class="card mb-4" style="padding: 80px">
-                    <div class="card-header">Profile Details</div>
+                <div class="card mb-4" style="padding: 30px">
+                    <h2 class="card-header">Profile Details</h2>
                     <div class="card-body">
                         <form role="form" id="compeleteProfileForm" enctype="multipart/form-data">
                             <!-- Form Group (username)-->
@@ -40,6 +40,14 @@
                                     placeholder="Enter your username" value="username">
                             </div> --}}
                             <!-- Form Row-->
+                            <div class="mb-3">
+                                <label class="small mb-1" for="inputEmailAddress">Select Role:</label>
+                                <select class="form-control" id="user_role" name="user_role">
+                                    <option value="student">STUDENT</option>
+                                    <option value="professor">FACULTY</option>
+                                    <option value="staff">STAFF/ADMIN</option>
+                                </select>
+                            </div>
                             <div class="row gx-3 mb-3">
                                 <!-- Form Group (first name)-->
                                 <div class="col-md-6">
@@ -59,20 +67,33 @@
                             <!-- Form Row        -->
                             <div class="row gx-3 mb-3">
                                 <!-- Form Group (department)-->
-                                <div class="col-md-6">
+                                <div class="col-md-6" style="display: block;" id="depDivCompleteProfile">
                                     <label for="organization_id">Select Department</label>
                                     <select class="form-control" id="department_id_user" name="department_id_user">
                                         @foreach ($departments as $id => $department)
+                                        @if ($id >= 1 && $id <= 5)
                                         <option value="{{ $id }}">{{ $department }}</option>
+                                        @endif
                                         @endforeach
                                     </select>
                                 </div>
                                 <!-- Form Group (organization name)-->
-                                <div class="col-md-6">
+                                <div class="col-md-6" style="display: block;" id="orgDivCompleteProfile">
                                     <label for="organization_id">Select Organization</label>
                                     <select class="form-control" id="organization_id_user" name="organization_id_user">
                                         @foreach ($organizations as $id => $organization)
                                         <option value="{{ $id }}">{{ $organization }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                <div class="col-md-6" style="display: none;" id="depDivStaffCompleteProfile">
+                                    <label for="organization_id">Select Department</label>
+                                    <select class="form-control" id="department_id_staff" name="department_id_staff">
+                                        @foreach ($departments as $id => $department)
+                                        @if ($id >= 6 && $id <= 9)
+                                        <option value="{{ $id }}">{{ $department }}</option>
+                                        @endif
                                         @endforeach
                                     </select>
                                 </div>

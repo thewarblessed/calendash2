@@ -62,30 +62,77 @@ class UserController extends Controller
     
     public function completeProfile(Request $request)
     {
-        $pendingUsers = new PendingUser();
-        $pendingUsers->user_id = $request->user_id;
-        $pendingUsers->tupID =  $request->tupID;
-        $pendingUsers->firstname =  $request->firstname;
-        $pendingUsers->lastname =  $request->lastname;
-        $pendingUsers->organization_id =  $request->organization_id_user;
-        $pendingUsers->department_id =  $request->department_id_user;
-        $pendingUsers->role = "student";
-        // dd($pendingUsers);
-        $files = $request->file('image');
-        $pendingUsers->image = 'images/'.time().'-'.$files->getClientOriginalName();
-        $pendingUsers->save();
-        Storage::put('public/images/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
-        return response()->json(["data" => $pendingUsers, "status" => 200]);
+        if ($request->user_role === 'student')
+        {
+            $pendingUsers = new PendingUser();
+            $pendingUsers->user_id = $request->user_id;
+            $pendingUsers->tupID =  $request->tupID;
+            $pendingUsers->firstname =  $request->firstname;
+            $pendingUsers->lastname =  $request->lastname;
+            $pendingUsers->organization_id =  $request->organization_id_user;
+            $pendingUsers->department_id =  $request->department_id_user;
+            $pendingUsers->role = $request->user_role;
+            // dd($pendingUsers);
+            $files = $request->file('image');
+            $pendingUsers->image = 'images/'.time().'-'.$files->getClientOriginalName();
+            $pendingUsers->save();
+            Storage::put('public/images/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
+            return response()->json(["data" => $pendingUsers, "status" => 200]);
+        }
+        elseif ($request->user_role === 'professor')
+        {
+            $pendingUsers = new PendingUser();
+            $pendingUsers->user_id = $request->user_id;
+            $pendingUsers->tupID =  $request->tupID;
+            $pendingUsers->firstname =  $request->firstname;
+            $pendingUsers->lastname =  $request->lastname;
+            $pendingUsers->organization_id =  null;
+            $pendingUsers->department_id =  10;
+            $pendingUsers->role = 'professor';
+            // dd($pendingUsers);
+            $files = $request->file('image');
+            $pendingUsers->image = 'images/'.time().'-'.$files->getClientOriginalName();
+            $pendingUsers->save();
+
+
+
+            // $pendingUsers->
+            // $user = User::where('id',$request->user_id)->first();
+            // $user->role = 'professor';
+            // $user->update();
+
+            Storage::put('public/images/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
+            return response()->json(["data" => $pendingUsers, "status" => 200]);
+        }
+        else{
+
+            $pendingUsers = new PendingUser();
+            $pendingUsers->user_id = $request->user_id;
+            $pendingUsers->tupID =  $request->tupID;
+            $pendingUsers->firstname =  $request->firstname;
+            $pendingUsers->lastname =  $request->lastname;
+            $pendingUsers->department_id =  $request->department_id_staff;
+            $pendingUsers->role = 'staff';
+            // dd($pendingUsers);
+            $files = $request->file('image');
+            $pendingUsers->image = 'images/'.time().'-'.$files->getClientOriginalName();
+            $pendingUsers->save();
+            Storage::put('public/images/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
+            return response()->json(["data" => $pendingUsers, "status" => 200]);
+        }
+        
         
     }
 
     public function pendingUsers(Request $request)
     {
         // $pendingUsers = PendingUser::all();  
-        $pendingUsers = PendingUser::join('users', 'pending_users.user_id','users.id')
-                                    ->join('organizations', 'pending_users.organization_id','organizations.id')
-                                    ->join('departments', 'pending_users.department_id','departments.id')
+        $pendingUsers = PendingUser::leftJoin('users', 'pending_users.user_id', 'users.id')
+                                    ->leftJoin('organizations', 'pending_users.organization_id', 'organizations.id')
+                                    ->leftJoin('departments', 'pending_users.department_id', 'departments.id')
+                                    ->orderByDesc('pending_users.id')
                                     ->get();
+                                    // dd($pendingUsers);
         return view('admin.user.pendingUsers', compact('pendingUsers'));
         
     }
@@ -119,62 +166,6 @@ class UserController extends Controller
 
     public function editRole(Request $request, String $id)
     {
-        // $user = User::where('id', $id)->first();
-        // $pendingUser = PendingUser::where('user_id', $id)->first();
-        // // dd($user);
-        // $role = $request->role;
-   
-        // if ($role === 'student')
-        // {
-        //     // $student = Student::findOrFail($user->id);
-        //     // dd($student);
-        //     $student = new Student();
-        //     $student->tupID = $pendingUser->tupID;
-        //     $student->lastname = $pendingUser->lastname;
-        //     $student->firstname = $pendingUser->firstname;
-        //     $student->department = $pendingUser->department;
-        //     $student->studOrg = $pendingUser->organization;
-        //     $student->user_id = $user->id;
-        //     $student->save();
-
-        //     $user->role = 'student';
-        //     $user->save();
-
-        //     return response()->json(["user" => $user, "student" => $student, "status" => 200]);
-        // }
-        // elseif ($role === 'professor')
-        // {
-        //     $prof = new Prof();
-        //     $prof->tupID = $user->tupID;
-        //     $prof->lastname = $user->lastname;
-        //     $prof->firstname = $user->firstname;
-        //     $prof->department = $user->department;
-        //     $prof->organization = $user->organization;
-        //     $prof->user_id = $user->id;
-        //     $prof->role = 'member';
-        //     $prof->save();
-
-
-        //     $user->role = 'professor';
-        //     $user->save();
-        //     return response()->json(["user" => $user, "prof" => $prof, "status" => 200]);
-        // }
-        // elseif ($role === 'staff')
-        // {
-        //     $staff = new Staff();
-        //     $staff->tupID = $user->tupID;
-        //     $staff->lastname = $user->lastname;
-        //     $staff->firstname = $user->firstname;
-        //     $staff->department = $user->department;
-        //     $staff->user_id = $user->id;
-        //     $staff->role = 'member';
-        //     $staff->save();
-
-
-        //     $user->role = 'staff';
-        //     $user->save();
-        //     return response()->json(["user" => $user, "staff" => $staff, "status" => 200]);
-        // }
         $newRole = $request->role;
         $user = User::findOrFail($id);
         $pendingUser = PendingUser::where('user_id', $user->id)->first();
@@ -206,8 +197,8 @@ class UserController extends Controller
                     $student->tupID = $tupID;
                     $student->lastname = $pendingUser->lastname;
                     $student->firstname = $pendingUser->firstname;
-                    $student->department = $pendingUser->department;
-                    $student->studOrg = $pendingUser->organization;
+                    $student->department_id = $pendingUser->department_id;
+                    $student->organization_id = $pendingUser->organization_id;
                     $student->user_id = $user->id;
                     $student->save();
                     break;
@@ -217,9 +208,8 @@ class UserController extends Controller
                     $professor->tupID = $tupID;
                     $professor->lastname = $pendingUser->lastname;
                     $professor->firstname = $pendingUser->firstname;
-                    $professor->department = $pendingUser->department;
-                    $professor->organization = $pendingUser->organization;
-                    $professor->role = 'member';
+                    $professor->department_id = $pendingUser->department_id;
+                    $professor->role = 'professor';
                     $professor->user_id = $user->id;
                     $professor->save();
                     break;
@@ -229,8 +219,8 @@ class UserController extends Controller
                     $staff->tupID = $tupID;
                     $staff->lastname = $pendingUser->lastname;
                     $staff->firstname = $pendingUser->firstname;
-                    $staff->department = $pendingUser->department;
-                    $staff->role = 'member';
+                    $staff->department_id = $pendingUser->department_id;
+                    $staff->role = 'staff';
                     $staff->user_id = $user->id;
                     $staff->save();
                     break;
@@ -249,10 +239,11 @@ class UserController extends Controller
     {
         // $pendingUsers = PendingUser::join('users', 'pending_users.user_id','users.id')->get();
         // $user = User::find($id);
-        $user = User::join('pending_users', 'pending_users.user_id','users.id')
-                        ->join('organizations', 'pending_users.organization_id','organizations.id')
-                        ->join('departments', 'pending_users.department_id','departments.id')
-                        ->where('users.id', $id)->first();
+        $user = User::leftJoin('pending_users', 'pending_users.user_id', 'users.id')
+                    ->leftJoin('organizations', 'pending_users.organization_id', 'organizations.id')
+                    ->leftJoin('departments', 'pending_users.department_id', 'departments.id')
+                    ->where('users.id', $id)
+                    ->first();
         // dd($user);
         
         // $student = new Student();

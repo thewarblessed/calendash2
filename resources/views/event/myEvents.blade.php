@@ -134,9 +134,9 @@
                                                             <button type="button" class="btn btn-dark btn-sm checkMore"
                                                                 data-bs-toggle="modal" data-id="{{ $event->id }}"
                                                                 data-bs-target="#checkMoreModal">View Details</button>
-                                                            <button type="button" class="btn btn-dark btn-sm checkStatus"
+                                                            {{-- <button type="button" class="btn btn-dark btn-sm checkStatus"
                                                                 data-bs-toggle="modal" data-id="{{ $event->id }}"
-                                                                data-bs-target="#checkStatusModal">View Status</button>
+                                                                data-bs-target="#checkStatusModal">View Status</button> --}}
                                                             {{-- <a type="button" class="btn btn-dark btn-sm checkMore" data-bs-toggle="modal" data-id="{{$event->id}}" data-bs-target="#checkMoreModal" id="checkMoreBtn">Check More</a> --}}
                                                             {{-- <button type="button" class="btn btn-dark approveBtn" style="width: 110px; height: 40px;" data-bs-toggle="modal" data-id="{{$event->id}}" data-bs-target="#approveRequestModal" id="tableApprove">Approve</button> --}}
                                                             {{-- <a class="text-dark text-sm mb-0">CHECK</a> --}}
@@ -215,7 +215,7 @@
                             </span>
                         </div>
 
-                        <div style="font-size: 14px; background-color:rgb(2, 36, 36); border-radius: 25px; ">
+                        <div style="font-size: 14px; background-color:rgb(39, 5, 95); border-radius: 25px; ">
                             <div class="rightbox">
                                 <div class="rb-container">
                                   <ul class="rb" id="statusList">
@@ -369,17 +369,17 @@
 
 <style>
     .rightbox {
-  padding: 0em 34rem 0em 0em;
-  height: 100%;
+  padding: 0;
+  height: 0%;
 }
 
-.rb-container {
+/* .rb-container {
   font-family: "PT Sans", sans-serif;
   width: 50%;
   margin: auto;
   display: block;
   position: relative;
-}
+} */
 
 .rb-container ul.rb {
   margin: 2.5em 0;
@@ -390,9 +390,9 @@
 .rb-container ul.rb li {
   list-style: none;
   margin: auto;
-  margin-left: 10em;
+  margin-left: 5em;
   min-height: 50px;
-  border-left: 1px dashed #fff;
+  border-left: 3px dashed #fff;
   padding: 0 0 50px 30px;
   position: relative;
 }
@@ -415,18 +415,25 @@
 }
 
 .rb-container ul.rb li:hover::before {
-  border-color: #232931;
+  border-color: #f5f105;
   transition: all 1000ms ease-in-out;
 }
 
 ul.rb li .timestamp {
   color: #00ff77;
   position: relative;
-  width: 100px;
-  font-size: 12px;
+  /* width: 100px; */
+  font-size: 13px;
 }
 
 .item-title {
   color: #fff;
 }
+
+.rb-container ul.rb li:first-child {
+    margin-left: 70px;
+    font-size: 18px;
+    font-weight: 900;
+}
+
 </style>

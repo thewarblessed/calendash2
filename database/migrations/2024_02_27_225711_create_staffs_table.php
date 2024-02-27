@@ -16,7 +16,10 @@ return new class extends Migration
             $table->text('tupID');
             $table->text('lastname');
             $table->text('firstname');
-            $table->string('department')->default('Admin/Staff');
+            $table->integer('department_id')->unsigned()->nullable();
+            $table->foreign('department_id')->references('id')->on('departments');
+            $table->integer('organization_id')->unsigned()->nullable();
+            $table->foreign('organization_id')->references('id')->on('organizations');
             $table->text('role');
             $table->string('image')->default('staff.jpg');
             $table->integer('user_id')->unsigned()->nullable();

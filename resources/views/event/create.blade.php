@@ -217,14 +217,19 @@
                     {{-- GENERATE LETTER DETAILS --}}
                     <div class="tab d-none">
                         <h3>Generate Letter</h3>
-                        <p>All Set! Please submit to continue. Thank you</p>
-
+                        <p>To save the Letter in you've created, please these steps.</p>
+                        <ul style="list-style-type: decimal; font-size: 14px">
+                            <li>File</li>
+                            <li>Print</li>
+                            <li>Select the Destination to "Save as PDF"</li>
+                            <li>then click "Save"</li>
+                            <li>then upload it to the bottom of this form</li>
+                        </ul>
                         <div class="container p-4 ">
                             <textarea name="letter_generator" id="editor"></textarea>
                         </div>
                         <div class="mb-3 col-md-6" style="align-self: center">
-                                <label for="request_letter" class="form-label" style="font-size: 18px">Upload Request
-                                    Letter</label>
+                                <label for="request_letter" class="form-label" style="font-size: 25px; text-align:center; color:blueviolet">Upload Request Letter</label>
                                 <input type="file" class="form-control" name="request_letter" id="request_letter" required>
                         </div>
 

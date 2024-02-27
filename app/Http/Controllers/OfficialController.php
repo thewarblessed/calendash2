@@ -26,7 +26,12 @@ class OfficialController extends Controller
 
         $departments = Department::pluck('department', 'id');
 
-        $officials = Official::join('users', 'users.id', 'officials.user_id')->orderBy('officials.id')->get();
+        $officials = User::join('officials', 'users.id', 'officials.user_id')
+                            ->leftjoin('departments','departments.id','officials.department_id')
+                            ->leftjoin('organizations','organizations.id','officials.organization_id')
+                            ->select('officials.id','departments.department','organizations.organization','users.role','users.name','users.email')
+                            ->orderBy('officials.id')->get();
+                            // dd($officials);
         // $withUser = User::orderBy('id')->select('')->get();
         // dd($officials);
         // return response()->json($venues);
@@ -130,6 +135,7 @@ class OfficialController extends Controller
     {
         //
         $officials = Official::join('users','users.id','officials.user_id')->where('officials.id',$id)->first();
+        // dd($officials);
         return response()->json(["officials" => $officials, "status" => 200]);
     }
 
@@ -139,12 +145,13 @@ class OfficialController extends Controller
     public function update(Request $request, string $id)
     {
         //
-        $offID = $request->officialEditId;
-        $officials = Official::where('id',$offID)->first();
+        $userID = $request->officialEditId;
+        $officials = Official::where('user_id',$userID)->first();
         // dd($officials);
-        $user = User::where('id',$officials->id)->first();
+        $user = User::where('id',$officials->user_id)->first();
+        // dd($user);
         // dd($officials->name);
-        $role = $officials->role;
+        $role = $officials->role;   
 
         if($role ==='org_adviser')
         {

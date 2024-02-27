@@ -16,7 +16,7 @@
                                     <button type="button" class="btn btn-sm btn-white me-2">
                                         View all
                                     </button>
-                                    <a type="button"
+                                    {{-- <a type="button"
                                     href="" class="btn btn-sm btn-dark btn-icon d-flex align-items-center me-2">
                                         <span class="btn-inner--icon">
                                             <svg width="16" height="16" xmlns="http://www.w3.org/2000/svg"
@@ -26,7 +26,7 @@
                                             </svg>
                                         </span>
                                         <span class="btn-inner--text">Add Users</span>
-                                    </a>
+                                    </a> --}}
                                 </div>
                             </div>
                         </div>
@@ -85,16 +85,24 @@
                                                     class="text-sm text-dark font-weight-semibold mb-0">{{$pendingUser->firstname}}</span>
                                             </td>
                                             <td class="align-left text-sm">
-                                                <span
-                                                    class="text-sm text-dark font-weight-semibold mb-0">{{$pendingUser->organization}}</span>
+                                                @if($pendingUser->organization === null)
+                                                <span class="text-sm text-dark font-weight-semibold mb-0">N/A</span>
+                                                @else
+                                                <span class="text-sm text-dark font-weight-semibold mb-0">{{$pendingUser->organization}}</span>
+                                                @endif
                                             </td>
                                             <td class="align-left text-sm">
                                                 <span
                                                     class="text-sm text-dark font-weight-semibold mb-0">{{$pendingUser->department}}</span>
                                             </td>
                                             <td class="align-middle text-center text-sm">
-                                                <span
-                                                    class="text-sm text-dark font-weight-semibold mb-0">{{$pendingUser->role}}</span>
+                                                @if($pendingUser->role === 'student')
+                                                <span class="text-sm text-dark font-weight-semibold mb-0">STUDENT</span>
+                                                @elseif($pendingUser->role === 'professor')
+                                                <span class="text-sm text-dark font-weight-semibold mb-0">FACULTY</span>
+                                                @else
+                                                <span class="text-sm text-dark font-weight-semibold mb-0">STAFF</span>
+                                                @endif
                                             </td> 
                                                   
                                             <td class="align-middle text-center text-sm">
@@ -112,13 +120,13 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <div class="border-top py-3 px-3 d-flex align-items-center">
+                            {{-- <div class="border-top py-3 px-3 d-flex align-items-center">
                                 <p class="font-weight-semibold mb-0 text-dark text-sm">Page 1 of 10</p>
                                 <div class="ms-auto">
                                     <button class="btn btn-sm btn-white mb-0">Previous</button>
                                     <button class="btn btn-sm btn-white mb-0">Next</button>
                                 </div>
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
                 </div>
@@ -140,7 +148,7 @@
                                 <label class="small mb-1" for="inputDepartment">Change Role</label>
                                 <select class="form-control form-control-lg" id="role" name="role">
                                     <option value="student">STUDENT</option>
-                                    <option value="professor">PROFESSOR</option>
+                                    <option value="professor">FACULTY</option>
                                     <option value="staff">ADMIN/STAFF</option>
                                   </select>
                             </div>

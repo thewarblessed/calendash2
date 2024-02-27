@@ -178,9 +178,10 @@ class EventController extends Controller
             
             $official = Official::where('organization_id',$orgID)->first();
             // dd($official);
-            $user = User::where('id',$official->user_id)->first();
-            $email = $user->email;
-            // dd($user);
+            // dd($official);
+            $users = User::where('id',$official->user_id)->first();
+            $email = $users->email;
+            
             // $orgAdviser = 
             //EVENT DATE TYPE
             
