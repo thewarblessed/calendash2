@@ -59,6 +59,36 @@
             </li>
 
             <li class="nav-item">
+                <a class="nav-link  {{ is_current_route('AdminIndexSectionHead') ? 'active' : '' }}"
+                    href="{{ route('AdminIndexSectionHead') }}">
+                    {{-- <i class="fa-solid fa-calendar-days"></i> --}}
+                    <i class="fa-solid fa-users"
+                        style="color: {{ is_current_route('AdminIndexSectionHead') ? '#774dd3' : 'defaultColor' }};font-size: 18px;"></i>
+                    <span class="nav-link-text ms-1">SECTION HEADS</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link  {{ is_current_route('AdminIndexDepartmentHead') ? 'active' : '' }}"
+                    href="{{ route('AdminIndexDepartmentHead') }}">
+                    {{-- <i class="fa-solid fa-calendar-days"></i> --}}
+                    <i class="fa-solid fa-users"
+                        style="color: {{ is_current_route('AdminIndexDepartmentHead') ? '#774dd3' : 'defaultColor' }};font-size: 18px;"></i>
+                    <span class="nav-link-text ms-1">DEPARTMENT HEADS</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link  {{ is_current_route('AdminIndexOrgAdviser') ? 'active' : '' }}"
+                    href="{{ route('AdminIndexOrgAdviser') }}">
+                    {{-- <i class="fa-solid fa-calendar-days"></i> --}}
+                    <i class="fa-solid fa-users"
+                        style="color: {{ is_current_route('AdminIndexOrgAdviser') ? '#774dd3' : 'defaultColor' }};font-size: 18px;"></i>
+                    <span class="nav-link-text ms-1">ORG ADVISERS</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
                 <a class="nav-link  {{ is_current_route('calendar') ? 'active' : '' }}" href="{{ route('calendar') }}">
                     {{-- <i class="fa-solid fa-calendar-days"></i> --}}
                     <i class="fa-regular fa-calendar-days"

@@ -80,29 +80,30 @@
                         },
                         success: function(response) {
                             var data = response;
-                            console.log(data)
+                            // console.log(data)
                             // Handle the successful response from the server
                             Swal.fire({
-                                title: 'Event Details',
-                                html:'Status: <strong>' + info.event.extendedProps.status +
-                                    '</strong><br>' +
-                                    'Event: <strong>' + info.event.title + '</strong><br>' +
-                                    'Start Time: <strong>' + info.event.start
-                                    .toLocaleTimeString([], {
-                                        hour: '2-digit',
-                                        minute: '2-digit'
-                                    }) + '</strong><br>' +
-                                    'End Time: <strong>' + info.event.end
-                                    .toLocaleTimeString([], {
-                                        hour: '2-digit',
-                                        minute: '2-digit'
-                                    }) + '</strong><br>' +
-                                    'Location: <strong>' + data.name + '</strong><br>' +
-                                    'Organization: <strong>' + data.organization + '</strong><br>' +
-                                    'Department: <strong>' + data.department +'</strong>',  
-                                showCloseButton: true,
-                                showConfirmButton: false,
-                            });
+                            title: 'Event Details',
+                            html: 'Status: <strong style="color: ' + (info.event.extendedProps.status === 'PENDING' ? '#D6AD60' : 'green') + '">' + info.event.extendedProps.status +
+                                '</strong><br>' +
+                                'Event: <strong>' + info.event.title + '</strong><br>' +
+                                'Event Organizer: <strong>' + data.eventOrganizerName + '</strong><br>' +
+                                'Start Time: <strong>' + info.event.start
+                                .toLocaleTimeString([], {
+                                    hour: '2-digit',
+                                    minute: '2-digit'
+                                }) + '</strong><br>' +
+                                'End Time: <strong>' + info.event.end
+                                .toLocaleTimeString([], {
+                                    hour: '2-digit',
+                                    minute: '2-digit'
+                                }) + '</strong><br>' +
+                                'Location: <strong>' + (data.roomName ? data.roomName : (data.venueName ? data.venueName : 'Unknown')) + '</strong><br>' +
+                                'Organization: <strong>' + (data.role === 'professor' ? 'FACULTY' : (data.role === 'staff' ? 'STAFF/ADMIN' : (data.role === 'student' ? data.organization : (data.role === 'outsider' ? 'OUTSIDER' : 'UNKNOWN')))) + '</strong><br>' +
+                                'Department: <strong>' + (data.role === 'professor' ? 'FACULTY' : (data.role === 'staff' ? 'STAFF/ADMIN' : (data.role === 'student' ? data.department : (data.role === 'outsider' ? 'OUTSIDER' : 'UNKNOWN')))) + '</strong>',   
+                            showCloseButton: true,
+                            showConfirmButton: false,
+                        });
                         },
                         error: function(xhr, status, error) {
                             // Handle errors

@@ -42,9 +42,12 @@ class EventController extends Controller
             $startTime = $request->input('start_time');
             $endTime = $request->input('end_time');
             $venueId = $request->input('venue_id');
+            $roomId = $request->input('room_id');
 
-            // Check if there are any events with the same venue and overlapping time
-            $conflict = Event::where('venue_id', $venueId)
+            $venueType = $request->input('selectedVenueType');
+
+            if ($venueType === 'room'){
+                $conflict = Event::where('room_id', $roomId)
                 ->where(function ($query) use ($date, $startTime, $endTime) {
                     $query->where(function ($q) use ($date, $startTime, $endTime) {
                         $q->where('start_date', $date)
@@ -58,24 +61,57 @@ class EventController extends Controller
                 ->exists();
 
             return response()->json(['conflict' => $conflict]);
+            }
+            else{
+                $conflict = Event::where('venue_id', $venueId)
+                ->where(function ($query) use ($date, $startTime, $endTime) {
+                    $query->where(function ($q) use ($date, $startTime, $endTime) {
+                        $q->where('start_date', $date)
+                            ->where('start_time', '<', $endTime)
+                            ->where('end_time', '>', $startTime);
+                    })->orWhere(function ($q) use ($date, $startTime, $endTime) {
+                        $q->where('start_date', '<', $date)
+                            ->where('end_date', '>', $date);
+                    });
+                })
+                ->exists();
+
+            return response()->json(['conflict' => $conflict]);
+            }
+            // Check if there are any events with the same venue and overlapping time
+            
         }
         elseif($event_type ==='wholeDay')
         {   
             $date = $request->input('date');
             $venueId = $request->input('venue_id');
+            $roomId = $request->input('room_id');
 
-            // Check if there are any events with the same venue and overlapping date
-            $conflict = Event::where('venue_id', $venueId)
+            $venueType = $request->input('selectedVenueType');
+            
+            if ($venueType === 'room'){
+                $conflict = Event::where('room_id', $roomId)
                 ->where(function ($query) use ($date) {
                     $query->where('start_date', '<=', $date)
                         ->where('end_date', '>=', $date);
                 })
                 ->exists();
-
-            return response()->json(['conflict' => $conflict]);
+                return response()->json(['conflict' => $conflict]);
+            }
+            else{
+                $conflict = Event::where('venue_id', $venueId)
+                ->where(function ($query) use ($date) {
+                    $query->where('start_date', '<=', $date)
+                        ->where('end_date', '>=', $date);
+                })
+                ->exists();
+                return response()->json(['conflict' => $conflict]);
+            }
+            
         }
         elseif($event_type ==='wholeWeek')
         {
+            $venueType = $request->input('selectedVenueType');
             $week = $request->input('date');
             $year = substr($week, 0, 4);
             $weekNumber = substr($week, 6);
@@ -85,27 +121,42 @@ class EventController extends Controller
             $endDate = date("Y-m-d", strtotime($year . "W" . $weekNumber . "7"));
 
             $venueId = $request->input('venue_id');
-
-            // Check if there are any events with the same venue and overlapping dates
-            $conflict = Event::where('venue_id', $venueId)
+            $roomId = $request->input('room_id');
+            // $venueId = $request->input('venue_id');
+            if ($venueType === 'room'){
+                $conflict = Event::where('room_id', $roomId)
                 ->where(function ($query) use ($startDate, $endDate) {
                     $query->where('start_date', '<=', $endDate)
                         ->where('end_date', '>=', $startDate);
                 })
                 ->exists();
-            // dd($conflict);
-            return response()->json(['conflict' => $conflict]);
+                // dd($conflict);
+                return response()->json(['conflict' => $conflict]);
+            }
+            else{
+                $conflict = Event::where('venue_id', $venueId)
+                ->where(function ($query) use ($startDate, $endDate) {
+                    $query->where('start_date', '<=', $endDate)
+                        ->where('end_date', '>=', $startDate);
+                })
+                ->exists();
+                // dd($conflict);
+                return response()->json(['conflict' => $conflict]);
+            }
+            // Check if there are any events with the same venue and overlapping dates
+            
         }
         else
         {
-            $venueId = $request->input('venue_id');
+            $venueType = $request->input('selectedVenueType');
+            // $venueId = $request->input('venue_id');
             $dateRange = $request->input('daterange');
             [$startDate, $endDate] = explode(' - ', $dateRange);
-            
+            $venueId = $request->input('venue_id');
+            $roomId = $request->input('room_id');
             // dd($endDate);
-
-            // Check if there are any events with the same venue and overlapping date range
-            $conflict = Event::where('venue_id', $venueId)
+            if($venueType ==='room'){
+                $conflict = Event::where('room_id', $roomId)
                 ->where(function ($query) use ($startDate, $endDate) {
                     $query->where(function ($q) use ($startDate, $endDate) {
                         $q->where('start_date', '<=', $endDate)
@@ -121,6 +172,27 @@ class EventController extends Controller
                 ->exists();
 
             return response()->json(['conflict' => $conflict]);
+            }
+            else{
+                $conflict = Event::where('venue_id', $venueId)
+                ->where(function ($query) use ($startDate, $endDate) {
+                    $query->where(function ($q) use ($startDate, $endDate) {
+                        $q->where('start_date', '<=', $endDate)
+                            ->where('end_date', '>=', $startDate);
+                    })->orWhere(function ($q) use ($startDate, $endDate) {
+                        $q->where('start_date', '>=', $startDate)
+                            ->where('end_date', '<=', $endDate);
+                    })->orWhere(function ($q) use ($startDate, $endDate) {
+                        $q->where('start_date', '<=', $startDate)
+                            ->where('end_date', '>=', $endDate);
+                    });
+                })
+                ->exists();
+
+            return response()->json(['conflict' => $conflict]);
+            }
+            // Check if there are any events with the same venue and overlapping date range
+            
         }
         
     }
@@ -269,26 +341,51 @@ class EventController extends Controller
                 // $venues->save();
                 Storage::put('public/pdf/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
     
-                Event::create([
-                    'user_id' => $request->user_id,
-                    'event_name' => $request->eventName,
-                    'description' => $request->eventDesc,
-                    'type' => 'within_day',
-                    'venue_id' => $request->event_venue,
-                    'room_id' => $request->event_venue,
-                    'start_date' => $date,
-                    'end_date' => $date,
-                    'start_time' => $start_time,
-                    'end_time' => $end_time,
-                    'participants' => $request->numParticipants,
-                    'target_dept' => $target_dept,
-                    'target_org' => $target_org,
-                    'event_letter' => $event_letter,
-                    'whole_week' => false,
-                    'status' => 'PENDING',
-                    'color' => '#D6AD60',
-                    'created_at' => now()
-                ]);
+                if ($request->event_place === 'room')
+                {
+                    Event::create([
+                        'user_id' => $request->user_id,
+                        'event_name' => $request->eventName,
+                        'description' => $request->eventDesc,
+                        'type' => 'within_day',
+                        'room_id' => $request->event_venue,
+                        'start_date' => $date,
+                        'end_date' => $date,
+                        'start_time' => $start_time,
+                        'end_time' => $end_time,
+                        'participants' => $request->numParticipants,
+                        'target_dept' => $target_dept,
+                        'target_org' => $target_org,
+                        'event_letter' => $event_letter,
+                        'whole_week' => false,
+                        'status' => 'PENDING',
+                        'color' => '#D6AD60',
+                        'created_at' => now()
+                    ]);
+                }
+                else
+                {
+                    Event::create([
+                        'user_id' => $request->user_id,
+                        'event_name' => $request->eventName,
+                        'description' => $request->eventDesc,
+                        'type' => 'within_day',
+                        'venue_id' => $request->event_venue,
+                        'start_date' => $date,
+                        'end_date' => $date,
+                        'start_time' => $start_time,
+                        'end_time' => $end_time,
+                        'participants' => $request->numParticipants,
+                        'target_dept' => $target_dept,
+                        'target_org' => $target_org,
+                        'event_letter' => $event_letter,
+                        'whole_week' => false,
+                        'status' => 'PENDING',
+                        'color' => '#D6AD60',
+                        'created_at' => now()
+                    ]);
+                }
+                
                 $data = [
                     "subject" => "Calendash Pending Request",
                     "body" => "Hello {$user->name}!, You have a new pending approval request!"
@@ -309,26 +406,50 @@ class EventController extends Controller
                 // $venues->save();
                 Storage::put('public/pdf/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
                 
-                Event::create([
-                    'user_id' => $request->user_id,
-                    'event_name' => $request->eventName,
-                    'description' => $request->eventDesc,
-                    'type' => 'whole_day',
-                    'venue_id' => $request->event_venue,
-                    'room_id' => $request->event_venue,
-                    'start_date' => $date,
-                    'end_date' => $date,
-                    'start_time' => '05:00:00',
-                    'end_time' => '21:00:00',
-                    'participants' => $request->numParticipants,
-                    'target_dept' => $target_dept,
-                    'target_org' => $target_org,
-                    'event_letter' => $event_letter,
-                    'whole_week' => false,
-                    'status' => 'PENDING',
-                    'color' => '#D6AD60',
-                    'created_at' => now()
-                ]);
+                if ($request->event_place === 'room')
+                {
+                    Event::create([
+                        'user_id' => $request->user_id,
+                        'event_name' => $request->eventName,
+                        'description' => $request->eventDesc,
+                        'type' => 'whole_day',
+                        'room_id' => $request->event_venue,
+                        'start_date' => $date,
+                        'end_date' => $date,
+                        'start_time' => '05:00:00',
+                        'end_time' => '21:00:00',
+                        'participants' => $request->numParticipants,
+                        'target_dept' => $target_dept,
+                        'target_org' => $target_org,
+                        'event_letter' => $event_letter,
+                        'whole_week' => false,
+                        'status' => 'PENDING',
+                        'color' => '#D6AD60',
+                        'created_at' => now()
+                    ]);
+                }
+                else{
+                    Event::create([
+                        'user_id' => $request->user_id,
+                        'event_name' => $request->eventName,
+                        'description' => $request->eventDesc,
+                        'type' => 'whole_day',
+                        'venue_id' => $request->event_venue,
+                        'start_date' => $date,
+                        'end_date' => $date,
+                        'start_time' => '05:00:00',
+                        'end_time' => '21:00:00',
+                        'participants' => $request->numParticipants,
+                        'target_dept' => $target_dept,
+                        'target_org' => $target_org,
+                        'event_letter' => $event_letter,
+                        'whole_week' => false,
+                        'status' => 'PENDING',
+                        'color' => '#D6AD60',
+                        'created_at' => now()
+                    ]);
+                }
+                
                 $data = [
                     "subject" => "Calendash Pending Request",
                     "body" => "Hello {$user->name}!, You have a new pending approval request!"
@@ -351,26 +472,49 @@ class EventController extends Controller
                 // $venues->save();
                 Storage::put('public/pdf/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
                 
-                Event::create([
-                    'user_id' => $request->user_id,
-                    'event_name' => $request->eventName,
-                    'description' => $request->eventDesc,
-                    'type' => 'whole_day',
-                    'venue_id' => $request->event_venue,
-                    'room_id' => $request->event_venue,
-                    'start_date' => $startDate,
-                    'end_date' => $endDate,
-                    'start_time' => '05:00:00',
-                    'end_time' => '21:00:00',
-                    'participants' => $request->numParticipants,
-                    'target_dept' => $target_dept,
-                    'target_org' => $target_org,
-                    'event_letter' => $event_letter,
-                    'whole_week' => false,
-                    'status' => 'PENDING',
-                    'color' => '#D6AD60',
-                    'created_at' => now()
-                ]);
+                if ($request->event_place === 'room'){
+                    Event::create([
+                        'user_id' => $request->user_id,
+                        'event_name' => $request->eventName,
+                        'description' => $request->eventDesc,
+                        'type' => 'whole_day',
+                        'room_id' => $request->event_venue,
+                        'start_date' => $startDate,
+                        'end_date' => $endDate,
+                        'start_time' => '05:00:00',
+                        'end_time' => '21:00:00',
+                        'participants' => $request->numParticipants,
+                        'target_dept' => $target_dept,
+                        'target_org' => $target_org,
+                        'event_letter' => $event_letter,
+                        'whole_week' => false,
+                        'status' => 'PENDING',
+                        'color' => '#D6AD60',
+                        'created_at' => now()
+                    ]);
+                }
+                else{
+                    Event::create([
+                        'user_id' => $request->user_id,
+                        'event_name' => $request->eventName,
+                        'description' => $request->eventDesc,
+                        'type' => 'whole_day',
+                        'venue_id' => $request->event_venue,
+                        'start_date' => $startDate,
+                        'end_date' => $endDate,
+                        'start_time' => '05:00:00',
+                        'end_time' => '21:00:00',
+                        'participants' => $request->numParticipants,
+                        'target_dept' => $target_dept,
+                        'target_org' => $target_org,
+                        'event_letter' => $event_letter,
+                        'whole_week' => false,
+                        'status' => 'PENDING',
+                        'color' => '#D6AD60',
+                        'created_at' => now()
+                    ]);
+                }
+                
                 $data = [
                     "subject" => "Calendash Pending Request",
                     "body" => "Hello {$user->name}!, You have a new pending approval request!"
@@ -704,9 +848,21 @@ class EventController extends Controller
                 //ADMIN
     public function showAdminEvents()
     {   
-        $events = Event::join('venues','venues.id','events.venue_id')
-                        ->join('departments','departments.id','events.target_dept')
-                        ->join('organizations','organizations.id','events.target_org')
+        $events = Event::leftjoin('venues','venues.id','events.venue_id')
+                        ->leftjoin('rooms','rooms.id','events.room_id')
+                        ->leftjoin('departments','departments.id','events.target_dept')
+                        ->leftjoin('organizations','organizations.id','events.target_org')
+                        ->select('organizations.organization',
+                                'departments.department',
+                                'events.status',
+                                'events.event_name',
+                                'events.start_time',
+                                'events.end_time',
+                                'events.type',
+                                'venues.name as venueName',
+                                'rooms.name as roomName',
+                                'events.id')
+                        ->orderByDesc('events.id')
                         ->get();
         // dd($events)
         //dd($events);

@@ -22,21 +22,21 @@ class OfficialController extends Controller
     {
         //
         // $officials = Official::orderBy('id')->get();
-        $organizations = Organization::pluck('organization', 'id');
+        // $organizations = Organization::pluck('organization', 'id');
 
-        $departments = Department::pluck('department', 'id');
+        // $departments = Department::pluck('department', 'id');
 
         $officials = User::join('officials', 'users.id', 'officials.user_id')
-                            ->leftjoin('departments','departments.id','officials.department_id')
-                            ->leftjoin('organizations','organizations.id','officials.organization_id')
-                            ->select('officials.id','departments.department','organizations.organization','users.role','users.name','users.email')
+                            ->where('officials.department_id', null)
+                            ->where('officials.organization_id', null)
+                            ->where('officials.section_id', null)
                             ->orderBy('officials.id')->get();
                             // dd($officials);
         // $withUser = User::orderBy('id')->select('')->get();
         // dd($officials);
         // return response()->json($venues);
         // dd([0],$officials->hash);
-        return View::make('admin.official.index', compact('officials','organizations','departments'));
+        return View::make('admin.official.index', compact('officials'));
 
     }
 
@@ -198,5 +198,32 @@ class OfficialController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function getAllOrgAdviser()
+    {
+        //
+        $orgAdvisers = Official::join('users', 'users.id','officials.user_id')
+                                ->where('users.role','org_adviser')
+                                ->get();
+        return response()->json(["orgAdvisers" => $orgAdvisers, "status" => 200]);
+    }
+
+    public function getAllSectionHead()
+    {
+        //
+        $orgAdvisers = Official::join('users', 'users.id','officials.user_id')
+                                ->where('users.role','section_head')
+                                ->get();
+        return response()->json(["orgAdvisers" => $orgAdvisers, "status" => 200]);
+    }
+
+    public function getAllDepartmentHead()
+    {
+        //
+        $orgAdvisers = Official::join('users', 'users.id','officials.user_id')
+                                ->where('users.role','department_head')
+                                ->get();
+        return response()->json(["orgAdvisers" => $orgAdvisers, "status" => 200]);
     }
 }

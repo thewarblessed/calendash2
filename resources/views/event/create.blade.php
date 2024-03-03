@@ -49,7 +49,7 @@
                                 </div>
                             </div>
 
-                            <div style="display: block;" id="venueDiv">
+                            <div style="display: none;" id="venueDiv">
                                 <div class="row" >
                                     @foreach ($venues as $venue)
                                         <div class="col-sm" style="display: block;" id="venueDiv">
@@ -240,7 +240,10 @@
                             <button type="button" id="back_button" class="btn btn-link" onclick="back()">Back</button>
                             <button type="button" id="next_button" class="btn btn-primary ms-auto"
                                 onclick="next()">Next</button>
-                            <button type="submit" id="createEvent_submit" class="btn btn-primary ms-auto">Submit</button>
+                            <button type="submit" id="createEvent_submit" class="btn btn-primary ms-auto">
+                                <span class="" role="status" id="spinner" aria-hidden="true"></span>
+                                <span class="sr-only">Loading...</span>Submit</button>
+                            
                         </div>
                     </div>
             </form>

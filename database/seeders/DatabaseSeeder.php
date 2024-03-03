@@ -16,7 +16,7 @@ class DatabaseSeeder extends Seeder
             VenueSeeder::class,
             OrganizationSeeder::class,
             DepartmentSeeder::class,
-            // SectionSeeder::class,
+            SectionSeeder::class,
             UserSeeder::class,
             OfficialSeeder::class,
             AdminSeeder::class,

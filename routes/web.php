@@ -15,6 +15,9 @@ use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\GoogleSocialiteController;
 use App\Http\Controllers\MailController;
+use App\Http\Controllers\OrganizationAdviserController;
+use App\Http\Controllers\DepartmentHeadController;
+use App\Http\Controllers\SectionHeadController;
 
 /*
 |--------------------------------------------------------------------------
@@ -232,6 +235,32 @@ Route::get('/admin/officials', [OfficialController::class, 'index'])
 Route::get('/admin/createOfficials', [OfficialController::class, 'create'])
     ->middleware('auth')
     ->name('AdminCreateOfficials');
+
+////////////////////// ORG ADVISERS///////////////////
+Route::get('/admin/orgAdvisers', [OrganizationAdviserController::class, 'index'])
+    ->middleware('auth')
+    ->name('AdminIndexOrgAdviser');
+
+Route::get('/admin/createOrgAdviser', [OrganizationAdviserController::class, 'create'])
+    ->middleware('auth')
+    ->name('AdminCreateOrgAdviser');
+
+Route::get('/admin/sectionHeads', [SectionHeadController::class, 'index'])
+    ->middleware('auth')
+    ->name('AdminIndexSectionHead');
+
+Route::get('/admin/createSectionHead', [SectionHeadController::class, 'create'])
+    ->middleware('auth')
+    ->name('AdminCreateSectionHead');
+
+Route::get('/admin/departmentHeads', [DepartmentHeadController::class, 'index'])
+    ->middleware('auth')
+    ->name('AdminIndexDepartmentHead');
+
+Route::get('/admin/createDepartmentHead', [DepartmentHeadController::class, 'create'])
+    ->middleware('auth')
+    ->name('AdminCreateDepartmentHead');
+
 
     /////////////////////// COMPLETE USER PROFILES FOR ADMIN /////////////
 // GET ALL OFFICIALS

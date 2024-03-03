@@ -6,6 +6,9 @@ use App\Http\Controllers\VenueController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\RequestController;
+use App\Http\Controllers\OrganizationAdviserController;
+use App\Http\Controllers\DepartmentHeadController;
+use App\Http\Controllers\SectionHeadController;
 use App\Http\Controllers\Auth\LoginController;
 
 /*
@@ -162,6 +165,62 @@ Route::post('/admin/official/{id}',[
 Route::post('/request/approve/{id}',[
         'uses' => 'RequestController@store',
         'as' => 'showEventRole',
+]);
+
+// GET ALL ORG ADVISERS
+Route::get('/admin/orgadvisers',[
+        'uses' => 'OrganizationAdviserController@getAllOrgAdviser',
+        'as' => 'getAllOrgAdviser',
+        ]);
+Route::post('/admin/storeOrgAdviser',[
+        'uses' => 'OrganizationAdviserController@store',
+        'as' => 'storeOrgAdviser',
+]);
+Route::get('/admin/orgAdviser/{id}',[
+        'uses' => 'OrganizationAdviserController@edit',
+        'as' => 'getSingleOrgAdviser',
+]);
+Route::post('/admin/orgAdviser/update/{id}',[
+        'uses' => 'OrganizationAdviserController@update',
+        'as' => 'updateOrgAdviser',
+]);
+
+///////////////////// SECTION HEADS /////////////////////////
+
+Route::get('/admin/orgadvisers',[
+        'uses' => 'OrganizationAdviserController@getAllOrgAdviser',
+        'as' => 'getAllOrgAdviser',
+        ]);
+Route::post('/admin/storeSectionHead',[
+        'uses' => 'SectionHeadController@store',
+        'as' => 'storeSectionHead',
+]);
+Route::get('/admin/sectionHead/{id}',[
+        'uses' => 'SectionHeadController@edit',
+        'as' => 'getSingleSectionHead',
+]);
+Route::post('/admin/sectionHead/update/{id}',[
+        'uses' => 'SectionHeadController@update',
+        'as' => 'updateSectionHead',
+]);
+
+///////////////////// DEPARTMENT HEADS /////////////////////////
+
+Route::get('/admin/orgadvisers',[
+        'uses' => 'OrganizationAdviserController@getAllOrgAdviser',
+        'as' => 'getAllOrgAdviser',
+        ]);
+Route::post('/admin/storeDepartmentHead',[
+        'uses' => 'DepartmentHeadController@store',
+        'as' => 'storeDepartmentHead',
+]);
+Route::get('/admin/departmentHead/{id}',[
+        'uses' => 'DepartmentHeadController@edit',
+        'as' => 'getSingleDepartmentHead',
+]);
+Route::post('/admin/departmentHead/update/{id}',[
+        'uses' => 'DepartmentHeadController@update',
+        'as' => 'updateDepartmentHead',
 ]);
 
 ///////////////////// USERS ////////////////

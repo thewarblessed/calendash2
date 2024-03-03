@@ -298,6 +298,7 @@ $(document).ready(function () {
 
 
     $("#createEvent_submit").on("click", function (e) {
+        $('#spinner').addClass('spinner-border spinner-border-sm');
         console.log(data);
         e.preventDefault();
         // $('#serviceSubmit').show()
@@ -323,7 +324,7 @@ $(document).ready(function () {
             dataType: "json",
             success: function (data) {
                 console.log(data);
-
+                $('#spinner').removeClass('spinner-border spinner-border-sm');
                 // var $ctable = $('#ctable').DataTable();
                 // $ctable.ajax.reload();
                 // $ctable.row.add(data.customer).draw(false);
@@ -340,7 +341,12 @@ $(document).ready(function () {
                 })
             },
             error: function (error) {
-                console.log('error');
+                $('#spinner').removeClass('spinner-border spinner-border-sm');
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "Something went wrong!"
+                  });
             }
         });
         //Swal.fire('SweetAlert2 is working!')
@@ -710,41 +716,80 @@ $(document).ready(function () {
     $('#end_time_withinDayUser').change(function() {
         var selectedDate = $('#event_date_withinDayUser').val();
         var selectedVenueID = $("input[name='event_venue']:checked").val();
+        var selectedVenueType = $("input[name='event_place']:checked").val();
+        
         var selectedStartTime = $('#start_time_withinDayUser').val();
         var selectedEndTime = $(this).val();
         console.log(selectedDate);
         console.log(selectedVenueID);
         console.log(selectedStartTime);
         console.log(selectedEndTime);
+        console.log(selectedVenueType);
 
-        $.ajax({
-            url: '/api/check-event-conflict',
-            type: 'POST',
-            data: {
-                event_type:'withinDay',
-                date: selectedDate,
-                start_time: selectedStartTime,
-                end_time: selectedEndTime,
-                venue_id: selectedVenueID
-            },
-            success: function(response) {
-                if (response.conflict) {
-                    Swal.fire({
-                        icon: "error",
-                        title: "Oops...",
-                        html: "There is an existing event with the <strong>same venue and time</strong>. Please check the calendar for available dates and time.",
-                    });
-                    // alert('');
-                    $('#event_date_withinDayUser').val('');
-                    $('#start_time_withinDayUser').val('');
-                    $('#end_time_withinDayUser').val('');
+        
+        if (selectedVenueType === 'room'){
+            $.ajax({
+                url: '/api/check-event-conflict',
+                type: 'POST',
+                data: {
+                    event_type:'withinDay',
+                    date: selectedDate,
+                    start_time: selectedStartTime,
+                    end_time: selectedEndTime,
+                    room_id: selectedVenueID,
+                    selectedVenueType: selectedVenueType
+                },
+                success: function(response) {
+                    if (response.conflict) {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Oops...",
+                            html: "There is an existing event with the <strong>same venue and time</strong>. Please check the calendar for available dates and time.",
+                        });
+                        // alert('');
+                        $('#event_date_withinDayUser').val('');
+                        $('#start_time_withinDayUser').val('');
+                        $('#end_time_withinDayUser').val('');
+                    }
+                    
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error checking event conflict:', error);
                 }
-                
-            },
-            error: function(xhr, status, error) {
-                console.error('Error checking event conflict:', error);
-            }
-        });
+            });
+        }
+        else{
+            $.ajax({
+                url: '/api/check-event-conflict',
+                type: 'POST',
+                data: {
+                    event_type:'withinDay',
+                    date: selectedDate,
+                    start_time: selectedStartTime,
+                    end_time: selectedEndTime,
+                    venue_id: selectedVenueID,
+                    selectedVenueType: selectedVenueType
+                },
+                success: function(response) {
+                    if (response.conflict) {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Oops...",
+                            html: "There is an existing event with the <strong>same venue and time</strong>. Please check the calendar for available dates and time.",
+                        });
+                        // alert('');
+                        $('#event_date_withinDayUser').val('');
+                        $('#start_time_withinDayUser').val('');
+                        $('#end_time_withinDayUser').val('');
+                    }
+                    
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error checking event conflict:', error);
+                }
+            });
+        }
+        
 
     });
 
@@ -752,63 +797,123 @@ $(document).ready(function () {
         var selectedVenueID = $("input[name='event_venue']:checked").val();
         var selectedWholeDay = $(this).val();
         console.log(selectedWholeDay);
-        
-        $.ajax({
-            url: '/api/check-event-conflict',
-            type: 'POST',
-            data: {
-                event_type:'wholeDay',
-                date: selectedWholeDay,
-                venue_id: selectedVenueID
-            },
-            success: function(response) {
-                if (response.conflict) {
-                    Swal.fire({
-                        icon: "error",
-                        title: "Oops...",
-                        html: "There is an existing event with the <strong>same venue and time</strong>. Please check the calendar for available dates and time.",
-                    });
-                    // alert('');
-                    $('#event_date_wholeDayUser').val('');
+        var selectedVenueType = $("input[name='event_place']:checked").val();
+        if (selectedVenueType === 'room'){
+            $.ajax({
+                url: '/api/check-event-conflict',
+                type: 'POST',
+                data: {
+                    event_type:'wholeDay',
+                    date: selectedWholeDay,
+                    room_id: selectedVenueID,
+                    selectedVenueType: selectedVenueType
+                },
+                success: function(response) {
+                    if (response.conflict) {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Oops...",
+                            html: "There is an existing event with the <strong>same venue and time</strong>. Please check the calendar for available dates and time.",
+                        });
+                        // alert('');
+                        $('#event_date_wholeDayUser').val('');
+                    }
+                    
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error checking event conflict:', error);
                 }
-                
-            },
-            error: function(xhr, status, error) {
-                console.error('Error checking event conflict:', error);
-            }
-        });
-
+            });
+        }
+        else{
+            $.ajax({
+                url: '/api/check-event-conflict',
+                type: 'POST',
+                data: {
+                    event_type:'wholeDay',
+                    date: selectedWholeDay,
+                    venue_id: selectedVenueID,
+                    selectedVenueType: selectedVenueType
+                },
+                success: function(response) {
+                    if (response.conflict) {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Oops...",
+                            html: "There is an existing event with the <strong>same venue and time</strong>. Please check the calendar for available dates and time.",
+                        });
+                        // alert('');
+                        $('#event_date_wholeDayUser').val('');
+                    }
+                    
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error checking event conflict:', error);
+                }
+            });
+        }
     });
 
     $('#event_date_wholeWeekUser').change(function() {
         var selectedVenueID = $("input[name='event_venue']:checked").val();
+        var selectedVenueType = $("input[name='event_place']:checked").val();
         var selectedWeek = $(this).val();
         console.log(selectedWeek);
-
-        $.ajax({
-            url: '/api/check-event-conflict',
-            type: 'POST',
-            data: {
-                event_type:'wholeWeek',
-                date: selectedWeek,
-                venue_id: selectedVenueID
-            },
-            success: function(response) {
-                if (response.conflict) {
-                    Swal.fire({
-                        icon: "error",
-                        title: "Oops...",
-                        html: "There is an existing event with the <strong>same venue and time</strong>. Please check the calendar for available dates and time.",
-                    });
-                    // alert('');
-                    $('#event_date_wholeWeekUser').val('');
+        if (selectedVenueType === 'room'){
+            $.ajax({
+                url: '/api/check-event-conflict',
+                type: 'POST',
+                data: {
+                    event_type:'wholeWeek',
+                    date: selectedWeek,
+                    room_id: selectedVenueID,
+                    selectedVenueType: selectedVenueType
+                },
+                success: function(response) {
+                    if (response.conflict) {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Oops...",
+                            html: "There is an existing event with the <strong>same venue and time</strong>. Please check the calendar for available dates and time.",
+                        });
+                        // alert('');
+                        $('#event_date_wholeWeekUser').val('');
+                    }
+                    
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error checking event conflict:', error);
                 }
-                
-            },
-            error: function(xhr, status, error) {
-                console.error('Error checking event conflict:', error);
-            }
-        });
+            });
+        }
+        else{
+            $.ajax({
+                url: '/api/check-event-conflict',
+                type: 'POST',
+                data: {
+                    event_type:'wholeWeek',
+                    date: selectedWeek,
+                    venue_id: selectedVenueID,
+                    selectedVenueType: selectedVenueType
+                },
+                success: function(response) {
+                    if (response.conflict) {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Oops...",
+                            html: "There is an existing event with the <strong>same venue and time</strong>. Please check the calendar for available dates and time.",
+                        });
+                        // alert('');
+                        $('#event_date_wholeWeekUser').val('');
+                    }
+                    
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error checking event conflict:', error);
+                }
+            });
+        }
+        
 
     });
 
@@ -816,32 +921,64 @@ $(document).ready(function () {
         // dateRanges
         var selectedVenueID = $("input[name='event_venue']:checked").val();
         var selectedRange = $(this).val();
+        var selectedVenueType = $("input[name='event_place']:checked").val();
         console.log(selectedRange);
 
-        $.ajax({
-            url: '/api/check-event-conflict',
-            type: 'POST',
-            data: {
-                event_type:'dateRanges',
-                daterange: selectedRange,
-                venue_id: selectedVenueID
-            },
-            success: function(response) {
-                if (response.conflict) {
-                    Swal.fire({
-                        icon: "error",
-                        title: "Oops...",
-                        html: "There is an existing event with the <strong>same venue and time</strong>. Please check the calendar for available dates and time.",
-                    });
-                    // alert('');
-                    $('#date_range_User').val('');
+        if (selectedVenueType === 'room'){
+            $.ajax({
+                url: '/api/check-event-conflict',
+                type: 'POST',
+                data: {
+                    event_type:'dateRanges',
+                    daterange: selectedRange,
+                    room_id: selectedVenueID,
+                    selectedVenueType: selectedVenueType
+                },
+                success: function(response) {
+                    if (response.conflict) {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Oops...",
+                            html: "There is an existing event with the <strong>same venue and time</strong>. Please check the calendar for available dates and time.",
+                        });
+                        // alert('');
+                        $('#date_range_User').val('');
+                    }
+                    
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error checking event conflict:', error);
                 }
-                
-            },
-            error: function(xhr, status, error) {
-                console.error('Error checking event conflict:', error);
-            }
-        });
+            });
+        }
+        else{
+            $.ajax({
+                url: '/api/check-event-conflict',
+                type: 'POST',
+                data: {
+                    event_type:'dateRanges',
+                    daterange: selectedRange,
+                    venue_id: selectedVenueID,
+                    selectedVenueType: selectedVenueType
+                },
+                success: function(response) {
+                    if (response.conflict) {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Oops...",
+                            html: "There is an existing event with the <strong>same venue and time</strong>. Please check the calendar for available dates and time.",
+                        });
+                        // alert('');
+                        $('#date_range_User').val('');
+                    }
+                    
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error checking event conflict:', error);
+                }
+            });
+        }
+        
 
     });
     //end TRAPPING
@@ -927,6 +1064,7 @@ $(document).ready(function () {
         const orgDiv = document.getElementById('orgDivCompleteProfile');
         const deptDiv = document.getElementById('depDivCompleteProfile');
         const deptDivStaff = document.getElementById('depDivStaffCompleteProfile');
+        const sectDiv = document.getElementById('sectDivCompleteProfile');
 
         // Perform actions based on the selected value
         console.log(selectedValue);
@@ -934,12 +1072,14 @@ $(document).ready(function () {
         {
             orgDiv.style.display = 'block';
             deptDiv.style.display = 'block';
+            sectDiv.style.display = 'block';
             deptDivStaff.style.display = 'none';
         }
         else if(selectedValue === 'professor')
         {
             orgDiv.style.display = 'none';
             deptDiv.style.display = 'none';
+            sectDiv.style.display = 'none';
             deptDivStaff.style.display = 'none';
         }
         else
@@ -947,6 +1087,7 @@ $(document).ready(function () {
             deptDivStaff.style.display = 'block';
             orgDiv.style.display = 'none';
             deptDiv.style.display = 'none';
+            sectDiv.style.display = 'none';
         }
     });
 
@@ -969,6 +1110,7 @@ $(document).ready(function () {
             },
             dataType: "json",
             success: function (data) {
+                console.log(data);
                 var role = data.user.role;
                 var newrole;
                 if (role ==='student')
@@ -992,6 +1134,7 @@ $(document).ready(function () {
                 $('#userApproveOrganization').text(data.user.organization);
                 $('#userApproveDepartment').text(data.user.department);
                 $('#userApproveRole').text(newrole);
+                $('#userApproveSection').text(data.user.section);
                 $('#userApproveTupID').text(data.user.tupID);
                 $("#userApproveTupIDPhoto").html(
                         `<img src="/storage/${data.user.image}" width="400" height="400" style="border-radius: 20px;">`);
@@ -1585,6 +1728,862 @@ $(document).ready(function () {
         $("#venueDiv").css('display', 'none')
         $("#requestRoomButton").css('display', 'none')
     });
+    //END ROOMS CRUD FOR ADMIN
+
+    //ORG ADVISER CRUD FOR ADMIN
+    $("#orgAdviserTable tbody").on("click", 'a.editOrgAdviser ', function (e) {
+        var id = $(this).data("id");
+        // e.preventDefault();
+        // console.log(id);
+
+        $.ajax({
+            type: "GET",
+            enctype: 'multipart/form-data',
+            processData: false, // Important!
+            contentType: false,
+            cache: false,
+            url: "/api/admin/orgAdviser/" + id,
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
+                    "content"
+                ),
+            },
+            dataType: "json",
+            success: function (data) {
+                console.log(data);
+                console.log(id);
+                $('#editOrgAdviserModal').modal('show');
+                $('#orgAdviserEditId').val(id);
+                $('#orgAdviserEditName').val(data.officials.name);
+                $('#orgAdviserEditEmail').val(data.officials.email);
+            },
+            error: function (error) {
+                console.log("error");
+            },
+        });
+
+    });
+
+    $("#orgAdviserUpdate").on("click", function (e) {
+        var id = $('#orgAdviserEditId').val();
+        console.log(id);
+    // console.log('napindot')
+        e.preventDefault();
+        let formData = new FormData($('#orgAdviserUpdateForm')[0]);
+        // console.log(formData);
+
+        for (var pair of formData.entries()) {
+            console.log(pair[0] + ',' + pair[1]);
+        }
+        
+        console.log(formData)
+        $.ajax({
+            
+            type: "POST",
+            url: "/api/admin/orgAdviser/update/" + id,
+            data: formData,
+            contentType: false,
+            processData: false,
+            headers: {
+                'Authorization': 'Bearer ' + sessionStorage.getItem('token'),
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            dataType: "json",
+            success: function (data) {
+                console.log(data);
+                Swal.fire({
+                    icon: "success",
+                    title: "Organization Adviser Updated!",
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+                
+                setTimeout(function () {
+                    window.location.href = '/admin/orgAdvisers';
+                }, 1500);
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    });
+
+    $("#orgAdviserSubmit").on("click", function (e) {
+        console.log('napindot')
+        e.preventDefault();
+        let formData = new FormData($('#orgAdviserForm')[0]);
+        // console.log(formData);
+
+        for (var pair of formData.entries()) {
+            console.log(pair[0] + ',' + pair[1]);
+        }
+        console.log(formData)
+        $.ajax({
+            
+            type: "POST",
+            url: "/api/admin/storeOrgAdviser",
+            data: formData,
+            contentType: false,
+            processData: false,
+            headers: {
+                'Authorization': 'Bearer ' + sessionStorage.getItem('token'),
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            dataType: "json",
+            success: function (data) {
+                console.log(data);
+                Swal.fire({
+                    icon: "success",
+                    title: "Organization Adviser Added!",
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+                // var $ctable = $('#ctable').DataTable();
+                // $ctable.ajax.reload();
+                // $ctable.row.add(data.customer).draw(false);
+                // // $etable.row.add(data.client).draw(false);
+                setTimeout(function () {
+                    window.location.href = '/admin/orgAdvisers';
+                }, 1500);
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    });
+    
+    $("#orgAdviserTable tbody").on("click", 'a.deleteOrgAdviser', function (e) {
+        // alert('dshagd')
+        var id = $(this).data("id");
+        console.log(id);
+        // e.preventDefault();
+
+        // $.ajax({
+        //     type: "GET",
+        //     enctype: 'multipart/form-data',
+        //     processData: false, // Important!
+        //     contentType: false,
+        //     cache: false,
+        //     url: "/api/show/event/" + id,
+        //     headers: {
+        //         "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
+        //             "content"
+        //         ),
+        //     },
+        //     dataType: "json",
+        //     success: function (data) {
+        //         var originalSDate = new Date(data.events.start_date);
+        //         var originalEDate = new Date(data.events.end_date);
+        //         var origStime = moment(data.events.start_time, "HH:mm:ss")
+        //         var origEtime = moment(data.events.end_time, "HH:mm:ss")
+        //         var origCreatedDate = new Date(data.events.created_at);
+
+        //         var formattedSTime = origStime.format("h:mm A");
+        //         var formattedETime = origEtime.format("h:mm A");
+
+        //         // var formattedCreatedTime = origCreatedDate.format("h:mm A");
+
+        //         // Format the date using moment.js
+        //         var formattedSDate = moment(originalSDate).format("MMMM D, YYYY");
+        //         var formattedEDate = moment(originalEDate).format("MMMM D, YYYY");
+        //         var formattedCreatedDate = moment(origCreatedDate).format("MMMM D, YYYY");
+
+        //         var formattedCreatedTime = moment(origCreatedDate).format("h:mm A");
+
+        //         console.log(formattedCreatedTime);
+        //         var dateType = data.events.type;
+        //         var dType;
+        //         if (dateType === 'within_day') {
+        //             dType = 'Within the Day';
+        //         } else if (dateType === 'whole_day') {
+        //             dType = 'Whole Day';
+        //         } else {
+        //             dType = 'Whole Week';
+        //         }
+        //         // console.log(dType);
+        //         // console.log(data);
+        //         $('#adminAllEventStatus').modal('show');
+        //         $('#eventStatusText').text(data.msg);
+        //         $('#eventDateRequestedText').text(formattedCreatedDate +' '+ formattedCreatedTime);
+        //         $('#eventStatusName').val(data.events.event_name);
+        //         $('#eventStatusDesc').val(data.events.description);
+        //         $('#eventStatusParticipants').val(data.events.participants);
+        //         $('#eventStatusVenue').val(data.venues.name);
+        //         $('#eventStatusDateType').val(dType);
+        //         $('#eventStatusStartDate').val(formattedSDate);
+        //         $('#eventStatusEndDate').val(formattedEDate);
+        //         $('#eventStatusSTime').val(formattedSTime);
+        //         $('#eventStatusETime').val(formattedETime);
+
+
+        //         var statusElement = $('#eventStatusText');
+        //         // console.log(statusElement)
+        //         // Get the value from the element's text content
+        //         var statusValue = $('#eventStatusText').text();
+
+        //         statusElement.removeClass();
+        //         // Apply styling based on the value
+        //         if (statusValue === 'APPROVED') {
+        //             statusElement.addClass('badge badge-sm border border-success text-success');
+        //         } else {
+        //             statusElement.addClass('badge badge-sm border border-warning text-warning');
+        //         }
+        //         // $("#venueEditImage").html(
+        //         // `<img src="/storage/${data.Venues.image}" width="100" class="img-fluid img-thumbnail">`);
+        //     },
+        //     error: function (error) {
+        //         console.log("error");
+        //     },
+        // });
+
+        // $.ajax({
+        //     type: "GET",
+        //     enctype: 'multipart/form-data',
+        //     processData: false, // Important!
+        //     contentType: false,
+        //     cache: false,
+        //     url: "/api/myEventStatus/" + id,
+        //     headers: {
+        //         "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
+        //             "content"
+        //         ),
+        //     },
+        //     dataType: "json",
+        //     success: function (data) {
+        //         console.log(data);
+        //         $('#adminStatusList').empty();
+        //         // $('#checkStatusModal').modal('show');
+        //         $('#eventStatusText').text(data.pendingMsg);
+
+        //         var statusElement = $('#eventStatusText');
+        //         // console.log(statusElement)
+        //         // Get the value from the element's text content
+        //         var statusValue = $('#eventStatusText').text();
+
+        //         statusElement.removeClass();
+        //         // Apply styling based on the value
+        //         if (statusValue === 'APPROVED') {
+        //             statusElement.addClass('badge badge-sm border border-success text-success');
+        //         } else {
+        //             statusElement.addClass('badge badge-sm border border-warning text-warning');
+        //         }
+        //         // $("#venueEditImage").html(
+        //         // `<img src="/storage/${data.Venues.image}" width="100" class="img-fluid img-thumbnail">`);
+
+        //         // var status = 1;
+        //         // $.each(data, function(index, item) {
+
+        //         // });
+
+        //         $.each(data.dates, function (index, item) {
+        //             // console.log(item);
+        //             console.log(index);
+        //             console.log(item)
+        //             console.log(data.msg);
+        //             var formattedDate = moment(item, 'YYYY-MM-DD HH:mm:ss').format('MMMM D, YYYY');
+        //             var formattedTime = moment(item, 'YYYY-MM-DD HH:mm:ss').format('h:mm A');
+        //             console.log(formattedTime);
+
+                   
+        //             if (data.msg && data.msg[index]) {
+        //                 var msgItem = data.msg[index];
+
+        //                 // Create a list item for each date and message
+        //                 var listItem = `
+        //                     <li class="rb-item">
+        //                         <div class="timestamp">
+        //                             ${formattedDate}<br> <span>${formattedTime}</span>
+        //                         </div>
+        //                         <div class="item-title">${msgItem}</div>
+        //                     </li>
+        //                 `;
+
+        //                 $('#adminStatusList').prepend(listItem);
+        //             }
+
+               
+        //         });
+
+
+
+        //     },
+        //     error: function (error) {
+        //         console.log("error");
+        //     },
+        // });
+
+    });//end event status table END ORG ADVISER
+
+    //SECTION HEADS
+    $("#sectionHeadTable tbody").on("click", 'a.editSectionHead ', function (e) {
+        var id = $(this).data("id");
+        // e.preventDefault();
+        // console.log(id);
+
+        $.ajax({
+            type: "GET",
+            enctype: 'multipart/form-data',
+            processData: false, // Important!
+            contentType: false,
+            cache: false,
+            url: "/api/admin/sectionHead/" + id,
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
+                    "content"
+                ),
+            },
+            dataType: "json",
+            success: function (data) {
+                console.log(data);
+                console.log(id);
+                $('#editSectionHeadModal').modal('show');
+                $('#sectionHeadEditId').val(id);
+                $('#sectionHeadEditName').val(data.officials.name);
+                $('#sectionHeadEditEmail').val(data.officials.email);
+            },
+            error: function (error) {
+                console.log("error");
+            },
+        });
+
+    });
+
+    $("#sectionHeadUpdate").on("click", function (e) {
+        var id = $('#sectionHeadEditId').val();
+        console.log(id);
+    // console.log('napindot')
+        e.preventDefault();
+        let formData = new FormData($('#sectionHeadUpdateForm')[0]);
+        // console.log(formData);
+
+        for (var pair of formData.entries()) {
+            console.log(pair[0] + ',' + pair[1]);
+        }
+        
+        console.log(formData)
+        $.ajax({
+            
+            type: "POST",
+            url: "/api/admin/sectionHead/update/" + id,
+            data: formData,
+            contentType: false,
+            processData: false,
+            headers: {
+                'Authorization': 'Bearer ' + sessionStorage.getItem('token'),
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            dataType: "json",
+            success: function (data) {
+                console.log(data);
+                Swal.fire({
+                    icon: "success",
+                    title: "Organization Adviser Updated!",
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+                
+                setTimeout(function () {
+                    window.location.href = '/admin/sectionHeads';
+                }, 1500);
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    });
+
+    $("#sectionHeadSubmit").on("click", function (e) {
+        console.log('napindot')
+        e.preventDefault();
+        let formData = new FormData($('#sectionHeadForm')[0]);
+        // console.log(formData);
+
+        for (var pair of formData.entries()) {
+            console.log(pair[0] + ',' + pair[1]);
+        }
+        console.log(formData)
+        $.ajax({
+            
+            type: "POST",
+            url: "/api/admin/storeSectionHead",
+            data: formData,
+            contentType: false,
+            processData: false,
+            headers: {
+                'Authorization': 'Bearer ' + sessionStorage.getItem('token'),
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            dataType: "json",
+            success: function (data) {
+                console.log(data);
+                Swal.fire({
+                    icon: "success",
+                    title: "Section Head Added!",
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+                // var $ctable = $('#ctable').DataTable();
+                // $ctable.ajax.reload();
+                // $ctable.row.add(data.customer).draw(false);
+                // // $etable.row.add(data.client).draw(false);
+                setTimeout(function () {
+                    window.location.href = '/admin/sectionHeads';
+                }, 1500);
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    });
+    
+    $("#sectionHeadTable tbody").on("click", 'a.deleteOrgAdviser', function (e) {
+        // alert('dshagd')
+        var id = $(this).data("id");
+        console.log(id);
+        // e.preventDefault();
+
+        // $.ajax({
+        //     type: "GET",
+        //     enctype: 'multipart/form-data',
+        //     processData: false, // Important!
+        //     contentType: false,
+        //     cache: false,
+        //     url: "/api/show/event/" + id,
+        //     headers: {
+        //         "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
+        //             "content"
+        //         ),
+        //     },
+        //     dataType: "json",
+        //     success: function (data) {
+        //         var originalSDate = new Date(data.events.start_date);
+        //         var originalEDate = new Date(data.events.end_date);
+        //         var origStime = moment(data.events.start_time, "HH:mm:ss")
+        //         var origEtime = moment(data.events.end_time, "HH:mm:ss")
+        //         var origCreatedDate = new Date(data.events.created_at);
+
+        //         var formattedSTime = origStime.format("h:mm A");
+        //         var formattedETime = origEtime.format("h:mm A");
+
+        //         // var formattedCreatedTime = origCreatedDate.format("h:mm A");
+
+        //         // Format the date using moment.js
+        //         var formattedSDate = moment(originalSDate).format("MMMM D, YYYY");
+        //         var formattedEDate = moment(originalEDate).format("MMMM D, YYYY");
+        //         var formattedCreatedDate = moment(origCreatedDate).format("MMMM D, YYYY");
+
+        //         var formattedCreatedTime = moment(origCreatedDate).format("h:mm A");
+
+        //         console.log(formattedCreatedTime);
+        //         var dateType = data.events.type;
+        //         var dType;
+        //         if (dateType === 'within_day') {
+        //             dType = 'Within the Day';
+        //         } else if (dateType === 'whole_day') {
+        //             dType = 'Whole Day';
+        //         } else {
+        //             dType = 'Whole Week';
+        //         }
+        //         // console.log(dType);
+        //         // console.log(data);
+        //         $('#adminAllEventStatus').modal('show');
+        //         $('#eventStatusText').text(data.msg);
+        //         $('#eventDateRequestedText').text(formattedCreatedDate +' '+ formattedCreatedTime);
+        //         $('#eventStatusName').val(data.events.event_name);
+        //         $('#eventStatusDesc').val(data.events.description);
+        //         $('#eventStatusParticipants').val(data.events.participants);
+        //         $('#eventStatusVenue').val(data.venues.name);
+        //         $('#eventStatusDateType').val(dType);
+        //         $('#eventStatusStartDate').val(formattedSDate);
+        //         $('#eventStatusEndDate').val(formattedEDate);
+        //         $('#eventStatusSTime').val(formattedSTime);
+        //         $('#eventStatusETime').val(formattedETime);
+
+
+        //         var statusElement = $('#eventStatusText');
+        //         // console.log(statusElement)
+        //         // Get the value from the element's text content
+        //         var statusValue = $('#eventStatusText').text();
+
+        //         statusElement.removeClass();
+        //         // Apply styling based on the value
+        //         if (statusValue === 'APPROVED') {
+        //             statusElement.addClass('badge badge-sm border border-success text-success');
+        //         } else {
+        //             statusElement.addClass('badge badge-sm border border-warning text-warning');
+        //         }
+        //         // $("#venueEditImage").html(
+        //         // `<img src="/storage/${data.Venues.image}" width="100" class="img-fluid img-thumbnail">`);
+        //     },
+        //     error: function (error) {
+        //         console.log("error");
+        //     },
+        // });
+
+        // $.ajax({
+        //     type: "GET",
+        //     enctype: 'multipart/form-data',
+        //     processData: false, // Important!
+        //     contentType: false,
+        //     cache: false,
+        //     url: "/api/myEventStatus/" + id,
+        //     headers: {
+        //         "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
+        //             "content"
+        //         ),
+        //     },
+        //     dataType: "json",
+        //     success: function (data) {
+        //         console.log(data);
+        //         $('#adminStatusList').empty();
+        //         // $('#checkStatusModal').modal('show');
+        //         $('#eventStatusText').text(data.pendingMsg);
+
+        //         var statusElement = $('#eventStatusText');
+        //         // console.log(statusElement)
+        //         // Get the value from the element's text content
+        //         var statusValue = $('#eventStatusText').text();
+
+        //         statusElement.removeClass();
+        //         // Apply styling based on the value
+        //         if (statusValue === 'APPROVED') {
+        //             statusElement.addClass('badge badge-sm border border-success text-success');
+        //         } else {
+        //             statusElement.addClass('badge badge-sm border border-warning text-warning');
+        //         }
+        //         // $("#venueEditImage").html(
+        //         // `<img src="/storage/${data.Venues.image}" width="100" class="img-fluid img-thumbnail">`);
+
+        //         // var status = 1;
+        //         // $.each(data, function(index, item) {
+
+        //         // });
+
+        //         $.each(data.dates, function (index, item) {
+        //             // console.log(item);
+        //             console.log(index);
+        //             console.log(item)
+        //             console.log(data.msg);
+        //             var formattedDate = moment(item, 'YYYY-MM-DD HH:mm:ss').format('MMMM D, YYYY');
+        //             var formattedTime = moment(item, 'YYYY-MM-DD HH:mm:ss').format('h:mm A');
+        //             console.log(formattedTime);
+
+                   
+        //             if (data.msg && data.msg[index]) {
+        //                 var msgItem = data.msg[index];
+
+        //                 // Create a list item for each date and message
+        //                 var listItem = `
+        //                     <li class="rb-item">
+        //                         <div class="timestamp">
+        //                             ${formattedDate}<br> <span>${formattedTime}</span>
+        //                         </div>
+        //                         <div class="item-title">${msgItem}</div>
+        //                     </li>
+        //                 `;
+
+        //                 $('#adminStatusList').prepend(listItem);
+        //             }
+
+               
+        //         });
+
+
+
+        //     },
+        //     error: function (error) {
+        //         console.log("error");
+        //     },
+        // });
+
+    });//end event status table END SECTION HEADS
+
+    //DEPT HEADS
+    $("#departmentHeadTable tbody").on("click", 'a.editDepartmentHead ', function (e) {
+        var id = $(this).data("id");
+        // e.preventDefault();
+        // console.log(id);
+
+        $.ajax({
+            type: "GET",
+            enctype: 'multipart/form-data',
+            processData: false, // Important!
+            contentType: false,
+            cache: false,
+            url: "/api/admin/departmentHead/" + id,
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
+                    "content"
+                ),
+            },
+            dataType: "json",
+            success: function (data) {
+                console.log(data);
+                console.log(id);
+                $('#editDepartmentHeadModal').modal('show');
+                $('#departmentHeadEditId').val(id);
+                $('#departmentHeadEditName').val(data.officials.name);
+                $('#departmentHeadEditEmail').val(data.officials.email);
+            },
+            error: function (error) {
+                console.log("error");
+            },
+        });
+
+    });
+
+    $("#departmentHeadUpdate").on("click", function (e) {
+        var id = $('#departmentHeadEditId').val();
+        console.log(id);
+    // console.log('napindot')
+        e.preventDefault();
+        let formData = new FormData($('#departmentHeadUpdateForm')[0]);
+        // console.log(formData);
+
+        for (var pair of formData.entries()) {
+            console.log(pair[0] + ',' + pair[1]);
+        }
+        
+        console.log(formData)
+        $.ajax({
+            
+            type: "POST",
+            url: "/api/admin/departmentHead/update/" + id,
+            data: formData,
+            contentType: false,
+            processData: false,
+            headers: {
+                'Authorization': 'Bearer ' + sessionStorage.getItem('token'),
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            dataType: "json",
+            success: function (data) {
+                console.log(data);
+                Swal.fire({
+                    icon: "success",
+                    title: "Department Head Updated!",
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+                
+                setTimeout(function () {
+                    window.location.href = '/admin/departmentHeads';
+                }, 1500);
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    });
+
+    $("#departmentHeadSubmit").on("click", function (e) {
+        console.log('napindot')
+        e.preventDefault();
+        let formData = new FormData($('#departmentHeadForm')[0]);
+        // console.log(formData);
+
+        for (var pair of formData.entries()) {
+            console.log(pair[0] + ',' + pair[1]);
+        }
+        console.log(formData)
+        $.ajax({
+            
+            type: "POST",
+            url: "/api/admin/storeDepartmentHead",
+            data: formData,
+            contentType: false,
+            processData: false,
+            headers: {
+                'Authorization': 'Bearer ' + sessionStorage.getItem('token'),
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            dataType: "json",
+            success: function (data) {
+                console.log(data);
+                Swal.fire({
+                    icon: "success",
+                    title: "Department Head Added!",
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+                // var $ctable = $('#ctable').DataTable();
+                // $ctable.ajax.reload();
+                // $ctable.row.add(data.customer).draw(false);
+                // // $etable.row.add(data.client).draw(false);
+                setTimeout(function () {
+                    window.location.href = '/admin/departmentHeads';
+                }, 1500);
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    });
+    
+    $("#departmentHeadTable tbody").on("click", 'a.deleteOrgAdviser', function (e) {
+        // alert('dshagd')
+        var id = $(this).data("id");
+        console.log(id);
+        // e.preventDefault();
+
+        // $.ajax({
+        //     type: "GET",
+        //     enctype: 'multipart/form-data',
+        //     processData: false, // Important!
+        //     contentType: false,
+        //     cache: false,
+        //     url: "/api/show/event/" + id,
+        //     headers: {
+        //         "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
+        //             "content"
+        //         ),
+        //     },
+        //     dataType: "json",
+        //     success: function (data) {
+        //         var originalSDate = new Date(data.events.start_date);
+        //         var originalEDate = new Date(data.events.end_date);
+        //         var origStime = moment(data.events.start_time, "HH:mm:ss")
+        //         var origEtime = moment(data.events.end_time, "HH:mm:ss")
+        //         var origCreatedDate = new Date(data.events.created_at);
+
+        //         var formattedSTime = origStime.format("h:mm A");
+        //         var formattedETime = origEtime.format("h:mm A");
+
+        //         // var formattedCreatedTime = origCreatedDate.format("h:mm A");
+
+        //         // Format the date using moment.js
+        //         var formattedSDate = moment(originalSDate).format("MMMM D, YYYY");
+        //         var formattedEDate = moment(originalEDate).format("MMMM D, YYYY");
+        //         var formattedCreatedDate = moment(origCreatedDate).format("MMMM D, YYYY");
+
+        //         var formattedCreatedTime = moment(origCreatedDate).format("h:mm A");
+
+        //         console.log(formattedCreatedTime);
+        //         var dateType = data.events.type;
+        //         var dType;
+        //         if (dateType === 'within_day') {
+        //             dType = 'Within the Day';
+        //         } else if (dateType === 'whole_day') {
+        //             dType = 'Whole Day';
+        //         } else {
+        //             dType = 'Whole Week';
+        //         }
+        //         // console.log(dType);
+        //         // console.log(data);
+        //         $('#adminAllEventStatus').modal('show');
+        //         $('#eventStatusText').text(data.msg);
+        //         $('#eventDateRequestedText').text(formattedCreatedDate +' '+ formattedCreatedTime);
+        //         $('#eventStatusName').val(data.events.event_name);
+        //         $('#eventStatusDesc').val(data.events.description);
+        //         $('#eventStatusParticipants').val(data.events.participants);
+        //         $('#eventStatusVenue').val(data.venues.name);
+        //         $('#eventStatusDateType').val(dType);
+        //         $('#eventStatusStartDate').val(formattedSDate);
+        //         $('#eventStatusEndDate').val(formattedEDate);
+        //         $('#eventStatusSTime').val(formattedSTime);
+        //         $('#eventStatusETime').val(formattedETime);
+
+
+        //         var statusElement = $('#eventStatusText');
+        //         // console.log(statusElement)
+        //         // Get the value from the element's text content
+        //         var statusValue = $('#eventStatusText').text();
+
+        //         statusElement.removeClass();
+        //         // Apply styling based on the value
+        //         if (statusValue === 'APPROVED') {
+        //             statusElement.addClass('badge badge-sm border border-success text-success');
+        //         } else {
+        //             statusElement.addClass('badge badge-sm border border-warning text-warning');
+        //         }
+        //         // $("#venueEditImage").html(
+        //         // `<img src="/storage/${data.Venues.image}" width="100" class="img-fluid img-thumbnail">`);
+        //     },
+        //     error: function (error) {
+        //         console.log("error");
+        //     },
+        // });
+
+        // $.ajax({
+        //     type: "GET",
+        //     enctype: 'multipart/form-data',
+        //     processData: false, // Important!
+        //     contentType: false,
+        //     cache: false,
+        //     url: "/api/myEventStatus/" + id,
+        //     headers: {
+        //         "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
+        //             "content"
+        //         ),
+        //     },
+        //     dataType: "json",
+        //     success: function (data) {
+        //         console.log(data);
+        //         $('#adminStatusList').empty();
+        //         // $('#checkStatusModal').modal('show');
+        //         $('#eventStatusText').text(data.pendingMsg);
+
+        //         var statusElement = $('#eventStatusText');
+        //         // console.log(statusElement)
+        //         // Get the value from the element's text content
+        //         var statusValue = $('#eventStatusText').text();
+
+        //         statusElement.removeClass();
+        //         // Apply styling based on the value
+        //         if (statusValue === 'APPROVED') {
+        //             statusElement.addClass('badge badge-sm border border-success text-success');
+        //         } else {
+        //             statusElement.addClass('badge badge-sm border border-warning text-warning');
+        //         }
+        //         // $("#venueEditImage").html(
+        //         // `<img src="/storage/${data.Venues.image}" width="100" class="img-fluid img-thumbnail">`);
+
+        //         // var status = 1;
+        //         // $.each(data, function(index, item) {
+
+        //         // });
+
+        //         $.each(data.dates, function (index, item) {
+        //             // console.log(item);
+        //             console.log(index);
+        //             console.log(item)
+        //             console.log(data.msg);
+        //             var formattedDate = moment(item, 'YYYY-MM-DD HH:mm:ss').format('MMMM D, YYYY');
+        //             var formattedTime = moment(item, 'YYYY-MM-DD HH:mm:ss').format('h:mm A');
+        //             console.log(formattedTime);
+
+                   
+        //             if (data.msg && data.msg[index]) {
+        //                 var msgItem = data.msg[index];
+
+        //                 // Create a list item for each date and message
+        //                 var listItem = `
+        //                     <li class="rb-item">
+        //                         <div class="timestamp">
+        //                             ${formattedDate}<br> <span>${formattedTime}</span>
+        //                         </div>
+        //                         <div class="item-title">${msgItem}</div>
+        //                     </li>
+        //                 `;
+
+        //                 $('#adminStatusList').prepend(listItem);
+        //             }
+
+               
+        //         });
+
+
+
+        //     },
+        //     error: function (error) {
+        //         console.log("error");
+        //     },
+        // });
+
+    });//end event status table END SECTION HEADS
+
+
+
 
     $("#venuesButton").on("click", function (e) {
         console.log('napindot')
@@ -1624,6 +2623,5 @@ $(document).ready(function () {
         }
 
     });
-
 
 })

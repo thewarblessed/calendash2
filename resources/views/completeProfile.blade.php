@@ -91,13 +91,21 @@
                                     <label for="organization_id">Select Department</label>
                                     <select class="form-control" id="department_id_staff" name="department_id_staff">
                                         @foreach ($departments as $id => $department)
-                                        @if ($id >= 6 && $id <= 9)
+                                        @if ($id >= 6 && $id <= 13)
                                         <option value="{{ $id }}">{{ $department }}</option>
                                         @endif
                                         @endforeach
                                     </select>
                                 </div>
                             </div>
+                            <div class="form-group" style="display: block;" id="sectDivCompleteProfile">
+                                <label for="organization_id">Select Section</label>
+                                <select class="form-control" id="section_id_user" name="section_id_user">
+                                  @foreach ($sections as $id => $section)
+                                  <option value="{{ $id }}">{{ $section }}</option>
+                                  @endforeach
+                                </select>
+                              </div>
                             <!-- Form Group (email address)-->
                             <div class="mb-3">
                                 <label class="small mb-1" for="inputEmailAddress">TUP ID</label>

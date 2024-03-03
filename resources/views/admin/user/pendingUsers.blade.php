@@ -64,8 +64,8 @@
                                             <th class="text-secondary text-xs font-weight-semibold opacity-15 ps-15">First Name</th>
                                             <th class="text-secondary text-xs font-weight-semibold opacity-15 ps-15">Organization</th>
                                             <th class="text-secondary text-xs font-weight-semibold opacity-15 ps-15">Department</th>
-                                            <th class="text-center text-secondary text-xs font-weight-semibold opacity-15">Role</th>
-                                            <th class="text-secondary text-xs font-weight-semibold opacity-7 ps-2">Action</th>
+                                            <th class="text-secondary text-xs font-weight-semibold opacity-15 ps-15">Section</th>
+                                            <th class="text-secondary text-xs font-weight-semibold opacity-7 ps-2">Role</th>
                                             <th class="text-secondary opacity-7"></th>
                                         </tr>
                                     </thead>
@@ -92,8 +92,14 @@
                                                 @endif
                                             </td>
                                             <td class="align-left text-sm">
-                                                <span
-                                                    class="text-sm text-dark font-weight-semibold mb-0">{{$pendingUser->department}}</span>
+                                                <span class="text-sm text-dark font-weight-semibold mb-0">{{$pendingUser->department}}</span>
+                                            </td>
+                                            <td class="align-left text-sm">
+                                                @if($pendingUser->section === null)
+                                                <span class="text-sm text-dark font-weight-semibold mb-0">N/A</span>
+                                                @else
+                                                <span class="text-sm text-dark font-weight-semibold mb-0">{{$pendingUser->section}}</span>
+                                                @endif
                                             </td>
                                             <td class="align-middle text-center text-sm">
                                                 @if($pendingUser->role === 'student')
@@ -226,10 +232,22 @@
                                 </div>
                             </div>
 
-                            <div class="form-group">
-                                <label for="exampleFormControlInput1">Role:</label>
-                                <p style="color: black" id="userApproveRole" ></p>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="exampleFormControlInput1">Role:</label>
+                                        <p style="color: black" id="userApproveRole" ></p>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="exampleFormControlInput1">Section:</label>
+                                        <p style="color: black" id="userApproveSection" ></p>
+                                    </div>
+                                </div>
                             </div>
+                            
                             
                             <div class="form-group">
                                 <label for="exampleFormControlInput1">TUP ID:</label>

@@ -30,9 +30,22 @@ class CalendarController extends Controller
         // return view ('mycalendar', ['event' => $events]);
         // $events = Event::orderBy('id')->select('event_name as title','description','event_date as start',)->get();
         // IF STUDENT
-        $events = Event::join('venues', 'events.venue_id','venues.id')
-                        ->join('departments', 'departments.id','events.target_dept')
-                        ->join('organizations', 'organizations.id','events.target_org')
+        // dd($id)
+        $events = Event::leftjoin('venues', 'events.venue_id','venues.id')
+                        ->leftjoin('users','events.user_id','users.id')
+                        ->leftjoin('departments', 'departments.id','events.target_dept')
+                        ->leftjoin('organizations', 'organizations.id','events.target_org')
+                        ->leftjoin('rooms', 'rooms.id','events.room_id')
+                        ->select('organizations.organization',
+                                'departments.department',
+                                'events.status',
+                                'events.event_name',
+                                'events.start_time',
+                                'events.end_time',
+                                'venues.name as venueName',
+                                'users.role',
+                                'users.name as eventOrganizerName',
+                                'rooms.name as roomName')
                         ->where('events.id', $id)
                         ->first();
         // dd($events);

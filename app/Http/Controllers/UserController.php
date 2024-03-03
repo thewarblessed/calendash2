@@ -9,6 +9,7 @@ use App\Models\Prof;
 use App\Models\Staff;
 use App\Models\Organization;
 use App\Models\Department;
+use App\Models\Section;
 use App\Models\PendingUser;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -27,7 +28,9 @@ class UserController extends Controller
 
         $departments = Department::pluck('department', 'id');
 
-        return view('completeProfile', compact('organizations','departments'));
+        $sections = Section::pluck('section', 'id');
+
+        return view('completeProfile', compact('organizations','departments','sections'));
     }
 
     public function getProfile($id)
@@ -71,6 +74,7 @@ class UserController extends Controller
             $pendingUsers->lastname =  $request->lastname;
             $pendingUsers->organization_id =  $request->organization_id_user;
             $pendingUsers->department_id =  $request->department_id_user;
+            $pendingUsers->section_id =  $request->section_id_user;
             $pendingUsers->role = $request->user_role;
             // dd($pendingUsers);
             $files = $request->file('image');
@@ -87,7 +91,7 @@ class UserController extends Controller
             $pendingUsers->firstname =  $request->firstname;
             $pendingUsers->lastname =  $request->lastname;
             $pendingUsers->organization_id =  null;
-            $pendingUsers->department_id =  10;
+            $pendingUsers->department_id =  14;
             $pendingUsers->role = 'professor';
             // dd($pendingUsers);
             $files = $request->file('image');
@@ -130,6 +134,7 @@ class UserController extends Controller
         $pendingUsers = PendingUser::leftJoin('users', 'pending_users.user_id', 'users.id')
                                     ->leftJoin('organizations', 'pending_users.organization_id', 'organizations.id')
                                     ->leftJoin('departments', 'pending_users.department_id', 'departments.id')
+                                    ->leftJoin('sections', 'pending_users.section_id', 'sections.id')
                                     ->orderByDesc('pending_users.id')
                                     ->get();
                                     // dd($pendingUsers);
@@ -242,6 +247,7 @@ class UserController extends Controller
         $user = User::leftJoin('pending_users', 'pending_users.user_id', 'users.id')
                     ->leftJoin('organizations', 'pending_users.organization_id', 'organizations.id')
                     ->leftJoin('departments', 'pending_users.department_id', 'departments.id')
+                    ->leftJoin('sections', 'pending_users.section_id', 'sections.id')
                     ->where('users.id', $id)
                     ->first();
         // dd($user);

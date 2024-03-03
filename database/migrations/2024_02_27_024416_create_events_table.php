@@ -54,6 +54,7 @@ return new class extends Migration
             $table->string('campus_director')->nullable();
             $table->timestamp('approved_campus_director_at')->nullable();
             $table->string('remarks_campus_director')->nullable();
+            $table->string('rejected_by')->nullable();
             $table->text('color');
             $table->timestamps();
         });

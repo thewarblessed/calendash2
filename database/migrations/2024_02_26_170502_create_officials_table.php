@@ -20,6 +20,8 @@ return new class extends Migration
             $table->foreign('department_id')->references('id')->on('departments');
             $table->integer('organization_id')->unsigned()->nullable();
             $table->foreign('organization_id')->references('id')->on('organizations');
+            $table->integer('section_id')->unsigned()->nullable();
+            $table->foreign('section_id')->references('id')->on('sections');
             $table->string('esign');
             $table->string('hash');
         });

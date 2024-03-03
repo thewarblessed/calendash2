@@ -29,16 +29,28 @@ class DepartmentSeeder extends Seeder
             'department' => 'BENG - TEMPORARY'
         ]);
         Department::create([
-            'department' => 'Clinic'
+            'department' => 'QA/Accreditation'
         ]);
         Department::create([
-            'department' => 'Registrar'
+            'department' => 'Directors Office/Planning Office'
         ]);
         Department::create([
-            'department' => 'Library'
+            'department' => 'ADAA/DH/SH/SC'
         ]);
         Department::create([
-            'department' => 'Accounting'
+            'department' => 'ADRE/Industry Based Program'
+        ]);
+        Department::create([
+            'department' => 'ADAF/HR/IDO/Maint/Aux/Proc/Supply'
+        ]);
+        Department::create([
+            'department' => 'OSA/Registrar/Medical/LRC/USG'
+        ]);
+        Department::create([
+            'department' => 'Accounting/Budget/Cashier'
+        ]);
+        Department::create([
+            'department' => 'Records'
         ]);
         Department::create([
             'department' => 'Faculty'
