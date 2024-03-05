@@ -296,8 +296,22 @@ $(document).ready(function () {
 
     });
 
+    //TRAPPING OF VENUES BASED ON THE INPUTED NUMBER OF PARTICIPANTS;
+    $('#numParticipants').change(function() {
+        const numParticipants = parseInt($(this).val());
+        console.log(numParticipants);
+        $('.card_capacity').each(function() {
+            const capacity = parseInt($(this).data('capacity'));
+            if (numParticipants <= capacity) {
+                $(this).parent().show(); // Show the whole venue card
+            } else {
+                $(this).parent().hide(); // Hide the whole venue card
+            }
+        });
+    });
 
     $("#createEvent_submit").on("click", function (e) {
+        // alert('default')
         $('#spinner').addClass('spinner-border spinner-border-sm');
         console.log(data);
         e.preventDefault();
@@ -351,6 +365,62 @@ $(document).ready(function () {
         });
         //Swal.fire('SweetAlert2 is working!')
     });//end create event
+
+    $("#createEvent_submit_outsider").on("click", function (e) {
+        // alert('createEvent_submit_outsider');
+        $('#spinner_outsider').addClass('spinner-border spinner-border-sm');
+        // console.log('outseidrehgasdhjas')
+        
+        console.log(data);
+        e.preventDefault();
+        // $('#serviceSubmit').show()
+        var data = $('#createEventForm')[0];
+        console.log(data);
+        let formData = new FormData($('#createEventForm')[0]);
+        console.log(formData);
+
+        for (var pair of formData.entries()) {
+            console.log(pair[0] + ',' + pair[1]);
+        }
+        console.log(formData)
+        $.ajax({
+            type: "POST",
+            url: "/api/outside/storeEvent",
+            data: formData,
+            contentType: false,
+            processData: false,
+            headers: {
+                'Authorization': 'Bearer ' + sessionStorage.getItem('token'),
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            dataType: "json",
+            success: function (data) {
+                console.log(data);
+                $('#spinner_outsider').removeClass('spinner-border spinner-border-sm');
+                setTimeout(function () {
+                    window.location.href = '/myEvents';
+                }, 1500);
+
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Event has been Requested!',
+                    showConfirmButton: false,
+                    timer: 3000
+                })
+            },
+            error: function (error) {
+                $('#spinner').removeClass('spinner-border spinner-border-sm');
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "Something went wrong!"
+                  });
+            }
+        });
+        //Swal.fire('SweetAlert2 is working!')
+    });//end create event
+
+    
 
     //REQUEST APPROVAL TABLE
     $("#eventTable tbody").on("click", 'button.approveBtn ', function (e) {
@@ -1065,6 +1135,11 @@ $(document).ready(function () {
         const deptDiv = document.getElementById('depDivCompleteProfile');
         const deptDivStaff = document.getElementById('depDivStaffCompleteProfile');
         const sectDiv = document.getElementById('sectDivCompleteProfile');
+        const tupID = document.getElementById('tupIDdiv');
+        const tupIDPhoto = document.getElementById('tupIDphotoDiv');
+        const validID = document.getElementById('validIDphotoDiv');
+
+        
 
         // Perform actions based on the selected value
         console.log(selectedValue);
@@ -1074,6 +1149,7 @@ $(document).ready(function () {
             deptDiv.style.display = 'block';
             sectDiv.style.display = 'block';
             deptDivStaff.style.display = 'none';
+            validID.style.display = 'none';
         }
         else if(selectedValue === 'professor')
         {
@@ -1081,13 +1157,24 @@ $(document).ready(function () {
             deptDiv.style.display = 'none';
             sectDiv.style.display = 'none';
             deptDivStaff.style.display = 'none';
+            validID.style.display = 'none';
         }
-        else
+        else if(selectedValue === 'staff')
         {
             deptDivStaff.style.display = 'block';
             orgDiv.style.display = 'none';
             deptDiv.style.display = 'none';
             sectDiv.style.display = 'none';
+            validID.style.display = 'none';
+        }
+        else{
+            deptDivStaff.style.display = 'none';
+            orgDiv.style.display = 'none';
+            deptDiv.style.display = 'none';
+            sectDiv.style.display = 'none';
+            tupID.style.display = 'none';
+            tupIDPhoto.style.display = 'none';
+            validID.style.display = 'block';
         }
     });
 
@@ -1116,16 +1203,29 @@ $(document).ready(function () {
                 if (role ==='student')
                 {
                     newrole = 'Student';
+                    $('#orgDeptRowDiv').css('display', 'block');
+                    $('#orgDiv').css('display', 'block');
+                    $('#sectionDiv').css('display', 'block');
                 }
                 else if(role ==='professor')
                 {
                     newrole = 'Faculty';
+                    $('#orgDiv').css('display', 'none');
+                    $('#sectionDiv').css('display', 'none');
                 }
-                else
+                else if(role ==='staff')
                 {   
                     newrole = 'Staff/Admin';
                 }
-
+                else
+                {
+                    newrole = 'Outside the TUPT Campus'
+                    $('#orgDeptRowDiv').css('display', 'none');
+                    $('#sectionDiv').css('display', 'none');
+                    $('#tupIDdiv').css('display', 'none');
+                    // $('#userApproveTupID').css('display', 'none');
+                    
+                }
                 console.log(data);
                 //     $('#createVenueModal').modal('show');
                 $('#userApproveId').val(id);
@@ -1205,6 +1305,18 @@ $(document).ready(function () {
             dataType: "json",
             success: function (data) {
                 console.log(data);
+                if (data.user.role === 'professor' || data.user.role === 'staff')
+                {
+                    $('#orgDivCheckStatus').css('display','none');
+                }
+                else if(data.user.role === 'outsider')
+                {
+                    $('#orgDivCheckStatus').css('display','none');
+                }
+                else if(data.user.role === 'student')
+                {
+                    $('#orgDivCheckStatus').css('display','block');
+                }
                 //     $('#createVenueModal').modal('show');
                 $('#userId').val(id);
                 $('#userLastname').val(data.user.lastname);

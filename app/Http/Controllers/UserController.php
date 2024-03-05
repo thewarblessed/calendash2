@@ -65,6 +65,7 @@ class UserController extends Controller
     
     public function completeProfile(Request $request)
     {
+        // dd($request->user_role);
         if ($request->user_role === 'student')
         {
             $pendingUsers = new PendingUser();
@@ -108,7 +109,7 @@ class UserController extends Controller
             Storage::put('public/images/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
             return response()->json(["data" => $pendingUsers, "status" => 200]);
         }
-        else{
+        elseif ($request->user_role === 'staff'){
 
             $pendingUsers = new PendingUser();
             $pendingUsers->user_id = $request->user_id;
@@ -124,6 +125,21 @@ class UserController extends Controller
             Storage::put('public/images/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
             return response()->json(["data" => $pendingUsers, "status" => 200]);
         }
+        else{
+            $pendingUsers = new PendingUser();
+            $pendingUsers->user_id = $request->user_id;
+            $pendingUsers->firstname =  $request->firstname;
+            $pendingUsers->lastname =  $request->lastname;
+            $pendingUsers->tupID =  0;
+            $pendingUsers->role = 'outsider';
+            // dd($pendingUsers);
+            $files = $request->file('validIDimage');
+            $pendingUsers->image = 'images/'.time().'-'.$files->getClientOriginalName();
+            // dd($pendingUsers);
+            $pendingUsers->save();
+            Storage::put('public/images/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
+            return response()->json(["data" => $pendingUsers, "status" => 200]);
+        }
         
         
     }
@@ -135,9 +151,10 @@ class UserController extends Controller
                                     ->leftJoin('organizations', 'pending_users.organization_id', 'organizations.id')
                                     ->leftJoin('departments', 'pending_users.department_id', 'departments.id')
                                     ->leftJoin('sections', 'pending_users.section_id', 'sections.id')
+                                    ->select('pending_users.user_id','pending_users.tupID','pending_users.lastname','pending_users.firstname','organizations.organization','departments.department','sections.section','pending_users.role','users.email_verified_at','users.email')
                                     ->orderByDesc('pending_users.id')
                                     ->get();
-                                    // dd($pendingUsers);
+                                    
         return view('admin.user.pendingUsers', compact('pendingUsers'));
         
     }
@@ -151,22 +168,78 @@ class UserController extends Controller
         $forUser = User::where('id', $id)->first();
 
         // dd($user->id);
-        $student = new Student();
-        $student->tupID = $user->tupID;
-        $student->lastname = $user->lastname;
-        $student->firstname = $user->firstname;
-        $student->department_id = $user->department_id;
-        $student->organization_id = $user->organization_id;
-        $student->user_id = $user->user_id;
-        // $student->role = 'student';
-        $student->save();
+        if ($user->role === 'student'){
+            $student = new Student();
+            $student->tupID = $user->tupID;
+            $student->lastname = $user->lastname;
+            $student->firstname = $user->firstname;
+            $student->department_id = $user->department_id;
+            $student->organization_id = $user->organization_id;
+            $student->user_id = $user->user_id;
+            // $student->role = 'student';
+            $student->save();
 
-        $forUser->email_verified_at = now();
-        $forUser->save();
-        return response()->json(["user" => $user, 
-                                // "student" => $student, 
-                                "status" => 200]);
-        
+            $forUser->email_verified_at = now(); // update
+            $forUser->role = $user->role;
+            $forUser->update();
+            return response()->json(["user" => $user, 
+                                    // "student" => $student, 
+                                    "status" => 200]);
+        }
+        elseif($user->role === 'professor'){
+            $professor = new Prof();
+            $professor->tupID = $user->tupID;
+            $professor->lastname = $user->lastname;
+            $professor->firstname = $user->firstname;
+            $professor->department_id = $user->department_id;
+            $professor->organization_id = $user->organization_id;
+            $professor->user_id = $user->user_id;
+            // $student->role = 'student';
+            $professor->save();
+
+            $forUser->email_verified_at = now(); // update
+            $forUser->role = $user->role;
+            $forUser->update();
+            return response()->json(["user" => $user, 
+                                    // "student" => $student, 
+                                    "status" => 200]);
+        }
+        elseif($user->role === 'staff'){
+            $staff = new Student();
+            $staff->tupID = $user->tupID;
+            $staff->lastname = $user->lastname;
+            $staff->firstname = $user->firstname;
+            $staff->department_id = $user->department_id;
+            $staff->organization_id = $user->organization_id;
+            $staff->user_id = $user->user_id;
+            // $student->role = 'student';
+            $staff->save();
+
+            $forUser->email_verified_at = now(); // update
+            $forUser->role = $user->role;
+            $forUser->update();
+            return response()->json(["user" => $user, 
+                                    // "student" => $student, 
+                                    "status" => 200]);
+        }
+        else{
+            // $student = new Student();
+            // $student->tupID = $user->tupID;
+            // $student->lastname = $user->lastname;
+            // $student->firstname = $user->firstname;
+            // $student->department_id = $user->department_id;
+            // $student->organization_id = $user->organization_id;
+            // $student->user_id = $user->user_id;
+            // // $student->role = 'student';
+            // $student->save();
+
+            $forUser->email_verified_at = now(); // update
+            $forUser->role = $user->role;
+            $forUser->update();
+            return response()->json(["user" => $user, 
+                                    // "student" => $student, 
+                                    "status" => 200]);
+        }
     }
 
     public function editRole(Request $request, String $id)

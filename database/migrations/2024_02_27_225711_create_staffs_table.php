@@ -20,7 +20,7 @@ return new class extends Migration
             $table->foreign('department_id')->references('id')->on('departments');
             $table->integer('organization_id')->unsigned()->nullable();
             $table->foreign('organization_id')->references('id')->on('organizations');
-            $table->text('role');
+            // $table->text('role');
             $table->string('image')->default('staff.jpg');
             $table->integer('user_id')->unsigned()->nullable();
             $table->foreign('user_id')->references('id')->on('users');

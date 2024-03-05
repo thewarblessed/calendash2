@@ -1041,6 +1041,164 @@ class EventController extends Controller
         }
     }
 
+    public function storeOutsiderEvents(Request $request)
+    {
+        $user = User::where('role','business_manager')->first();
+        $email = $user->email;
+        $inputType = $request->input('event_type');
+        // dd($user);
+        // $randomColor = '#' . Str::random(6);
+        // dd($inputType);
+        if ($inputType === 'wholeWeek') {
+            $weekDate = $request->input('event_date_wholeWeekUser');
+            // dd($weekDate);
+            list($year, $week) = explode("-W", $weekDate);
+            $startDate = Carbon::now()->setISODate($year, $week, 1)->toDateString();
+            $endDate = Carbon::now()->setISODate($year, $week, 7)->toDateString();
+
+            $request->validate([
+                'receipt' => 'required|image|mimes:jpeg,png,jpg|max:2048', // Image file validation
+            ]);
+    
+            $files = $request->file('receipt');
+            $receipt = 'images/'.time().'-'.$files->getClientOriginalName();
+            // $venues->save();
+            Storage::put('public/images/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
+
+            Event::create([
+                'user_id' => $request->user_id,
+                'event_name' => $request->eventName,
+                'description' => $request->eventDesc,
+                'type' => 'whole_week',
+                'venue_id' => $request->event_venue,
+                'start_date' => $startDate,
+                'end_date' => $endDate,
+                'start_time' => '00:00:00',
+                'end_time' => '00:00:00',
+                'whole_week' => true,
+                'participants' => $request->numParticipants,
+                'receipt_image' => $receipt,
+                'status' => 'PENDING',
+                'color' => '#31B4F2'
+            ]);
+
+            return response()->json(["success" => "Event Created Successfully.", "status" => 200]);
+        }
+        elseif ($inputType === 'withinDay') {
+            // Handle whole_day or within_day events
+            $date = $request->event_date;
+            $start_time = $request->start_time_withinDayUser;
+            $end_time = $request->end_time_withinDayUser;
+
+            $request->validate([
+                'receipt' => 'required|image|mimes:jpeg,png,jpg|max:2048', // Image file validation
+            ]);
+    
+            $files = $request->file('receipt');
+            $event_letter = 'images/'.time().'-'.$files->getClientOriginalName();
+            // $venues->save();
+            Storage::put('public/images/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
+
+            Event::create([
+                'user_id' => $request->user_id,
+                'event_name' => $request->eventName,
+                'description' => $request->eventDesc,
+                'type' => 'within_day',
+                'venue_id' => $request->event_venue,
+                'start_date' => $date,
+                'end_date' => $date,
+                'start_time' => $start_time,
+                'end_time' => $end_time,
+                'participants' => $request->numParticipants,
+                'description' => $request->eventDesc,
+                'receipt_image' => $receipt,
+                'whole_week' => false,
+                'status' => 'PENDING',
+                'color' => '#31B4F2'
+            ]);
+            $data = [
+                "subject" => "Calendash Pending Request",
+                "body" => "Hello {$user->name}!, You have a new pending approval request!"
+            ];
+            Mail::to($email)->send(new MailNotify($data));
+            return response()->json(["success" => "Event Created Successfully.", "status" => 200]);
+        }   
+        else if ($inputType === 'wholeDay'){
+            //whole day
+            $date = $request->event_date_wholeDayUser;
+            
+            $request->validate([
+                'receipt' => 'required|image|mimes:jpeg,png,jpg|max:2048', // Image file validation
+            ]);
+    
+            $files = $request->file('receipt');
+            $receipt = 'images/'.time().'-'.$files->getClientOriginalName();
+            // $venues->save();
+            Storage::put('public/images/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
+     
+            Event::create([
+                'user_id' => $request->user_id,
+                'event_name' => $request->eventName,
+                'description' => $request->eventDesc,
+                'type' => 'whole_day',
+                'venue_id' => $request->event_venue,
+                'start_date' => $date,
+                'end_date' => $date,
+                'start_time' => '00:00:00',
+                'end_time' => '00:00:00',
+                'participants' => $request->numParticipants,
+                'description' => $request->eventDesc,
+                'receipt_image' => $receipt,
+                'whole_week' => false,
+                'status' => 'PENDING',
+                'color' => '#31B4F2'
+            ]);
+            $data = [
+                "subject" => "Calendash Pending Request",
+                "body" => "Hello {$user->name}!, You have a new pending approval request!"
+            ];
+            Mail::to($email)->send(new MailNotify($data));
+            return response()->json(["success" => "Event Created Successfully.", "status" => 200]);
+        }
+        else{
+            $dateRange = $request->daterange;
+            [$startDate, $endDate] = explode(' - ', $dateRange);
+            // dd($startDate);
+            $request->validate([
+                'receipt' => 'required|image|mimes:jpeg,png,jpg|max:2048', // Image file validation
+            ]);
+    
+            $files = $request->file('receipt');
+            $receipt = 'images/'.time().'-'.$files->getClientOriginalName();
+            // $venues->save();
+            Storage::put('public/images/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
+            Event::create([
+                'user_id' => $request->user_id,
+                'event_name' => $request->eventName,
+                'description' => $request->eventDesc,
+                'type' => 'whole_day',
+                'venue_id' => $request->event_venue,
+                'start_date' => $startDate,
+                'end_date' => $endDate,
+                'start_time' => '05:00:00',
+                'end_time' => '21:00:00',
+                'participants' => $request->numParticipants,
+                'receipt_image' => $receipt,
+                'whole_week' => false,
+                'status' => 'PENDING',
+                'color' => '#D6AD60',
+                'created_at' => now()
+            ]);
+    
+            $data = [
+                "subject" => "Calendash Pending Request",
+                "body" => "Hello {$user->name}!, You have a new pending approval request!"
+            ];
+            Mail::to($email)->send(new MailNotify($data));
+            return response()->json(["success" => "Event Created Successfully.", "status" => 200]);
+        }
+    }
+
     /////////////// MOBILE ////////////////////
     
     public function storeMobileEvent(Request $request)

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use App\Models\Venue;
+use App\Models\Event;
 use Redirect;
 use View;
 
@@ -46,6 +47,13 @@ class VenueController extends Controller
         $venues = Venue::where('id',$id)->get();
         // dd($venues);
         return view('venues.rulesreg', compact('venues'));
+    }
+    
+    public function eventlist(string $id)
+    {
+        $venue = Venue::find($id);
+        $events = Event::where('venue_id', $id)->get();
+        return view('venues.eventlist', compact('venue', 'events'));
     }
 
     /**

@@ -24,7 +24,7 @@
                                                 <div class="card-body">
                                                     <h5 class="card-title">{{ $venue->name }}</h5>
                                                         <a href="{{ route('venueRulesreg', ['id' => $venue->id]) }}" class="btn btn-info mr-2" style="flex: 1;">Policies</a>
-                                                        <a href="#" class="btn btn-primary ml-2" style="flex: 1;">Event List</a>
+                                                        <a href="{{ route('venueEventlist', ['id' => $venue->id]) }}" class="btn btn-primary ml-2" style="flex: 1;">Event List</a>
                                                    </div>
                                             </div>
                                         </div>   

@@ -31,7 +31,8 @@ return new class extends Migration
             $table->foreign('target_dept')->references('id')->on('departments');
             $table->integer('target_org')->unsigned()->nullable();
             $table->foreign('target_org')->references('id')->on('organizations');
-            $table->string('event_letter')->default('default.pdf');
+            $table->string('event_letter')->default('default.pdf')->nullable();
+            $table->string('receipt_image')->nullable();
             $table->text('status');
             $table->string('org_adviser')->nullable();
             $table->timestamp('approved_org_adviser_at')->nullable();

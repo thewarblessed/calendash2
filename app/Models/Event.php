@@ -32,6 +32,7 @@ class Event extends Model
         "target_org",
         "event_letter",
         "status",
+        "receipt_image",
         "org_adviser",
         "sect_head",
         "dept_head",

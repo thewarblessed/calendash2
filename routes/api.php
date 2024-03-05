@@ -248,6 +248,11 @@ Route::post('/admin/editRole/{id}',[
 Route::post('/admin/postCreateMyEvent', [EventController::class, 'storeMyEventsAdmin'])
     ->name('postCreateMyEvent');
 
+Route::post('/outside/storeEvent',[
+        'uses' => 'EventController@storeOutsiderEvents',
+        'as' => 'storeOutsiderEvents',
+]);
+
 ////////////////================ MOBILE ROUTES ================//////////////////
 //REGISTRATION MOBILE
 Route::post('/auth/sign-up',[

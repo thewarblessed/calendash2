@@ -20,7 +20,7 @@ class Staff extends Model
         "firstname",
         "lastname",
         "tupId",
-        "department",
+        "department_id",
         "role",
         "user_id"
     ];

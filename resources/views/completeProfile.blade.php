@@ -46,6 +46,7 @@
                                     <option value="student">STUDENT</option>
                                     <option value="professor">FACULTY</option>
                                     <option value="staff">STAFF/ADMIN</option>
+                                    <option value="outsider">OUTSIDE THE TUP</option>
                                 </select>
                             </div>
                             <div class="row gx-3 mb-3">
@@ -107,16 +108,22 @@
                                 </select>
                               </div>
                             <!-- Form Group (email address)-->
-                            <div class="mb-3">
+                            <div class="mb-3" id="tupIDdiv">
                                 <label class="small mb-1" for="inputEmailAddress">TUP ID</label>
                                 <input class="form-control" id="inputEmailAddress" name="tupID" type="text"
-                                    placeholder="Enter your TUP ID (ex. TUPT-XX-XXXX)" value="" required>
+                                    placeholder="Enter your TUP ID (ex. TUPT-XX-XXXX)" value="" >
                             </div>
 
-                            <div class="mb-3">
+                            <div class="mb-3" id="tupIDphotoDiv">
                                 <label class="small mb-1" for="inputImageID">Upload image of your TUP ID</label>
                                 <input class="form-control" id="inputImageID" name="image" type="file"
-                                    placeholder="Enter your TUP ID (ex. TUPT-XX-XXXX)" value="" required>
+                                    placeholder="Enter your TUP ID (ex. TUPT-XX-XXXX)" value="" >
+                            </div>
+
+                            <div class="mb-3" id="validIDphotoDiv" style="display: none;">
+                                <label class="small mb-1" for="inputValidID">Upload image of any Valid ID</label>
+                                <input class="form-control" id="inputValidID" name="validIDimage" type="file"
+                                    placeholder="Enter your TUP ID (ex. TUPT-XX-XXXX)" value="" >
                             </div>
                             <!-- Form Row-->
                             {{-- <div class="row gx-3 mb-3">

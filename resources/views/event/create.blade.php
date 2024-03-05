@@ -42,8 +42,8 @@
                                     <input class="form-check-input" type="radio" name="event_place" value="venue" id="venue" required>
                                     <label class="custom-control-label" for="event_place" style="font-size: 16px;">VENUES</label>
                                 </div>
-
-                                <div class="form-check">
+                                
+                                <div class="form-check" style="{{ Auth::user()->role === 'outsider' ? 'display: none;' : '' }}">
                                     <input class="form-check-input" type="radio" name="event_place" value="room" id="room" required>
                                     <label class="custom-control-label" for="event_place" style="font-size: 16px;">REQUEST ROOMS</label>
                                 </div>
@@ -216,33 +216,49 @@
 
                     {{-- GENERATE LETTER DETAILS --}}
                     <div class="tab d-none">
-                        <h3>Generate Letter</h3>
-                        <p>To save the Letter in you've created, please these steps.</p>
-                        <ul style="list-style-type: decimal; font-size: 14px">
-                            <li>File</li>
-                            <li>Print</li>
-                            <li>Select the Destination to "Save as PDF"</li>
-                            <li>then click "Save"</li>
-                            <li>then upload it to the bottom of this form</li>
-                        </ul>
-                        <div class="container p-4 ">
-                            <textarea name="letter_generator" id="editor"></textarea>
-                        </div>
-                        <div class="mb-3 col-md-6" style="align-self: center">
-                                <label for="request_letter" class="form-label" style="font-size: 25px; text-align:center; color:blueviolet">Upload Request Letter</label>
-                                <input type="file" class="form-control" name="request_letter" id="request_letter" required>
-                        </div>
-
+                        @if(Auth::user()->role === 'outsider')
+                        <h3 style="text-align: center">Upload receipt</h3>
+                            <div class="mb-3 col-md-6 d-flex justify-content-center">
+                                <label for="request_letter" class="form-label" style="font-size: 16px; text-align:center; color:blueviolet">Upload Photo of Receipt</label>
+                            </div>
+                            <div class="col-md-6 d-flex justify-content-center">
+                                <input type="file" class="form-control" name="receipt" id="receipt" required>
+                            </div>
+                        @else
+                            <h3>Generate Letter</h3>
+                            <p>To save the Letter in you've created, please these steps.</p>
+                            <ul style="list-style-type: decimal; font-size: 14px">
+                                <li>File</li>
+                                <li>Print</li>
+                                <li>Select the Destination to "Save as PDF"</li>
+                                <li>then click "Save"</li>
+                                <li>then upload it to the bottom of this form</li>
+                            </ul>
+                                <div class="container p-4 ">
+                                    <textarea name="letter_generator" id="editor"></textarea>
+                                </div>
+                                <div class="mb-3 col-md-6" style="align-self: center">
+                                        <label for="request_letter" class="form-label" style="font-size: 25px; text-align:center; color:blueviolet">Upload Request Letter</label>
+                                        <input type="file" class="form-control" name="request_letter" id="request_letter" required>
+                                </div>
+                        @endif
                     </div>
+                    
 
                     <div class="card-footer text-end">
                         <div class="d-flex">
                             <button type="button" id="back_button" class="btn btn-link" onclick="back()">Back</button>
                             <button type="button" id="next_button" class="btn btn-primary ms-auto"
                                 onclick="next()">Next</button>
+                            @if(Auth::user()->role === 'outsider')
+                            <button type="submit" id="createEvent_submit_outsider" class="btn btn-primary ms-auto">
+                                <span class="" role="status" id="spinner_outsider" aria-hidden="true"></span>
+                                <span class="sr-only">Loading...</span>Submit</button>
+                            @else
                             <button type="submit" id="createEvent_submit" class="btn btn-primary ms-auto">
                                 <span class="" role="status" id="spinner" aria-hidden="true"></span>
                                 <span class="sr-only">Loading...</span>Submit</button>
+                            @endif
                             
                         </div>
                     </div>
@@ -272,6 +288,8 @@
     </script>
     <script type="text/javascript" src="/js/alert.js"></script>
     <script>
+        $("#createEvent_submit_outsider").hide()
+        
         $("#createEvent_submit").hide()
         var current = 0;
         var tabs = $(".tab");
@@ -280,19 +298,47 @@
         loadFormData(current);
 
         function loadFormData(n) {
-
-            $(tabs_pill[n]).addClass("active");
-            $(tabs[n]).removeClass("d-none");
-            $("#back_button").attr("disabled", n == 0 ? true : false);
-            n == tabs.length - 1 ?
+            var role = "{{Auth::user()->role}}";
+            console.log(role);
+            if (role === 'outsider'){
+                $(tabs_pill[n]).addClass("active");
+                $(tabs[n]).removeClass("d-none");
+                $("#back_button").attr("disabled", n == 0 ? true : false);
+                n == tabs.length - 1 ?
+                $("#next_button").hide() && $("#createEvent_submit_outsider").show() :
+                $("#next_button")
+                .attr("type", "button")
+                .text("Next")
+                .attr("onclick", "next()");
+            }
+            else{
+                $(tabs_pill[n]).addClass("active");
+                $(tabs[n]).removeClass("d-none");
+                $("#back_button").attr("disabled", n == 0 ? true : false);
+                n == tabs.length - 1 ?
                 $("#next_button").hide() && $("#createEvent_submit").show() :
                 $("#next_button")
                 .attr("type", "button")
                 .text("Next")
                 .attr("onclick", "next()");
+            }
+            
         }
 
         function next() {
+            // if()
+            const eventName = $('#eventName').val();
+            const eventDesc = $('#eventDesc').val();
+            const numParticipants = $('#numParticipants').val();
+            if (eventName === '' || eventDesc === '' || numParticipants === '')
+            {
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "Please fill out all fields!"
+                });
+                return false;
+            }
             $(tabs[current]).addClass("d-none");
             $(tabs_pill[current]).removeClass("active");
 

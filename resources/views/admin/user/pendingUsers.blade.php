@@ -62,6 +62,7 @@
                                             <th class="text-secondary text-xs font-weight-semibold opacity-15 ps-15" >TUP ID</th>
                                             <th class="text-secondary text-xs font-weight-semibold opacity-15 ps-15">Last Name</th>
                                             <th class="text-secondary text-xs font-weight-semibold opacity-15 ps-15">First Name</th>
+                                            <th class="text-secondary text-xs font-weight-semibold opacity-15 ps-15">Email</th>
                                             <th class="text-secondary text-xs font-weight-semibold opacity-15 ps-15">Organization</th>
                                             <th class="text-secondary text-xs font-weight-semibold opacity-15 ps-15">Department</th>
                                             <th class="text-secondary text-xs font-weight-semibold opacity-15 ps-15">Section</th>
@@ -73,8 +74,11 @@
                                         @foreach($pendingUsers as $pendingUser)
                                         <tr>
                                             <td>
+                                                @if($pendingUser->tupID === '0')
+                                                <span class="text-sm text-dark font-weight-semibold mb-0">N/A</span>
+                                                @else
                                                 <p class="text-sm text-dark font-weight-semibold mb-0">{{$pendingUser->tupID}}</p>
-                                                
+                                                @endif
                                             </td>
                                             <td>
                                                 <p class="text-sm text-dark font-weight-semibold mb-0">{{$pendingUser->lastname}}</p>
@@ -85,6 +89,10 @@
                                                     class="text-sm text-dark font-weight-semibold mb-0">{{$pendingUser->firstname}}</span>
                                             </td>
                                             <td class="align-left text-sm">
+                                                <span
+                                                    class="text-sm text-dark font-weight-semibold mb-0">{{$pendingUser->email}}</span>
+                                            </td>
+                                            <td class="align-left text-sm">
                                                 @if($pendingUser->organization === null)
                                                 <span class="text-sm text-dark font-weight-semibold mb-0">N/A</span>
                                                 @else
@@ -92,7 +100,11 @@
                                                 @endif
                                             </td>
                                             <td class="align-left text-sm">
+                                                @if($pendingUser->department === null)
+                                                <span class="text-sm text-dark font-weight-semibold mb-0">N/A</span>
+                                                @else
                                                 <span class="text-sm text-dark font-weight-semibold mb-0">{{$pendingUser->department}}</span>
+                                                @endif
                                             </td>
                                             <td class="align-left text-sm">
                                                 @if($pendingUser->section === null)
@@ -106,8 +118,10 @@
                                                 <span class="text-sm text-dark font-weight-semibold mb-0">STUDENT</span>
                                                 @elseif($pendingUser->role === 'professor')
                                                 <span class="text-sm text-dark font-weight-semibold mb-0">FACULTY</span>
-                                                @else
+                                                @elseif($pendingUser->role === 'staff')
                                                 <span class="text-sm text-dark font-weight-semibold mb-0">STAFF</span>
+                                                @else
+                                                <span class="text-sm text-dark font-weight-semibold mb-0">OUTSIDE</span>
                                                 @endif
                                             </td> 
                                                   
@@ -167,7 +181,7 @@
                                 <label for="exampleFormControlInput1">First Name</label>
                                 <input name="userFirstname" type="text" class="form-control" id="userFirstname" readonly>
                             </div>
-                            <div class="form-group">
+                            <div class="form-group" id="orgDivCheckStatus">
                                 <label for="exampleFormControlInput1">Organization</label>
                                 <input name="userOrganization" type="text" class="form-control" id="userOrganization" readonly>
                             </div>
@@ -216,8 +230,8 @@
                                 </div>
                             </div>
 
-                            <div class="row">
-                                <div class="col-md-6">
+                            <div class="row" id="orgDeptRowDiv">
+                                <div class="col-md-6" id="orgDiv">
                                     <div class="form-group">
                                         <label for="exampleFormControlInput1">Organization:</label>
                                         <p style="color: black" id="userApproveOrganization" ></p>
@@ -240,7 +254,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col-md-6">
+                                <div class="col-md-6" id="sectionDiv">
                                     <div class="form-group">
                                         <label for="exampleFormControlInput1">Section:</label>
                                         <p style="color: black" id="userApproveSection" ></p>
@@ -249,7 +263,7 @@
                             </div>
                             
                             
-                            <div class="form-group">
+                            <div class="form-group" id="tupIDdiv">
                                 <label for="exampleFormControlInput1">TUP ID:</label>
                                 <p style="color: black" id="userApproveTupID" ></p>
                             </div>

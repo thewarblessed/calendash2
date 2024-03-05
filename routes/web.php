@@ -186,6 +186,11 @@ Route::get('/rulesreg/{id}', [VenueController::class, 'rulesreg'])
     ->middleware('auth')
     ->name('venueRulesreg');
 
+// route to eventlist
+Route::get('/eventlist/{id}', [VenueController::class, 'eventlist'])
+    ->middleware('auth')    
+    ->name('venueEventlist');
+
 Route::get('/texteditor', function () {
     return view('event.editor');
 })->name('multiform')->middleware('auth');

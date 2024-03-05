@@ -27,10 +27,12 @@ class OfficialController extends Controller
         // $departments = Department::pluck('department', 'id');
 
         $officials = User::join('officials', 'users.id', 'officials.user_id')
-                            ->where('officials.department_id', null)
-                            ->where('officials.organization_id', null)
-                            ->where('officials.section_id', null)
-                            ->orderBy('officials.id')->get();
+                        ->whereIn('users.role', ['osa', 'adaa', 'atty', 'campus_director', 'business_manager'])
+                        ->whereNull('officials.department_id')
+                        ->whereNull('officials.organization_id')
+                        ->whereNull('officials.section_id')
+                        ->orderBy('officials.id')
+                        ->get();
                             // dd($officials);
         // $withUser = User::orderBy('id')->select('')->get();
         // dd($officials);
