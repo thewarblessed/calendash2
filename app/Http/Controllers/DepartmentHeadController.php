@@ -41,6 +41,13 @@ class DepartmentHeadController extends Controller
         return view('admin.deptHead.create', compact('departments'));
     }
 
+    public function getAllDepartments()
+    {
+        //
+        $departments = Department::all();
+        return response()->json($departments);
+    }
+
     /**
      * Store a newly created resource in storage.
      */

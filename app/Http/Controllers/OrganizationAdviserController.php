@@ -39,6 +39,12 @@ class OrganizationAdviserController extends Controller
         return view('admin.orgAdviser.create', compact('organizations'));
     }
 
+    public function getAllOrganizations()
+    {
+        //
+        $organizations = Organization::all();
+        return response()->json($organizations);
+    }
     /**
      * Store a newly created resource in storage.
      */

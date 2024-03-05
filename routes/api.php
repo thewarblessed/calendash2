@@ -285,3 +285,5 @@ Route::get('/mobileAdmin/event/getAll', [EventController::class, 'getMobileAdmin
 //MOBILE CREATE EVENT
 Route::post('/mobileAdmin/event/store', [EventController::class, 'storeMobileEvent']);
 Route::get('/mobileAdmin/event/index', [EventController::class, 'getMobileEvents']);
+Route::get('/mobileAdmin/department', [DepartmentHeadController::class, 'getAllDepartments']);
+Route::get('/mobileAdmin/organization', [OrganizationAdviserController::class, 'getAllOrganizations']);

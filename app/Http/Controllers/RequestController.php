@@ -7,6 +7,9 @@ use App\Models\Event;
 use App\Models\User;
 use App\Models\Venue;
 use App\Models\Official;
+use App\Models\Student;
+use App\Models\Prof;
+use App\Models\Staff;
 use View;
 use Illuminate\Support\Facades\Hash;
 use Carbon\Carbon;
@@ -27,7 +30,10 @@ class RequestController extends Controller
         // $events = Event::with('venues');
         // dd($pending);
             
-        $user_role = Auth::user()->role;
+        // $user_role = Auth::user()->role;
+        // $user_org = Official::where('org')
+        // $user_sec =
+        // $user_dept
         
         if($user_role === "org_adviser")
         {
@@ -112,6 +118,9 @@ class RequestController extends Controller
         
         $angEvent = Venue::join('events', 'venues.id', 'events.venue_id')->where('events.id', $event_id)->select('venues.name')->first();
         $venue = $angEvent->name;
+        
+
+        // $secHead = Official::where('section_id',) 
 
         $hashedPassword = Hash::make($password);
         $hashedPasswordFromDatabase = Official::join('users', 'users.id', 'officials.user_id')->where('users.id', $user_id)->select('officials.hash')->first();

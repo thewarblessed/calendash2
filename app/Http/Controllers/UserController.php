@@ -204,6 +204,7 @@ class UserController extends Controller
                     $student->firstname = $pendingUser->firstname;
                     $student->department_id = $pendingUser->department_id;
                     $student->organization_id = $pendingUser->organization_id;
+                    $student->section_id = $pendingUser->section_id;
                     $student->user_id = $user->id;
                     $student->save();
                     break;

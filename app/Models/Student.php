@@ -22,8 +22,9 @@ class Student extends Model
         "tupId",
         "course",
         "yearLevel",
-        "department",
-        "section",
+        "organization_id",
+        "department_id",
+        "section_id",
         "studOrg",
         "user_id"
     ];

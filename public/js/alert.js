@@ -2583,8 +2583,6 @@ $(document).ready(function () {
     });//end event status table END SECTION HEADS
 
 
-
-
     $("#venuesButton").on("click", function (e) {
         console.log('napindot')
         e.preventDefault();
