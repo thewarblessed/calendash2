@@ -1148,6 +1148,8 @@ $(document).ready(function () {
             orgDiv.style.display = 'block';
             deptDiv.style.display = 'block';
             sectDiv.style.display = 'block';
+            tupID.style.display = 'block';
+            tupIDPhoto.style.display = 'block';
             deptDivStaff.style.display = 'none';
             validID.style.display = 'none';
         }

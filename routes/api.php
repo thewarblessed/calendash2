@@ -252,6 +252,11 @@ Route::post('/outside/storeEvent',[
         'uses' => 'EventController@storeOutsiderEvents',
         'as' => 'storeOutsiderEvents',
 ]);
+////////////////////////////// attendance student lists //////////////////////
+Route::get('/studentlists',[
+        'uses' => 'AttendanceController@getStudentList',
+        'as' => 'getStudentList',
+]);
 
 ////////////////================ MOBILE ROUTES ================//////////////////
 //REGISTRATION MOBILE

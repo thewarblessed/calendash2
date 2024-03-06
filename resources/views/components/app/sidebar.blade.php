@@ -189,6 +189,15 @@
                     <span class="nav-link-text ms-1">Venues</span>
                 </a>
             </li>
+            
+            <li class="nav-item">
+                <a class="nav-link  {{ is_current_route('attendance') ? 'active' : '' }}"
+                    href="{{ route('attendance') }}">
+                    <i class="fa-solid fa-clock"
+                        style="color: {{ is_current_route('attendance') ? '#774dd3' : 'defaultColor' }};font-size: 18px;"></i>
+                    <span class="nav-link-text ms-1">Attendance</span>
+                </a>
+            </li>
             @endif
 
             @endif

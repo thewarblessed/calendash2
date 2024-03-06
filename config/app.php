@@ -173,6 +173,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         Illuminate\Auth\AuthServiceProvider::class,
         Laravel\Socialite\SocialiteServiceProvider::class,
+        Maatwebsite\Excel\ExcelServiceProvider::class,
     ])->toArray(),
 
     /*
@@ -189,6 +190,7 @@ return [
     'aliases' => Facade::defaultAliases()->merge([
         'Auth' => Illuminate\Support\Facades\Auth::class,
         'Socialite' => Laravel\Socialite\Facades\Socialite::class,
+        'Excel' => Maatwebsite\Excel\Facades\Excel::class,
         // 'Example' => App\Facades\Example::class,
     ])->toArray(),
 

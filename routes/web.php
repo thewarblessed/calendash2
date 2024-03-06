@@ -18,6 +18,7 @@ use App\Http\Controllers\MailController;
 use App\Http\Controllers\OrganizationAdviserController;
 use App\Http\Controllers\DepartmentHeadController;
 use App\Http\Controllers\SectionHeadController;
+use App\Http\Controllers\AttendanceController;
 
 /*
 |--------------------------------------------------------------------------
@@ -276,6 +277,19 @@ Route::get('/admin/pendingUsers', [UserController::class, 'pendingUsers'])
 // ->middleware('auth')
 // ->name('AdminCreateOfficials');
 
+//////////////////////////////////////////////// ATTENDANCE ///////////////////////////////////////////////////
+Route::get('/attendance', [AttendanceController::class, 'index'])
+->name('attendance');
+
+Route::get('/attendance/{id}', [AttendanceController::class, 'attendance'])
+    ->middleware('auth')
+    ->name('singleAttendance');
+
+//////////////////////////////////////// ATTENDANCE IMPORT FILE EXCEL  ///////////////////////////
+
+Route::post('/import/studentImport', [AttendanceController::class, 'import'])
+->middleware('auth')
+->name('studentImport');
 
 // GOOGLE LOGIN 
 Route::get('auth/google', [GoogleSocialiteController::class, 'redirectToGoogle']);
