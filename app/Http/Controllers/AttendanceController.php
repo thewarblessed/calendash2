@@ -24,9 +24,10 @@ class AttendanceController extends Controller
     public function attendance(string $id)
     {
         //
-        $events = Event::orderBy('id')->get();
+        $event_id = $id;
+        $events = Event::where('id',$id)->first();
         // dd($events);
-        return view('attendance.attendance',compact('events'));
+        return view('attendance.attendance',compact('events','event_id'));
     }
 
     public function getStudentList()
@@ -38,9 +39,9 @@ class AttendanceController extends Controller
 
     }
 
-    public function import() 
+    public function import(Request $request) 
     {   
-        $eventId = 1;
+        $eventId = $request->student_event_id;
         Excel::import(new ImportStudents($eventId), request()->file('studentList'));
         return back();
     }

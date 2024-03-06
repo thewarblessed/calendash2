@@ -6,9 +6,10 @@
             <div class="card-header border-bottom pb-0">
                 <div class="" style="text-align: center">
                     <div>
-                        <strong><h3>Events list</h3></strong>
-                        <p class="text-sm">See information about all events</p>
-                        <button type="button" class="btn btn-dark approveBtn" style="width: 100%; height: 40px;" data-bs-toggle="modal" data-bs-target="#importStudentModal" id="tableApprove">Import File</button>
+                        {{-- <strong><h3>Events list</h3></strong> --}}
+                        <h1>{{ $events->event_name }}</h1>
+                        <p class="text-sm">See all participants</p>
+                        <button type="button" class="btn btn-dark approveBtn" style="width: 100%; height: 40px;" data-bs-toggle="modal" data-bs-target="#importStudentModal" id="importFile">Import File</button>
                     </div>
                 </div>
             </div>
@@ -41,11 +42,12 @@
                             @csrf
                             <div class="form-group">
                               <label for="exampleFormControlInput1">Upload excel file</label>
+                              <input name="student_event_id" type="text" class="form-control" value="{{$event_id}}" id="student_event_id" hidden>
                               <input name="studentList" type="file" class="form-control" id="studentList" required>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-white" data-bs-dismiss="modal" id="modalClose">Close</button>
-                                <button type="submit" class="btn btn-dark" id="eventApprove">Import</button>
+                                <button type="submit" class="btn btn-dark" id="studentListImport">Import</button>
                             </div>
                         </form>
                 
@@ -120,6 +122,12 @@ $(document).ready(function () {
         var id = $(this).data("id");
         console.log(id);
     })
+
+    $("#importFile").on("click", function (e) {
+        // var event_id = $("#studentListEventID").val();
+        // console.log(event_id);
+        console.log('napindot')
+    });
 
 
 })
