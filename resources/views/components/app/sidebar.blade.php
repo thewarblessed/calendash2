@@ -230,11 +230,11 @@
             @if (auth()->user()->hasRole(['business_manager']))
 
                 <li class="nav-item">
-                    <a class="nav-link  {{ is_current_route('adaaRequest') ? 'active' : '' }}"
-                        href="{{ route('adaaRequest') }}">
+                    <a class="nav-link  {{ is_current_route('outsideRequest') ? 'active' : '' }}"
+                        href="{{ route('outsideRequest') }}">
                         <i class="fa-solid fa-bell"
-                            style="color: {{ is_current_route('adaaRequest') ? '#774dd3' : 'defaultColor' }}; font-size:{{ is_current_route('adaaRequest') ? '23px' : '18px' }};"></i>
-                        <span class="nav-link-text ms-1">Requests</span>
+                            style="color: {{ is_current_route('outsideRequest') ? '#774dd3' : 'defaultColor' }}; font-size:{{ is_current_route('adaaRequest') ? '23px' : '18px' }};"></i>
+                        <span class="nav-link-text ms-1">Requests for Event Rent</span>
                     </a>
                 </li>
                 <!-- EVENT CALENDAR -->

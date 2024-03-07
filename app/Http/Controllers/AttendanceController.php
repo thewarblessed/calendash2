@@ -7,6 +7,7 @@ use App\Models\Attendance;
 use App\Models\Event;
 use App\Imports\ImportStudents;
 use Maatwebsite\Excel\Facades\Excel;
+use Auth;
 
 class AttendanceController extends Controller
 {
@@ -16,7 +17,7 @@ class AttendanceController extends Controller
     public function index()
     {
         //
-        $events = Event::orderBy('id')->get();
+        $events = Event::orderBy('id')->where('user_id', Auth::user()->id)->get();
         // dd($events);
         return view('attendance.index',compact('events'));
     }

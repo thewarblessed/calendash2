@@ -25,19 +25,36 @@ class RequestController extends Controller
     {
         //ROLE BASED TABLE
         //IF IT HALL OR NOT
-        // $events = Event::orderBy('id')->whereNotNull('osa', null)->get();
+        // $events = Event::join('users','events.user_id','users.id')
+        //                 ->get();
+        // $event
         // $pending = 
         // $events = Event::with('venues');
         // dd($pending);
             
-        // $user_role = Auth::user()->role;
-        // $user_org = Official::where('org')
+        $user_role = Auth::user()->role;
+        $user_id = Auth::user()->id;
+        // dd($user_id);
+        $official = Official::where('user_id',$user_id)->first();
+        $org_id = $official->organization_id;
+        $dept_id = $official->department_id;
+        
+        
+        // $section = User::where('id')
+        
+        // $section_id = $official->section_id;
+        // $user_org = Official::where('target_org','');
+        
         // $user_sec =
         // $user_dept
         
         if($user_role === "org_adviser")
         {
-            $pending = Venue::join('events','events.venue_id','venues.id')->orderBy('events.status')->orderByDesc('events.id')->get();
+            $pending = Venue::join('events','events.venue_id','venues.id')
+            ->orderBy('events.status')
+            ->orderByDesc('events.id')
+            ->where('events.target_org', $org_id)
+            ->get();
             // dd($pending);
             $PenEvents = Event::orderBy('id')->whereNull('org_adviser')->get();
             // dd($PenEvents);
@@ -45,15 +62,23 @@ class RequestController extends Controller
         }   
         elseif($user_role === "section_head")
         {
+            $pending = Venue::join('events','events.venue_id','venues.id')
+            ->orderBy('events.status')
+            ->orderByDesc('events.id')
+            ->where('events.', $org_id)
+            ->get();
+
+            // $pending = Venue::join('events','events.venue_id','venues.id')->orderBy('events.status')->orderByDesc('events.id')->get();
             // $pending = Event::orderBy('id')->get();
-            $pending = Event::orderBy('id')->whereNotNull('org_adviser')->get();
+            // $pending = Event::orderBy('id')->whereNotNull('org_adviser')->get();
             // dd($PenEvents);
             return View::make('officials.secHead.request', compact('pending'));
         }     
         elseif($user_role === "department_head")
         {
+            $pending = Venue::join('events','events.venue_id','venues.id')->orderBy('events.status')->orderByDesc('events.id')->get();
             // $pending = Event::orderBy('id')->get();
-            $pending = Event::orderBy('id')->whereNotNull('sect_head')->get();
+            // $pending = Event::orderBy('id')->whereNotNull('sect_head')->get();
             return View::make('officials.secHead.request', compact('pending'));
         }
         elseif ($user_role === "osa")
