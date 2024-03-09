@@ -2916,6 +2916,14 @@ $(document).ready(function () {
         // Fetch notifications every minute
         // setInterval(fetchNotifications, 60000); // Update every minute (60000 milliseconds)
     });
-    
+
+    $("#termsConditions").on("click", function (e) {
+        e.preventDefault();
+        Swal.fire({
+            title: 'Terms and Condition',
+            text: 'fshdfksdhfkh dfjkhsdkfjhskf hsdkfj hsdfs'
+          });
+    });
+
 
 })
