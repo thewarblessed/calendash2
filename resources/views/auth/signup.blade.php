@@ -189,7 +189,7 @@
                                             </select>
                                         </div>
 
-                                        {{-- <div class="form-check form-check-info text-left mb-0">
+                                        <div class="form-check form-check-info text-left mb-0">
                                             <input class="form-check-input" type="checkbox" name="terms"
                                                 id="terms" required>
                                             <label class="font-weight-normal text-dark mb-0" for="terms">
@@ -199,7 +199,7 @@
                                             @error('terms')
                                                 <span class="text-danger text-sm">{{ $message }}</span>
                                             @enderror
-                                        </div> --}}
+                                        </div>
                                         <div class="text-center">
                                             <button type="submit" class="btn btn-dark w-100 mt-4 mb-3">Sign up</button>
                                             <button type="button" class="btn btn-white btn-icon w-100 mb-3">

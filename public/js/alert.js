@@ -420,11 +420,8 @@ $(document).ready(function () {
         //Swal.fire('SweetAlert2 is working!')
     });//end create event
 
-    
-
     //REQUEST APPROVAL TABLE
     $("#eventTable tbody").on("click", 'button.approveBtn ', function (e) {
-        $('#eventReject').hide();
         // alert('dshagd')
         var id = $(this).data("id");
         // alert(id);
@@ -556,6 +553,148 @@ $(document).ready(function () {
         });
 
     });//end event table
+
+    // REQUEST REJECT TABLE
+    $("#eventTable tbody").on("click", 'button.rejectBtn', function (e) {
+       
+        
+        // alert('dshagd')
+        var id = $(this).data("id");
+        console.log(id);
+        
+        $.ajax({
+            type: "GET",
+            enctype: 'multipart/form-data',
+            processData: false, // Important!
+            contentType: false,
+            cache: false,
+            url: "/api/show/event/" + id,
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
+                    "content"
+                ),
+            },
+            dataType: "json",
+            success: function (data) {
+                console.log(data);
+                $('#rejectRequestModal').modal('show');
+                $('#eventRejectId').val(data.events.id);
+                $('#eventRejectName').val(data.events.event_name);
+                $('#eventRejectDesc').val(data.events.description);
+                $('#eventRejectParticipants').val(data.events.participants);
+                $('#eventRejectVenue').val(data.venues.name);
+                // $('#eventApprove').hide();
+                // $('#eventReject').show();
+                // $("#venueEditImage").html(
+                // `<img src="/storage/${data.Venues.image}" width="100" class="img-fluid img-thumbnail">`);
+            },
+            error: function (error) {
+                console.log("error");
+            },
+        });
+
+        // console.log(id)
+        // //PDF
+        $.ajax({
+            type: "GET",
+            url: "/api/show/letter/" + id,
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+            dataType: "json",
+            success: function (data) {
+                console.log(data);
+                var pdfLink = $('<a>', {
+                    href: "/storage/" + data,
+                    text: "Click here to view Request Letter",
+                    target: "_blank",
+                });
+                // console.log(href)
+                $("#viewRejectAnotherTab").empty().append(pdfLink);
+            },
+            error: function (error) {
+                console.log(error);
+            },
+        });
+
+        // //EVENT APPROVE BUTTON
+        $("#eventReject").on("click", async function (e) {
+            e.preventDefault();
+
+            // console.log($('#eventAuthId').val())
+            var user_id = $('#eventAuthRejectId').val()
+            // var eventAppId = $('#eventApproveId').val()
+            // console.log(eventAppId);
+            // console.log(user_id + 'hi');
+            // console.log($('#eventApproveVenue').val())
+            // alert('dshadahs')
+            $("#rejectRequestModal").modal('hide');
+            var reason = $('#eventRejectReason').val()
+            // console.log(reason);
+            const { value: password } = await Swal.fire({
+                title: "Enter your passcode to confirm approval",
+                input: "password",
+                inputLabel: "Passcode",
+                inputPlaceholder: "Enter your passcode",
+                inputAttributes: {
+                    maxlength: "10",
+                    autocapitalize: "off",
+                    autocorrect: "off"
+                }
+            });
+
+            if (password) {
+                console.log(password)
+                const dataToSend = {
+                    key1: password,
+                    key2: user_id,
+                    key3: reason
+                };
+                console.log(dataToSend);
+                $.ajax({
+                    type: "POST",
+                    url: "/api/request/reject/" + id,
+                    data: dataToSend,
+                    headers: {
+                        'Authorization': 'Bearer ' + sessionStorage.getItem('token'),
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function (data) {
+                        console.log(data);
+
+                        // setTimeout(function () {
+                        //     window.location.href = '/request';
+                        // }, 1500);
+
+                        Swal.fire({
+                            icon: "success",
+                            title: "Request has been declined",
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+
+                    },
+                    error: function (error) {
+                        console.log('error');
+                        Swal.fire({
+                            icon: "error",
+                            title: "Oops...",
+                            text: "Something went wrong!",
+                            footer: '<a href="#">Why do I have this issue?</a>'
+                        });
+
+                    }
+                });
+
+                // Swal.fire(`Entered password: ${password}`);
+            }
+        });
+
+    });//end event status table END SECTION HEADS
+
+    // $("#eventReject").on("click", function (e) {
+    //     console.log('rejected')
+    // });
 
     //CREATE OFFICIALS
     $("#officialSubmit").on("click", function (e) {
@@ -2696,16 +2835,19 @@ $(document).ready(function () {
 
     });//end event status table END SECTION HEADS
 
+    // $("#venuesButton").on("click", function (e) {
+    //     console.log('napindot')
+    //     e.preventDefault();
+    //     $("#requestRoomButton").css('display', 'block')
 
-    $("#venuesButton").on("click", function (e) {
-        console.log('napindot')
-        e.preventDefault();
-        $("#requestRoomButton").css('display', 'block')
+    //     $("#roomDiv").css('display', 'none')
+    //     $("#venueDiv").css('display', 'block')
+    //     $("#venuesButton").css('display', 'none')
+    // });
 
-        $("#roomDiv").css('display', 'none')
-        $("#venueDiv").css('display', 'block')
-        $("#venuesButton").css('display', 'none')
-    });
+    //////////////// reject request ////////////////////////
+
+
 
     //VENUES RDB
     $('.radiobuttonsuser input[name="event_place"]').change(function () {
@@ -2735,5 +2877,45 @@ $(document).ready(function () {
         }
 
     });
+
+    //notification
+    function fetchNotifications() {
+        $.ajax({
+            url: '/api/notif/request', // Update the URL to your endpoint
+            method: 'GET',
+            success: function(response) {
+                $('#notificationList').empty(); // Clear existing notifications
+                response.forEach(function(notification) {
+                    var timeAgo = moment(notification.created_at).fromNow(); // Use moment.js to calculate time ago
+                    var listItem = '<li class="mb-2">' +
+                        '<a class="dropdown-item border-radius-md" href="javascript:;">' +
+                        '<div class="d-flex py-1">' +
+                        '<div class="my-auto">' +
+                        '<img src="../assets/img/team-2.jpg" class="avatar avatar-sm border-radius-sm me-3">' +
+                        '</div>' +
+                        '<div class="d-flex flex-column justify-content-center">' +
+                        '<h6 class="text-sm font-weight-normal mb-1">' +
+                        '<span class="font-weight-bold">New request</span> from ' + notification.name +
+                        '</h6>' +
+                        '<p class="text-xs text-secondary mb-0 d-flex align-items-center">' +
+                        '<i class="fa fa-clock opacity-6 me-1"></i>' + timeAgo +
+                        '</p>' +
+                        '</div>' +
+                        '</div>' +
+                        '</a>' +
+                        '</li>';
+                    $('#notificationList').append(listItem); // Append new notification to the list
+                });
+            }
+        });
+    }
+
+    // Fetch notifications initially
+    $("#dropdownMenuButton").on("click", function (e) {
+        fetchNotifications();
+        // Fetch notifications every minute
+        // setInterval(fetchNotifications, 60000); // Update every minute (60000 milliseconds)
+    });
+    
 
 })

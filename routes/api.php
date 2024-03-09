@@ -164,6 +164,12 @@ Route::post('/request/approve/{id}',[
         'as' => 'showEventRole',
 ]);
 
+//reject request
+Route::post('/request/reject/{id}',[
+        'uses' => 'RequestController@reject',
+        'as' => 'rejectEvent',
+]);
+
 // GET ALL ORG ADVISERS
 Route::get('/admin/orgadvisers',[
         'uses' => 'OrganizationAdviserController@getAllOrgAdviser',
@@ -260,6 +266,12 @@ Route::post('/updateAttendance/{id}',[
         'uses' => 'AttendanceController@updateAttendance',
         'as' => 'updateAttendance',
         ]);
+
+////////////////////////////// NOTIFICATIONS  //////////////////////
+Route::get('/notif/request',[
+        'uses' => 'NotificationController@index',
+        'as' => 'getNotif',
+]);
 
 ////////////////================ MOBILE ROUTES ================//////////////////
 //REGISTRATION MOBILE

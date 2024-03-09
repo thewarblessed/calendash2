@@ -180,13 +180,13 @@
                 </a>
             </li>
 
-            <!-- VENUES -->
+            <!-- My Events -->
             <li class="nav-item">
                 <a class="nav-link  {{ is_current_route('venues.indexUser') ? 'active' : '' }}"
                     href="{{ route('venues.indexUser') }}">
                     <i class="fa-solid fa-map-location-dot"
                         style="color: {{ is_current_route('venues.indexUser') ? '#774dd3' : 'defaultColor' }};font-size: 18px;"></i>
-                    <span class="nav-link-text ms-1">Venues</span>
+                    <span class="nav-link-text ms-1">My Events</span>
                 </a>
             </li>
             
@@ -206,14 +206,6 @@
             {{-- FOR OFFICIALS --}}
             @if (auth()->user()->hasRole(['org_adviser', 'section_head', 'department_head', 'osa', 'adaa', 'atty',
             'campus_director']))
-            <li class="nav-item">
-                <a class="nav-link  {{ is_current_route('adaaRequest') ? 'active' : '' }}"
-                    href="{{ route('adaaRequest') }}">
-                    <i class="fa-solid fa-bell"
-                        style="color: {{ is_current_route('adaaRequest') ? '#774dd3' : 'defaultColor' }}; font-size:{{ is_current_route('adaaRequest') ? '23px' : '18px' }};"></i>
-                    <span class="nav-link-text ms-1">Requests</span>
-                </a>
-            </li>
 
             <!-- EVENT CALENDAR -->
             <li class="nav-item">
@@ -224,6 +216,35 @@
                     <span class="nav-link-text ms-1">Event Calendar</span>
                 </a>
             </li>
+
+            <li class="nav-item">
+                <a class="nav-link  {{ is_current_route('adaaRequest') ? 'active' : '' }}"
+                    href="{{ route('adaaRequest') }}">
+                    <i class="fa-solid fa-bell"
+                        style="color: {{ is_current_route('adaaRequest') ? '#774dd3' : 'defaultColor' }}; font-size:{{ is_current_route('adaaRequest') ? '23px' : '18px' }};"></i>
+                    <span class="nav-link-text ms-1">Requests</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link  {{ is_current_route('adaaRequest') ? 'active' : '' }}"
+                    href="{{ route('adaaRequest') }}">
+                    <i class="fa-regular fa-thumbs-up"
+                        style="color: {{ is_current_route('adaaRequest') ? '#774dd3' : 'defaultColor' }}; font-size:{{ is_current_route('adaaRequest') ? '23px' : '18px' }};"></i>
+                    <span class="nav-link-text ms-1">My Approved Requests</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link  {{ is_current_route('myRejected') ? 'active' : '' }}"
+                    href="{{ route('myRejected') }}">
+                    <i class="fa-solid fa-square-xmark"
+                        style="color: {{ is_current_route('myRejected') ? '#774dd3' : 'defaultColor' }}; font-size:{{ is_current_route('adaaRequest') ? '23px' : '18px' }};"></i>
+                    <span class="nav-link-text ms-1">My Declined Requests</span>
+                </a>
+            </li>
+
+            
             @endif
 
             {{-- BUSINESS MANAGER --}}

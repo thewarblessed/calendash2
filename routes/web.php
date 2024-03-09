@@ -286,20 +286,24 @@ Route::get('/attendance/{id}', [AttendanceController::class, 'attendance'])
     ->middleware('auth')
     ->name('singleAttendance');
 
+
+//////////////////////////////////////////////// REJECTED REQUESTS FOR OFFICIALS  ///////////////////////////////////////////////////
+Route::get('/my/rejected', [RequestController::class, 'myRejectRequest'])
+    ->middleware('auth')
+    ->name('myRejected');
+
+
 //////////////////////////////////////// ATTENDANCE IMPORT FILE EXCEL  ///////////////////////////
 
 Route::post('/import/studentImport', [AttendanceController::class, 'import'])
 ->middleware('auth')
 ->name('studentImport');
 
-
 //////////////////////////////////////// OUTSIDER & BUSINESS MANAGER  ///////////////////////////
 
 Route::get('/outside/request', [BusinessManagerController::class, 'index'])
 ->middleware('auth')
 ->name('outsideRequest');
-
-
 
 // GOOGLE LOGIN 
 Route::get('auth/google', [GoogleSocialiteController::class, 'redirectToGoogle']);

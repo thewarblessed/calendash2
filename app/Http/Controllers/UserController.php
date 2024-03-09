@@ -175,6 +175,7 @@ class UserController extends Controller
             $student->firstname = $user->firstname;
             $student->department_id = $user->department_id;
             $student->organization_id = $user->organization_id;
+            $student->section_id = $user->section_id;
             $student->user_id = $user->user_id;
             // $student->role = 'student';
             $student->save();
