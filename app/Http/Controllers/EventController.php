@@ -856,6 +856,8 @@ class EventController extends Controller
                                 'departments.department',
                                 'events.status',
                                 'events.event_name',
+                                'events.start_date',
+                                'events.end_date',
                                 'events.start_time',
                                 'events.end_time',
                                 'events.type',
