@@ -292,6 +292,7 @@ Route::post('/import/studentImport', [AttendanceController::class, 'import'])
 ->middleware('auth')
 ->name('studentImport');
 
+
 //////////////////////////////////////// OUTSIDER & BUSINESS MANAGER  ///////////////////////////
 
 Route::get('/outside/request', [BusinessManagerController::class, 'index'])

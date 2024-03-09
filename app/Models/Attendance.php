@@ -17,9 +17,10 @@ class Attendance extends Model
 
     protected $fillable = [
         "event_id",
-        "tupID",
+        "yearsection",
         "lastname",
         "firstname",
         "attendance_time",
+        "is_present"
     ];
 }

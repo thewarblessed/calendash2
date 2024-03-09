@@ -26,10 +26,11 @@ class VenueController extends Controller
 
     public function indexUser()
     {
-        //
+        // $venues = Venue::orderBy('id')->get();
+        // return View::make('venues.index', compact('venues'));
         $venues = Venue::orderBy('id')->get();
-        // return response()->json($venues);
-        return View::make('venues.index', compact('venues'));
+        $events = Event::with('venue')->orderBy('id')->get(); // Eager load the venue relationship
+        return view('venues.index', compact('venues', 'events'));
 
     }
 
@@ -52,7 +53,7 @@ class VenueController extends Controller
     public function eventlist(string $id)
     {
         $venue = Venue::find($id);
-        $events = Event::where('venue_id', $id)->get();
+        $events = Event::where('venue_id', $id)->where('status', 'APPROVED')->get();
         return view('venues.eventlist', compact('venue', 'events'));
     }
 

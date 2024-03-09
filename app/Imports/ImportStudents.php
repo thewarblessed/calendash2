@@ -25,7 +25,7 @@ class ImportStudents implements ToCollection
         foreach ($rows as $row) {
             Attendance::create([
                 'event_id' => $this->eventId,
-                'tupID' => $row[0],
+                'yearsection' => $row[0],
                 'lastname' => $row[1],
                 'firstname' => $row[2],
             ]);

@@ -49,9 +49,6 @@ Route::middleware(['cors'])->group(function () {
         ]);         
 });
 
-
-
-
 Route::get('/admin/indexVenues',[
         'uses' => 'VenueController@index',
         'as' => 'indexVenue',
@@ -253,10 +250,16 @@ Route::post('/outside/storeEvent',[
         'as' => 'storeOutsiderEvents',
 ]);
 ////////////////////////////// attendance student lists //////////////////////
-Route::get('/studentlists',[
+Route::get('/studentlists/{id}',[
         'uses' => 'AttendanceController@getStudentList',
         'as' => 'getStudentList',
 ]);
+
+// Update Attendance
+Route::post('/updateAttendance/{id}',[
+        'uses' => 'AttendanceController@updateAttendance',
+        'as' => 'updateAttendance',
+        ]);
 
 ////////////////================ MOBILE ROUTES ================//////////////////
 //REGISTRATION MOBILE

@@ -8,6 +8,7 @@ use App\Models\Event;
 use App\Imports\ImportStudents;
 use Maatwebsite\Excel\Facades\Excel;
 use Auth;
+use Log;
 
 class AttendanceController extends Controller
 {
@@ -31,10 +32,10 @@ class AttendanceController extends Controller
         return view('attendance.attendance',compact('events','event_id'));
     }
 
-    public function getStudentList()
+    public function getStudentList(string $id)
     {
         //
-        $studentList = Attendance::orderBy('id')->get();
+        $studentList = Attendance::orderBy('id')->where('event_id', $id)->get();
         // dd($events);
         return response()->json($studentList);
 
@@ -81,9 +82,43 @@ class AttendanceController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function updateAttendance(Request $request, string $id)
     {
-        //
+        // Log::info($request);
+        // paload ako web pala check mo laravel log eco ctrl p ka dito sa vs code
+        // Validate the request
+        // $request->validate([
+        //     'is_present' => 'required|boolean',
+        // ]);
+        // dd($request->all());
+        // Find the attendance record
+        $attendance = Attendance::findOrFail($id);
+        
+        // Update the attendance status
+        if ($attendance->is_present === null)
+        {
+            $attendance->is_present = 1;
+            $attendance->attendance_time = now();
+        }
+        else{
+            $attendance->is_present = null;
+            $attendance->attendance_time = null;
+        }
+        $attendance->update();
+        
+        // Update the attendance_time if the student is present
+        // dd($attendance->is_present);
+        
+        // if ($attendance->is_present) {
+        //     $attendance->attendance_time = now(); // Set the current timestamp
+        // } else {
+        //     $attendance->attendance_time = null; // Clear the attendance_time if the student is absent
+        // }
+
+        // Save the changes
+       
+
+        return response()->json(['message' => 'Attendance updated successfully']);
     }
 
     /**

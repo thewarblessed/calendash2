@@ -52,7 +52,7 @@
                             <div class="container">
                                 <div class="row">
                                     @foreach ($events as $event)
-                                    <div class="col-sm">
+                                    {{-- <div class="col-sm"> --}}
                                         <div class="card" style="width: 15rem; margin-bottom: 30px; border: 2px solid rgb(216, 200, 231)">
                                             <img src="{{ asset('storage/'.$event->image) }}" height="200" class="card-img-top" alt="...">
                                             <div class="card-body">
@@ -61,7 +61,7 @@
                                                     {{-- <a href="{{ route('venueEventlist', ['id' => $event->id]) }}" class="btn btn-primary ml-2" style="flex: 1;">Event List</a> --}}
                                                </div>
                                         </div>
-                                    </div>   
+                                    {{-- </div>    --}}
                                     @endforeach
                                 </div>
                             </div>

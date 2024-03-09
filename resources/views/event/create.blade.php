@@ -33,24 +33,29 @@
                     <div class="tab d-none">
                         <h3 style="text-align: center">Choose Available Venues</h3>
                         <div class="container">
-                            
+
                             {{-- <button type="button" id="requestRoomButton" class="btn btn-link" >Request Rooms</button>
                             <button type="button" id="venuesButton" class="btn btn-link" style="display: none;">Venue</button> --}}
 
                             <div class="radiobuttonsuser">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="event_place" value="venue" id="venue" required>
-                                    <label class="custom-control-label" for="event_place" style="font-size: 16px;">VENUES</label>
+                                    <input class="form-check-input" type="radio" name="event_place" value="venue"
+                                        id="venue" required>
+                                    <label class="custom-control-label" for="event_place"
+                                        style="font-size: 16px;">VENUES</label>
                                 </div>
-                                
-                                <div class="form-check" style="{{ Auth::user()->role === 'outsider' ? 'display: none;' : '' }}">
-                                    <input class="form-check-input" type="radio" name="event_place" value="room" id="room" required>
-                                    <label class="custom-control-label" for="event_place" style="font-size: 16px;">REQUEST ROOMS</label>
+
+                                <div class="form-check"
+                                    style="{{ Auth::user()->role === 'outsider' ? 'display: none;' : '' }}">
+                                    <input class="form-check-input" type="radio" name="event_place" value="room"
+                                        id="room" required>
+                                    <label class="custom-control-label" for="event_place"
+                                        style="font-size: 16px;">REQUEST ROOMS</label>
                                 </div>
                             </div>
 
                             <div style="display: none;" id="venueDiv">
-                                <div class="row" >
+                                <div class="row">
                                     @foreach ($venues as $venue)
                                         <div class="col-sm" style="display: block;" id="venueDiv">
                                             <div id="venue{{ $venue->id }}" data-capacity="{{ $venue->capacity }}"
@@ -70,8 +75,9 @@
                                                     </div>
                                                     <p class="card-text">Capacity: {{ $venue->capacity }}</p>
                                                     <div class="form-check">
-                                                        <input class="form-check-input" type="radio" name="event_venue"
-                                                            id="event_venue" value= "{{ $venue->id }}" required>
+                                                        <input class="form-check-input" type="radio"
+                                                            name="event_venue" id="event_venue"
+                                                            value= "{{ $venue->id }}" required>
                                                         <label class="custom-control-label" for="event_venue"
                                                             style="color: blue; font-size: 18px"><strong>SELECT</strong>
                                                         </label>
@@ -84,7 +90,7 @@
                             </div>
 
                             <div style="display: none;" id="roomDiv">
-                                <div class="row" >
+                                <div class="row">
                                     @foreach ($rooms as $room)
                                         <div class="col-sm">
                                             <div id="venue{{ $room->id }}" data-capacity="{{ $room->capacity }}"
@@ -94,7 +100,8 @@
                                                     class="card-img-top" alt="...">
                                                 <div class="card-body">
                                                     <h4 class="card-title">{{ $room->name }}</h4>
-                                                    <p1 class="card-subtitle mb-2 text-muted">Rules and Regulations</p1>
+                                                    <p1 class="card-subtitle mb-2 text-muted">Rules and Regulations
+                                                    </p1>
                                                     <div class="card-text">
                                                         <ul>
                                                             @foreach (explode("\n", $room->description) as $item)
@@ -104,8 +111,9 @@
                                                     </div>
                                                     <p class="card-text">Capacity: {{ $room->capacity }}</p>
                                                     <div class="form-check">
-                                                        <input class="form-check-input" type="radio" name="event_venue"
-                                                            id="event_venue" value= "{{ $room->id }}" required>
+                                                        <input class="form-check-input" type="radio"
+                                                            name="event_venue" id="event_venue"
+                                                            value= "{{ $room->id }}" required>
                                                         <label class="custom-control-label" for="event_venue"
                                                             style="color: blue; font-size: 18px"><strong>SELECT</strong>
                                                         </label>
@@ -116,7 +124,7 @@
                                     @endforeach
                                 </div>
                             </div>
-                           
+
 
                         </div>
                     </div>
@@ -125,37 +133,45 @@
                     <div class="tab d-none">
                         <div class="card-body">
                             <h3 style="text-align: center">Set Date and Time</h3>
-      
+
                             <div class="radiobuttonsuser">
                                 <h4 style="text-align: left">Select preferred Date and Time</h4>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="event_type" value="withinDay" id="withinDay" required>
-                                    <label class="custom-control-label" for="withinDay" style="font-size: 16px;">Within the Day</label>
+                                    <input class="form-check-input" type="radio" name="event_type"
+                                        value="withinDay" id="withinDay" required>
+                                    <label class="custom-control-label" for="withinDay"
+                                        style="font-size: 16px;">Within the Day</label>
                                 </div>
 
                                 <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="event_type" value="wholeDay" id="wholeDay" required>
-                                    <label class="custom-control-label" for="wholeDay" style="font-size: 16px;">Whole Day</label>
+                                    <input class="form-check-input" type="radio" name="event_type"
+                                        value="wholeDay" id="wholeDay" required>
+                                    <label class="custom-control-label" for="wholeDay" style="font-size: 16px;">Whole
+                                        Day</label>
                                 </div>
 
                                 <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="event_type" value="wholeWeek" id="wholeWeek" required>
-                                    <label class="custom-control-label" for="wholeWeek" style="font-size: 16px;">Whole Week</label>
+                                    <input class="form-check-input" type="radio" name="event_type"
+                                        value="wholeWeek" id="wholeWeek" required>
+                                    <label class="custom-control-label" for="wholeWeek"
+                                        style="font-size: 16px;">Whole Week</label>
                                 </div>
 
                                 <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="event_type" value="dateRanges"
-                                        id="dateRanges" required>
-                                    <label class="custom-control-label" for="dateRanges" style="font-size: 16px;">Date Range</label>
+                                    <input class="form-check-input" type="radio" name="event_type"
+                                        value="dateRanges" id="dateRanges" required>
+                                    <label class="custom-control-label" for="dateRanges"
+                                        style="font-size: 16px;">Date Range</label>
                                 </div>
                             </div>
 
                             <div id="withinTheDayDivUser" class="withinTheDay" style="display:none;">
                                 <h5 style="text-align: center">Within the Day</h5>
                                 <div class="form-group">
-                                    <label for="example-datetime-local-input" class="form-control-label">Datetime</label>
-                                    <input class="form-control" type="date" value="" name="event_date_withinDayUser"
-                                        id="event_date_withinDayUser">
+                                    <label for="example-datetime-local-input"
+                                        class="form-control-label">Datetime</label>
+                                    <input class="form-control" type="date" value=""
+                                        name="event_date_withinDayUser" id="event_date_withinDayUser">
                                 </div>
                                 <div class="row">
                                     <div class="mb-3 col-md-6">
@@ -193,7 +209,7 @@
                                 <h5 style="text-align: center">Date Range</h5>
                                 <div class="form-group" style="text-align: center">
                                     <label for="example-week-input" class="form-control-label"></label>
-                                    <input type="text" name="daterange" value="" id="date_range_User"/>
+                                    <input type="text" name="daterange" value="" id="date_range_User" />
                                 </div>
                             </div>
                         </div>
@@ -206,20 +222,23 @@
                                     <li>Allotted time for Ingress: The time allocated for entering the premises.</li>
                                     <li>Allotted time for Egress: The time allocated for exiting the premises.</li>
                                     <li>Ensure that you adhere to the specified Ingress and Egress timings.</li>
-                                    <li>Failure to comply with the allotted timings may result in penalties or restrictions.</li>
+                                    <li>Failure to comply with the allotted timings may result in penalties or
+                                        restrictions.</li>
                                 </ul>
                             </div>
                         </div>
-                        
+
                     </div>
-   
+
 
                     {{-- GENERATE LETTER DETAILS --}}
                     <div class="tab d-none">
-                        @if(Auth::user()->role === 'outsider')
-                        <h3 style="text-align: center">Upload receipt</h3>
+                        @if (Auth::user()->role === 'outsider')
+                            <h3 style="text-align: center">Upload receipt</h3>
                             <div class="mb-3 col-md-6 d-flex justify-content-center">
-                                <label for="request_letter" class="form-label" style="font-size: 16px; text-align:center; color:blueviolet">Upload Photo of Receipt</label>
+                                <label for="request_letter" class="form-label"
+                                    style="font-size: 16px; text-align:center; color:blueviolet">Upload Photo of
+                                    Receipt</label>
                             </div>
                             <div class="col-md-6 d-flex justify-content-center">
                                 <input type="file" class="form-control" name="receipt" id="receipt" required>
@@ -234,34 +253,108 @@
                                 <li>then click "Save"</li>
                                 <li>then upload it to the bottom of this form</li>
                             </ul>
-                                <div class="container p-4 ">
-                                    <textarea name="letter_generator" id="editor"></textarea>
-                                </div>
-                                <div class="mb-3 col-md-6" style="align-self: center">
+                            <div class="container p-4 ">
+                                <textarea name="letter_generator" id="editor"></textarea>
+                            </div>
+                            {{-- <div class="mb-3 col-md-6" style="align-self: center">
                                         <label for="request_letter" class="form-label" style="font-size: 25px; text-align:center; color:blueviolet">Upload Request Letter</label>
                                         <input type="file" class="form-control" name="request_letter" id="request_letter" required>
-                                </div>
+                                </div> --}}
+                            <div class="mb-3 col-md-6" style="align-self: center">
+                                <label for="request_letter" class="form-label"
+                                    style="font-size: 25px; text-align:center; color:blueviolet">Upload Request
+                                    Letter</label>
+                                <input type="file" class="form-control" name="request_letter" id="request_letter"
+                                    required accept=".pdf">
+                                <onchange="validateFile(this)">
+                                <!-- Call validateFile function when file selection changes -->
+                                <small class="text-danger" id="fileError"></small> <!-- Error message placeholder -->
+                                <small class="form-text text-muted">Max file size: 25MB. File type: PDF only.</small>
+                                <!-- Additional info -->
+                            </div>
+                            <script>
+                                function validateFile(input) {
+                                    const file = input.files[0];
+                                    const maxSize = 25 * 1024 * 1024; // 25MB in bytes
+
+                                    if (file.size > maxSize) {
+                                        document.getElementById('fileError').textContent = 'File size exceeds 25MB limit.';
+                                        input.value = ''; // Clear the file input
+                                    } else if (!file.type.includes('pdf')) {
+                                        document.getElementById('fileError').textContent = 'Only PDF files are allowed.';
+                                        input.value = ''; // Clear the file input
+                                    } else {
+                                        document.getElementById('fileError').textContent = ''; // Clear any previous error message
+                                    }
+                                }
+                            </script>
                         @endif
+
+                        {{-- <div class="card-footer text-end" style="position: absolute; bottom: 5px; right: 0;">
+                            <div class="d-flex mt-2">
+                                <input type="checkbox" id="termsCheckbox" onchange="toggleSubmitButton()">
+                                <label for="termsCheckbox" class="form-check-label" style="font-size: 16px;">I agree to the terms and conditions</label>
+                            </div>
+                        </div> --}}
+
+                        <div class="form-check form-check-info text-left mb-0">
+                            <input class="form-check-input" type="checkbox" name="terms"
+                                id="termsCheckbox" onchange="toggleSubmitButton()" required>
+                            <label class="font-weight-normal text-dark mb-0" for="terms">
+                                I agree the <a href="#" id="termsConditions"
+                                    class="text-dark font-weight-bold">Terms and Conditions</a>.
+                            </label>
+                        </div>
+
+                        <script>
+                            function toggleSubmitButton() {
+                                const submitButton = document.getElementById('createEvent_submit');
+                                const submitButtonOutsider = document.getElementById('createEvent_submit_outsider');
+                                const termsCheckbox = document.getElementById('termsCheckbox');
+
+                                if (termsCheckbox.checked) {
+                                    submitButton.disabled = false;
+                                    submitButtonOutsider.disabled = false;
+                                } else {
+                                    submitButton.disabled = true;
+                                    submitButtonOutsider.disabled = true;
+                                }
+                            }
+                        </script>
                     </div>
-                    
 
                     <div class="card-footer text-end">
-                        <div class="d-flex">
-                            <button type="button" id="back_button" class="btn btn-link" onclick="back()">Back</button>
+                        <div class="d-flex mt-2">
+                            <button type="button" id="back_button" class="btn btn-link"
+                                onclick="back()">Back</button>
                             <button type="button" id="next_button" class="btn btn-primary ms-auto"
                                 onclick="next()">Next</button>
-                            @if(Auth::user()->role === 'outsider')
-                            <button type="submit" id="createEvent_submit_outsider" class="btn btn-primary ms-auto">
-                                <span class="" role="status" id="spinner_outsider" aria-hidden="true"></span>
-                                <span class="sr-only">Loading...</span>Submit</button>
-                            @else
-                            <button type="submit" id="createEvent_submit" class="btn btn-primary ms-auto">
-                                <span class="" role="status" id="spinner" aria-hidden="true"></span>
-                                <span class="sr-only">Loading...</span>Submit</button>
-                            @endif
-                            
                         </div>
                     </div>
+
+                    <div class="card-footer text-end" id="submitSection">
+                        <div class="d-flex mt-2">
+                            @if (Auth::user()->role === 'outsider')
+                                <button type="submit" id="createEvent_submit_outsider"
+                                    class="btn btn-primary ms-auto" disabled>
+                                    <span class="" role="status" id="spinner_outsider"
+                                        aria-hidden="true"></span>
+                                    <span class="sr-only">Loading...</span>Submit
+                                </button>
+                            @else
+                                <button type="submit" id="createEvent_submit" class="btn btn-primary ms-auto"
+                                    disabled>
+                                    <span class="" role="status" id="spinner" aria-hidden="true"></span>
+                                    <span class="sr-only">Loading...</span>Submit
+                                </button>
+                            @endif
+                        </div>
+                    </div>
+
+                
+            
+
+                </div>
             </form>
         </div>
     </main>
@@ -289,7 +382,7 @@
     <script type="text/javascript" src="/js/alert.js"></script>
     <script>
         $("#createEvent_submit_outsider").hide()
-        
+
         $("#createEvent_submit").hide()
         var current = 0;
         var tabs = $(".tab");
@@ -298,31 +391,30 @@
         loadFormData(current);
 
         function loadFormData(n) {
-            var role = "{{Auth::user()->role}}";
+            var role = "{{ Auth::user()->role }}";
             console.log(role);
-            if (role === 'outsider'){
+            if (role === 'outsider') {
                 $(tabs_pill[n]).addClass("active");
                 $(tabs[n]).removeClass("d-none");
                 $("#back_button").attr("disabled", n == 0 ? true : false);
                 n == tabs.length - 1 ?
-                $("#next_button").hide() && $("#createEvent_submit_outsider").show() :
-                $("#next_button")
-                .attr("type", "button")
-                .text("Next")
-                .attr("onclick", "next()");
-            }
-            else{
+                    $("#next_button").hide() && $("#createEvent_submit_outsider").show() :
+                    $("#next_button")
+                    .attr("type", "button")
+                    .text("Next")
+                    .attr("onclick", "next()");
+            } else {
                 $(tabs_pill[n]).addClass("active");
                 $(tabs[n]).removeClass("d-none");
                 $("#back_button").attr("disabled", n == 0 ? true : false);
                 n == tabs.length - 1 ?
-                $("#next_button").hide() && $("#createEvent_submit").show() :
-                $("#next_button")
-                .attr("type", "button")
-                .text("Next")
-                .attr("onclick", "next()");
+                    $("#next_button").hide() && $("#createEvent_submit").show() :
+                    $("#next_button")
+                    .attr("type", "button")
+                    .text("Next")
+                    .attr("onclick", "next()");
             }
-            
+
         }
 
         function next() {
@@ -330,8 +422,7 @@
             const eventName = $('#eventName').val();
             const eventDesc = $('#eventDesc').val();
             const numParticipants = $('#numParticipants').val();
-            if (eventName === '' || eventDesc === '' || numParticipants === '')
-            {
+            if (eventName === '' || eventDesc === '' || numParticipants === '') {
                 Swal.fire({
                     icon: "error",
                     title: "Oops...",
@@ -367,7 +458,7 @@
         // document.getElementById('event_date').min = minDate;
         document.getElementById('event_date_withinDayUser').min = minDateWholeDay;
         document.getElementById('event_date_wholeDayUser').min = minDateWithinDay;
-        
+
         // $(function() {
         //     var minDate = new Date();
         //     minDate.setDate(today.getDate() + 7); // Set min date to 7 days ahead
@@ -442,23 +533,23 @@
                 }
             });
         });
-
     </script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js">
-    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
     <script>
         $(function() {
             $('input[name="daterange"]').daterangepicker({
-            opens: 'right',
-            minDate: moment().add(1, 'weeks').startOf('day'), // Set minDate to start of day one week from now
-            locale: {
-                format: 'YYYY-MM-DD'
-            }
+                opens: 'right',
+                minDate: moment().add(1, 'weeks').startOf(
+                    'day'), // Set minDate to start of day one week from now
+                locale: {
+                    format: 'YYYY-MM-DD'
+                }
             }, function(start, end, label) {
-            console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+                console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end
+                    .format('YYYY-MM-DD'));
             });
         });
     </script>
