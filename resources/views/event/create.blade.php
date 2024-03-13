@@ -34,8 +34,10 @@
                         <h3 style="text-align: center">Choose Available Venues</h3>
                         <div class="container">
 
-                            {{-- <button type="button" id="requestRoomButton" class="btn btn-link" >Request Rooms</button>
-                            <button type="button" id="venuesButton" class="btn btn-link" style="display: none;">Venue</button> --}}
+                            {{-- <button type="button" id="requestRoomButton" class="btn btn-link">Request
+                                Rooms</button>
+                            <button type="button" id="venuesButton" class="btn btn-link"
+                                style="display: none;">Venue</button> --}}
 
                             <div class="radiobuttonsuser">
                                 <div class="form-check">
@@ -77,7 +79,7 @@
                                                     <div class="form-check">
                                                         <input class="form-check-input" type="radio"
                                                             name="event_venue" id="event_venue"
-                                                            value= "{{ $venue->id }}" required>
+                                                            value="{{ $venue->id }}" required>
                                                         <label class="custom-control-label" for="event_venue"
                                                             style="color: blue; font-size: 18px"><strong>SELECT</strong>
                                                         </label>
@@ -113,7 +115,7 @@
                                                     <div class="form-check">
                                                         <input class="form-check-input" type="radio"
                                                             name="event_venue" id="event_venue"
-                                                            value= "{{ $room->id }}" required>
+                                                            value="{{ $room->id }}" required>
                                                         <label class="custom-control-label" for="event_venue"
                                                             style="color: blue; font-size: 18px"><strong>SELECT</strong>
                                                         </label>
@@ -140,7 +142,8 @@
                                     <input class="form-check-input" type="radio" name="event_type"
                                         value="withinDay" id="withinDay" required>
                                     <label class="custom-control-label" for="withinDay"
-                                        style="font-size: 16px;">Within the Day</label>
+                                        style="font-size: 16px;">Within
+                                        the Day</label>
                                 </div>
 
                                 <div class="form-check">
@@ -154,14 +157,16 @@
                                     <input class="form-check-input" type="radio" name="event_type"
                                         value="wholeWeek" id="wholeWeek" required>
                                     <label class="custom-control-label" for="wholeWeek"
-                                        style="font-size: 16px;">Whole Week</label>
+                                        style="font-size: 16px;">Whole
+                                        Week</label>
                                 </div>
 
                                 <div class="form-check">
                                     <input class="form-check-input" type="radio" name="event_type"
                                         value="dateRanges" id="dateRanges" required>
                                     <label class="custom-control-label" for="dateRanges"
-                                        style="font-size: 16px;">Date Range</label>
+                                        style="font-size: 16px;">Date
+                                        Range</label>
                                 </div>
                             </div>
 
@@ -257,9 +262,11 @@
                                 <textarea name="letter_generator" id="editor"></textarea>
                             </div>
                             {{-- <div class="mb-3 col-md-6" style="align-self: center">
-                                        <label for="request_letter" class="form-label" style="font-size: 25px; text-align:center; color:blueviolet">Upload Request Letter</label>
-                                        <input type="file" class="form-control" name="request_letter" id="request_letter" required>
-                                </div> --}}
+                            <label for="request_letter" class="form-label"
+                                style="font-size: 25px; text-align:center; color:blueviolet">Upload Request
+                                Letter</label>
+                            <input type="file" class="form-control" name="request_letter" id="request_letter" required>
+                        </div> --}}
                             <div class="mb-3 col-md-6" style="align-self: center">
                                 <label for="request_letter" class="form-label"
                                     style="font-size: 25px; text-align:center; color:blueviolet">Upload Request
@@ -293,16 +300,18 @@
                         {{-- <div class="card-footer text-end" style="position: absolute; bottom: 5px; right: 0;">
                             <div class="d-flex mt-2">
                                 <input type="checkbox" id="termsCheckbox" onchange="toggleSubmitButton()">
-                                <label for="termsCheckbox" class="form-check-label" style="font-size: 16px;">I agree to the terms and conditions</label>
+                                <label for="termsCheckbox" class="form-check-label" style="font-size: 16px;">I agree to
+                                    the terms and conditions</label>
                             </div>
                         </div> --}}
 
                         <div class="form-check form-check-info text-left mb-0">
-                            <input class="form-check-input" type="checkbox" name="terms"
-                                id="termsCheckbox" onchange="toggleSubmitButton()" required>
+                            <input class="form-check-input" type="checkbox" name="terms" id="termsCheckbox"
+                                onchange="toggleSubmitButton()" required>
                             <label class="font-weight-normal text-dark mb-0" for="terms">
                                 I agree the <a href="#" id="termsConditions"
-                                    class="text-dark font-weight-bold">Terms and Conditions</a>.
+                                    class="text-dark font-weight-bold">Terms
+                                    and Conditions</a>.
                             </label>
                         </div>
 
@@ -351,8 +360,8 @@
                         </div>
                     </div>
 
-                
-            
+
+
 
                 </div>
             </form>
@@ -550,6 +559,73 @@
             }, function(start, end, label) {
                 console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end
                     .format('YYYY-MM-DD'));
+            });
+        });
+
+        $(document).ready(function() {
+            // $('#dateRangeDivUser').hide();  
+            $('#date_range_User').change(function() {
+
+                // dateRanges
+                var selectedVenueID = $("input[name='event_venue']:checked").val();
+                var selectedRange = $(this).val();
+                var selectedVenueType = $("input[name='event_place']:checked").val();
+                console.log(selectedRange);
+
+                if (selectedVenueType === 'room') {
+                    $.ajax({
+                        url: '/api/check-event-conflict',
+                        type: 'POST',
+                        data: {
+                            event_type: 'dateRanges',
+                            daterange: selectedRange,
+                            room_id: selectedVenueID,
+                            selectedVenueType: selectedVenueType
+                        },
+                        success: function(response) {
+                            if (response.conflict) {
+                                Swal.fire({
+                                    icon: "error",
+                                    title: "Oops...",
+                                    html: "There is an existing event with the <strong>same venue and time</strong>. Please check the calendar for available dates and time.",
+                                });
+                                // alert('');
+                                $('#date_range_User').val('');
+                            }
+
+                        },
+                        error: function(xhr, status, error) {
+                            console.error('Error checking event conflict:', error);
+                        }
+                    });
+                } else {
+                    $.ajax({
+                        url: '/api/check-event-conflict',
+                        type: 'POST',
+                        data: {
+                            event_type: 'dateRanges',
+                            daterange: selectedRange,
+                            venue_id: selectedVenueID,
+                            selectedVenueType: selectedVenueType
+                        },
+                        success: function(response) {
+                            if (response.conflict) {
+                                Swal.fire({
+                                    icon: "error",
+                                    title: "Oops...",
+                                    html: "There is an existing event with the <strong>same venue and time</strong>. Please check the calendar for available dates and time.",
+                                });
+                                // alert('');
+                                $('#date_range_User').val('');
+                            }
+
+                        },
+                        error: function(xhr, status, error) {
+                            console.error('Error checking event conflict:', error);
+                        }
+                    });
+                }
+
             });
         });
     </script>

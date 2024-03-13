@@ -20,6 +20,7 @@ use App\Http\Controllers\DepartmentHeadController;
 use App\Http\Controllers\SectionHeadController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\BusinessManagerController;
+use App\Http\Controllers\RequestRoomController;
 
 /*
 |--------------------------------------------------------------------------
@@ -292,6 +293,10 @@ Route::get('/my/rejected', [RequestController::class, 'myRejectRequest'])
     ->middleware('auth')
     ->name('myRejected');
 
+Route::get('/my/approved', [RequestController::class, 'myApprovedRequest'])
+->middleware('auth')
+->name('myApproved');
+
 
 //////////////////////////////////////// ATTENDANCE IMPORT FILE EXCEL  ///////////////////////////
 
@@ -312,6 +317,14 @@ Route::get('/login/google/callback', [GoogleSocialiteController::class, 'handleC
 // GMAIL NOTIFICATION
 Route::get('/sendmail', [MailController::class, 'index']);
 
+//////////////////////////////////////// ROOM PENDING REQUEST  ///////////////////////////
 
+Route::get('/pending/rooms', [RequestRoomController::class, 'index'])
+    ->middleware('auth')
+    ->name('pendingRequestRoom');
+
+Route::get('/approved/rooms', [RequestRoomController::class, 'approvedRoomsView'])
+    ->middleware('auth')
+    ->name('approvedRoomsView');
 
 

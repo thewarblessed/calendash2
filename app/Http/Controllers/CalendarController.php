@@ -15,7 +15,13 @@ class CalendarController extends Controller
         // $events = Event::orderBy('id')->get();
         // return view ('mycalendar', ['event' => $events]);
         // $events = Event::orderBy('id')->select('event_name as title','description','event_date as start',)->get();
-        $events = Event::orderBy('id')->select('id','event_name as title','description','status','color')->selectRaw('CONCAT(start_date, "T", start_time) as start')->selectRaw('CONCAT(end_date, "T", end_time) as end')->get();
+        $events = Event::orderBy('id')
+                ->select('id','event_name as title','description','status','color')
+                ->selectRaw('CONCAT(start_date, "T", start_time) as start')
+                ->selectRaw('CONCAT(end_date, "T", end_time) as end')
+                ->where('status', 'PENDING')
+                ->orWhere('status', 'APPROVED')
+                ->get();
         
         // dd($events);
 

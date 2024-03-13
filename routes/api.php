@@ -141,6 +141,29 @@ Route::post('/check-event-conflict',[
 //         'as' => 'EventApproval',
 // ])->middleware('auth');
 
+////////////////////// PENDING ROOM REQUEST DATATABLE ////////////////////
+Route::get('/my/pendingRooms',[
+        'uses' => 'RequestRoomController@getAllPendingRequestRooms',
+        'as' => 'getAllPendingRequestRooms',
+]);
+
+Route::get('/my/pendingRooms/{id}',[
+        'uses' => 'RequestRoomController@getSinglePendingRequestRooms',
+        'as' => 'getSinglePendingRequestRooms',
+]);
+
+///////////// APPROVING OF ROOMS ////////////////////
+Route::post('/rooms/approve/{id}',[
+        'uses' => 'RequestRoomController@approveRooms',
+        'as' => 'approveRooms',
+]);
+
+///////////// GET ALL APPROVED ROOM EVENTS ////////////////////
+Route::get('/rooms/approve',[
+        'uses' => 'RequestRoomController@getAllApproveRooms',
+        'as' => 'getAllApproveRooms',
+]);
+
 
 ///////////////////// OFFICIALS ////////////////
 // ADD OFFICIALS
@@ -164,10 +187,22 @@ Route::post('/request/approve/{id}',[
         'as' => 'showEventRole',
 ]);
 
-//reject request
+// REJECTING OF REQUEST BY OFFICIALS
 Route::post('/request/reject/{id}',[
         'uses' => 'RequestController@reject',
         'as' => 'rejectEvent',
+]);
+
+//get official all reject request
+Route::post('/my/reject/{id}',[
+        'uses' => 'RequestController@getMyRejectRequest',
+        'as' => 'getMyRejectRequest',
+]);
+
+//get official all approved request
+Route::post('/my/approved/{id}',[
+        'uses' => 'RequestController@getMyApprovedRequest',
+        'as' => 'getMyApprovedRequest',
 ]);
 
 // GET ALL ORG ADVISERS

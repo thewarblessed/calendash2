@@ -14,59 +14,18 @@
                                 </div>
                             </div>
                         </div>
+                        <input name="officialApprovedUserID" type="text" class="form-control" value="{{ Auth::user()->id }}" id="officialApprovedUserID" hidden>
                         <div class="card-body px-0 py-0">
-                            <div class="border-bottom py-3 px-3 d-sm-flex align-items-center">
-                                <form id="radioForm">
-                                    <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
-                                        
-                                        <input type="radio" class="btn-check" name="btnradiotable" id="btnradiotable1" value="PENDING"
-                                            autocomplete="off" >
-                                        <label class="btn btn-white px-3 mb-0" for="btnradiotable1">Pending</label>
-
-                                        <input type="radio" class="btn-check" name="btnradiotable" id="btnradiotable2" value="appByMe"
-                                            autocomplete="off">
-                                        <label class="btn btn-white px-3 mb-0" for="btnradiotable2">Approved by Me</label>
-
-                                        <input type="radio" class="btn-check" name="btnradiotable" id="btnradiotable3" value="APPROVED"
-                                            autocomplete="off">
-                                        <label class="btn btn-white px-3 mb-0" for="btnradiotable3">Approved Events</label>
-
-                                        <input type="radio" class="btn-check" name="btnradiotable" id="btnradiotable4" value="all"
-                                            autocomplete="off" checked>
-                                        <label class="btn btn-white px-3 mb-0" for="btnradiotable4">All</label>
-
-                                    </div>
-                                </form>
-
-                                <div class="input-group w-sm-25 ms-auto">
-                                    <span class="input-group-text text-body">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px"
-                                            fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z">
-                                            </path>
-                                        </svg>
-                                    </span>
-                                    <input type="text" class="form-control" placeholder="Search" id="searchEvent">
-                                </div>
-                            </div>
                             <div class="table-responsive p-0">
-                                <table class="table align-items-center mb-0" id="eventTable">
+                                <table class="table align-items-center mb-0" id="officialApprovedTable">
                                     
-                                    <thead class="bg-gray-100">
+                                    <thead >
                                         <tr>
-                                            {{-- <th class="text-secondary text-xs font-weight-semibold opacity-15" >Event Name</th>
-                                            <th class="text-secondary text-xs font-weight-semibold opacity-15 ps-2" >Description</th>
-                                            <th class="text-secondary text-xs font-weight-semibold opacity-15 ps-2" >Event Date</th>
-                                            <th class="text-secondary text-xs font-weight-semibold opacity-15 ps-2" >Start Time</th>
-                                            <th class="text-secondary text-xs font-weight-semibold opacity-15 ps-2" >End Time</th>
-                                            <th class="text-secondary text-xs font-weight-semibold opacity-15 ps-2" >Status</th>
-                                            <th class="text-xs font-weight-semibold opacity-15" >Action</th> --}}
-
-
-                                            <th class="text-secondary text-xs font-weight-semibold opacity-7">Event Name</th>
+                                            <th class="text-secondary text-xs font-weight-semibold opacity-7" style="font-weight: bold; color:black;">Event Name</th>
                                             {{-- <th class="text-secondary text-xs font-weight-semibold opacity-7 ps-2">Description</th> --}}
                                             <th class="text-secondary text-xs font-weight-semibold opacity-7 ps-2">Venue</th>
+                                            <th class="text-secondary text-xs font-weight-semibold opacity-7 ps-2">Organization</th>
+                                            <th class="text-secondary text-xs font-weight-semibold opacity-7 ps-2">Department</th>
                                             <th class="text-secondary text-xs font-weight-semibold opacity-7 ps-2">Type</th>
                                             <th class="text-secondary text-xs font-weight-semibold opacity-7 ps-2">Start Date</th>
                                             <th class="text-secondary text-xs font-weight-semibold opacity-7 ps-2">End Date</th>
@@ -75,127 +34,24 @@
                                             <th class="text-secondary text-xs font-weight-semibold opacity-7 ps-2">Status</th>
                                             {{-- <th class="text-secondary text-xs font-weight-semibold opacity-7 ps-7">Action</th> --}}
                                             <th class="text-secondary opacity-7"></th>
-                                            
-
-
-                                            {{-- <th class="text-secondary text-xs font-weight-semibold opacity-15 ps-2">Description</th>
-                                            <th class="text-center text-secondary text-xs font-weight-semibold opacity-15">Capacity</th>
-                                            <th class="text-center text-secondary text-xs font-weight-semibold opacity-15">Capacity</th>
-                                            <th class="text-center text-secondary text-xs font-weight-semibold opacity-15">Capacity</th>
-                                            <th class="text-center text-secondary text-xs font-weight-semibold opacity-15">Capacity</th>
-                                            <th class="text-center text-secondary text-xs font-weight-semibold opacity-15">Capacity</th> --}}
-                                            
-                                            
-                                            {{-- <th class="text-secondary opacity-7"></th> --}}
                                         </tr>
                                     </thead>
-                                    <tbody id="eventBody">
-                                        @foreach($pending as $event)
+                                    <tbody id="officialRejectsBody">
+                                        
                                         <tr>
-                                            {{-- <td>
-                                                <div class="d-flex px-2 py-1">
-                                                    <div class="d-flex align-items-center" style="margin-right: 40px">
-                                                        
-                                                        <img src="{{ asset('storage/'.$event->image) }}" width="100" height="100" style="border-radius: 50%;"/>
-                                                    </div>
-                                                    <div class="d-flex flex-column justify-content-center ms-1">
-                                                        <h6 class="mb-0 text-sm font-weight-semibold">{{$event->name}}</h6>
-                                                        <p class="text-sm text-secondary mb-0">
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                            </td> --}}
-                                            <td>
-                                                <p class="text-sm text-dark font-weight-semibold mb-0" style="margin-left: 16px">{{$event->event_name}}</p>
-                                            </td>
-                                            <td>
-                                                <p class="text-sm text-dark font-weight-semibold mb-0">{{$event->name}}</p>
-                                                
-                                            </td>
-                                            <td>
-                                                @if ($event->type === 'whole_day')
-                                                <p class="text-sm text-dark font-weight-semibold mb-0">Whole Day</p>
-                                                @endif
-                                                @if ($event->type === 'whole_week')
-                                                <p class="text-sm text-dark font-weight-semibold mb-0">Whole Week</p>
-                                                @endif
-                                                @if ($event->type === 'within_day')
-                                                <p class="text-sm text-dark font-weight-semibold mb-0">Within the Day</p>
-                                                @endif
-                                                {{-- <p class="text-sm text-dark font-weight-semibold mb-0">{{$event->type}}</p> --}}
-                                            </td>
-                                            <td>
-                                                <p class="text-sm text-dark font-weight-semibold mb-0">{{Carbon\Carbon::parse($event->start_date)->format('j F, Y')}}</p>
-                                                
-                                            </td>
-                                            <td>
-                                                <p class="text-sm text-dark font-weight-semibold mb-0">{{Carbon\Carbon::parse($event->end_date)->format('j F, Y')}}</p>
-                                                
-                                            </td>
-                                            <td>
-                                                <p class="text-sm text-dark font-weight-semibold mb-0">{{Carbon\Carbon::parse($event->start_time)->format('g:i A')}}</p>
-                                                
-                                            </td>
-                                            <td>
-                                                <p class="text-sm text-dark font-weight-semibold mb-0">{{Carbon\Carbon::parse($event->end_time)->format('g:i A')}}</p>
-                                                
-                                            </td>
-                                            <td hidden>
-                                                <p class="text-sm text-dark font-weight-semibold mb-0">{{$event->sect_head}}</p>
-                                            </td>
-                                            <td class="align-middle text-center">
-                                                
-                                                @if($event->status === "PENDING")
-                                                    <span class="badge badge-sm border border-warning text-warning bg-warning border-radius-sm ms-sm-3 px-2">{{$event->status}}</span>
-                                                @endif 
-
-                                                @if($event->status === "PENDING" && Auth::user()->role === 'org_adviser' && $event->org_adviser !== null)
-                                                <span class="badge badge-sm border border-success text-success bg-success border-radius-sm ms-sm-3 px-2">APPROVED BY YOU</span>
-                                                @endif
-
-                                                {{-- @if($event->status === "PENDING" && Auth::user()->role === 'org_adviser' && $event->org_adviser !== null)
-                                                <span class="badge badge-sm border border-success text-success bg-success border-radius-sm ms-sm-3 px-2">APPROVED BY YOU</span>
-                                                @endif --}}
-
-                                                @if($event->status === "APPROVED")
-                                                <span class="badge badge-sm border border-success text-success bg-success border-radius-sm ms-sm-3 px-2">{{$event->status}}</span>
-                                                @endif
-                                            </td>
-                                            {{-- <td class="align-middle text-center">
-                                                <span class="text-secondary text-sm font-weight-normal">{{$event->name}}</span>
-                                                
-                                            </td> --}}
-                                            <td>
-                                                @if($event->status === "APPROVED") 
-                                                <div class="text-sm text-dark font-weight-semibold mb-0">
-                                                    <button type="button" class="btn btn-dark viewDetailsBtn" style="width: 150px; height: 40px;" data-bs-toggle="modal" data-id="{{$event->id}}" data-bs-target="#viewDetailsModal" id="tableViewDetails">View Details</button>
-                                                </div>
-
-                                                @else
-                                                <div class="text-sm text-dark font-weight-semibold mb-0">
-                                                    <button type="button" class="btn btn-dark approveBtn" style="width: 110px; height: 40px;" data-bs-toggle="modal" data-id="{{$event->id}}" data-bs-target="#approveRequestModal" id="tableApprove">Approve</button>
-                                                    <button type="button" class="btn btn-danger rejectBtn" style="width: 110px; height: 40px;"  data-id="{{$event->id}}" id="tableReject">Reject</button>
-                                                </div>
-                                                @endif
-
-                                                {{-- @if(Auth::user()->role === 'org_adviser' && $event->org_adviser !== null)
-                                                    <div>IKAW AY ORG ADIVSER</div>
-                                                    <span>IKAW AY ORG ADIVSER</span>
-                                                @endif --}}
-                                            </td>
                                         </tr>
-                                        @endforeach
+                                       
 
                                     </tbody>
                                 </table>
                             </div>
-                            <div class="border-top py-3 px-3 d-flex align-items-center">
+                            {{-- <div class="border-top py-3 px-3 d-flex align-items-center">
                                 <p class="font-weight-semibold mb-0 text-dark text-sm">Page 1 of 10</p>
                                 <div class="ms-auto">
                                     <button class="btn btn-sm btn-white mb-0">Previous</button>
                                     <button class="btn btn-sm btn-white mb-0">Next</button>
                                 </div>
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
                 </div>
@@ -318,15 +174,130 @@
                 </div>
                 </div>
             </div>
+
+            
            
             {{-- <x-app.footer /> --}}
         </div>
     </main>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
-    <script type="text/javascript" src="/js/alert.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="sweetalert2.all.min.js"></script>
-    <script src="sweetalert2.min.js"></script>
-    <script src="sweetalert2.all.min.js"></script>
-    <link rel="stylesheet" href="sweetalert2.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" type="text/css"
+        href="https://cdn.datatables.net/buttons/1.7.1/css/buttons.dataTables.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" charset="utf8"
+        src="https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js">
+    </script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.print.min.js">
+    </script>
+    <script src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
 </x-app-layout>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+
+    $(document).ready(function() {
+        var id = $("#officialApprovedUserID").val();
+        console.log(id + 'user_id');
+        $("#officialApprovedTable").DataTable({
+            ajax: {
+                url: "/api/my/approved/" + id,
+                method: "POST",
+                dataSrc: "",
+            },
+            dom: 'Bfrtip',
+            buttons: [{
+                    extend: 'pdfHtml5',
+                    className: 'btn btn-danger',
+                    exportOptions: {
+                        columns: [0, 1, 2]
+                    }
+                },
+                {
+                    extend: 'excelHtml5',
+                    className: 'btn btn-success',
+                    exportOptions: {
+                        columns: [0, 1, 2]
+                    }
+                }
+            ],
+            columns: [{ 
+                        data: "event_name",
+                        render: function(data, type, row) {
+                            return "<span style='color: black; font-weight: bold;'>" + data + "</span>";
+                        }
+                    },
+                    {
+                        data: "venueName",
+                        render: function(data, type, row) {
+                            return "<span style='color: black; font-weight: bold;'>" + data + "</span>";
+                        }
+                    },
+                    {
+                        data: "organization",
+                        render: function(data, type, row) {
+                            return "<span style='color: black; font-weight: bold;'>" + data + "</span>";
+                        }
+                    },
+                    {
+                        data: "department",
+                        render: function(data, type, row) {
+                            return "<span style='color: black; font-weight: bold;'>" + data + "</span>";
+                        }
+                    },
+                    {
+                        data: "type",
+                        render: function(data, type, row) {
+                            if (data === "whole_day") {
+                                return "<span style='color: black; font-weight: bold;'>Whole Day</span>";
+                            } else if (data === "whole_week"){
+                                return "<span style='color: black; font-weight: bold;'>Whole Week</span>";
+                            }
+                            else if (data === "within_day"){
+                                return "<span style='color: black; font-weight: bold;'>Within the Day</span>";
+                            }
+                        }
+                    },
+                    {
+                        data: "start_date",
+                        render: function(data, type, row) {
+                            return "<span style='color: black; font-weight: bold;'>" + moment(data).format('MMMM D, YYYY') + "</span>";
+                        }
+                    },
+                    {
+                        data: "end_date",
+                        render: function(data, type, row) {
+                            return "<span style='color: black; font-weight: bold;'>" + moment(data).format('MMMM D, YYYY') + "</span>";
+                        }
+                    },
+                    {
+                        data: "start_time",
+                        render: function(data, type, row) {
+                            return "<span style='color: black; font-weight: bold;'>" + moment(data, 'HH:mm').format('h:mm A') + "</span>";
+                        }
+                    },
+                    {
+                        data: "end_time",
+                        render: function(data, type, row) {
+                            return "<span style='color: black; font-weight: bold;'>" + moment(data, 'HH:mm').format('h:mm A') + "</span>";
+                        }
+                    },
+                    {
+                        data: "status",
+                        render: function(data, type, row) {
+                            return "<span style='color: green; font-weight: bold;'>" + data + "</span>";
+                        }
+                    },
+                    {
+                        data: "status",
+                        render: function(data, type, row) {
+                            return "<u><a href='#' style='color: black; font-weight: bold;'>Click here to view request letter</a></u>";
+                        }
+                    },
+            ],
+        });
+
+    })
+</script>

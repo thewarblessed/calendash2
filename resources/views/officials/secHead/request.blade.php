@@ -109,8 +109,11 @@
                                                 <p class="text-sm text-dark font-weight-semibold mb-0" style="margin-left: 16px">{{$event->event_name}}</p>
                                             </td>
                                             <td>
-                                                <p class="text-sm text-dark font-weight-semibold mb-0">{{$event->name}}</p>
-                                                
+                                                @if($event->roomName === null)
+                                                <p class="text-sm text-dark font-weight-semibold mb-0">{{$event->venueName}}</p>
+                                                @else
+                                                <p class="text-sm text-dark font-weight-semibold mb-0">{{$event->roomName}}</p>
+                                                @endif
                                             </td>
                                             <td>
                                                 @if ($event->type === 'whole_day')

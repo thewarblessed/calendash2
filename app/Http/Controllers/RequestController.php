@@ -10,9 +10,11 @@ use App\Models\Official;
 use App\Models\Student;
 use App\Models\Prof;
 use App\Models\Staff;
+use App\Models\Room;
 use View;
 use Illuminate\Support\Facades\Hash;
 use Carbon\Carbon;
+use DB;
 // use Auth;
 use Illuminate\Support\Facades\Auth;
 
@@ -30,7 +32,6 @@ class RequestController extends Controller
         // $events = Event::with('venues');
         // dd($pending);
         
-        
         $user_role = Auth::user()->role;
         $user_id = Auth::user()->id;
         // dd($user_id);
@@ -38,33 +39,32 @@ class RequestController extends Controller
         $org_id = $official->organization_id;
         $dept_id = $official->department_id;
         $section_id = $official->section_id;
-        // $section_id = 
-        
-        // $pending = Event::leftjoin('venues','events.venue_id','venues.id')
-        //                 ->leftjoin('users','users.id','events.user_id')
-        //                 ->leftjoin('students','students.user_id','users.id')
-        //                 ->orderBy('events.status')
-        //                 ->orderByDesc('events.id')
-        //                 ->where('students.section_id', $section_id)
-        //                 ->get();
-
-        // dd($pending);
-        // $section = User::where('id')
-        
-        // $section_id = $official->section_id;
-        // $user_org = Official::where('target_org','');
-        
-        // $user_sec =
-        // $user_dept
-        
+        // dd($org_id);
         if($user_role === "org_adviser")
         {
-            $pending = Venue::join('events','events.venue_id','venues.id')
-            ->orderBy('events.status')
-            ->orderByDesc('events.id')
-            ->where('events.target_org', $org_id)
-            ->where('events.status','PENDING')
-            ->get();
+            $pending = Event::leftjoin('venues','events.venue_id','venues.id')
+                            ->leftjoin('organizations','organizations.id','events.target_org')
+                            ->leftjoin('departments','departments.id','events.target_dept')
+                            ->leftjoin('rooms','rooms.id','events.room_id')
+                            ->orderBy('events.status')
+                            ->where('events.target_org', $org_id)
+                            ->where('events.status','PENDING')
+                            ->whereNull('org_adviser')
+                            ->select('organizations.organization',
+                                    'departments.department',
+                                    'events.status',
+                                    'events.event_name',
+                                    'events.start_date',
+                                    'events.end_date',
+                                    'events.start_time',
+                                    'events.end_time',
+                                    'events.type',
+                                    \DB::raw('CASE
+                                                WHEN rooms.name IS NULL THEN venues.name
+                                                ELSE rooms.name
+                                            END AS venueName'),
+                                    'events.id')
+                            ->get();
             // dd($pending);
             $PenEvents = Event::orderBy('id')->whereNull('org_adviser')->get();
             // dd($PenEvents);
@@ -72,14 +72,31 @@ class RequestController extends Controller
         }   
         elseif($user_role === "section_head")
         {
+            // dd($section_id)
             $pending = Event::leftjoin('venues','events.venue_id','venues.id')
                         ->leftjoin('users','users.id','events.user_id')
                         ->leftjoin('students','students.user_id','users.id')
+                        ->leftjoin('organizations','organizations.id','events.target_org')
+                        ->leftjoin('departments','departments.id','events.target_dept')
                         ->orderBy('events.status')
                         ->orderByDesc('events.id')
                         ->whereNotNull('org_adviser')
+                        ->whereNull('sect_head')
+                        ->whereNull('room_id')
                         ->where('students.section_id', $section_id)
+                        ->select('organizations.organization',
+                                        'departments.department',
+                                        'events.status',
+                                        'events.event_name',
+                                        'events.start_date',
+                                        'events.end_date',
+                                        'events.start_time',
+                                        'events.end_time',
+                                        'events.type',
+                                        'venues.name as venueName',
+                                        'events.id')
                         ->get();
+                    // dd($pending)l
             // $pending = Venue::join('events','events.venue_id','venues.id')->orderBy('events.status')->orderByDesc('events.id')->get();
             // $pending = Event::orderBy('id')->get();
             // $pending = Event::orderBy('id')->whereNotNull('org_adviser')->get();
@@ -90,48 +107,134 @@ class RequestController extends Controller
         {
             // $pending = Venue::join('events','events.venue_id','venues.id')->orderBy('events.status')->orderByDesc('events.id')->get();
             $pending = Event::leftjoin('venues','events.venue_id','venues.id')
-                        ->leftjoin('users','users.id','events.user_id')
-                        ->leftjoin('students','students.user_id','users.id')
-                        ->orderBy('events.status')
-                        ->orderByDesc('events.id')
-                        ->whereNotNull('sect_head')
-                        ->where('students.section_id', $section_id)
-                        ->get();
+                            ->leftjoin('users','users.id','events.user_id')
+                            ->leftjoin('students','students.user_id','users.id')
+                            ->leftjoin('organizations','organizations.id','events.target_org')
+                            ->leftjoin('departments','departments.id','events.target_dept')
+                            ->orderBy('events.status')
+                            ->orderByDesc('events.id')
+                            ->whereNotNull('sect_head')
+                            ->whereNull('dept_head')
+                            ->where('events.status','PENDING')
+                            ->where('events.target_dept',$dept_id)
+                            ->select('organizations.organization',
+                                        'departments.department',
+                                        'events.status',
+                                        'events.event_name',
+                                        'events.start_date',
+                                        'events.end_date',
+                                        'events.start_time',
+                                        'events.end_time',
+                                        'events.type',
+                                        'venues.name as venueName',
+                                        'events.id')
+                            ->get();
+            
             // $pending = Event::orderBy('id')->get();
             // $pending = Event::orderBy('id')->whereNotNull('sect_head')->get();
             return View::make('officials.secHead.request', compact('pending'));
         }
         elseif ($user_role === "osa")
         {
-            $pending = Event::orderBy('id')->whereNotNull('dept_head')
-                            // ->where('status', 'PENDING')
+            $pending = Event::leftjoin('venues','events.venue_id','venues.id')
+                            ->leftjoin('users','users.id','events.user_id')
+                            ->leftjoin('organizations','organizations.id','events.target_org')
+                            ->leftjoin('departments','departments.id','events.target_dept')
+                            ->orderBy('events.status')
+                            ->orderByDesc('events.id')
+                            ->whereNotNull('dept_head')
+                            ->whereNull('osa')
+                            ->where('events.status','PENDING')
+                            ->select('organizations.organization',
+                                        'departments.department',
+                                        'events.status',
+                                        'events.event_name',
+                                        'events.start_date',
+                                        'events.end_date',
+                                        'events.start_time',
+                                        'events.end_time',
+                                        'events.type',
+                                        'venues.name as venueName',
+                                        'events.id')
                             ->get();
             // dd($pending);
             return View::make('officials.secHead.request', compact('pending'));
         }
         elseif ($user_role === "adaa")
         {
-            $pending = Event::orderBy('id')->whereNotNull('osa')->get();
+            $pending = Event::leftjoin('venues','events.venue_id','venues.id')
+                            ->leftjoin('users','users.id','events.user_id')
+                            ->leftjoin('organizations','organizations.id','events.target_org')
+                            ->leftjoin('departments','departments.id','events.target_dept')
+                            ->orderBy('events.status')
+                            ->orderByDesc('events.id')
+                            ->whereNotNull('osa')
+                            ->whereNull('adaa')
+                            ->where('events.status','PENDING')
+                            ->select('organizations.organization',
+                                        'departments.department',
+                                        'events.status',
+                                        'events.event_name',
+                                        'events.start_date',
+                                        'events.end_date',
+                                        'events.start_time',
+                                        'events.end_time',
+                                        'events.type',
+                                        'venues.name as venueName',
+                                        'events.id')
+                            ->get();
             return View::make('officials.secHead.request', compact('pending'));
         }
         elseif ($user_role === "atty")
         {
+            $pending = Event::leftjoin('venues','events.venue_id','venues.id')
+                            ->leftjoin('users','users.id','events.user_id')
+                            ->leftjoin('organizations','organizations.id','events.target_org')
+                            ->leftjoin('departments','departments.id','events.target_dept')
+                            ->orderBy('events.status')
+                            ->orderByDesc('events.id')
+                            ->whereNull('atty')
+                            ->where('venues.name', 'IT Auditorium')
+                            ->whereNotNull('adaa')  
+                            ->where('events.status','PENDING')
+                            ->select('organizations.organization',
+                                        'departments.department',
+                                        'events.status',
+                                        'events.event_name',
+                                        'events.start_date',
+                                        'events.end_date',
+                                        'events.start_time',
+                                        'events.end_time',
+                                        'events.type',
+                                        'venues.name as venueName',
+                                        'events.id')
+                            ->get();
             // $pending = Event::orderBy('id')->whereNotNull('adaa', null);
-            $pending = Event::join('venues', 'venues.id', 'events.venue_id')
-            ->orderBy('events.id')
-            ->where('venues.name', 'IT Auditorium')
-            ->whereNotNull('adaa')
-            ->get();
             return View::make('officials.secHead.request', compact('pending'));
         }
         elseif ($user_role === "campus_director")
         {
             // hindi dapat lalabas yung sa IT FUNCTION HALL na venue.
             $pending = Event::join('venues', 'venues.id', 'events.venue_id')
-            ->orderBy('events.id')
-            ->where('venues.name', '!=', 'IT Auditorium')
-            ->whereNotNull('adaa')
-            ->get();
+                            ->leftjoin('users','users.id','events.user_id')
+                            ->leftjoin('organizations','organizations.id','events.target_org')
+                            ->leftjoin('departments','departments.id','events.target_dept')
+                            ->orderBy('events.id')
+                            ->where('venues.name', '!=', 'IT Auditorium')
+                            ->whereNotNull('adaa')
+                            ->whereNull('campus_director')
+                            ->select('organizations.organization',
+                                        'departments.department',
+                                        'events.status',
+                                        'events.event_name',
+                                        'events.start_date',
+                                        'events.end_date',
+                                        'events.start_time',
+                                        'events.end_time',
+                                        'events.type',
+                                        'venues.name as venueName',
+                                        'events.id')
+                            ->get();
             return View::make('officials.secHead.request', compact('pending'));
         }
     }
@@ -161,10 +264,6 @@ class RequestController extends Controller
         // dd($role);
         $event_id = $id;
         
-        $angEvent = Venue::join('events', 'venues.id', 'events.venue_id')->where('events.id', $event_id)->select('venues.name')->first();
-        $venue = $angEvent->name;
-        
-
         // $secHead = Official::where('section_id',) 
 
         $hashedPassword = Hash::make($password);
@@ -172,245 +271,297 @@ class RequestController extends Controller
         $hashOfOfficial = $hashedPasswordFromDatabase->hash;
         // dd($hashedPassword);
 
-        // if ($role->)
-        if($venue === 'IT Auditorium')
+        $eventType = Event::leftjoin('venues', 'events.venue_id', '=', 'venues.id')
+                    ->leftJoin('rooms', 'events.room_id', '=', 'rooms.id')
+                    ->where('events.id', $event_id)
+                    ->select('venues.name as venue_name', 'rooms.name as room_name',
+                        \DB::raw('CASE
+                                    WHEN rooms.id IS NOT NULL THEN "Room"
+                                    ELSE "Venue"
+                                END AS event_type')
+                    )
+                    ->first();
+        // dd($eventTy/pe->event_type);
+        
+        $place = $eventType->event_type;
+
+        if ($place === "Room")
         {
+            $room = Room::join('events', 'rooms.id', 'events.room_id')->where('events.id', $event_id)->select('rooms.name')->first();
             if($role === 'org_adviser')
-                {
-                    if ($hashedPasswordFromDatabase && Hash::check($password, $hashedPasswordFromDatabase->hash)) {
-                        // Passwords match, proceed with authentication logic
-                        // echo "Password Match";
-                        $users = User::find($user_id);
-                        $officials = Official::join('users', 'users.id', 'officials.user_id')->where('users.id', $user_id)->first();
-                        $events = Event::find($event_id);
-                        $events->org_adviser = $officials->hash;
-                        $events->approved_org_adviser_at = now();
-                        $events->save();
-                        return response()->json(["message" => 'Request handled successfully']);
-                        // return response()->json(['message' => 'Request handled successfully']);
-                    } else {
-                        // Passwords do not match, handle invalid password
-                        // echo "Password Does Not Match";
-                        return response()->json(['error' => 'Invalid passcode'], 422);
+                    {
+                        if ($hashedPasswordFromDatabase && Hash::check($password, $hashedPasswordFromDatabase->hash)) {
+                            // Passwords match, proceed with authentication logic
+                            // echo "Password Match";
+                            $users = User::find($user_id);
+                            $officials = Official::join('users', 'users.id', 'officials.user_id')->where('users.id', $user_id)->first();
+                            $events = Event::find($event_id);
+                            $events->org_adviser = $officials->hash;
+                            $events->approved_org_adviser_at = now();
+                            $events->save();
+                            return response()->json(["message" => 'Request handled successfully']);
+                            // return response()->json(['message' => 'Request handled successfully']);
+                        } else {
+                            // Passwords do not match, handle invalid password
+                            // echo "Password Does Not Match";
+                            return response()->json(['error' => 'Invalid passcode'], 422);
+                        }
+                
                     }
-            
-                }
-            elseif($role === 'section_head')
-                {
-                    if ($hashedPasswordFromDatabase && Hash::check($password, $hashedPasswordFromDatabase->hash)) {
-                        // Passwords match, proceed with authentication logic
-                        // echo "Password Match";
-                        $users = User::find($user_id);
-                        $officials = Official::join('users', 'users.id', 'officials.user_id')->where('users.id', $user_id)->first();
-                        $events = Event::find($event_id);
-                        $events->sect_head = $officials->hash;
-                        $events->updated_at = now();
-                        $events->save();
-                        return response()->json(["message" => 'Request handled successfully']);
-                        // return response()->json(['message' => 'Request handled successfully']);
-                    } else {
-                        // Passwords do not match, handle invalid password
-                        // echo "Password Does Not Match";
-                        return response()->json(['error' => 'Invalid passcode'], 422);
-                    }
-            
-                }
-            elseif($role === 'department_head')
-                {
-                    if ($hashedPasswordFromDatabase && Hash::check($password, $hashedPasswordFromDatabase->hash)) {
-                        // Passwords match, proceed with authentication logic
-                        // echo "Password Match";
-                        $users = User::find($user_id);
-                        $officials = Official::join('users', 'users.id', 'officials.user_id')->where('users.id', $user_id)->first();
-                        $events = Event::find($event_id);
-                        $events->dept_head = $officials->hash;
-                        $events->save();
-                        return response()->json(["message" => 'Request handled successfully']);
-                        // return response()->json(['message' => 'Request handled successfully']);
-                    } else {
-                        // Passwords do not match, handle invalid password
-                        // echo "Password Does Not Match";
-                        return response()->json(['error' => 'Invalid passcode'], 422);
-                    }
-                }
-            elseif($role === 'osa')
-                {
-                    if ($hashedPasswordFromDatabase && Hash::check($password, $hashedPasswordFromDatabase->hash)) {
-                        // Passwords match, proceed with authentication logic
-                        // echo "Password Match";
-                        $users = User::find($user_id);
-                        $officials = Official::join('users', 'users.id', 'officials.user_id')->where('users.id', $user_id)->first();
-                        $events = Event::find($event_id);
-                        $events->osa = $officials->hash;
-                        $events->save();
-                        return response()->json(["message" => 'Request handled successfully']);
-                        // return response()->json(['message' => 'Request handled successfully']);
-                    } else {
-                        // Passwords do not match, handle invalid password
-                        // echo "Password Does Not Match";
-                        return response()->json(['error' => 'Invalid passcode'], 422);
-                    }
-                }
-            elseif($role === 'adaa')
-                {
-                    if ($hashedPasswordFromDatabase && Hash::check($password, $hashedPasswordFromDatabase->hash)) {
-                        // Passwords match, proceed with authentication logic
-                        // echo "Password Match";
-                        $users = User::find($user_id);
-                        $officials = Official::join('users', 'users.id', 'officials.user_id')->where('users.id', $user_id)->first();
-                        $events = Event::find($event_id);
-                        $events->adaa = $officials->hash;
-                        $events->save();
-                        return response()->json(["message" => 'Request handled successfully']);
-                        // return response()->json(['message' => 'Request handled successfully']);
-                    } else {
-                        // Passwords do not match, handle invalid password
-                        // echo "Password Does Not Match";
-                        return response()->json(['error' => 'Invalid passcode'], 422);
-                    }
-                }
-            elseif($role === 'atty')
-                {
-                    if ($hashedPasswordFromDatabase && Hash::check($password, $hashedPasswordFromDatabase->hash)) {
-                        // Passwords match, proceed with authentication logic
-                        // echo "Password Match";
-                        $users = User::find($user_id);
-                        $officials = Official::join('users', 'users.id', 'officials.user_id')->where('users.id', $user_id)->first();
-                        $events = Event::find($event_id);
-                        $events->atty = $officials->hash;
-                        $events->save();
-                        return response()->json(["message" => 'Request handled successfully']);
-                        // return response()->json(['message' => 'Request handled successfully']);
-                    } else {
-                        // Passwords do not match, handle invalid password
-                        // echo "Password Does Not Match";
-                        return response()->json(['error' => 'Invalid passcode'], 422);
-                    }
-                }
         }
         else
         {
-            if($role === 'org_adviser')
-                {
-                    if ($hashedPasswordFromDatabase && Hash::check($password, $hashedPasswordFromDatabase->hash)) {
-                        // Passwords match, proceed with authentication logic
-                        // echo "Password Match";
-                        $users = User::find($user_id);
-                        $officials = Official::join('users', 'users.id', 'officials.user_id')->where('users.id', $user_id)->first();
-                        $events = Event::find($event_id);
-                        $events->org_adviser = $officials->hash;
-                        $events->approved_org_adviser_at = now();
-                        $events->save();
-                        return response()->json(["message" => 'Request handled successfully']);
-                        // return response()->json(['message' => 'Request handled successfully']);
-                    } else {
-                        // Passwords do not match, handle invalid password
-                        // echo "Password Does Not Match";
-                        return response()->json(['error' => 'Invalid passcode'], 422);
+            $angEvent = Venue::join('events', 'venues.id', 'events.venue_id')->where('events.id', $event_id)->select('venues.name')->first();
+            // dd($angEvent);
+            $venue = $angEvent->name;
+            if($venue === 'IT Auditorium')
+            {
+                if($role === 'org_adviser')
+                    {
+                        if ($hashedPasswordFromDatabase && Hash::check($password, $hashedPasswordFromDatabase->hash)) {
+                            // Passwords match, proceed with authentication logic
+                            // echo "Password Match";
+                            $users = User::find($user_id);
+                            $officials = Official::join('users', 'users.id', 'officials.user_id')->where('users.id', $user_id)->first();
+                            $events = Event::find($event_id);
+                            $events->org_adviser = $officials->hash;
+                            $events->approved_org_adviser_at = now();
+                            $events->save();
+                            return response()->json(["message" => 'Request handled successfully']);
+                            // return response()->json(['message' => 'Request handled successfully']);
+                        } else {
+                            // Passwords do not match, handle invalid password
+                            // echo "Password Does Not Match";
+                            return response()->json(['error' => 'Invalid passcode'], 422);
+                        }
+                
                     }
-            
-                }
-            elseif($role === 'section_head')
-                {
-                    if ($hashedPasswordFromDatabase && Hash::check($password, $hashedPasswordFromDatabase->hash)) {
-                        // Passwords match, proceed with authentication logic
-                        // echo "Password Match";
-                        $users = User::find($user_id);
-                        $officials = Official::join('users', 'users.id', 'officials.user_id')->where('users.id', $user_id)->first();
-                        $events = Event::find($event_id);
-                        $events->sect_head = $officials->hash;
-                        $events->approved_sec_head_at = now();
-                        $events->save();
-                        return response()->json(["message" => 'Request handled successfully']);
-                        // return response()->json(['message' => 'Request handled successfully']);
-                    } else {
-                        // Passwords do not match, handle invalid password
-                        // echo "Password Does Not Match";
-                        return response()->json(['error' => 'Invalid passcode'], 422);
+                elseif($role === 'section_head')
+                    {
+                        if ($hashedPasswordFromDatabase && Hash::check($password, $hashedPasswordFromDatabase->hash)) {
+                            // Passwords match, proceed with authentication logic
+                            // echo "Password Match";
+                            $users = User::find($user_id);
+                            $officials = Official::join('users', 'users.id', 'officials.user_id')->where('users.id', $user_id)->first();
+                            $events = Event::find($event_id);
+                            $events->sect_head = $officials->hash;
+                            $events->approved_sec_head_at = now();
+                            $events->save();
+                            return response()->json(["message" => 'Request handled successfully']);
+                            // return response()->json(['message' => 'Request handled successfully']);
+                        } else {
+                            // Passwords do not match, handle invalid password
+                            // echo "Password Does Not Match";
+                            return response()->json(['error' => 'Invalid passcode'], 422);
+                        }
+                
                     }
-            
-                }
-            elseif($role === 'department_head')
-                {
-                    if ($hashedPasswordFromDatabase && Hash::check($password, $hashedPasswordFromDatabase->hash)) {
-                        // Passwords match, proceed with authentication logic
-                        // echo "Password Match";
-                        $users = User::find($user_id);
-                        $officials = Official::join('users', 'users.id', 'officials.user_id')->where('users.id', $user_id)->first();
-                        $events = Event::find($event_id);
-                        $events->dept_head = $officials->hash;
-                        $events->approved_dept_head_at = now();
-                        $events->updated_at = now();
-                        $events->save();
-                        return response()->json(["message" => 'Request handled successfully']);
-                        // return response()->json(['message' => 'Request handled successfully']);
-                    } else {
-                        // Passwords do not match, handle invalid password
-                        // echo "Password Does Not Match";
-                        return response()->json(['error' => 'Invalid passcode'], 422);
+                elseif($role === 'department_head')
+                    {
+                        if ($hashedPasswordFromDatabase && Hash::check($password, $hashedPasswordFromDatabase->hash)) {
+                            // Passwords match, proceed with authentication logic
+                            // echo "Password Match";
+                            $users = User::find($user_id);
+                            $officials = Official::join('users', 'users.id', 'officials.user_id')->where('users.id', $user_id)->first();
+                            $events = Event::find($event_id);
+                            $events->dept_head = $officials->hash;
+                            $events->approved_dept_head_at = now();
+                            $events->save();
+                            return response()->json(["message" => 'Request handled successfully']);
+                            // return response()->json(['message' => 'Request handled successfully']);
+                        } else {
+                            // Passwords do not match, handle invalid password
+                            // echo "Password Does Not Match";
+                            return response()->json(['error' => 'Invalid passcode'], 422);
+                        }
                     }
-                }
-            elseif($role === 'osa')
-                {
-                    if ($hashedPasswordFromDatabase && Hash::check($password, $hashedPasswordFromDatabase->hash)) {
-                        // Passwords match, proceed with authentication logic
-                        // echo "Password Match";
-                        $users = User::find($user_id);
-                        $officials = Official::join('users', 'users.id', 'officials.user_id')->where('users.id', $user_id)->first();
-                        $events = Event::find($event_id);
-                        $events->osa = $officials->hash;
-                        $events->approved_osa_at = now();
-                        $events->updated_at = now();
-                        $events->save();
-                        return response()->json(["message" => 'Request handled successfully']);
-                        // return response()->json(['message' => 'Request handled successfully']);
-                    } else {
-                        // Passwords do not match, handle invalid password
-                        // echo "Password Does Not Match";
-                        return response()->json(['error' => 'Invalid passcode'], 422);
+                elseif($role === 'osa')
+                    {
+                        if ($hashedPasswordFromDatabase && Hash::check($password, $hashedPasswordFromDatabase->hash)) {
+                            // Passwords match, proceed with authentication logic
+                            // echo "Password Match";
+                            $users = User::find($user_id);
+                            $officials = Official::join('users', 'users.id', 'officials.user_id')->where('users.id', $user_id)->first();
+                            $events = Event::find($event_id);
+                            $events->osa = $officials->hash;
+                            $events->approved_osa_at = now();
+                            $events->save();
+                            return response()->json(["message" => 'Request handled successfully']);
+                            // return response()->json(['message' => 'Request handled successfully']);
+                        } else {
+                            // Passwords do not match, handle invalid password
+                            // echo "Password Does Not Match";
+                            return response()->json(['error' => 'Invalid passcode'], 422);
+                        }
                     }
-                }
-            elseif($role === 'adaa')
-                {
-                    if ($hashedPasswordFromDatabase && Hash::check($password, $hashedPasswordFromDatabase->hash)) {
-                        // Passwords match, proceed with authentication logic
-                        // echo "Password Match";
-                        $users = User::find($user_id);
-                        $officials = Official::join('users', 'users.id', 'officials.user_id')->where('users.id', $user_id)->first();
-                        $events = Event::find($event_id);
-                        $events->adaa = $officials->hash;
-                        $events->approved_adaa_at = now();
-                        $events->updated_at = now();
-                        $events->save();
-                        return response()->json(["message" => 'Request handled successfully']);
-                        // return response()->json(['message' => 'Request handled successfully']);
-                    } else {
-                        // Passwords do not match, handle invalid password
-                        // echo "Password Does Not Match";
-                        return response()->json(['error' => 'Invalid passcode'], 422);
+                elseif($role === 'adaa')
+                    {
+                        if ($hashedPasswordFromDatabase && Hash::check($password, $hashedPasswordFromDatabase->hash)) {
+                            // Passwords match, proceed with authentication logic
+                            // echo "Password Match";
+                            $users = User::find($user_id);
+                            $officials = Official::join('users', 'users.id', 'officials.user_id')->where('users.id', $user_id)->first();
+                            $events = Event::find($event_id);
+                            $events->adaa = $officials->hash;
+                            $events->approved_adaa_at = now();
+                            $events->save();
+                            return response()->json(["message" => 'Request handled successfully']);
+                            // return response()->json(['message' => 'Request handled successfully']);
+                        } else {
+                            // Passwords do not match, handle invalid password
+                            // echo "Password Does Not Match";
+                            return response()->json(['error' => 'Invalid passcode'], 422);
+                        }
                     }
-                }
-            elseif($role === 'campus_director')
-                {
-                    if ($hashedPasswordFromDatabase && Hash::check($password, $hashedPasswordFromDatabase->hash)) {
-                        // Passwords match, proceed with authentication logic
-                        // echo "Password Match";
-                        $users = User::find($user_id);
-                        $officials = Official::join('users', 'users.id', 'officials.user_id')->where('users.id', $user_id)->first();
-                        $events = Event::find($event_id);
-                        $events->campus_director = $officials->hash;
-                        $events->approved_campus_director_at = now();
-                        $events->updated_at = now();
-                        $events->save();
-                        return response()->json(["message" => 'Request handled successfully']);
-                        // return response()->json(['message' => 'Request handled successfully']);
-                    } else {
-                        // Passwords do not match, handle invalid password
-                        // echo "Password Does Not Match";
-                        return response()->json(['error' => 'Invalid passcode'], 422);
+                elseif($role === 'atty')
+                    {
+                        if ($hashedPasswordFromDatabase && Hash::check($password, $hashedPasswordFromDatabase->hash)) {
+                            // Passwords match, proceed with authentication logic
+                            // echo "Password Match";
+                            $users = User::find($user_id);
+                            $officials = Official::join('users', 'users.id', 'officials.user_id')->where('users.id', $user_id)->first();
+                            $events = Event::find($event_id);
+                            $events->atty = $officials->hash;
+                            $events->approved_atty_at = now();
+                            $events->status = "APPROVED";
+                            $events->color = "#31B4F2";
+                            $events->save();
+                            return response()->json(["message" => 'Request handled successfully']);
+                            // return response()->json(['message' => 'Request handled successfully']);
+                        } else {
+                            // Passwords do not match, handle invalid password
+                            // echo "Password Does Not Match";
+                            return response()->json(['error' => 'Invalid passcode'], 422);
+                        }
                     }
-                }
+            }
+            else
+            {
+                if($role === 'org_adviser')
+                    {
+                        if ($hashedPasswordFromDatabase && Hash::check($password, $hashedPasswordFromDatabase->hash)) {
+                            // Passwords match, proceed with authentication logic
+                            // echo "Password Match";
+                            $users = User::find($user_id);
+                            $officials = Official::join('users', 'users.id', 'officials.user_id')->where('users.id', $user_id)->first();
+                            $events = Event::find($event_id);
+                            $events->org_adviser = $officials->hash;
+                            $events->approved_org_adviser_at = now();
+                            $events->save();
+                            return response()->json(["message" => 'Request handled successfully']);
+                            // return response()->json(['message' => 'Request handled successfully']);
+                        } else {
+                            // Passwords do not match, handle invalid password
+                            // echo "Password Does Not Match";
+                            return response()->json(['error' => 'Invalid passcode'], 422);
+                        }
+                
+                    }
+                elseif($role === 'section_head')
+                    {
+                        if ($hashedPasswordFromDatabase && Hash::check($password, $hashedPasswordFromDatabase->hash)) {
+                            // Passwords match, proceed with authentication logic
+                            // echo "Password Match";
+                            $users = User::find($user_id);
+                            $officials = Official::join('users', 'users.id', 'officials.user_id')->where('users.id', $user_id)->first();
+                            $events = Event::find($event_id);
+                            $events->sect_head = $officials->hash;
+                            $events->approved_sec_head_at = now();
+                            $events->save();
+                            return response()->json(["message" => 'Request handled successfully']);
+                            // return response()->json(['message' => 'Request handled successfully']);
+                        } else {
+                            // Passwords do not match, handle invalid password
+                            // echo "Password Does Not Match";
+                            return response()->json(['error' => 'Invalid passcode'], 422);
+                        }
+                
+                    }
+                elseif($role === 'department_head')
+                    {
+                        if ($hashedPasswordFromDatabase && Hash::check($password, $hashedPasswordFromDatabase->hash)) {
+                            // Passwords match, proceed with authentication logic
+                            // echo "Password Match";
+                            $users = User::find($user_id);
+                            $officials = Official::join('users', 'users.id', 'officials.user_id')->where('users.id', $user_id)->first();
+                            $events = Event::find($event_id);
+                            $events->dept_head = $officials->hash;
+                            $events->approved_dept_head_at = now();
+                            $events->updated_at = now();
+                            $events->save();
+                            return response()->json(["message" => 'Request handled successfully']);
+                            // return response()->json(['message' => 'Request handled successfully']);
+                        } else {
+                            // Passwords do not match, handle invalid password
+                            // echo "Password Does Not Match";
+                            return response()->json(['error' => 'Invalid passcode'], 422);
+                        }
+                    }
+                elseif($role === 'osa')
+                    {
+                        if ($hashedPasswordFromDatabase && Hash::check($password, $hashedPasswordFromDatabase->hash)) {
+                            // Passwords match, proceed with authentication logic
+                            // echo "Password Match";
+                            $users = User::find($user_id);
+                            $officials = Official::join('users', 'users.id', 'officials.user_id')->where('users.id', $user_id)->first();
+                            $events = Event::find($event_id);
+                            $events->osa = $officials->hash;
+                            $events->approved_osa_at = now();
+                            $events->updated_at = now();
+                            $events->save();
+                            return response()->json(["message" => 'Request handled successfully']);
+                            // return response()->json(['message' => 'Request handled successfully']);
+                        } else {
+                            // Passwords do not match, handle invalid password
+                            // echo "Password Does Not Match";
+                            return response()->json(['error' => 'Invalid passcode'], 422);
+                        }
+                    }
+                elseif($role === 'adaa')
+                    {
+                        if ($hashedPasswordFromDatabase && Hash::check($password, $hashedPasswordFromDatabase->hash)) {
+                            // Passwords match, proceed with authentication logic
+                            // echo "Password Match";
+                            $users = User::find($user_id);
+                            $officials = Official::join('users', 'users.id', 'officials.user_id')->where('users.id', $user_id)->first();
+                            $events = Event::find($event_id);
+                            $events->adaa = $officials->hash;
+                            $events->approved_adaa_at = now();
+                            $events->updated_at = now();
+                            $events->save();
+                            return response()->json(["message" => 'Request handled successfully']);
+                            // return response()->json(['message' => 'Request handled successfully']);
+                        } else {
+                            // Passwords do not match, handle invalid password
+                            // echo "Password Does Not Match";
+                            return response()->json(['error' => 'Invalid passcode'], 422);
+                        }
+                    }
+                elseif($role === 'campus_director')
+                    {
+                        if ($hashedPasswordFromDatabase && Hash::check($password, $hashedPasswordFromDatabase->hash)) {
+                            // Passwords match, proceed with authentication logic
+                            // echo "Password Match";
+                            $users = User::find($user_id);
+                            $officials = Official::join('users', 'users.id', 'officials.user_id')->where('users.id', $user_id)->first();
+                            $events = Event::find($event_id);
+                            $events->campus_director = $officials->hash;
+                            $events->approved_campus_director_at = now();
+                            $events->updated_at = now();
+                            $events->status = "APPROVED";
+                            $events->color = "#31B4F2";
+                            $events->save();
+                            return response()->json(["message" => 'Request handled successfully']);
+                            // return response()->json(['message' => 'Request handled successfully']);
+                        } else {
+                            // Passwords do not match, handle invalid password
+                            // echo "Password Does Not Match";
+                            return response()->json(['error' => 'Invalid passcode'], 422);
+                        }
+                    }
+            }
         }
+        
         // return response()->json(["events" => $events]);
     }
 
@@ -442,7 +593,8 @@ class RequestController extends Controller
                         $events->remarks_org_adviser = $reason;
                         $events->rejected_by = $user_id;
                         $events->status = 'REJECTED';
-                        $events->save();
+                        $events->updated_at = now(); // DATE OF REJECTION
+                        $events->update();
                         return response()->json(["message" => 'Request handled successfully']);
                         // return response()->json(['message' => 'Request handled successfully']);
                     } else {
@@ -579,99 +731,229 @@ class RequestController extends Controller
 
     public function myRejectRequest()
     {
-        $user_role = Auth::user()->role;
         $user_id = Auth::user()->id;
+        return view('officials.secHead.myNewReject', ['user_id' => $user_id]);
+    }
+
+    public function getMyRejectRequest(String $id)
+    {
         // dd($user_id);
-        $official = Official::where('user_id',$user_id)->first();
+        $myRejectList = Event::leftjoin('venues','events.venue_id','venues.id')
+                            ->orderBy('events.id')
+                            ->where('rejected_by', $id)
+                            ->select('events.event_name',
+                            'events.type',
+                            'events.start_date',
+                            'events.end_date',
+                            'events.start_time',
+                            'events.end_time',
+                            'events.status',
+                            'events.updated_at',
+                            'venues.name',
+                            'events.remarks_org_adviser',
+                            'events.remarks_sec_head',
+                            'events.remarks_dept_head',
+                            'events.remarks_osa',
+                            'events.remarks_adaa',
+                            'events.remarks_atty',
+                            'events.remarks_campus_director',)
+                            ->get();
+        // dd($events);
+        return response()->json($myRejectList);
+    }
+
+    public function myApprovedRequest()
+    {
+        return view('officials.secHead.myApproved');
+    }
+
+    public function getMyApprovedRequest(String $id)
+    {
+        $official = Official::where('user_id',$id)->first();
+        $user_role = $official->role;
         $org_id = $official->organization_id;
         $dept_id = $official->department_id;
         $section_id = $official->section_id;
-        
+    
         // dd($org_id);
         if($user_role === "org_adviser")
         {
-            $pending = Venue::join('events','events.venue_id','venues.id')
-            ->orderBy('events.status')
-            ->orderByDesc('events.id')
-            ->where('events.target_org', $org_id)
-            ->where('events.status','REJECTED')
-            ->get();
-            // dd($pending);
-            $PenEvents = Event::orderBy('id')->whereNull('org_adviser')->get();
-            // dd($PenEvents);
-            return View::make('officials.secHead.myRejects', compact('pending'));
+            $myRejectList = Event::leftjoin('venues','events.venue_id','venues.id')
+                                ->leftjoin('organizations','organizations.id','events.target_org')
+                                ->leftjoin('departments','departments.id','events.target_dept')
+                                ->leftjoin('rooms','rooms.id','events.room_id')
+                                ->whereNotNull('org_adviser')
+                                ->where('events.target_org',$org_id)
+                                ->select('organizations.organization',
+                                        'departments.department',
+                                        'events.status',
+                                        'events.event_name',
+                                        'events.start_date',
+                                        'events.end_date',
+                                        'events.start_time',
+                                        'events.end_time',
+                                        'events.type',
+                                        \DB::raw('CASE
+                                                    WHEN rooms.name IS NULL THEN venues.name
+                                                    ELSE rooms.name
+                                                END AS venueName'),
+                                        'events.id')
+                                ->orderBy('events.id')
+                                ->get();
+            return response()->json($myRejectList);
         }   
         elseif($user_role === "section_head")
         {
-            $pending = Event::leftjoin('venues','events.venue_id','venues.id')
-                        ->leftjoin('users','users.id','events.user_id')
-                        ->leftjoin('students','students.user_id','users.id')
-                        ->orderBy('events.status')
-                        ->orderByDesc('events.id')
-                        ->whereNotNull('org_adviser')
-                        ->where('students.section_id', $section_id)
-                        ->where('events.status','REJECTED')
-                        ->get();
-            // $pending = Venue::join('events','events.venue_id','venues.id')->orderBy('events.status')->orderByDesc('events.id')->get();
-            // $pending = Event::orderBy('id')->get();
-            // $pending = Event::orderBy('id')->whereNotNull('org_adviser')->get();
-            // dd($PenEvents);
-            return View::make('officials.secHead.myRejects', compact('pending'));
+            $myRejectList = Event::leftjoin('venues','events.venue_id','venues.id')
+                                ->leftjoin('users','events.user_id','users.id')
+                                ->leftjoin('students','students.user_id','users.id')
+                                ->leftjoin('organizations','organizations.id','events.target_org')
+                                ->leftjoin('departments','departments.id','events.target_dept')
+                                ->leftjoin('rooms','rooms.id','events.room_id')
+                                ->orderBy('events.id')
+                                ->whereNotNull('org_adviser')
+                                ->whereNotNull('sect_head')
+                                ->whereNull('events.room_id')
+                                ->where('students.section_id',$section_id)
+                                ->select('organizations.organization',
+                                        'departments.department',
+                                        'events.status',
+                                        'events.event_name',
+                                        'events.start_date',
+                                        'events.end_date',
+                                        'events.start_time',
+                                        'events.end_time',
+                                        'events.type',
+                                        'venues.name as venueName',
+                                        'events.id')
+                                ->get();
+            return response()->json($myRejectList);
         }     
         elseif($user_role === "department_head")
         {
-            // $pending = Venue::join('events','events.venue_id','venues.id')->orderBy('events.status')->orderByDesc('events.id')->get();
-            $pending = Event::leftjoin('venues','events.venue_id','venues.id')
-                        ->leftjoin('users','users.id','events.user_id')
-                        ->leftjoin('students','students.user_id','users.id')
-                        ->orderBy('events.status')
-                        ->orderByDesc('events.id')
-                        ->whereNotNull('sect_head')
-                        ->where('events.target_dept', $dept_id)
-                        ->where('events.status','REJECTED')
-                        ->get();
-            // $pending = Event::orderBy('id')->get();
-            // $pending = Event::orderBy('id')->whereNotNull('sect_head')->get();
-            return View::make('officials.secHead.myRejects', compact('pending'));
+            $myRejectList = Event::leftjoin('venues','events.venue_id','venues.id')
+                                ->leftjoin('organizations','organizations.id','events.target_org')
+                                ->leftjoin('departments','departments.id','events.target_dept')
+                                ->orderBy('events.id')
+                                ->whereNotNull('org_adviser')
+                                ->whereNotNull('sect_head')
+                                ->whereNotNull('dept_head')
+                                ->select('organizations.organization',
+                                        'departments.department',
+                                        'events.status',
+                                        'events.event_name',
+                                        'events.start_date',
+                                        'events.end_date',
+                                        'events.start_time',
+                                        'events.end_time',
+                                        'events.type',
+                                        'venues.name as venueName',
+                                        'events.id')
+                                ->get();
+            return response()->json($myRejectList);
         }
         elseif ($user_role === "osa")
         {
-            $pending = Event::orderBy('id')
-                            ->where('rejected_by',$user_id)
-                            ->where('status', 'PENDING')
-                            ->get();
-            // dd($pending);
-            return View::make('officials.secHead.myRejects', compact('pending'));
+            $myRejectList = Event::leftjoin('venues','events.venue_id','venues.id')
+                                ->leftjoin('organizations','organizations.id','events.target_org')
+                                ->leftjoin('departments','departments.id','events.target_dept')
+                                ->orderBy('events.id')
+                                ->whereNotNull('org_adviser')
+                                ->whereNotNull('sect_head')
+                                ->whereNotNull('dept_head')
+                                ->whereNotNull('osa')
+                                ->select('organizations.organization',
+                                        'departments.department',
+                                        'events.status',
+                                        'events.event_name',
+                                        'events.start_date',
+                                        'events.end_date',
+                                        'events.start_time',
+                                        'events.end_time',
+                                        'events.type',
+                                        'venues.name as venueName',
+                                        'events.id')
+                                ->get();
+            return response()->json($myRejectList);
         }
         elseif ($user_role === "adaa")
         {
-            $pending = Event::orderBy('id')
-                            ->where('rejected_by',$user_id)
-                            ->where('status', 'PENDING')
-                            ->get();
-            return View::make('officials.secHead.myRejects', compact('pending'));
+            $myRejectList = Event::leftjoin('venues','events.venue_id','venues.id')
+                                ->leftjoin('organizations','organizations.id','events.target_org')
+                                ->leftjoin('departments','departments.id','events.target_dept')
+                                ->orderBy('events.id')
+                                ->whereNotNull('org_adviser')
+                                ->whereNotNull('sect_head')
+                                ->whereNotNull('dept_head')
+                                ->whereNotNull('osa')
+                                ->whereNotNull('adaa')
+                                ->select('organizations.organization',
+                                        'departments.department',
+                                        'events.status',
+                                        'events.event_name',
+                                        'events.start_date',
+                                        'events.end_date',
+                                        'events.start_time',
+                                        'events.end_time',
+                                        'events.type',
+                                        'venues.name as venueName',
+                                        'events.id')
+                                ->get();
+            return response()->json($myRejectList);
         }
         elseif ($user_role === "atty")
         {
-            // $pending = Event::orderBy('id')->whereNotNull('adaa', null);
-            $pending = Event::join('venues', 'venues.id', 'events.venue_id')
-                            ->orderBy('events.id')
-                            ->where('venues.name', 'IT Auditorium')
-                            ->where('rejected_by',$user_id)
-                            ->where('status', 'PENDING')
-                            ->get();
-            return View::make('officials.secHead.myRejects', compact('pending'));
+            $myRejectList = Event::leftjoin('venues','events.venue_id','venues.id')
+                                ->leftjoin('organizations','organizations.id','events.target_org')
+                                ->leftjoin('departments','departments.id','events.target_dept')
+                                ->orderBy('events.id')
+                                ->whereNotNull('org_adviser')
+                                ->whereNotNull('sect_head')
+                                ->whereNotNull('dept_head')
+                                ->whereNotNull('osa')
+                                ->whereNotNull('adaa')
+                                ->whereNotNull('atty')
+                                ->where('venues.name', 'IT Auditorium')
+                                ->select('organizations.organization',
+                                        'departments.department',
+                                        'events.status',
+                                        'events.event_name',
+                                        'events.start_date',
+                                        'events.end_date',
+                                        'events.start_time',
+                                        'events.end_time',
+                                        'events.type',
+                                        'venues.name as venueName',
+                                        'events.id')
+                                ->get();
+            return response()->json($myRejectList);
         }
         elseif ($user_role === "campus_director")
         {
-            // hindi dapat lalabas yung sa IT FUNCTION HALL na venue.
-            $pending = Event::join('venues', 'venues.id', 'events.venue_id')
-            ->orderBy('events.id')
-            ->where('venues.name', '!=', 'IT Auditorium')
-            ->where('rejected_by',$user_id)
-            ->where('status', 'PENDING')
-            ->get();
-            return View::make('officials.secHead.myRejects', compact('pending'));
+            $myRejectList = Event::leftjoin('venues','events.venue_id','venues.id')
+                                ->leftjoin('organizations','organizations.id','events.target_org')
+                                ->leftjoin('departments','departments.id','events.target_dept')
+                                ->orderBy('events.id')
+                                ->whereNotNull('org_adviser')
+                                ->whereNotNull('sect_head')
+                                ->whereNotNull('dept_head')
+                                ->whereNotNull('osa')
+                                ->whereNotNull('adaa')
+                                ->whereNotNull('campus_director')
+                                ->where('venues.name', '!=', 'IT Auditorium')
+                                ->select('organizations.organization',
+                                        'departments.department',
+                                        'events.status',
+                                        'events.event_name',
+                                        'events.start_date',
+                                        'events.end_date',
+                                        'events.start_time',
+                                        'events.end_time',
+                                        'events.type',
+                                        'venues.name as venueName',
+                                        'events.id')
+                                ->get();
+            return response()->json($myRejectList);
         }
     }
     /**
@@ -944,6 +1226,7 @@ class RequestController extends Controller
 {
     $events = Event::find($id);
     $venues = Venue::find($events->venue_id);
+    $rooms = Room::find($events->room_id);
     // dd($events);
     $orgAdviser = $events->org_adviser;
     $secHead = $events->sect_head;
@@ -996,7 +1279,7 @@ class RequestController extends Controller
         $events->save();
      }
 
-     return response()->json(["events" => $events, "venues" => $venues, "msg" => $Message, 
+     return response()->json(["events" => $events, "venues" => $venues, "rooms" => $rooms, "msg" => $Message, 
                             // "approvedSecHeadDate" => $approvedSecHeadDate, "approvedSecHeadMsg" => $approvedSecHeadMsg,
                             // "approvedDeptHeadDate" => $approvedDeptHeadDate, "approvedDeptHeadMsg" => $approvedDeptHeadMsg,
                             // "approvedOsaDate" => $approvedOsaDate, "approvedOsaMsg" => $approvedOsaMsg,

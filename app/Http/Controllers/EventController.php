@@ -48,6 +48,7 @@ class EventController extends Controller
 
             if ($venueType === 'room'){
                 $conflict = Event::where('room_id', $roomId)
+                ->where('status', '!=', 'REJECTED')
                 ->where(function ($query) use ($date, $startTime, $endTime) {
                     $query->where(function ($q) use ($date, $startTime, $endTime) {
                         $q->where('start_date', $date)
@@ -64,6 +65,7 @@ class EventController extends Controller
             }
             else{
                 $conflict = Event::where('venue_id', $venueId)
+                ->where('status', '!=', 'REJECTED')
                 ->where(function ($query) use ($date, $startTime, $endTime) {
                     $query->where(function ($q) use ($date, $startTime, $endTime) {
                         $q->where('start_date', $date)
@@ -91,6 +93,7 @@ class EventController extends Controller
             
             if ($venueType === 'room'){
                 $conflict = Event::where('room_id', $roomId)
+                ->where('status', '!=', 'REJECTED')
                 ->where(function ($query) use ($date) {
                     $query->where('start_date', '<=', $date)
                         ->where('end_date', '>=', $date);
@@ -100,6 +103,7 @@ class EventController extends Controller
             }
             else{
                 $conflict = Event::where('venue_id', $venueId)
+                ->where('status', '!=', 'REJECTED')
                 ->where(function ($query) use ($date) {
                     $query->where('start_date', '<=', $date)
                         ->where('end_date', '>=', $date);
@@ -125,6 +129,7 @@ class EventController extends Controller
             // $venueId = $request->input('venue_id');
             if ($venueType === 'room'){
                 $conflict = Event::where('room_id', $roomId)
+                ->where('status', '!=', 'REJECTED')
                 ->where(function ($query) use ($startDate, $endDate) {
                     $query->where('start_date', '<=', $endDate)
                         ->where('end_date', '>=', $startDate);
@@ -135,6 +140,7 @@ class EventController extends Controller
             }
             else{
                 $conflict = Event::where('venue_id', $venueId)
+                ->where('status', '!=', 'REJECTED')
                 ->where(function ($query) use ($startDate, $endDate) {
                     $query->where('start_date', '<=', $endDate)
                         ->where('end_date', '>=', $startDate);
@@ -157,6 +163,7 @@ class EventController extends Controller
             // dd($endDate);
             if($venueType ==='room'){
                 $conflict = Event::where('room_id', $roomId)
+                ->where('status', '!=', 'REJECTED')
                 ->where(function ($query) use ($startDate, $endDate) {
                     $query->where(function ($q) use ($startDate, $endDate) {
                         $q->where('start_date', '<=', $endDate)
@@ -175,6 +182,7 @@ class EventController extends Controller
             }
             else{
                 $conflict = Event::where('venue_id', $venueId)
+                ->where('status', '!=', 'REJECTED')
                 ->where(function ($query) use ($startDate, $endDate) {
                     $query->where(function ($q) use ($startDate, $endDate) {
                         $q->where('start_date', '<=', $endDate)

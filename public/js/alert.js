@@ -442,13 +442,24 @@ $(document).ready(function () {
             },
             dataType: "json",
             success: function (data) {
-                console.log(data);
-                $('#createVenueModal').modal('show');
-                $('#eventApproveId').val(data.events.id);
-                $('#eventApproveName').val(data.events.event_name);
-                $('#eventApproveDesc').val(data.events.description);
-                $('#eventApproveParticipants').val(data.events.participants);
-                $('#eventApproveVenue').val(data.venues.name);
+                // console.log(data.venues);
+                if (data.venues !== null){
+                    $('#createVenueModal').modal('show');
+                    $('#eventApproveId').val(data.events.id);
+                    $('#eventApproveName').val(data.events.event_name);
+                    $('#eventApproveDesc').val(data.events.description);
+                    $('#eventApproveParticipants').val(data.events.participants);
+                    $('#eventApproveVenue').val(data.venues.name);
+                }
+                else{
+                    $('#createVenueModal').modal('show');
+                    $('#eventApproveId').val(data.events.id);
+                    $('#eventApproveName').val(data.events.event_name);
+                    $('#eventApproveDesc').val(data.events.description);
+                    $('#eventApproveParticipants').val(data.events.participants);
+                    $('#eventApproveVenue').val(data.rooms.name);
+                }
+                
                 // $("#venueEditImage").html(
                 // `<img src="/storage/${data.Venues.image}" width="100" class="img-fluid img-thumbnail">`);
             },
@@ -490,7 +501,7 @@ $(document).ready(function () {
             var user_id = $('#eventAuthId').val()
             // var eventAppId = $('#eventApproveId').val()
             // console.log(eventAppId);
-            // console.log(user_id);
+            console.log(user_id);
             // console.log($('#eventApproveVenue').val())
             // alert('dshadahs')
             $("#approveRequestModal").modal('hide');
@@ -662,9 +673,9 @@ $(document).ready(function () {
                     success: function (data) {
                         console.log(data);
 
-                        // setTimeout(function () {
-                        //     window.location.href = '/request';
-                        // }, 1500);
+                        setTimeout(function () {
+                            window.location.href = '/my/rejected';
+                        }, 1500);
 
                         Swal.fire({
                             icon: "success",
@@ -1126,70 +1137,70 @@ $(document).ready(function () {
 
     });
 
-    $('#date_range_User').change(function() {
-        // dateRanges
-        var selectedVenueID = $("input[name='event_venue']:checked").val();
-        var selectedRange = $(this).val();
-        var selectedVenueType = $("input[name='event_place']:checked").val();
-        console.log(selectedRange);
-
-        if (selectedVenueType === 'room'){
-            $.ajax({
-                url: '/api/check-event-conflict',
-                type: 'POST',
-                data: {
-                    event_type:'dateRanges',
-                    daterange: selectedRange,
-                    room_id: selectedVenueID,
-                    selectedVenueType: selectedVenueType
-                },
-                success: function(response) {
-                    if (response.conflict) {
-                        Swal.fire({
-                            icon: "error",
-                            title: "Oops...",
-                            html: "There is an existing event with the <strong>same venue and time</strong>. Please check the calendar for available dates and time.",
-                        });
-                        // alert('');
-                        $('#date_range_User').val('');
-                    }
-                    
-                },
-                error: function(xhr, status, error) {
-                    console.error('Error checking event conflict:', error);
-                }
-            });
-        }
-        else{
-            $.ajax({
-                url: '/api/check-event-conflict',
-                type: 'POST',
-                data: {
-                    event_type:'dateRanges',
-                    daterange: selectedRange,
-                    venue_id: selectedVenueID,
-                    selectedVenueType: selectedVenueType
-                },
-                success: function(response) {
-                    if (response.conflict) {
-                        Swal.fire({
-                            icon: "error",
-                            title: "Oops...",
-                            html: "There is an existing event with the <strong>same venue and time</strong>. Please check the calendar for available dates and time.",
-                        });
-                        // alert('');
-                        $('#date_range_User').val('');
-                    }
-                    
-                },
-                error: function(xhr, status, error) {
-                    console.error('Error checking event conflict:', error);
-                }
-            });
-        }
+    // $('#date_range_User').change(function() {
         
+    //     // dateRanges
+    //     var selectedVenueID = $("input[name='event_venue']:checked").val();
+    //     var selectedRange = $(this).val();
+    //     var selectedVenueType = $("input[name='event_place']:checked").val();
+    //     console.log(selectedRange);
 
-    });
+    //     if (selectedVenueType === 'room'){
+    //         $.ajax({
+    //             url: '/api/check-event-conflict',
+    //             type: 'POST',
+    //             data: {
+    //                 event_type:'dateRanges',
+    //                 daterange: selectedRange,
+    //                 room_id: selectedVenueID,
+    //                 selectedVenueType: selectedVenueType
+    //             },
+    //             success: function(response) {
+    //                 if (response.conflict) {
+    //                     Swal.fire({
+    //                         icon: "error",
+    //                         title: "Oops...",
+    //                         html: "There is an existing event with the <strong>same venue and time</strong>. Please check the calendar for available dates and time.",
+    //                     });
+    //                     // alert('');
+    //                     $('#date_range_User').val('');
+    //                 }
+                    
+    //             },
+    //             error: function(xhr, status, error) {
+    //                 console.error('Error checking event conflict:', error);
+    //             }
+    //         });
+    //     }
+    //     else{
+    //         $.ajax({
+    //             url: '/api/check-event-conflict',
+    //             type: 'POST',
+    //             data: {
+    //                 event_type:'dateRanges',
+    //                 daterange: selectedRange,
+    //                 venue_id: selectedVenueID,
+    //                 selectedVenueType: selectedVenueType
+    //             },
+    //             success: function(response) {
+    //                 if (response.conflict) {
+    //                     Swal.fire({
+    //                         icon: "error",
+    //                         title: "Oops...",
+    //                         html: "There is an existing event with the <strong>same venue and time</strong>. Please check the calendar for available dates and time.",
+    //                     });
+    //                     // alert('');
+    //                     $('#date_range_User').val('');
+    //                 }
+                    
+    //             },
+    //             error: function(xhr, status, error) {
+    //                 console.error('Error checking event conflict:', error);
+    //             }
+    //         });
+    //     }
+
+    // });
     //end TRAPPING
     $('#radioForm input').change(function () {
         // alert($('input[name=btnradiotable]:checked', '#radioForm').val());
@@ -2853,6 +2864,7 @@ $(document).ready(function () {
     $('.radiobuttonsuser input[name="event_place"]').change(function () {
         const venueDiv = document.getElementById('venueDiv');
         const roomDiv = document.getElementById('roomDiv');
+        const dateRangeDiv = document.getElementById('dateRangeDivUser');
 
         // const eventDate = document.getElementById('event_date');
         // const startTimeWithinDay = document.getElementById('start_time_withinDay');
@@ -2863,12 +2875,14 @@ $(document).ready(function () {
 
             if ($(this).val() === 'venue') {
                 console.log('venue');
+                dateRangeDiv.style.display = 'none';
                 venueDiv.style.display = 'block';
                 roomDiv.style.display = 'none';
 
             }
             else {
                 console.log('rroom');
+                dateRangeDiv.style.display = 'none';
                 venueDiv.style.display = 'none';
                 roomDiv.style.display = 'block';
                 
