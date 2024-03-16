@@ -12,11 +12,14 @@ class NotificationController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(String $id)
     {
         //
+
+        $user_id = $id;
+        // dd($user_id);
         $user_role = 'org_adviser';
-        $user_id = 1;
+        
         // dd($user_id);
         $official = Official::where('user_id',$user_id)->first();
         $org_id = $official->organization_id;

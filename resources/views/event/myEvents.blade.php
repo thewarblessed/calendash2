@@ -60,9 +60,6 @@
                                                 Status</th>
                                             <th class="text-secondary text-xs font-weight-semibold opacity-7 ps-2">
                                                 Action</th>
-                                            <th
-                                                class="text-center text-secondary text-xs font-weight-semibold opacity-7">
-                                            </th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -85,7 +82,7 @@
                                                 </td>
                                                 <td>
                                                     <p class="text-sm font-weight-normal mb-0">
-                                                        {{ Carbon\Carbon::parse($event->event_date)->format('j F, Y') }}
+                                                        {{ Carbon\Carbon::parse($event->start_date)->format('j F, Y') }}
                                                     </p>
                                                 </td>
                                                 <td>
@@ -123,6 +120,21 @@
                                                                     clip-rule="evenodd" />
                                                             </svg>
                                                             PENDING
+                                                        </span>
+                                                        {{-- <p class="text-secondary text-sm mb-0">{{$status}}</p> --}}
+                                                    @endif
+
+                                                    @if ($event->status === 'REJECTED')
+                                                        <span style="font-size: 12px"
+                                                            class="badge badge-sm border border-danger text-danger bg-danger">
+                                                            <svg width="12" height="12"
+                                                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                                                fill="currentColor" class="me-1ca">
+                                                                <path fill-rule="evenodd"
+                                                                    d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 6a.75.75 0 00-1.5 0v6c0 .414.336.75.75.75h4.5a.75.75 0 000-1.5h-3.75V6z"
+                                                                    clip-rule="evenodd" />
+                                                            </svg>
+                                                            REJECTED
                                                         </span>
                                                         {{-- <p class="text-secondary text-sm mb-0">{{$status}}</p> --}}
                                                     @endif
@@ -222,9 +234,9 @@
 
                                     <li class="rb-item" ng-repeat="itembx">
                                       <div class="timestamp">
-                                        3rd May 2020<br> <span>7:00 PM</span>
+                                        <br> <span></span>
                                       </div>
-                                      <div class="item-title">Approved by OSA.</div>
+                                      <div class="item-title"></div>
                                     </li>
 
                                   </ul>
@@ -432,8 +444,8 @@ ul.rb li .timestamp {
 
 .rb-container ul.rb li:first-child {
     margin-left: 70px;
-    font-size: 18px;
-    font-weight: 900;
+    font-size: 16px;
+    font-weight: 700;
 }
 
 </style>

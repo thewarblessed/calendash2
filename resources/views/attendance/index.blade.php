@@ -9,7 +9,7 @@
                         <div class="card-header border-bottom pb-0">
                             <div class="" style="text-align: center">
                                 <div>
-                                    <strong><h3>Your Events</h3></strong>
+                                    <strong><h3>Your Ongoing Events</h3></strong>
                                     <p class="text-sm">Click to check attendance</p>
                                 </div>
                             </div>
@@ -46,26 +46,70 @@
                     </div>
                 </div>
 
-                <div class="col-12">
+                {{-- <div class="col-12">
                     <div class="card border shadow-xs mb-4">
                         <div class="form-group">
                             <div class="container">
                                 <div class="row">
                                     @foreach ($events as $event)
-                                    {{-- <div class="col-sm"> --}}
                                         <div class="card" style="width: 15rem; margin-bottom: 30px; border: 2px solid rgb(216, 200, 231)">
                                             <img src="{{ asset('storage/'.$event->image) }}" height="200" class="card-img-top" alt="...">
                                             <div class="card-body">
                                                 <h5 class="card-title">{{ $event->event_name }}</h5>
                                                     <a href="{{ route('singleAttendance', ['id' => $event->id]) }}" class="btn btn-info mr-2" style="flex: 1;">Attendance</a>
-                                                    {{-- <a href="{{ route('venueEventlist', ['id' => $event->id]) }}" class="btn btn-primary ml-2" style="flex: 1;">Event List</a> --}}
-                                               </div>
+                                            </div>
                                         </div>
-                                    {{-- </div>    --}}
                                     @endforeach
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </div> --}}
+                <div class="card-body p-3">
+                    <div class="row">
+                        @if ($events->isEmpty())
+                            <div class="col-12 text-center">
+                                <img src="https://media3.giphy.com/media/O4B7pH57BbdVZVcNgS/200w.gif?cid=6c09b952srkcsa5x6oecl5wlks5dj0r6tul26s7n0vrrs66x&ep=v1_videos_search&rid=200w.gif&ct=v" width="250" height="250" style="border-radius: 20px" alt="Description of the image">
+                                <p>You have no ongoing events yet</p>
+                            </div>
+                        @else
+                            @foreach ($events as $event)
+                                <div class="col-xl-4 col-md-6 mb-xl-0 mb-4">
+                                    <div class="card card-background border-radius-xl card-background-after-none align-items-start mb-4">
+                                        <div class="full-background bg-cover" style="background-image: url('https://i.pinimg.com/originals/e5/27/9f/e5279f5b58c4d921d8439c253bb15362.gif'); background-size: cover;"></div>
+                                        <span class="mask bg-dark opacity-1 border-radius-sm"></span>
+                                        <div class="card-body text-start p-3 w-100">
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <div
+                                                        class="blur shadow d-flex align-items-center w-100 border-radius-md border border-white mt-8 p-3">
+                                                        <div class="w-50">
+                                                            <p class="text-dark text-sm font-weight-bold mb-1">{{ $event->event_name }}</p>
+                                                            <p class="text-xs text-secondary mb-0">{{ $event->start_date }}</p>
+                                                        </div>
+                                                        {{-- <p class="text-dark text-sm font-weight-bold ms-auto">Growth
+                                                        </p> --}}
+                                                        <a class="text-dark text-sm font-weight-bold ms-auto border border-primary rounded p-1" href="{{ route('singleAttendance', ['id' => $event->id]) }}">
+                                                            Check Attendance
+                                                            <i class="fas fa-arrow-right-long text-sm ms-1" aria-hidden="true"></i>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <a href="{{ route('singleAttendance', ['id' => $event->id]) }}">
+                                        <h4 class="font-weight-semibold">
+                                            {{ $event->event_name }}
+                                        </h4>
+                                    </a>
+                                    <p class="mb-4">
+                                        {{ $event->description }}
+                                    </p>
+                                    
+                                </div>
+                            @endforeach
+                        @endif
                     </div>
                 </div>
             </div>

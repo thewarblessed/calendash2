@@ -205,6 +205,19 @@ Route::post('/my/approved/{id}',[
         'as' => 'getMyApprovedRequest',
 ]);
 
+//get USER all reject request
+Route::post('/user/reject/{id}',[
+        'uses' => 'UserEventController@getAllRejectedRequest',
+        'as' => 'getAllRejectedRequest',
+]);
+
+//get USER all approved request
+Route::post('/user/approved/{id}',[
+        'uses' => 'UserEventController@getAllApprovedRequest',
+        'as' => 'getAllApprovedRequest',
+]);
+
+
 // GET ALL ORG ADVISERS
 Route::get('/admin/orgadvisers',[
         'uses' => 'OrganizationAdviserController@getAllOrgAdviser',
@@ -303,7 +316,7 @@ Route::post('/updateAttendance/{id}',[
         ]);
 
 ////////////////////////////// NOTIFICATIONS  //////////////////////
-Route::get('/notif/request',[
+Route::post('/notif/request/{id}',[
         'uses' => 'NotificationController@index',
         'as' => 'getNotif',
 ]);

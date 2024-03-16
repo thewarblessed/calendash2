@@ -63,12 +63,8 @@
                                             <th
                                                 class="text-center text-secondary text-xs font-weight-semibold opacity-7">
                                                 End Time</th>
-                                            <th
-                                                class="text-center text-secondary text-xs font-weight-semibold opacity-7">
-                                                Department</th>
-                                            <th
-                                                class="text-center text-secondary text-xs font-weight-semibold opacity-7">
-                                                Organization</th>
+                                            <th class="text-center text-secondary text-xs font-weight-semibold opacity-7">Department</th>
+                                            <th class="text-center text-secondary text-xs font-weight-semibold opacity-7">Organization</th>
                                             <th
                                                 class="text-center text-secondary text-xs font-weight-semibold opacity-7">
                                                 Status</th>
@@ -151,13 +147,13 @@
 
                                             <td class="align-middle text-center text-sm">
                                                 @if ($event->status === 'APPROVED')
-                                                <span
+                                                <span style="font-size: 12px"
                                                     class="badge badge-sm border border-success text-success bg-success">
-                                                    <svg width="9" height="9" viewBox="0 0 10 9" fill="none"
-                                                        xmlns="http://www.w3.org/2000/svg" stroke="currentColor"
-                                                        class="me-1">
-                                                        <path d="M1 4.42857L3.28571 6.71429L9 1" stroke-width="2"
-                                                            stroke-linecap="round" stroke-linejoin="round" />
+                                                    <svg width="12" height="12" xmlns="http://www.w3.org/2000/svg"
+                                                        viewBox="0 0 24 24" fill="currentColor" class="me-1ca">
+                                                        <path fill-rule="evenodd"
+                                                            d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 6a.75.75 0 00-1.5 0v6c0 .414.336.75.75.75h4.5a.75.75 0 000-1.5h-3.75V6z"
+                                                            clip-rule="evenodd" />
                                                     </svg>
                                                     APPROVED
                                                 </span>
@@ -173,6 +169,20 @@
                                                             clip-rule="evenodd" />
                                                     </svg>
                                                     PENDING
+                                                </span>
+                                                {{-- <p class="text-secondary text-sm mb-0">{{$status}}</p> --}}
+                                                @endif
+
+                                                @if ($event->status === 'REJECTED')
+                                                <span style="font-size: 12px"
+                                                    class="badge badge-sm border border-danger text-danger bg-danger">
+                                                    <svg width="12" height="12" xmlns="http://www.w3.org/2000/svg"
+                                                        viewBox="0 0 24 24" fill="currentColor" class="me-1ca">
+                                                        <path fill-rule="evenodd"
+                                                            d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 6a.75.75 0 00-1.5 0v6c0 .414.336.75.75.75h4.5a.75.75 0 000-1.5h-3.75V6z"
+                                                            clip-rule="evenodd" />
+                                                    </svg>
+                                                    REJECTED
                                                 </span>
                                                 {{-- <p class="text-secondary text-sm mb-0">{{$status}}</p> --}}
                                                 @endif
@@ -211,13 +221,11 @@
                                 </table>
                             </div>
                             {{-- <div class="pagination"></div> --}}
-                            <div class="border-top py-3 px-3 d-flex align-items-center" id="pagination">
-                                <p class="font-weight-semibold mb-0 text-dark text-sm" id="page-info">Page 1 of 10
-                                </p>
-                                <div class="ms-auto">
-                                    <button class="btn btn-sm btn-white mb-0" id="previous-btn">Previous</button>
-                                    <button class="btn btn-sm btn-white mb-0" id="next-btn">Next</button>
-                                </div>
+                            {{-- <div class="border-top py-3 px-3 d-flex align-items-center" id="pagination">
+                                
+                            </div> --}}
+                            <div class="border-top py-3 px-3 d-flex align-items-center">
+                                {{ $events->links() }}
                             </div>
                         </div>
                     </div>
@@ -484,6 +492,7 @@
         font-size: 18px;
         font-weight: 900;
     }
+
     
     </style>
 

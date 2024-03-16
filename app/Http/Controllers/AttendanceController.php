@@ -18,6 +18,14 @@ class AttendanceController extends Controller
     public function index()
     {
         //
+        $currentDateTime = now();
+        // $events = Event::orderBy('id')
+        //                 ->where('user_id', Auth::user()->id)
+        //                 ->where('start_date', '<=', $currentDateTime)
+        //                 ->where('end_date', '>=', $currentDateTime)
+        //                 ->whereTime('start_time', '<=', $currentDateTime->format('H:i:s'))
+        //                 ->whereTime('end_time', '>=', $currentDateTime->format('H:i:s'))
+        //                 ->get();
         $events = Event::orderBy('id')->where('user_id', Auth::user()->id)->get();
         // dd($events);
         return view('attendance.index',compact('events'));

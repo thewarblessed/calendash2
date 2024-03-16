@@ -853,9 +853,12 @@ class EventController extends Controller
         return response()->json($request_letter);
     }
 
-                //ADMIN
-    public function showAdminEvents()
-    {   
+    //ADMIN
+    public function showAdminEvents(Request $request)
+    {
+        // $sortColumn = $request->query('sort', 'id'); // Default to sorting by id if no sort parameter is provided
+        // $sortDirection = $request->query('direction', 'asc'); // Default to ascending order
+    
         $events = Event::leftjoin('venues','venues.id','events.venue_id')
                         ->leftjoin('rooms','rooms.id','events.room_id')
                         ->leftjoin('departments','departments.id','events.target_dept')
@@ -873,14 +876,9 @@ class EventController extends Controller
                                 'rooms.name as roomName',
                                 'events.id')
                         ->orderByDesc('events.id')
-                        ->get();
-        // dd($events)
-        //dd($events);
-        // $user_id = $events->user_id;
-        // $user = User::find($user_id);
-        // dd($user);
-        // return response()->json($events);
-        return View::make('admin.event.index', compact('events'));
+                        ->paginate(10);
+    
+        return view('admin.event.index', compact('events'));
     }
 
     public function createAdminEvents()
@@ -899,7 +897,7 @@ class EventController extends Controller
     public function statusEvents()
     {   
         $eventForUser = Event::orderByDesc('id')->where('user_id', Auth::id())->get();
-            
+        // dd($eventForUser);
         return View::make('event.myEvents', compact('eventForUser'));
         
     }

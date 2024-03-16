@@ -139,6 +139,7 @@
                 <li class="nav-item ps-2 d-flex align-items-center">
                     <a class="nav-link text-body p-0">
                         <strong style="color: black">{{Auth::user()->name}}</strong>
+                        <input type="text" id="authUserID" value="{{Auth::user()->id}}" hidden>
                     </a>
                 </li>
                 <li class="nav-item ps-2 d-flex align-items-center">
@@ -167,15 +168,23 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 <script>
     $(document).ready(function() {
+    
     var existingNotifications = []; // Array to store existing notification IDs
-
+    var id = $('#authUserID').val();
+    console.log(id);
+    // alert(id)
     function fetchNotifications() {
         $.ajax({
-            url: '/api/notif/request', // Update the URL to your endpoint
-            method: 'GET',
-            success: function(response) {
-                $('#notificationList').empty(); // Clear existing notifications
+        url: '/api/notif/request/' + id, // Update the URL to your endpoint
+        method: 'POST',
+        success: function(response) {
+            $('#notificationList').empty(); // Clear existing notifications
+
+            if (response.length === 0) {
+                $('#notificationList').append('<li class="text-center">No notifications</li>');
+            } else {
                 response.forEach(function(notification) {
+                    console.log(notification);
                     var timeAgo = moment(notification.created_at).fromNow(); // Use moment.js to calculate time ago
                     var listItem = '<li class="mb-2">' +
                         '<a class="dropdown-item border-radius-md" href="{{ url('/request') }}">' +
@@ -201,10 +210,11 @@
                         existingNotifications.push(notification.id); // Add the ID to the existingNotifications array
                     }
                 });
-
-                updateBadge(); // Update the badge count
             }
-        });
+
+            updateBadge(); // Update the badge count
+        }
+    });
     }
 
     // Fetch notifications initially

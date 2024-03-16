@@ -511,7 +511,7 @@ $(document).ready(function () {
                 inputLabel: "Passcode",
                 inputPlaceholder: "Enter your passcode",
                 inputAttributes: {
-                    maxlength: "10",
+                    maxlength: "256",
                     autocapitalize: "off",
                     autocorrect: "off"
                 }
@@ -648,7 +648,7 @@ $(document).ready(function () {
                 inputLabel: "Passcode",
                 inputPlaceholder: "Enter your passcode",
                 inputAttributes: {
-                    maxlength: "10",
+                    maxlength: "256",
                     autocapitalize: "off",
                     autocorrect: "off"
                 }
@@ -762,6 +762,7 @@ $(document).ready(function () {
         // alert('dshagd')
         var id = $(this).data("id");
         // e.preventDefault();
+        console.log(id);
 
         $.ajax({
             type: "GET",
@@ -777,6 +778,7 @@ $(document).ready(function () {
             },
             dataType: "json",
             success: function (data) {
+                console.log(data);
                 var originalSDate = new Date(data.events.start_date);
                 var originalEDate = new Date(data.events.end_date);
                 var origStime = moment(data.events.start_time, "HH:mm:ss")
@@ -795,7 +797,7 @@ $(document).ready(function () {
 
                 var formattedCreatedTime = moment(origCreatedDate).format("h:mm A");
 
-                console.log(formattedCreatedTime);
+                // console.log(formattedCreatedTime);
                 var dateType = data.events.type;
                 var dType;
                 if (dateType === 'within_day') {
@@ -806,14 +808,21 @@ $(document).ready(function () {
                     dType = 'Whole Week';
                 }
                 // console.log(dType);
-                // console.log(data);
+                console.log(data.typeOfPlace);
+                if (data.typeOfPlace === 'Room') {
+                    $('#eventStatusVenue').val(data.rooms.name);
+                } else if (data.typeOfPlace === 'Venue') {
+                    $('#eventStatusVenue').val(data.venues.name);
+                } else {
+                    // Handle other cases if needed
+                }                
                 $('#checkMoreModal').modal('show');
                 $('#eventStatusText').text(data.msg);
                 $('#eventDateRequestedText').text(formattedCreatedDate +' '+ formattedCreatedTime);
                 $('#eventStatusName').val(data.events.event_name);
                 $('#eventStatusDesc').val(data.events.description);
                 $('#eventStatusParticipants').val(data.events.participants);
-                $('#eventStatusVenue').val(data.venues.name);
+                // $('#eventStatusVenue').val(data.venues.name);
                 $('#eventStatusDateType').val(dType);
                 $('#eventStatusStartDate').val(formattedSDate);
                 $('#eventStatusEndDate').val(formattedEDate);
@@ -825,14 +834,14 @@ $(document).ready(function () {
                 // console.log(statusElement)
                 // Get the value from the element's text content
                 var statusValue = $('#eventStatusText').text();
-
+                console.log(statusValue);
                 statusElement.removeClass();
                 // Apply styling based on the value
-                if (statusValue === 'APPROVED') {
-                    statusElement.addClass('badge badge-sm border border-success text-success');
-                } else {
-                    statusElement.addClass('badge badge-sm border border-warning text-warning');
-                }
+                // if (statusValue === 'APPROVED') {
+                //     statusElement.addClass('badge badge-sm border border-success text-success');
+                // } else {
+                //     statusElement.addClass('badge badge-sm border border-warning text-warning');
+                // }
                 // $("#venueEditImage").html(
                 // `<img src="/storage/${data.Venues.image}" width="100" class="img-fluid img-thumbnail">`);
             },
@@ -858,6 +867,7 @@ $(document).ready(function () {
                 console.log(data);
                 $('#statusList').empty();
                 // $('#checkStatusModal').modal('show');
+                // console.log(data.pendingMsg);
                 $('#eventStatusText').text(data.pendingMsg);
 
                 var statusElement = $('#eventStatusText');
@@ -867,30 +877,27 @@ $(document).ready(function () {
 
                 statusElement.removeClass();
                 // Apply styling based on the value
-                if (statusValue === 'APPROVED') {
+                if (statusValue === 'REJECTED') {
+                    statusElement.addClass('badge badge-sm border border-danger text-danger');
+                } else if(statusValue ==='APPROVED') {
                     statusElement.addClass('badge badge-sm border border-success text-success');
-                } else {
+                }
+                else{
                     statusElement.addClass('badge badge-sm border border-warning text-warning');
                 }
-                // $("#venueEditImage").html(
-                // `<img src="/storage/${data.Venues.image}" width="100" class="img-fluid img-thumbnail">`);
-
-                // var status = 1;
-                // $.each(data, function(index, item) {
-
-                // });
 
                 $.each(data.dates, function (index, item) {
                     // console.log(item);
-                    console.log(index);
-                    console.log(item)
-                    console.log(data.msg);
+                    // console.log(index);
+                    // console.log(item)
+                    // console.log(data.msg);
                     var formattedDate = moment(item, 'YYYY-MM-DD HH:mm:ss').format('MMMM D, YYYY');
                     var formattedTime = moment(item, 'YYYY-MM-DD HH:mm:ss').format('h:mm A');
                     console.log(formattedTime);
 
                    
                     if (data.msg && data.msg[index]) {
+                        var statusValue = $('#eventStatusText').text();
                         var msgItem = data.msg[index];
 
                         // Create a list item for each date and message
@@ -905,7 +912,6 @@ $(document).ready(function () {
 
                         $('#statusList').prepend(listItem);
                     }
-
                
                 });
 

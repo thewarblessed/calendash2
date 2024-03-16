@@ -198,6 +198,24 @@
                     <span class="nav-link-text ms-1">Attendance</span>
                 </a>
             </li>
+
+            <li class="nav-item">
+                <a class="nav-link  {{ is_current_route('meApproved') ? 'active' : '' }}"
+                    href="{{ route('meApproved') }}">
+                    <i class="fa-solid fa-square-check"
+                        style="color: {{ is_current_route('meApproved') ? '#774dd3' : 'defaultColor' }};font-size: 18px;"></i>
+                    <span class="nav-link-text ms-1">My Approved Requests</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link  {{ is_current_route('meRejected') ? 'active' : '' }}"
+                    href="{{ route('meRejected') }}">
+                    <i class="fa-solid fa-square-xmark"
+                        style="color: {{ is_current_route('meRejected') ? '#774dd3' : 'defaultColor' }};font-size: 18px;"></i>
+                    <span class="nav-link-text ms-1">My Declined Request</span>
+                </a>
+            </li>
             @endif
 
             @endif

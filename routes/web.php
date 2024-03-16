@@ -21,6 +21,7 @@ use App\Http\Controllers\SectionHeadController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\BusinessManagerController;
 use App\Http\Controllers\RequestRoomController;
+use App\Http\Controllers\UserEventController;
 
 /*
 |--------------------------------------------------------------------------
@@ -296,6 +297,15 @@ Route::get('/my/rejected', [RequestController::class, 'myRejectRequest'])
 Route::get('/my/approved', [RequestController::class, 'myApprovedRequest'])
 ->middleware('auth')
 ->name('myApproved');
+
+//////////////////////////////////////////////// REJECTED REQUESTS FOR USERS  ///////////////////////////////////////////////////
+Route::get('/me/rejected', [UserEventController::class, 'myRejected'])
+    ->middleware('auth')
+    ->name('meRejected');
+
+Route::get('/me/approved', [UserEventController::class, 'myApproved'])
+->middleware('auth')
+->name('meApproved');
 
 
 //////////////////////////////////////// ATTENDANCE IMPORT FILE EXCEL  ///////////////////////////
