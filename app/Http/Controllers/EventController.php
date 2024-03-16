@@ -896,7 +896,9 @@ class EventController extends Controller
 
     public function statusEvents()
     {   
-        $eventForUser = Event::orderByDesc('id')->where('user_id', Auth::id())->get();
+        $eventForUser = Event::orderByDesc('id')->where('user_id', Auth::id())
+                                ->where('status','PENDING')                                    
+                                ->get();
         // dd($eventForUser);
         return View::make('event.myEvents', compact('eventForUser'));
         
