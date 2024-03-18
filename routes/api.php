@@ -165,6 +165,17 @@ Route::get('/rooms/approve',[
 ]);
 
 
+///////////////////// ADMIN EVENTS /////////////////////////
+Route::get('/admin/allEvents/{id}', 'EventController@showAdminSingleEvent')->name('showAdminSingleEvent');
+Route::post('/admin/allEvents/update/{id}', 'EvensController@update')->name('updateAdminEvents');
+
+// GET EVENT BY DATE (admin)
+Route::post('/events',[
+        'uses' => 'EventController@getEventDate',
+        'as' => 'getEventDate',
+        ]);
+
+
 ///////////////////// OFFICIALS ////////////////
 // ADD OFFICIALS
 Route::post('/admin/storeOfficial',[

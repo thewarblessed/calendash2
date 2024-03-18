@@ -2941,8 +2941,33 @@ $(document).ready(function () {
         e.preventDefault();
         Swal.fire({
             title: 'Terms and Condition',
-            text: 'fshdfksdhfkh dfjkhsdkfjhskf hsdkfj hsdfs'
-          });
+            html: `<div style="text-align: justify; text-justify: inter-word; padding: 20px;">CALENDASH Event Scheduling Terms and Conditions<br/><br/>
+            These terms and conditions ("Terms") govern the scheduling of events in Technological University of the Philippines - Taguig ("TUP-T") by CALENDASH for the TUP-T students, faculty, and guests ("Users"). By engaging our services, the Users agree to abide by these Terms.<br/><br/>
+            <b>1. Event Details:</b><br/>
+            a. The Users agree to provide accurate and complete information regarding the event, including date, time, location, and any specific requirements.<br/>
+            b. Once the event is approved by the school officials, any changes to the event details will not be tolerated.<br/><br/>
+            <b>2. Booking and Approval:</b><br/>
+            a. Events must be booked through the CALENDASH platform.<br/>
+            b. Submission of event details does not guarantee approval. CALENDASH will seek approval from school officials, and only approved events will be scheduled.<br/>
+            c. The specific dates and times allotted during which the venue is in use, including setup and teardown times must be followed.<br/><br/>
+            <b>3. Cancellation:</b><br/>
+            a. CALENDASH reserves the right to cancel or reschedule an event in consultation with school officials due to unforeseen circumstances.<br/><br/>
+            <b>4. Responsibilities:</b><br/>
+            a. The Users are responsible for obtaining any necessary permits or permissions for the event.<br/>
+            b. CALENDASH is not liable for any damages, injuries, or losses incurred during the event unless caused by gross negligence or willful misconduct.<br/>
+            c. Venue should be returned after use, including cleanliness and any specific requirements for repairs or maintenance.<br/><br/>
+            <b>5. Approval Process:</b><br/>
+            a. The approval process involves coordination with TUP-T officials. Users are advised to submit event request letter in advance to allow for the approval process.<br/><br/>
+            <b>6. Termination:</b><br/>
+            a. CALENDASH reserves the right to terminate or suspend services if Users breach any material provision of these Terms.<br/><br/>
+            By engaging our services, the Users acknowledge that they have read, understood, and agreed to these Terms and Conditions. These Terms may be subject to change, and Users will be notified of any revisions.</div>`,
+            showCloseButton: true,
+            showConfirmButton: false,
+            closeButtonHtml: '<i class="fas fa-times"></i>',
+            customClass: {
+                closeButton: 'swal-close-button',
+            }
+        });
     });
 
 

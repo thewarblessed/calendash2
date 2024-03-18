@@ -15,6 +15,7 @@ use App\Models\Organization;
 use App\Models\Official;
 use App\Models\Department;
 use App\Models\Room;
+use DB;
 use View;
 use Auth;
 use Carbon\Carbon;
@@ -881,6 +882,76 @@ class EventController extends Controller
         return view('admin.event.index', compact('events'));
     }
 
+    //ADMIN SEARCH EVENTDATE
+    public function getEventDate(Request $request)
+    {
+        // dd($request->all());
+        $startDate = $request->input('start_date');
+        
+        $event = Event::leftjoin('venues','venues.id','events.venue_id')
+                        ->leftjoin('rooms','rooms.id','events.room_id')
+                        ->leftjoin('organizations','organizations.id','events.target_org')
+                        ->leftjoin('departments','departments.id','events.target_dept')
+                        ->select('organizations.organization',
+                                    'departments.department',
+                                    'events.status',
+                                    'events.event_name',
+                                    'events.start_date',
+                                    'events.end_date',
+                                    'events.start_time',
+                                    'events.end_time',
+                                    'events.type',
+                                    'events.event_letter',
+                                    DB::raw('CASE
+                                    WHEN rooms.name IS NULL THEN venues.name
+                                    ELSE rooms.name END AS venueName'),
+                                    'events.id')
+                        ->where('start_date', $startDate)->get();
+
+        return response()->json($event);
+        
+    }
+
+    //AdminEvents - Edit Event
+    public function showAdminSingleEvent(String $id)
+    {
+           $events = Event::leftjoin('venues','venues.id','events.venue_id')
+                        ->leftjoin('rooms','rooms.id','events.room_id')
+                        ->leftjoin('departments','departments.id','events.target_dept')
+                        ->leftjoin('organizations','organizations.id','events.target_org')
+                        ->select('organizations.organization',
+                                'departments.department',
+                                'events.status',
+                                'events.event_name',
+                                'events.start_date',
+                                'events.end_date',
+                                'events.start_time',
+                                'events.end_time', 
+                                'events.type',
+                                DB::raw('CASE
+                                WHEN rooms.name IS NULL THEN venues.name
+                                ELSE rooms.name END AS venueName'),
+                                'events.id')
+                        ->where('events.id', $id)
+                        ->orderByDesc('events.id')
+                        ->first();
+           return response()->json($events);
+    }
+
+    public function editAdminEvents(string $id)
+    {
+         // Find the event by its ID
+           $event = Event::where('id', $id)->first();
+       
+           // Check if the event exists
+           if (!$event) {
+               return response()->json(["error" => "Event not found.", "status" => 404]);
+           }
+       
+           // Return the event data as JSON response
+           return response()->json(["event" => $event, "status" => 200]);
+    }
+    
     public function createAdminEvents()
     {   
         $venues = Venue::all();
