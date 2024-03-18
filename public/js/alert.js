@@ -1143,6 +1143,55 @@ $(document).ready(function () {
 
     });
 
+    // $("#start_time_withinDayUser").on("click", function (e) {
+    //     // $('#start_time_withinDayUser').val();
+    //     // $('#end_time_withinDayUser').val();
+    //     $('#event_date_withinDayUser').val();
+    // })
+
+    $("#start_time_withinDayUser").on("click change", function (e) {
+        var eventDate = $('#event_date_withinDayUser').val();
+        if (!eventDate) {
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                html: "Please select an event date first.",
+            });
+            $('#event_date_withinDayUser').focus();
+            $(this).val('');
+            return;
+        }
+        // Proceed with your logic here if the event date is selected
+    });
+
+    $("#end_time_withinDayUser").on("click change", function (e) {
+        var eventDate = $('#event_date_withinDayUser').val();
+        var startTime = $('#start_time_withinDayUser').val();
+        if (!eventDate) {
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                html: "Please select an event date first.",
+            });
+            $('#event_date_withinDayUser').focus();
+            $(this).val('');
+            return;
+        }
+        if (!startTime) {
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                html: "Please select a start time first.",
+            });
+            $('#start_time_withinDayUser').focus();
+            $(this).val('');
+            return;
+        }
+        // Proceed with your logic here if the event date and start time are selected
+    });
+    
+
+
     // $('#date_range_User').change(function() {
         
     //     // dateRanges
@@ -2969,6 +3018,87 @@ $(document).ready(function () {
             }
         });
     });
+
+    // business manager && manager
+    $("#pendingOutsidersTable tbody").on("click", 'button.approveAccounts ', function (e) {
+        var id = $(this).data("id");
+        // e.preventDefault();
+        console.log(id);
+
+        $.ajax({
+            type: "GET",
+            enctype: 'multipart/form-data',
+            processData: false, // Important!
+            contentType: false,
+            cache: false,
+            url: "/api/admin/getUser/" + id,
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
+                    "content"
+                ),
+            },
+            dataType: "json",
+            success: function (data) {
+                console.log(data);
+                var newrole = '';
+                if (data.user.role === 'outsider')
+                {
+                    newrole = 'Outsider';
+                }
+                //     $('#createVenueModal').modal('show');
+                $('#outsiderApproveId').val(id);
+                $('#outsiderApproveLastname').text(data.user.lastname);
+                $('#outsiderApproveFirstname').text(data.user.firstname);
+                $('#outsiderApproveRole').text(newrole);
+                $("#outsiderApproveTupIDPhoto").html(
+                        `<img src="/storage/${data.user.image}" width="400" height="400" style="border-radius: 20px;">`);
+            },
+            error: function (error) {
+                console.log("error");
+            },
+        });
+
+    });
+
+    $("#approveOutsiderAccount").on("click", function (e) {
+
+        e.preventDefault();
+        // var data = $('#roleUpdateForm')[0];
+        var id = $("#outsiderApproveId").val();
+        console.log(id);
+
+        $.ajax({
+            type: "POST",
+            enctype: 'multipart/form-data',
+            processData: false, // Important!
+            contentType: false,
+            cache: false,
+            url: "/api/admin/confirmPendingUsers/" + id,
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
+                    "content"
+                ),
+            },
+            dataType: "json",
+            success: function (data) {
+                console.log(data);
+                Swal.fire({
+                    icon: "success",
+                    title: "Account verified!",
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+
+                setTimeout(function () {
+                    window.location.href = '/outsidelist';
+                }, 1500);
+            },
+            error: function (error) {
+                console.log("error");
+            },
+        });
+
+    });//end create
 
 
 })

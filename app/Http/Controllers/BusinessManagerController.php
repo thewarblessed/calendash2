@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\PendingUser;
 use App\Models\Venue;
 
 class BusinessManagerController extends Controller
@@ -78,5 +79,19 @@ class BusinessManagerController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+    
+    public function getAllOutsideUser()
+    {
+        $pendingUsers = PendingUser::leftJoin('users', 'pending_users.user_id', 'users.id')
+                                    ->leftJoin('organizations', 'pending_users.organization_id', 'organizations.id')
+                                    ->leftJoin('departments', 'pending_users.department_id', 'departments.id')
+                                    ->leftJoin('sections', 'pending_users.section_id', 'sections.id')
+                                    ->select('pending_users.user_id','pending_users.tupID','pending_users.lastname','pending_users.firstname','organizations.organization','departments.department','sections.section','pending_users.role','users.email_verified_at','users.email')
+                                    ->orderByDesc('pending_users.id')
+                                    ->where('pending_users.role', 'outsider')
+                                    ->paginate(5);
+
+        return view('bm.outsider', compact('pendingUsers'));
     }
 }

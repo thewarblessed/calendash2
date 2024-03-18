@@ -314,14 +314,14 @@
                     </a>
                 </li>
 
-                {{-- <li class="nav-item">
+                <li class="nav-item">
                     <a class="nav-link  {{ is_current_route('outsideUser') ? 'active' : '' }}"
                         href="{{ route('outsideUser') }}">
-                        <i class="fa-solid fa-bell"
+                        <i class="fa-solid fa-users"
                             style="color: {{ is_current_route('outsideUser') ? '#774dd3' : 'defaultColor' }}; font-size:{{ is_current_route('adaaRequest') ? '23px' : '18px' }};"></i>
-                        <span class="nav-link-text ms-1">User</span>
+                        <span class="nav-link-text ms-1">Outside Users</span>
                     </a>
-                </li> --}}
+                </li>
 
                 <!-- EVENT CALENDAR -->
                 <li class="nav-item">

@@ -280,6 +280,12 @@ Route::get('/admin/pendingUsers', [UserController::class, 'pendingUsers'])
 // ->middleware('auth')
 // ->name('AdminCreateOfficials');
 
+///////////////////////////////////////////////// OUTSIDE AND BUSINESS MANAGER ////////////////////////////////////////
+Route::get('/outsidelist',[
+    'uses' => 'BusinessManagerController@getAllOutsideUser',
+    'as' => 'outsideUser',
+]);
+
 //////////////////////////////////////////////// ATTENDANCE ///////////////////////////////////////////////////
 Route::get('/attendance', [AttendanceController::class, 'index'])
 ->name('attendance');

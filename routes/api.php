@@ -310,10 +310,15 @@ Route::post('/admin/editRole/{id}',[
 Route::post('/admin/postCreateMyEvent', [EventController::class, 'storeMyEventsAdmin'])
     ->name('postCreateMyEvent');
 
+
+
+/////////////////////////////// OUTSIDE & BUSINESS MANAGER ////////////////////////
 Route::post('/outside/storeEvent',[
         'uses' => 'EventController@storeOutsiderEvents',
         'as' => 'storeOutsiderEvents',
 ]);
+
+
 ////////////////////////////// attendance student lists //////////////////////
 Route::get('/studentlists/{id}',[
         'uses' => 'AttendanceController@getStudentList',
