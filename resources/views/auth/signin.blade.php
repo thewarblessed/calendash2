@@ -36,7 +36,7 @@
                                 </div>
                                 <!-- Form -->
                                 <div class="card-body">
-                                    <form class="text-start" method="POST" action="https://calendash.online/sign-in"
+                                    <form class="text-start" method="POST" action="{{ route('login') }}"
                                         enctype="multipart/form-data">
                                         @csrf
                                         <label>Email Address</label>
