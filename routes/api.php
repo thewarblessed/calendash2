@@ -337,6 +337,12 @@ Route::post('/notif/request/{id}',[
         'as' => 'getNotif',
 ]);
 
+////////////////////////////// EXTERNAL API  //////////////////////
+Route::get('/getAllCalendars',[
+        'uses' => 'CalendarController@myApiCalendar',
+        'as' => 'myApiCalendar',
+]);
+
 ////////////////================ MOBILE ROUTES ================//////////////////
 //REGISTRATION MOBILE
 Route::post('/auth/sign-up',[
