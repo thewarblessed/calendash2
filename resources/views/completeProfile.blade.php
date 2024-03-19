@@ -32,6 +32,7 @@
                     <h2 class="card-header">Profile Details</h2>
                     <div class="card-body">
                         <form role="form" id="compeleteProfileForm" enctype="multipart/form-data">
+                            @csrf
                             <!-- Form Group (username)-->
                             {{-- <div class="mb-3">
                                 <label class="small mb-1" for="inputUsername">Username (how your name will appear to
