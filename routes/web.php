@@ -22,6 +22,7 @@ use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\BusinessManagerController;
 use App\Http\Controllers\RequestRoomController;
 use App\Http\Controllers\UserEventController;
+use App\Http\Controllers\ReportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -190,10 +191,10 @@ Route::get('/rulesreg/{id}', [VenueController::class, 'rulesreg'])
     ->middleware('auth')
     ->name('venueRulesreg');
 
-// route to eventlist
-Route::get('/eventlist/{id}', [VenueController::class, 'eventlist'])
+// route to feedback
+Route::get('/feedback/{id}', [VenueController::class, 'feedback'])
     ->middleware('auth')    
-    ->name('venueEventlist');
+    ->name('venueFeedback');
 
 Route::get('/texteditor', function () {
     return view('event.editor');
@@ -338,3 +339,5 @@ Route::get('/approved/rooms', [RequestRoomController::class, 'approvedRoomsView'
     ->name('approvedRoomsView');
 
 
+//////////////////////////////////////// REPORT CHARTS  ///////////////////////////
+Route::get('/admin/report', [ReportController::class, 'showEventReport'])->name('showEventReport');

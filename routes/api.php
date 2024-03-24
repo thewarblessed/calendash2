@@ -10,6 +10,7 @@ use App\Http\Controllers\OrganizationAdviserController;
 use App\Http\Controllers\DepartmentHeadController;
 use App\Http\Controllers\SectionHeadController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\ReportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -174,6 +175,11 @@ Route::post('/events',[
         'uses' => 'EventController@getEventDate',
         'as' => 'getEventDate',
         ]);
+
+// REPORTS
+// Route::get('/admin/report/venue', [ReportController::class, 'showVenueReport'])->name('admin.report.venue');
+Route::get('/admin/report/event', [ReportController::class, 'showEventReport'])->name('admin.report.event');
+
 
 
 ///////////////////// OFFICIALS ////////////////

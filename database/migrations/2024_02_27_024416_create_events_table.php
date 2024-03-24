@@ -32,6 +32,7 @@ return new class extends Migration
             $table->integer('target_org')->unsigned()->nullable();
             $table->foreign('target_org')->references('id')->on('organizations');
             $table->string('event_letter')->default('default.pdf')->nullable();
+            $table->string('feedback_image')->nullable();
             $table->string('receipt_image')->nullable();
             $table->text('status');
             $table->string('org_adviser')->nullable();

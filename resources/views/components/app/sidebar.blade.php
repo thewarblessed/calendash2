@@ -106,6 +106,18 @@
                     <span class="nav-link-text ms-1">EVENTS</span>
                 </a>
             </li>
+            
+            <li class="nav-item">
+                <a class="nav-link  {{ is_current_route('showEventReport') ? 'active' : '' }}"
+                    href="{{ route('showEventReport') }}">
+                    {{-- <i class="fa-solid fa-calendar-days"></i> --}}
+                    <i class="fa fa-bar-chart"
+                        style="color: {{ is_current_route('showEventReport') ? '#774dd3' : 'defaultColor' }};font-size: 18px;"></i>
+                    <span class="nav-link-text ms-1">REPORTS</span>
+                </a>
+            </li>
+
+
             @endif
 
             @if (auth()->user()->hasRole(['student', 'professor', 'staff']))

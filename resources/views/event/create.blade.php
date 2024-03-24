@@ -232,6 +232,17 @@
                                 </ul>
                             </div>
                         </div>
+                        <div class="mb-3 col-md-6" style="align-self: center">
+                            <label for="feedback_image" class="form-label"
+                                style="font-size: 25px; text-align:center; color:blueviolet">Upload
+                                QR Code for Feedback</label>
+                            <input type="file" class="form-control" name="feedback_image" id="feedback_image">
+                            {{-- <onchange="validateFile(this)">
+                            <!-- Call validateFile function when file selection changes -->
+                            <small class="text-danger" id="fileError"></small> <!-- Error message placeholder -->
+                            <small class="form-text text-muted">Max file size: 5MB. File type: PDF only.</small>
+                            <!-- Additional info --> --}}
+                        </div>
 
                     </div>
 
@@ -276,16 +287,16 @@
                                 <onchange="validateFile(this)">
                                 <!-- Call validateFile function when file selection changes -->
                                 <small class="text-danger" id="fileError"></small> <!-- Error message placeholder -->
-                                <small class="form-text text-muted">Max file size: 25MB. File type: PDF only.</small>
+                                <small class="form-text text-muted">Max file size: 5MB. File type: PDF only.</small>
                                 <!-- Additional info -->
                             </div>
                             <script>
                                 function validateFile(input) {
                                     const file = input.files[0];
-                                    const maxSize = 25 * 1024 * 1024; // 25MB in bytes
+                                    const maxSize = 5 * 1024 * 1024; // 5MB in bytes
 
                                     if (file.size > maxSize) {
-                                        document.getElementById('fileError').textContent = 'File size exceeds 25MB limit.';
+                                        document.getElementById('fileError').textContent = 'File size exceeds 5MB limit.';
                                         input.value = ''; // Clear the file input
                                     } else if (!file.type.includes('pdf')) {
                                         document.getElementById('fileError').textContent = 'Only PDF files are allowed.';

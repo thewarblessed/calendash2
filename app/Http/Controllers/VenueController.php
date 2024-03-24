@@ -24,15 +24,26 @@ class VenueController extends Controller
 
     }
 
+    // public function indexUser()
+    // {
+    //     // $venues = Venue::orderBy('id')->get();
+    //     // return View::make('venues.index', compact('venues'));
+    //     $venues = Venue::orderBy('id')->get();
+    //     $events = Event::with('venue')->orderBy('id')->get(); // Eager load the venue relationship
+    //     return view('venues.index', compact('venues', 'events'));
+
+    // }
+
     public function indexUser()
     {
-        // $venues = Venue::orderBy('id')->get();
-        // return View::make('venues.index', compact('venues'));
         $venues = Venue::orderBy('id')->get();
-        $events = Event::with('venue')->orderBy('id')->get(); // Eager load the venue relationship
-        return view('venues.index', compact('venues', 'events'));
+        $approvedVenues = Venue::whereHas('events', function ($query) {
+        $query->where('status', 'APPROVED');
+        })->orderBy('id')->get();
 
+        return view('venues.index', compact('venues', 'approvedVenues'));
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -50,11 +61,11 @@ class VenueController extends Controller
         return view('venues.rulesreg', compact('venues'));
     }
     
-    public function eventlist(string $id)
+    public function feedback(string $id)
     {
-        $venue = Venue::find($id);
+        $venues = Venue::find($id);
         $events = Event::where('venue_id', $id)->where('status', 'APPROVED')->get();
-        return view('venues.eventlist', compact('venue', 'events'));
+        return view('venues.feedback', compact('venues', 'events'));
     }
 
     /**

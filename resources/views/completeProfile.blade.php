@@ -115,7 +115,7 @@
                             </div>
 
                             <div class="mb-3" id="tupIDphotoDiv">
-                                <label class="small mb-1" for="inputImageID">Upload Image of your TUP ID with ID NO.</label>
+                                <label class="small mb-1" for="inputImageID">Upload Image of your TUP ID</label>
                                 <input class="form-control" id="inputImageID" name="image" type="file"
                                     placeholder="Enter your TUP ID (ex. TUPT-XX-XXXX)" value="">
                             </div>

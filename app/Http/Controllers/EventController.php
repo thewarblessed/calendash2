@@ -281,6 +281,15 @@ class EventController extends Controller
                 $event_letter = 'pdf/'.time().'-'.$files->getClientOriginalName();
                 // $venues->save();
                 Storage::put('public/pdf/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
+
+                $request->validate([
+                    'feedback_image' => 'required|image|mimes:jpeg,png,jpg|max:2048', // Image file validation
+                ]);
+        
+                $files = $request->file('feedback_image');
+                $feedback_image = 'images/'.time().'-'.$files->getClientOriginalName();
+                // $venues->save();
+                Storage::put('public/images/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
                 
                 if ($request->event_place === 'room')
                 {
@@ -299,6 +308,7 @@ class EventController extends Controller
                         'target_dept' => $target_dept,
                         'target_org' => $target_org,
                         'event_letter' => $event_letter,
+                        'feedback_image' => $feedback_image,
                         'status' => 'PENDING',
                         'color' => '#D6AD60',
                         'created_at' => now()
@@ -321,6 +331,7 @@ class EventController extends Controller
                         'target_dept' => $target_dept,
                         'target_org' => $target_org,
                         'event_letter' => $event_letter,
+                        'feedback_image' => $feedback_image,
                         'status' => 'PENDING',
                         'color' => '#D6AD60',
                         'created_at' => now()
@@ -349,6 +360,15 @@ class EventController extends Controller
                 $event_letter = 'pdf/'.time().'-'.$files->getClientOriginalName();
                 // $venues->save();
                 Storage::put('public/pdf/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
+
+                $request->validate([
+                    'feedback_image' => 'required|image|mimes:jpeg,png,jpg|max:2048', // Image file validation
+                ]);
+        
+                $files = $request->file('feedback_image');
+                $feedback_image = 'images/'.time().'-'.$files->getClientOriginalName();
+                // $venues->save();
+                Storage::put('public/images/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
     
                 if ($request->event_place === 'room')
                 {
@@ -366,6 +386,7 @@ class EventController extends Controller
                         'target_dept' => $target_dept,
                         'target_org' => $target_org,
                         'event_letter' => $event_letter,
+                        'feedback_image' => $feedback_image,
                         'whole_week' => false,
                         'status' => 'PENDING',
                         'color' => '#D6AD60',
@@ -388,6 +409,7 @@ class EventController extends Controller
                         'target_dept' => $target_dept,
                         'target_org' => $target_org,
                         'event_letter' => $event_letter,
+                        'feedback_image' => $feedback_image,
                         'whole_week' => false,
                         'status' => 'PENDING',
                         'color' => '#D6AD60',
@@ -414,6 +436,15 @@ class EventController extends Controller
                 $event_letter = 'pdf/'.time().'-'.$files->getClientOriginalName();
                 // $venues->save();
                 Storage::put('public/pdf/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
+
+                $request->validate([
+                    'feedback_image' => 'required|image|mimes:jpeg,png,jpg|max:2048', // Image file validation
+                ]);
+        
+                $files = $request->file('feedback_image');
+                $feedback_image = 'images/'.time().'-'.$files->getClientOriginalName();
+                // $venues->save();
+                Storage::put('public/images/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
                 
                 if ($request->event_place === 'room')
                 {
@@ -431,6 +462,7 @@ class EventController extends Controller
                         'target_dept' => $target_dept,
                         'target_org' => $target_org,
                         'event_letter' => $event_letter,
+                        'feedback_image' => $feedback_image,
                         'whole_week' => false,
                         'status' => 'PENDING',
                         'color' => '#D6AD60',
@@ -452,6 +484,7 @@ class EventController extends Controller
                         'target_dept' => $target_dept,
                         'target_org' => $target_org,
                         'event_letter' => $event_letter,
+                        'feedback_image' => $feedback_image,
                         'whole_week' => false,
                         'status' => 'PENDING',
                         'color' => '#D6AD60',
@@ -480,6 +513,15 @@ class EventController extends Controller
                 $event_letter = 'pdf/'.time().'-'.$files->getClientOriginalName();
                 // $venues->save();
                 Storage::put('public/pdf/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
+
+                $request->validate([
+                    'feedback_image' => 'required|image|mimes:jpeg,png,jpg|max:2048', // Image file validation
+                ]);
+        
+                $files = $request->file('feedback_image');
+                $feedback_image = 'images/'.time().'-'.$files->getClientOriginalName();
+                // $venues->save();
+                Storage::put('public/images/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
                 
                 if ($request->event_place === 'room'){
                     Event::create([
@@ -496,6 +538,7 @@ class EventController extends Controller
                         'target_dept' => $target_dept,
                         'target_org' => $target_org,
                         'event_letter' => $event_letter,
+                        'feedback_image' => $feedback_image,
                         'whole_week' => false,
                         'status' => 'PENDING',
                         'color' => '#D6AD60',
@@ -517,6 +560,7 @@ class EventController extends Controller
                         'target_dept' => $target_dept,
                         'target_org' => $target_org,
                         'event_letter' => $event_letter,
+                        'feedback_image' => $feedback_image,
                         'whole_week' => false,
                         'status' => 'PENDING',
                         'color' => '#D6AD60',
@@ -555,6 +599,15 @@ class EventController extends Controller
                 $event_letter = 'pdf/'.time().'-'.$files->getClientOriginalName();
                 // $venues->save();
                 Storage::put('public/pdf/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
+
+                $request->validate([
+                    'feedback_image' => 'required|image|mimes:jpeg,png,jpg|max:2048', // Image file validation
+                ]);
+        
+                $files = $request->file('feedback_image');
+                $feedback_image = 'images/'.time().'-'.$files->getClientOriginalName();
+                // $venues->save();
+                Storage::put('public/images/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
     
                 Event::create([
                     'user_id' => $request->user_id,
@@ -572,6 +625,7 @@ class EventController extends Controller
                     'target_dept' => $target_dept,
                     'target_org' => $target_org,
                     'event_letter' => $event_letter,
+                    'feedback_image' => $feedback_image,
                     'status' => 'PENDING',
                     'color' => '#D6AD60',
                     'created_at' => now()
@@ -593,6 +647,15 @@ class EventController extends Controller
                 $event_letter = 'pdf/'.time().'-'.$files->getClientOriginalName();
                 // $venues->save();
                 Storage::put('public/pdf/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
+
+                $request->validate([
+                    'feedback_image' => 'required|image|mimes:jpeg,png,jpg|max:2048', // Image file validation
+                ]);
+        
+                $files = $request->file('feedback_image');
+                $feedback_image = 'images/'.time().'-'.$files->getClientOriginalName();
+                // $venues->save();
+                Storage::put('public/images/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
     
                 Event::create([
                     'user_id' => $request->user_id,
@@ -609,6 +672,7 @@ class EventController extends Controller
                     'target_dept' => $target_dept,
                     'target_org' => $target_org,
                     'event_letter' => $event_letter,
+                    'feedback_image' => $feedback_image,
                     'whole_week' => false,
                     'status' => 'PENDING',
                     'color' => '#D6AD60',
@@ -628,6 +692,15 @@ class EventController extends Controller
                 $event_letter = 'pdf/'.time().'-'.$files->getClientOriginalName();
                 // $venues->save();
                 Storage::put('public/pdf/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
+
+                $request->validate([
+                    'feedback_image' => 'required|image|mimes:jpeg,png,jpg|max:2048', // Image file validation
+                ]);
+        
+                $files = $request->file('feedback_image');
+                $feedback_image = 'images/'.time().'-'.$files->getClientOriginalName();
+                // $venues->save();
+                Storage::put('public/images/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
                 
                 Event::create([
                     'user_id' => $request->user_id,
@@ -644,6 +717,7 @@ class EventController extends Controller
                     'target_dept' => $target_dept,
                     'target_org' => $target_org,
                     'event_letter' => $event_letter,
+                    'feedback_image' => $feedback_image,
                     'whole_week' => false,
                     'status' => 'PENDING',
                     'color' => '#D6AD60',
@@ -664,6 +738,15 @@ class EventController extends Controller
                 $event_letter = 'pdf/'.time().'-'.$files->getClientOriginalName();
                 // $venues->save();
                 Storage::put('public/pdf/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
+
+                $request->validate([
+                    'feedback_image' => 'required|image|mimes:jpeg,png,jpg|max:2048', // Image file validation
+                ]);
+        
+                $files = $request->file('feedback_image');
+                $feedback_image = 'images/'.time().'-'.$files->getClientOriginalName();
+                // $venues->save();
+                Storage::put('public/images/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
                 
                 Event::create([
                     'user_id' => $request->user_id,
@@ -680,6 +763,7 @@ class EventController extends Controller
                     'target_dept' => $target_dept,
                     'target_org' => $target_org,
                     'event_letter' => $event_letter,
+                    'feedback_image' => $feedback_image,
                     'whole_week' => false,
                     'status' => 'PENDING',
                     'color' => '#D6AD60',
@@ -710,6 +794,15 @@ class EventController extends Controller
                 $event_letter = 'pdf/'.time().'-'.$files->getClientOriginalName();
                 // $venues->save();
                 Storage::put('public/pdf/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
+
+                $request->validate([
+                    'feedback_image' => 'required|image|mimes:jpeg,png,jpg|max:2048', // Image file validation
+                ]);
+        
+                $files = $request->file('feedback_image');
+                $feedback_image = 'images/'.time().'-'.$files->getClientOriginalName();
+                // $venues->save();
+                Storage::put('public/images/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
     
                 Event::create([
                     'user_id' => $request->user_id,
@@ -727,6 +820,7 @@ class EventController extends Controller
                     'target_dept' => $target_dept,
                     'target_org' => $target_org,
                     'event_letter' => $event_letter,
+                    'feedback_image' => $feedback_image,
                     'status' => 'PENDING',
                     'color' => '#D6AD60',
                     'created_at' => now()
@@ -748,6 +842,15 @@ class EventController extends Controller
                 $event_letter = 'pdf/'.time().'-'.$files->getClientOriginalName();
                 // $venues->save();
                 Storage::put('public/pdf/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
+
+                $request->validate([
+                    'feedback_image' => 'required|image|mimes:jpeg,png,jpg|max:2048', // Image file validation
+                ]);
+        
+                $files = $request->file('feedback_image');
+                $feedback_image = 'images/'.time().'-'.$files->getClientOriginalName();
+                // $venues->save();
+                Storage::put('public/images/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
     
                 Event::create([
                     'user_id' => $request->user_id,
@@ -764,6 +867,7 @@ class EventController extends Controller
                     'target_dept' => $target_dept,
                     'target_org' => $target_org,
                     'event_letter' => $event_letter,
+                    'feedback_image' => $feedback_image,
                     'whole_week' => false,
                     'status' => 'PENDING',
                     'color' => '#D6AD60',
@@ -783,6 +887,15 @@ class EventController extends Controller
                 $event_letter = 'pdf/'.time().'-'.$files->getClientOriginalName();
                 // $venues->save();
                 Storage::put('public/pdf/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
+
+                $request->validate([
+                    'feedback_image' => 'required|image|mimes:jpeg,png,jpg|max:2048', // Image file validation
+                ]);
+        
+                $files = $request->file('feedback_image');
+                $feedback_image = 'images/'.time().'-'.$files->getClientOriginalName();
+                // $venues->save();
+                Storage::put('public/images/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
                 
                 Event::create([
                     'user_id' => $request->user_id,
@@ -799,6 +912,7 @@ class EventController extends Controller
                     'target_dept' => $target_dept,
                     'target_org' => $target_org,
                     'event_letter' => $event_letter,
+                    'feedback_image' => $feedback_image,
                     'whole_week' => false,
                     'status' => 'PENDING',
                     'color' => '#D6AD60',
@@ -819,6 +933,15 @@ class EventController extends Controller
                 $event_letter = 'pdf/'.time().'-'.$files->getClientOriginalName();
                 // $venues->save();
                 Storage::put('public/pdf/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
+
+                $request->validate([
+                    'feedback_image' => 'required|image|mimes:jpeg,png,jpg|max:2048', // Image file validation
+                ]);
+        
+                $files = $request->file('feedback_image');
+                $feedback_image = 'images/'.time().'-'.$files->getClientOriginalName();
+                // $venues->save();
+                Storage::put('public/images/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
                 
                 Event::create([
                     'user_id' => $request->user_id,
@@ -835,6 +958,7 @@ class EventController extends Controller
                     'target_dept' => $target_dept,
                     'target_org' => $target_org,
                     'event_letter' => $event_letter,
+                    'feedback_image' => $feedback_image,
                     'whole_week' => false,
                     'status' => 'PENDING',
                     'color' => '#D6AD60',
@@ -938,19 +1062,19 @@ class EventController extends Controller
            return response()->json($events);
     }
 
-    public function editAdminEvents(string $id)
-    {
-         // Find the event by its ID
-           $event = Event::where('id', $id)->first();
+    // public function editAdminEvents(string $id)
+    // {
+    //      // Find the event by its ID
+    //        $event = Event::where('id', $id)->first();
        
-           // Check if the event exists
-           if (!$event) {
-               return response()->json(["error" => "Event not found.", "status" => 404]);
-           }
+    //        // Check if the event exists
+    //        if (!$event) {
+    //            return response()->json(["error" => "Event not found.", "status" => 404]);
+    //        }
        
-           // Return the event data as JSON response
-           return response()->json(["event" => $event, "status" => 200]);
-    }
+    //        // Return the event data as JSON response
+    //        return response()->json(["event" => $event, "status" => 200]);
+    // }
     
     public function createAdminEvents()
     {   
@@ -1028,6 +1152,15 @@ class EventController extends Controller
             // $venues->save();
             Storage::put('public/pdf/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
 
+            $request->validate([
+                'feedback_image' => 'required|image|mimes:jpeg,png,jpg|max:2048', // Image file validation
+            ]);
+    
+            $files = $request->file('feedback_image');
+            $feedback_image = 'images/'.time().'-'.$files->getClientOriginalName();
+            // $venues->save();
+            Storage::put('public/images/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
+
             Event::create([
                 'event_name' => $request->eventName,
                 'description' => $request->eventDesc,
@@ -1044,6 +1177,7 @@ class EventController extends Controller
                 'target_org' => $request->event_org,
                 'description' => $request->eventDesc,
                 'event_letter' => $event_letter,
+                'feedback_image' => $feedback_image,
                 'status' => 'APPROVED',
                 'color' => '#31B4F2'
             ]);
@@ -1065,6 +1199,15 @@ class EventController extends Controller
             // $venues->save();
             Storage::put('public/pdf/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
 
+            $request->validate([
+                'feedback_image' => 'required|image|mimes:jpeg,png,jpg|max:2048', // Image file validation
+            ]);
+    
+            $files = $request->file('feedback_image');
+            $feedback_image = 'images/'.time().'-'.$files->getClientOriginalName();
+            // $venues->save();
+            Storage::put('public/images/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
+
             Event::create([
                 'event_name' => $request->eventName,
                 'description' => $request->eventDesc,
@@ -1080,6 +1223,7 @@ class EventController extends Controller
                 'target_org' => $request->event_org,
                 'description' => $request->eventDesc,
                 'event_letter' => $event_letter,
+                'feedback_image' => $feedback_image,
                 'whole_week' => false,
                 'status' => 'APPROVED',
                 'color' => '#31B4F2'
@@ -1098,6 +1242,15 @@ class EventController extends Controller
             $event_letter = 'pdf/'.time().'-'.$files->getClientOriginalName();
             // $venues->save();
             Storage::put('public/pdf/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
+
+            $request->validate([
+                'feedback_image' => 'required|image|mimes:jpeg,png,jpg|max:2048', // Image file validation
+            ]);
+    
+            $files = $request->file('feedback_image');
+            $feedback_image = 'images/'.time().'-'.$files->getClientOriginalName();
+            // $venues->save();
+            Storage::put('public/images/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
             
             Event::create([
                 'event_name' => $request->eventName,
@@ -1114,6 +1267,7 @@ class EventController extends Controller
                 'target_org' => $request->event_org,
                 'description' => $request->eventDesc,
                 'event_letter' => $event_letter,
+                'feedback_image' => $feedback_image,
                 'whole_week' => false,
                 'status' => 'APPROVED',
                 'color' => '#31B4F2'
@@ -1138,6 +1292,15 @@ class EventController extends Controller
             $endDate = Carbon::now()->setISODate($year, $week, 7)->toDateString();
 
             $request->validate([
+                'feedback_image' => 'required|image|mimes:jpeg,png,jpg|max:2048', // Image file validation
+            ]);
+    
+            $files = $request->file('feedback_image');
+            $feedback_image = 'images/'.time().'-'.$files->getClientOriginalName();
+            // $venues->save();
+            Storage::put('public/images/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
+
+            $request->validate([
                 'receipt' => 'required|image|mimes:jpeg,png,jpg|max:2048', // Image file validation
             ]);
     
@@ -1158,6 +1321,7 @@ class EventController extends Controller
                 'end_time' => '00:00:00',
                 'whole_week' => true,
                 'participants' => $request->numParticipants,
+                'feedback_image' => $feedback_image,
                 'receipt_image' => $receipt,
                 'status' => 'PENDING',
                 'color' => '#31B4F2'
@@ -1170,6 +1334,15 @@ class EventController extends Controller
             $date = $request->event_date;
             $start_time = $request->start_time_withinDayUser;
             $end_time = $request->end_time_withinDayUser;
+
+            $request->validate([
+                'feedback_image' => 'required|image|mimes:jpeg,png,jpg|max:2048', // Image file validation
+            ]);
+    
+            $files = $request->file('feedback_image');
+            $feedback_image = 'images/'.time().'-'.$files->getClientOriginalName();
+            // $venues->save();
+            Storage::put('public/images/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
 
             $request->validate([
                 'receipt' => 'required|image|mimes:jpeg,png,jpg|max:2048', // Image file validation
@@ -1192,6 +1365,7 @@ class EventController extends Controller
                 'end_time' => $end_time,
                 'participants' => $request->numParticipants,
                 'description' => $request->eventDesc,
+                'feedback_image' => $feedback_image,
                 'receipt_image' => $receipt,
                 'whole_week' => false,
                 'status' => 'PENDING',
@@ -1207,6 +1381,15 @@ class EventController extends Controller
         else if ($inputType === 'wholeDay'){
             //whole day
             $date = $request->event_date_wholeDayUser;
+
+            $request->validate([
+                'feedback_image' => 'required|image|mimes:jpeg,png,jpg|max:2048', // Image file validation
+            ]);
+    
+            $files = $request->file('feedback_image');
+            $feedback_image = 'images/'.time().'-'.$files->getClientOriginalName();
+            // $venues->save();
+            Storage::put('public/images/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
             
             $request->validate([
                 'receipt' => 'required|image|mimes:jpeg,png,jpg|max:2048', // Image file validation
@@ -1229,6 +1412,7 @@ class EventController extends Controller
                 'end_time' => '00:00:00',
                 'participants' => $request->numParticipants,
                 'description' => $request->eventDesc,
+                'feedback_image' => $feedback_image,
                 'receipt_image' => $receipt,
                 'whole_week' => false,
                 'status' => 'PENDING',
@@ -1245,6 +1429,15 @@ class EventController extends Controller
             $dateRange = $request->daterange;
             [$startDate, $endDate] = explode(' - ', $dateRange);
             // dd($startDate);
+            $request->validate([
+                'feedback_image' => 'required|image|mimes:jpeg,png,jpg|max:2048', // Image file validation
+            ]);
+    
+            $files = $request->file('feedback_image');
+            $feedback_image = 'images/'.time().'-'.$files->getClientOriginalName();
+            // $venues->save();
+            Storage::put('public/images/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
+
             $request->validate([
                 'receipt' => 'required|image|mimes:jpeg,png,jpg|max:2048', // Image file validation
             ]);
@@ -1264,6 +1457,7 @@ class EventController extends Controller
                 'start_time' => '05:00:00',
                 'end_time' => '21:00:00',
                 'participants' => $request->numParticipants,
+                'feedback_image' => $feedback_image,
                 'receipt_image' => $receipt,
                 'whole_week' => false,
                 'status' => 'PENDING',
