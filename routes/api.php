@@ -316,10 +316,15 @@ Route::post('/admin/editRole/{id}',[
 Route::post('/admin/postCreateMyEvent', [EventController::class, 'storeMyEventsAdmin'])
     ->name('postCreateMyEvent');
 
+
+
+/////////////////////////////// OUTSIDE & BUSINESS MANAGER ////////////////////////
 Route::post('/outside/storeEvent',[
         'uses' => 'EventController@storeOutsiderEvents',
         'as' => 'storeOutsiderEvents',
 ]);
+
+
 ////////////////////////////// attendance student lists //////////////////////
 Route::get('/studentlists/{id}',[
         'uses' => 'AttendanceController@getStudentList',
@@ -336,6 +341,12 @@ Route::post('/updateAttendance/{id}',[
 Route::post('/notif/request/{id}',[
         'uses' => 'NotificationController@index',
         'as' => 'getNotif',
+]);
+
+////////////////////////////// EXTERNAL API  //////////////////////
+Route::get('/getAllCalendars',[
+        'uses' => 'CalendarController@myApiCalendar',
+        'as' => 'myApiCalendar',
 ]);
 
 ////////////////================ MOBILE ROUTES ================//////////////////
