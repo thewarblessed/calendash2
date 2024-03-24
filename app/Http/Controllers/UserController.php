@@ -152,6 +152,7 @@ class UserController extends Controller
                                     ->leftJoin('departments', 'pending_users.department_id', 'departments.id')
                                     ->leftJoin('sections', 'pending_users.section_id', 'sections.id')
                                     ->select('pending_users.user_id','pending_users.tupID','pending_users.lastname','pending_users.firstname','organizations.organization','departments.department','sections.section','pending_users.role','users.email_verified_at','users.email')
+                                    ->where('pending_users.role', '!=', 'outsider')
                                     ->orderByDesc('pending_users.id')
                                     ->get();
                                     

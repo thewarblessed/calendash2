@@ -58,6 +58,7 @@ return new class extends Migration
             $table->string('remarks_campus_director')->nullable();
             $table->integer('rejected_by')->unsigned()->nullable();
             $table->foreign('rejected_by')->references('id')->on('users');
+            $table->string('remarks_business_manager')->nullable();
             $table->text('color');
             $table->timestamps();
         });

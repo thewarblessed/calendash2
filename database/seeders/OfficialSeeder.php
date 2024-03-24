@@ -23,7 +23,6 @@ class OfficialSeeder extends Seeder
 
             Official::create([
                 'user_id' => $user->id,
-                'esign' => 'esign.jpg',
                 'role' => $user->role,
                 // 'department' => $department,
                 'hash' => Hash::make('passcode'),

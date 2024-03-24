@@ -51,30 +51,32 @@
                                                 placeholder="Enter password" aria-label="Password"
                                                 aria-describedby="password-addon">
                                         </div>
-                                        <div class="d-flex align-items-center">
+                                        {{-- <div class="d-flex align-items-center">
                                             <a href="{{ route('password.request') }}"
                                                 class="text-xs font-weight-bold ms-auto">Forgot password</a>
-                                        </div>
+                                        </div> --}}
                                         <div class="text-center">
                                             <button type="submit" class="btn btn-dark w-100 mt-4 mb-3">Sign in</button>
+                                            <label>or</label>
+                                                
                                             <a href="{{ url('auth/google') }}" type="button"
                                                 class="btn btn-white btn-icon w-100 mb-3">
                                                 <span class="btn-inner--icon me-1">
                                                     <img class="w-5" src="../assets/img/logos/google-logo.svg"
                                                         alt="google-logo" />
                                                 </span>
-                                                <span class="btn-inner--text">Sign in with Google</span>
+                                                <span class="btn-inner--text">Continue with Google</span>
                                             </a>
                                         </div>
                                     </form>
                                 </div>
-                                <!-- Card Footer -->
+                                {{-- <!-- Card Footer -->
                                 <div class="card-footer text-center pt-0 px-lg-2 px-1">
                                     <p class="mb-4 text-xs mx-auto">
                                         Don't have an account?
                                         <a href="{{ route('sign-up') }}" class="text-dark font-weight-bold">Sign up</a>
                                     </p>
-                                </div>
+                                </div> --}}
                             </div>
                         </div>
 
@@ -160,7 +162,8 @@
                             // Handle the successful response from the server
                             Swal.fire({
                             title: 'Event Details',
-                            html: 'Status: <strong style="color: ' + (info.event.extendedProps.status === 'PENDING' ? '#D6AD60' : 'green') + '">' + info.event.extendedProps.status +
+                            html:'<div style="text-align: center;"><img src="https://www.investopedia.com/thmb/hJrIBjjMBGfx0oa_bHAgZ9AWyn0=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/qr-code-bc94057f452f4806af70fd34540f72ad.png" style="width: 100px; height: 100px; margin: 0 auto; display: block;"><p>QR Code of Feedback Form</p></div>' + 
+                                'Status: <strong style="color: ' + (info.event.extendedProps.status === 'PENDING' ? '#D6AD60' : 'green') + '">' + info.event.extendedProps.status +
                                 '</strong><br>' +
                                 'Event: <strong>' + info.event.title + '</strong><br>' +
                                 'Event Organizer: <strong>' + data.eventOrganizerName + '</strong><br>' +

@@ -15,45 +15,10 @@
                             </div>
                         </div>
                         <div class="card-body px-0 py-0">
-                            <div class="border-bottom py-3 px-3 d-sm-flex align-items-center">
-                                <form id="radioForm">
-                                    <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
-                                        
-                                        <input type="radio" class="btn-check" name="btnradiotable" id="btnradiotable1" value="PENDING"
-                                            autocomplete="off" >
-                                        <label class="btn btn-white px-3 mb-0" for="btnradiotable1">Pending</label>
-
-                                        <input type="radio" class="btn-check" name="btnradiotable" id="btnradiotable2" value="appByMe"
-                                            autocomplete="off">
-                                        <label class="btn btn-white px-3 mb-0" for="btnradiotable2">Approved by Me</label>
-
-                                        <input type="radio" class="btn-check" name="btnradiotable" id="btnradiotable3" value="APPROVED"
-                                            autocomplete="off">
-                                        <label class="btn btn-white px-3 mb-0" for="btnradiotable3">Approved Events</label>
-
-                                        <input type="radio" class="btn-check" name="btnradiotable" id="btnradiotable4" value="all"
-                                            autocomplete="off" checked>
-                                        <label class="btn btn-white px-3 mb-0" for="btnradiotable4">All</label>
-
-                                    </div>
-                                </form>
-
-                                <div class="input-group w-sm-25 ms-auto">
-                                    <span class="input-group-text text-body">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px"
-                                            fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z">
-                                            </path>
-                                        </svg>
-                                    </span>
-                                    <input type="text" class="form-control" placeholder="Search" id="searchEvent">
-                                </div>
-                            </div>
                             <div class="table-responsive p-0">
                                 <table class="table align-items-center mb-0" id="eventOutsiderTable">
                                     
-                                    <thead class="bg-gray-100">
+                                    <thead class="bg">
                                         <tr>
 
                                             <th class="text-secondary text-xs font-weight-semibold opacity-7">Event Name</th>
@@ -115,38 +80,26 @@
                                             <td hidden>
                                                 <p class="text-sm text-dark font-weight-semibold mb-0">{{$event->sect_head}}</p>
                                             </td>
-                                            <td class="align-middle text-center">
-                                                
-                                                @if($event->status === "PENDING")
-                                                    <span class="badge badge-sm border border-warning text-warning bg-warning border-radius-sm ms-sm-3 px-2">{{$event->status}}</span>
-                                                @endif 
-
-                                                @if($event->status === "PENDING" && Auth::user()->role === 'org_adviser' && $event->org_adviser !== null)
-                                                <span class="badge badge-sm border border-success text-success bg-success border-radius-sm ms-sm-3 px-2">APPROVED BY YOU</span>
-                                                @endif
-
-                                                {{-- @if($event->status === "PENDING" && Auth::user()->role === 'org_adviser' && $event->org_adviser !== null)
-                                                <span class="badge badge-sm border border-success text-success bg-success border-radius-sm ms-sm-3 px-2">APPROVED BY YOU</span>
-                                                @endif --}}
-
-                                                @if($event->status === "APPROVED")
-                                                <span class="badge badge-sm border border-success text-success bg-success border-radius-sm ms-sm-3 px-2">{{$event->status}}</span>
-                                                @endif
+                                            <td class="align-left">
+                                                    @if($event->receipt_image != null) 
+                                                    <span class="badge badge-sm border border-success text-success bg-success border-radius-sm ms-sm-3 px-2">RECEIPT RECEIVED</span>
+                                                    @else
+                                                    <span class="badge badge-sm border border-warning text-warning bg-warning border-radius-sm ms-sm-3 px-2">WAITING FOR RECEIPT</span>
+                                                    @endif
                                             </td>
                                             {{-- <td class="align-middle text-center">
                                                 <span class="text-secondary text-sm font-weight-normal">{{$event->name}}</span>
                                                 
                                             </td> --}}
                                             <td>
-                                                @if($event->status === "APPROVED") 
+                                                @if($event->receipt_image != null) 
                                                 <div class="text-sm text-dark font-weight-semibold mb-0">
-                                                    <button type="button" class="btn btn-dark viewDetailsBtn" style="width: 150px; height: 40px;" data-bs-toggle="modal" data-id="{{$event->id}}" data-bs-target="#viewDetailsModal" id="tableViewDetails">View Details</button>
-                                                </div>
-
+                                                    <button type="button" class="btn btn-dark approveBtnOutsiderReceipt" style="width: 110px; height: 40px;" data-id="{{$event->id}}" id="tableApprove">Approve</button>
+                                                    {{-- <button type="button" class="btn btn-danger rejectBtn" style="width: 110px; height: 40px;" data-id="{{$event->id}}" id="tableReject">Reject</button> --}}
                                                 @else
                                                 <div class="text-sm text-dark font-weight-semibold mb-0">
-                                                    <button type="button" class="btn btn-dark approveBtnOutsider" style="width: 110px; height: 40px;" data-id="{{$event->id}}" id="tableApprove">Approve</button>
-                                                    <button type="button" class="btn btn-danger rejectBtnOutsider" style="width: 110px; height: 40px;" data-id="{{$event->id}}" id="tableReject">Reject</button>
+                                                    {{-- <button type="button" class="btn btn-dark approveBtnOutsider" style="width: 110px; height: 40px;" data-id="{{$event->id}}" id="tableApprove">Approve</button>
+                                                    <button type="button" class="btn btn-danger rejectBtn" style="width: 110px; height: 40px;" data-id="{{$event->id}}" id="tableReject">Reject</button> --}}
                                                 </div>
                                                 @endif
 
@@ -173,7 +126,7 @@
                 </div>
             </div>
 
-            <div class="modal fade" id="approveOutsiderRequestModal" tabindex="-1" role="dialog" aria-labelledby="createeventModalLabel" aria-hidden="true">
+            <div class="modal fade" id="approveOutsiderReceiveReceiptModal" tabindex="-1" role="dialog" aria-labelledby="createeventModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">

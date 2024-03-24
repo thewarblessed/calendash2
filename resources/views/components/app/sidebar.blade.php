@@ -106,7 +106,7 @@
                     <span class="nav-link-text ms-1">EVENTS</span>
                 </a>
             </li>
-            
+
             <li class="nav-item">
                 <a class="nav-link  {{ is_current_route('showEventReport') ? 'active' : '' }}"
                     href="{{ route('showEventReport') }}">
@@ -201,7 +201,7 @@
                     <span class="nav-link-text ms-1">My Events</span>
                 </a>
             </li>
-            
+
             <li class="nav-item">
                 <a class="nav-link  {{ is_current_route('attendance') ? 'active' : '' }}"
                     href="{{ route('attendance') }}">
@@ -256,16 +256,17 @@
                 </a>
             </li>
 
-            @if (auth()->user()->hasRole(['section_head']) && auth()->user()->official && auth()->user()->official->user_id === 2)
+            @if (auth()->user()->hasRole(['section_head']) && auth()->user()->official &&
+            auth()->user()->official->user_id === 2)
 
             <li class="nav-item">
-                    <a class="nav-link  {{ is_current_route('pendingRequestRoom') ? 'active' : '' }}"
-                        href="{{ route('pendingRequestRoom') }}">
-                        <i class="fa-solid fa-person-shelter"
-                            style="color: {{ is_current_route('pendingRequestRoom') ? '#774dd3' : 'defaultColor' }}; font-size:{{ is_current_route('adaaRequest') ? '23px' : '18px' }};"></i>
-                        <span class="nav-link-text ms-1">Requests for Rooms</span>
-                    </a>
-                </li>
+                <a class="nav-link  {{ is_current_route('pendingRequestRoom') ? 'active' : '' }}"
+                    href="{{ route('pendingRequestRoom') }}">
+                    <i class="fa-solid fa-person-shelter"
+                        style="color: {{ is_current_route('pendingRequestRoom') ? '#774dd3' : 'defaultColor' }}; font-size:{{ is_current_route('adaaRequest') ? '23px' : '18px' }};"></i>
+                    <span class="nav-link-text ms-1">Requests for Rooms</span>
+                </a>
+            </li>
 
             <li class="nav-item mt-2">
                 <div class="d-flex align-items-center nav-link">
@@ -311,49 +312,78 @@
                 </a>
             </li>
 
-            
+
             @endif
 
             {{-- BUSINESS MANAGER --}}
             @if (auth()->user()->hasRole(['business_manager']))
 
-                <li class="nav-item">
-                    <a class="nav-link  {{ is_current_route('outsideRequest') ? 'active' : '' }}"
-                        href="{{ route('outsideRequest') }}">
-                        <i class="fa-solid fa-bell"
-                            style="color: {{ is_current_route('outsideRequest') ? '#774dd3' : 'defaultColor' }}; font-size:{{ is_current_route('adaaRequest') ? '23px' : '18px' }};"></i>
-                        <span class="nav-link-text ms-1">Requests for Event Rent</span>
-                    </a>
-                </li>
+            <li class="nav-item">
+                <a class="nav-link  {{ is_current_route('outsideRequest') ? 'active' : '' }}"
+                    href="{{ route('outsideRequest') }}">
+                    <i class="fa-solid fa-bell"
+                        style="color: {{ is_current_route('outsideRequest') ? '#774dd3' : 'defaultColor' }}; font-size:{{ is_current_route('adaaRequest') ? '23px' : '18px' }};"></i>
+                    <span class="nav-link-text ms-1">Requests for Event Rent</span>
+                </a>
+            </li>
 
-                <li class="nav-item">
-                    <a class="nav-link  {{ is_current_route('outsideUser') ? 'active' : '' }}"
-                        href="{{ route('outsideUser') }}">
-                        <i class="fa-solid fa-users"
-                            style="color: {{ is_current_route('outsideUser') ? '#774dd3' : 'defaultColor' }}; font-size:{{ is_current_route('adaaRequest') ? '23px' : '18px' }};"></i>
-                        <span class="nav-link-text ms-1">Outside Users</span>
-                    </a>
-                </li>
+            <li class="nav-item">
+                <a class="nav-link  {{ is_current_route('waitingForReceipt') ? 'active' : '' }}"
+                    href="{{ route('waitingForReceipt') }}">
+                    <i class="fa-solid fa-bell"
+                        style="color: {{ is_current_route('waitingForReceipt') ? '#774dd3' : 'defaultColor' }}; font-size:{{ is_current_route('adaaRequest') ? '23px' : '18px' }};"></i>
+                    <span class="nav-link-text ms-1">Pending Receipt</span>
+                </a>
+            </li>
 
-                <!-- EVENT CALENDAR -->
-                <li class="nav-item">
-                    <a class="nav-link  {{ is_current_route('calendar') ? 'active' : '' }}" href="{{ route('calendar') }}">
-                        <i class="fa-solid fa-calendar-days"
-                            style="color: {{ is_current_route('calendar') ? '#774dd3' : 'defaultColor' }};font-size: 18px;"></i>
-                        {{-- <i class="fa-solid fa-calendar-plus"></i> --}}
-                        <span class="nav-link-text ms-1">Event Calendar</span>
-                    </a>
-                </li>
+            <li class="nav-item">
+                <a class="nav-link  {{ is_current_route('outsideUser') ? 'active' : '' }}"
+                    href="{{ route('outsideUser') }}">
+                    <i class="fa-solid fa-users"
+                        style="color: {{ is_current_route('outsideUser') ? '#774dd3' : 'defaultColor' }}; font-size:{{ is_current_route('adaaRequest') ? '23px' : '18px' }};"></i>
+                    <span class="nav-link-text ms-1">Outside Users</span>
+                </a>
+            </li>
+
+            <!-- EVENT CALENDAR -->
+            <li class="nav-item">
+                <a class="nav-link  {{ is_current_route('calendar') ? 'active' : '' }}" href="{{ route('calendar') }}">
+                    <i class="fa-solid fa-calendar-days"
+                        style="color: {{ is_current_route('calendar') ? '#774dd3' : 'defaultColor' }};font-size: 18px;"></i>
+                    {{-- <i class="fa-solid fa-calendar-plus"></i> --}}
+                    <span class="nav-link-text ms-1">Event Calendar</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link  {{ is_current_route('approvedEventsBusinessManager') ? 'active' : '' }}"
+                    href="{{ route('approvedEventsBusinessManager') }}">
+                    <i class="fa-regular fa-thumbs-up"
+                        style="color: {{ is_current_route('approvedEventsBusinessManager') ? '#774dd3' : 'defaultColor' }}; font-size:{{ is_current_route('adaaRequest') ? '23px' : '18px' }};"></i>
+                    <span class="nav-link-text ms-1">My Approved Requests</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link  {{ is_current_route('rejectedEventsBusinessManager') ? 'active' : '' }}"
+                    href="{{ route('rejectedEventsBusinessManager') }}">
+                    <i class="fa-solid fa-square-xmark"
+                        style="color: {{ is_current_route('rejectedEventsBusinessManager') ? '#774dd3' : 'defaultColor' }}; font-size:{{ is_current_route('adaaRequest') ? '23px' : '18px' }};"></i>
+                    <span class="nav-link-text ms-1">My Declined Requests</span>
+                </a>
+            </li>
+
+
             @endif
 
             {{-- OUTSIDER --}}
             @if (auth()->user()->hasRole(['outsider']))
 
                 <li class="nav-item">
-                    <a class="nav-link  {{ is_current_route('events') || is_current_route('createEvent') ? 'active' : '' }}"
-                        href="{{ route('events') }}">
+                    <a class="nav-link  {{ is_current_route('outsideCreateRequest') || is_current_route('createEvent') ? 'active' : '' }}"
+                        href="{{ route('outsideCreateRequest') }}">
                         <i class="fa-solid fa-calendar-plus"
-                            style="color: {{ is_current_route('events') || is_current_route('createEvent') ? '#774dd3' : 'defaultColor' }};font-size: 18px;"></i>
+                            style="color: {{ is_current_route('outsideCreateRequest') || is_current_route('createEvent') ? '#774dd3' : 'defaultColor' }};font-size: 18px;"></i>
                         <span class="nav-link-text ms-1">Venue Request</span>
                     </a>
                 </li>
@@ -364,6 +394,34 @@
                             style="color: {{ is_current_route('calendar') ? '#774dd3' : 'defaultColor' }};font-size: 18px;"></i>
                         {{-- <i class="fa-solid fa-calendar-plus"></i> --}}
                         <span class="nav-link-text ms-1">Event Calendar</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link  {{ is_current_route('statusOutsiderEvents') ? 'active' : '' }}"
+                        href="{{ route('statusOutsiderEvents') }}">
+                        <i class="fa-solid fa-circle-check"
+                            style="color: {{ is_current_route('statusOutsiderEvents') ? '#774dd3' : 'defaultColor' }};font-size: 18px;"></i>
+                        {{-- <i class="fa-solid fa-calendar-plus"></i> --}}
+                        <span class="nav-link-text ms-1">Status of your request</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link  {{ is_current_route('approvedEventsOutsider') ? 'active' : '' }}"
+                        href="{{ route('approvedEventsOutsider') }}">
+                        <i class="fa-regular fa-thumbs-up"
+                            style="color: {{ is_current_route('approvedEventsOutsider') ? '#774dd3' : 'defaultColor' }}; font-size:{{ is_current_route('adaaRequest') ? '23px' : '18px' }};"></i>
+                        <span class="nav-link-text ms-1">My Approved Requests</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link  {{ is_current_route('rejectedEventsOutsider') ? 'active' : '' }}"
+                        href="{{ route('rejectedEventsOutsider') }}">
+                        <i class="fa-solid fa-square-xmark"
+                            style="color: {{ is_current_route('rejectedEventsOutsider') ? '#774dd3' : 'defaultColor' }}; font-size:{{ is_current_route('adaaRequest') ? '23px' : '18px' }};"></i>
+                        <span class="nav-link-text ms-1">My Declined Requests</span>
                     </a>
                 </li>
             @endif

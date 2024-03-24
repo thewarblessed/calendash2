@@ -41,6 +41,14 @@ class Event extends Model
         "adaa",
         "atty",
         "campus_director",
+        "remarks_org_adviser",
+        "remarks_sec_head",
+        "remarks_dept_head",
+        "remarks_osa",
+        "remarks_adaa",
+        "remarks_atty",
+        "remarks_campus_director",
+        "remarks_business_manager",
         "color",
         "created_at"
 

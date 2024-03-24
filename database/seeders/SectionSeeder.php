@@ -24,6 +24,12 @@ class SectionSeeder extends Seeder
             'section' => 'BS Environmental Science'
         ]);
         Section::create([
+            'section' => 'BS in Civil Engineering'
+        ]);
+        Section::create([
+            'section' => 'BET Major in Civil Technology'
+        ]);
+        Section::create([
             'section' => 'BS Electrical Engineering'
         ]);
         Section::create([

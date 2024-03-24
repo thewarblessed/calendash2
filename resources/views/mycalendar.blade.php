@@ -84,7 +84,8 @@
                             // Handle the successful response from the server
                             Swal.fire({
                             title: 'Event Details',
-                            html: 'Status: <strong style="color: ' + (info.event.extendedProps.status === 'PENDING' ? '#D6AD60' : 'green') + '">' + info.event.extendedProps.status +
+                            html: '<div style="text-align: center;"><img src="https://www.investopedia.com/thmb/hJrIBjjMBGfx0oa_bHAgZ9AWyn0=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/qr-code-bc94057f452f4806af70fd34540f72ad.png" style="width: 100px; height: 100px; margin: 0 auto; display: block;"><p>QR Code of Feedback Form</p></div>' +
+                                'Status: <strong style="color: ' + (info.event.extendedProps.status === 'PENDING' ? '#D6AD60' : 'green') + '">' + info.event.extendedProps.status +
                                 '</strong><br>' +
                                 'Event: <strong>' + info.event.title + '</strong><br>' +
                                 'Event Organizer: <strong>' + data.eventOrganizerName + '</strong><br>' +

@@ -66,10 +66,8 @@ class OrganizationAdviserController extends Controller
         $officials->hash = Hash::make($request->passcode);
         $officials->organization_id = $request->organization_id;
         $officials->role = 'org_adviser';
-        $files = $request->file('image');
-        $officials->esign = 'images/'.time().'-'.$files->getClientOriginalName();
+        
         $officials->save();
-        Storage::put('public/images/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
         
         // dd($officials);
 

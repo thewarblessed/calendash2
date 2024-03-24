@@ -79,10 +79,7 @@ class OfficialController extends Controller
             $officials->hash = Hash::make($request->passcode);
             $officials->organization_id = $request->organization_id;
             $officials->role = 'org_adviser';
-            $files = $request->file('image');
-            $officials->esign = 'images/'.time().'-'.$files->getClientOriginalName();
             $officials->save();
-            Storage::put('public/images/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
             
             // dd($officials);
 
@@ -95,10 +92,8 @@ class OfficialController extends Controller
             $officials->hash = Hash::make($request->passcode);
             $officials->department_id = $request->department_id;
             $officials->role = 'department_head';
-            $files = $request->file('image');
-            $officials->esign = 'images/'.time().'-'.$files->getClientOriginalName();
+           
             $officials->save();
-            Storage::put('public/images/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
             
             // dd($officials);
 
@@ -111,9 +106,7 @@ class OfficialController extends Controller
             $officials->hash = Hash::make($request->passcode);
             $files = $request->file('image');
             $officials->role = $request->official_role;
-            $officials->esign = 'images/'.time().'-'.$files->getClientOriginalName();
             $officials->save();
-            Storage::put('public/images/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
             
             // dd($officials);
 

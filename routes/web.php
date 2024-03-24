@@ -287,6 +287,52 @@ Route::get('/outsidelist',[
     'as' => 'outsideUser',
 ]);
 
+Route::get('/pending/receipt', [BusinessManagerController::class, 'waitingForReceipt'])
+->middleware('auth')
+->name('waitingForReceipt');
+
+Route::get('/outside/createRequest', [BusinessManagerController::class, 'create'])
+->middleware('auth')
+->name('outsideCreateRequest');
+
+Route::get('/outside/myRequest', [BusinessManagerController::class, 'statusOutsiderEvents'])
+->middleware('auth')
+->name('statusOutsiderEvents');
+
+Route::get('/outsidelist',[
+    'uses' => 'BusinessManagerController@getAllOutsideUser',
+    'as' => 'outsideUser',
+]);
+
+Route::get('/outside/pendingUser',[
+    'uses' => 'BusinessManagerController@showPendingOutsider',
+    'as' => 'showPendingOutsider',
+]);
+
+/// rejected request of outsider
+Route::get('/outside/rejected-request',[
+    'uses' => 'BusinessManagerController@rejectedEventsOutsider',
+    'as' => 'rejectedEventsOutsider',
+]);
+
+/// rejected request of business manager
+Route::get('/bm/rejected-request',[
+    'uses' => 'BusinessManagerController@rejectedEventsBusinessManager',
+    'as' => 'rejectedEventsBusinessManager',
+]);
+
+/// APPROVED request of outsider
+Route::get('/outside/approved-request',[
+    'uses' => 'BusinessManagerController@approvedEventsOutsider',
+    'as' => 'approvedEventsOutsider',
+]);
+
+/// APPROVED request of business manager
+Route::get('/bm/approved-request',[
+    'uses' => 'BusinessManagerController@approvedEventsBusinessManager',
+    'as' => 'approvedEventsBusinessManager',
+]);
+
 //////////////////////////////////////////////// ATTENDANCE ///////////////////////////////////////////////////
 Route::get('/attendance', [AttendanceController::class, 'index'])
 ->name('attendance');

@@ -61,10 +61,7 @@ class SectionHeadController extends Controller
         $officials->hash = Hash::make($request->passcode);
         $officials->section_id = $request->section_id;
         $officials->role = 'section_head';
-        $files = $request->file('image');
-        $officials->esign = 'images/'.time().'-'.$files->getClientOriginalName();
         $officials->save();
-        Storage::put('public/images/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
         
         // dd($officials);
 

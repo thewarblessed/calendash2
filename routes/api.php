@@ -11,6 +11,7 @@ use App\Http\Controllers\DepartmentHeadController;
 use App\Http\Controllers\SectionHeadController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\BusinessManagerController;
 
 /*
 |--------------------------------------------------------------------------
@@ -320,9 +321,57 @@ Route::post('/admin/postCreateMyEvent', [EventController::class, 'storeMyEventsA
 
 /////////////////////////////// OUTSIDE & BUSINESS MANAGER ////////////////////////
 Route::post('/outside/storeEvent',[
-        'uses' => 'EventController@storeOutsiderEvents',
+        'uses' => 'BusinessManagerController@store',
         'as' => 'storeOutsiderEvents',
 ]);
+
+Route::get('/show/outsiderEvent/{id}',[
+        'uses' => 'BusinessManagerController@edit',
+        'as' => 'showSingleOutsiderEvent',
+        ]);
+
+Route::post('/outside/storeEventAmount/{id}',[
+        'uses' => 'BusinessManagerController@storeBusinessManager',
+        'as' => 'storeBusinessManager',
+]);
+
+Route::post('/upload-receipt/{id}',[
+        'uses' => 'BusinessManagerController@uploadReceipt',
+        'as' => 'uploadReceipt',
+]);
+Route::post('/approve-receipt/{id}',[
+        'uses' => 'BusinessManagerController@approveReceipt',
+        'as' => 'approveReceipt',
+]);
+
+Route::post('/reject-outsider-event/{id}',[
+        'uses' => 'BusinessManagerController@rejectEvent',
+        'as' => 'rejectEventOutsider',
+]);
+
+Route::post('/rejected-event-outsider/{id}',[
+        'uses' => 'BusinessManagerController@getAllRejectedEventsOutsider',
+        'as' => 'getAllRejectedEventsOutsider',
+]);
+
+Route::post('/rejected-event-businessmanager/{id}',[
+        'uses' => 'BusinessManagerController@getAllRejectedEventsBusinessManager',
+        'as' => 'getAllRejectedEventsBusinessManager',
+]);
+   
+Route::post('/approved-event-outsider/{id}',[
+        'uses' => 'BusinessManagerController@getAllApprovedEventsOutsider',
+        'as' => 'getAllApprovedEventsOutsider',
+]);
+
+Route::post('/approved-event-businessmanager',[
+        'uses' => 'BusinessManagerController@getAllApprovedEventsBusinessManager',
+        'as' => 'getAllApprovedEventsBusinessManager',
+]);
+
+
+Route::get('/myOutsiderEventStatus/{id}', [BusinessManagerController::class, 'checkStatusOutsider'])
+    ->name('checkStatusOutsider');
 
 
 ////////////////////////////// attendance student lists //////////////////////
