@@ -18,7 +18,7 @@ class OrganizationAdviserController extends Controller
     public function index()
     {
         //
-        $organizations = Organization::pluck('organization', 'id');
+        $organizations = Organization::orderBy('organization')->pluck('organization', 'id');
         $officials = User::join('officials', 'users.id', 'officials.user_id')
                             ->leftjoin('departments','departments.id','officials.department_id')
                             ->leftjoin('organizations','organizations.id','officials.organization_id')

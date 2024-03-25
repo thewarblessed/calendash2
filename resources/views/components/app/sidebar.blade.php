@@ -108,11 +108,11 @@
             </li>
 
             <li class="nav-item">
-                <a class="nav-link  {{ is_current_route('showEventReport') ? 'active' : '' }}"
-                    href="{{ route('showEventReport') }}">
+                <a class="nav-link  {{ is_current_route('countEventPerOrgReport') ? 'active' : '' }}"
+                    href="{{ route('countEventPerOrgReport') }}">
                     {{-- <i class="fa-solid fa-calendar-days"></i> --}}
                     <i class="fa fa-bar-chart"
-                        style="color: {{ is_current_route('showEventReport') ? '#774dd3' : 'defaultColor' }};font-size: 18px;"></i>
+                        style="color: {{ is_current_route('countEventPerOrgReport') ? '#774dd3' : 'defaultColor' }};font-size: 18px;"></i>
                     <span class="nav-link-text ms-1">REPORTS</span>
                 </a>
             </li>

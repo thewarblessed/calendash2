@@ -632,7 +632,6 @@ class EventController extends Controller
             $professor = Prof::where('user_id',$request->user_id)->first();
             // dd($professor);
             $target_dept = $professor->department;
-            $target_org = $professor->organization;
 
             if ($inputType === 'wholeWeek') {
                 $weekDate = $request->input('event_date_wholeWeekUser');

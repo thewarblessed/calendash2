@@ -392,4 +392,4 @@ Route::get('/approved/rooms', [RequestRoomController::class, 'approvedRoomsView'
 
 
 //////////////////////////////////////// REPORT CHARTS  ///////////////////////////
-Route::get('/admin/report', [ReportController::class, 'showEventReport'])->name('showEventReport');
+Route::get('/admin/report', [ReportController::class, 'countEventPerOrgReport'])->name('countEventPerOrgReport');

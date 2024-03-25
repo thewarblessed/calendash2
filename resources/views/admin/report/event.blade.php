@@ -14,29 +14,19 @@
                         </div>
 
                         <div class="card-body">
-                            <h3 class="text-sm text-center">Event/Venue Per Organization (Bar Chart)</h3>
+                            <button onclick="generatePDF()">Download PDF</button>
+                            <h3 class="text-sm text-center">Total Number of Events Per Organization (Bar Chart)</h3>
                             <div class="card shadow-xs border mb-4">
                                 <div class="card-body p-3">
                                     <div class="chart">
-                                        <canvas id="chart-bars" class="chart-canvas" height="300px"></canvas>
+                                        <canvas id="chart-event" width="800" height="400"></canvas>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
                         <div class="card-body">
-                            <h3 class="text-sm text-center">Event/Venue Per Organization (Line Chart)</h3>
-                            <div class="card shadow-xs border mb-4">
-                                <div class="card-body p-3">
-                                    <div class="chart">
-                                        <canvas id="chart-line" class="chart-canvas" height="300px"></canvas>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="card-body">
-                            <h3 class="text-sm text-center">Event/Venue Per Organization (Doughnut Chart)</h3>
+                            <h3 class="text-sm text-center">Total Events per Venue</h3>
                             <div class="card shadow-xs border mb-4">
                                 <div class="card-body p-3">
                                     <div class="chart">
@@ -46,6 +36,17 @@
                             </div>
                         </div>
 
+                        {{-- <div class="card-body">
+                            <h3 class="text-sm text-center">Event/Venue Per Organization (Doughnut Chart)</h3>
+                            <div class="card shadow-xs border mb-4">
+                                <div class="card-body p-3">
+                                    <div class="chart">
+                                        <canvas id="chart-doughnut" class="chart-canvas" height="300px"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> --}}
+
                     </div>
                 </div>
             </div>
@@ -54,118 +55,95 @@
     </main>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
     {{-- FOR BAR CHART --}}
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Data for the bar chart
-            var events = {!! json_encode($events) !!}; // Assuming $events contains the event data per organization
-
-            var organizationCounts = {}; // Object to store organization counts
-
-            // Counting events per organization
-            events.forEach(function(event) {
-                var organization = event.organization;
-
-                // Initialize count to 0 if organization doesn't exist in organizationCounts
-                if (!organizationCounts[organization]) {
-                    organizationCounts[organization] = 0;
-                }
-
-                // Increment count for the organization
-                organizationCounts[organization]++;
-            });
-
-            // Extracting labels (organization names) and event counts from organizationCounts object
-            var labels = Object.keys(organizationCounts);
-            var eventCounts = Object.values(organizationCounts);
-
-            var barData = {
-                labels: labels,
-                datasets: [{
-                    label: 'Event Count',
-                    data: eventCounts,
-                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    borderWidth: 1
-                }]
-            };
-
-            var barOptions = {
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            };
-
-            // Render the bar chart
-            var ctxBars = document.getElementById('chart-bars').getContext('2d');
-            new Chart(ctxBars, {
-                type: 'bar',
-                data: barData,
-                options: barOptions
-            });
-        });
-    </script>
-    {{-- FOR LINE CHART --}}
-
-    {{-- FOR DOUGHNUT CHART --}}
-    <script>
-        var ctx = document.getElementById("chart-doughnut").getContext("2d");
+        var ctx = document.getElementById('chart-event').getContext('2d');
+        var colors = Array.from({ length: {!! $events->count() !!} }, () => '#' + Math.floor(Math.random() * 16777215).toString(16));
 
         new Chart(ctx, {
-            type: "doughnut",
+            type: 'bar',
             data: {
-                labels: ["EGLD", "ETH", "SOL", "BTC"],
+                labels: {!! json_encode($events->pluck('organization_name')) !!},
                 datasets: [{
-                    label: "Wallet",
-                    cutout: 40,
-                    backgroundColor: ["#c3e1ff", "#add4fc", "#78baff", "#419eff"],
-                    data: [450, 200, 100, 220],
-                    maxBarThickness: 6
-                }, ],
+                    label: 'Number of Events',
+                    backgroundColor: colors, // Use the array of colors here
+                    data: {!! json_encode($events->pluck('total')) !!},
+                }]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: {
                     legend: {
-                        display: false,
+                        display: false
                     },
                     tooltip: {
                         backgroundColor: '#fff',
+                        titleColor: '#1e293b',
                         bodyColor: '#1e293b',
                         borderColor: '#e9ecef',
                         borderWidth: 1,
                         usePointStyle: true
                     }
                 },
-                interaction: {
-                    intersect: false,
-                    mode: 'index',
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1
+                        }
+                    }
+                }
+            }
+        });
+
+        function generatePDF() {
+            var element = document.getElementById('chart-event');
+        element.style.width = '800px'; // Set the width of the chart canvas
+        element.style.height = '400px'; // Set the height of the chart canvas
+        html2pdf().from(element).save();
+        
+        // Reset chart size after downloading
+        element.style.width = '100%';
+        element.style.height = '100%';
+        }
+    </script>
+
+    {{-- FOR DOUGHNUT CHART --}}
+    <script>
+        var ctx = document.getElementById("chart-doughnut").getContext("2d");
+        new Chart(ctx, {
+            type: "doughnut",
+            data: {
+                labels: {!! json_encode($venueNames) !!},
+                datasets: [{
+                    label: "Number of Events",
+                    data: {!! json_encode($totalEvents) !!},
+                }],
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'right',
+                    },
+                    tooltip: {
+                        backgroundColor: '#964B00',
+                        bodyColor: '#1e293b',
+                        borderColor: '#e9ecef',
+                        borderWidth: 1,
+                        usePointStyle: true
+                    }
                 },
                 scales: {
                     y: {
-                        grid: {
-                            drawBorder: false,
-                            display: false,
-                            drawOnChartArea: false,
-                            drawTicks: false,
-                        },
-                        ticks: {
-                            display: false
-                        },
+                        display: false,
                     },
                     x: {
-                        grid: {
-                            drawBorder: false,
-                            display: false,
-                            drawOnChartArea: false,
-                            drawTicks: false
-                        },
-                        ticks: {
-                            display: false
-                        },
+                        display: false,
                     },
                 },
             },

@@ -32,12 +32,12 @@ INDEX.BLADE
                                         </span>
                                         <input type="date" class="form-control form-control-sm"
                                             id="start-date-picker" placeholder="Search">
-                                        {{-- <button type="button" class="btn btn-primary btn-sm" id="fetch-events-btn">
-                                            <span class="btn-inner--text" style="writing-mode: vertical-rl; text-orientation: mixed;">Fetch Event</span>
-                                        </button> --}}
-
                                     </div>
                                 </div>
+
+                                <button class="btn btn-primary btn-sm" onclick="window.location.href='{{ route('createAdminEvents') }}'">
+                                    <span>Create Event</span>
+                                </button>
 
                             </div>
                         </div>

@@ -18,7 +18,7 @@ class SectionHeadController extends Controller
     public function index()
     {
         //
-        $sections = Section::pluck('section', 'id');
+        $sections = Section::orderBy('section')->pluck('section', 'id');
         $officials = User::join('officials', 'users.id', 'officials.user_id')
                             ->leftjoin('departments','departments.id','officials.department_id')
                             ->leftjoin('sections','sections.id','officials.section_id')
