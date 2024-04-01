@@ -189,23 +189,44 @@
                                     minute: '2-digit'
                                 });
                             }
-
-                            // Handle the successful response from the server
-                            Swal.fire({
-                                title: 'Event Details',
-                                html: '<div style="text-align: center;"><img src="https://api.qrserver.com/v1/create-qr-code/?data=' + data.feedback_image + '&amp;size=100x100" style="width: 100px; height: 100px; margin: 0 auto; display: block;"><p>QR Code of Feedback Form</p></div>' +
-                                    'Status: <strong style="color: ' + (info.event.extendedProps.status === 'PENDING' ? '#D6AD60' : 'green') + '">' + info.event.extendedProps.status +
-                                    '</strong><br>' +
-                                    'Event: <strong>' + info.event.title + '</strong><br>' +
-                                    'Event Organizer: <strong>' + data.eventOrganizerName + '</strong><br>' +
-                                    'Start Time: <strong>' + startTime + '</strong><br>' +
-                                    'End Time: <strong>' + endTime + '</strong><br>' +
-                                    'Location: <strong>' + (data.roomName ? data.roomName : (data.venueName ? data.venueName : 'Unknown')) + '</strong><br>' +
-                                    'Organization: <strong>' + (data.role === 'professor' ? 'FACULTY' : (data.role === 'staff' ? 'STAFF/ADMIN' : (data.role === 'student' ? data.organization : (data.role === 'outsider' ? 'OUTSIDER' : 'UNKNOWN')))) + '</strong><br>' +
-                                    'Department: <strong>' + (data.role === 'professor' ? 'FACULTY' : (data.role === 'staff' ? 'STAFF/ADMIN' : (data.role === 'student' ? data.department : (data.role === 'outsider' ? 'OUTSIDER' : 'UNKNOWN')))) + '</strong>',
-                                showCloseButton: true,
-                                showConfirmButton: false,
+                            console.log(data.role);
+                            if (data.role === 'professor'){
+                                Swal.fire({
+                                    title: 'Event Details',
+                                    html: '<div style="text-align: center;"><img src="https://api.qrserver.com/v1/create-qr-code/?data=' + data.feedback_image + '&amp;size=100x100" style="width: 100px; height: 100px; margin: 0 auto; display: block;"><p>QR Code of Feedback Form</p></div>' +
+                                        'Status: <strong style="color: ' + (info.event.extendedProps.status === 'PENDING' ? '#D6AD60' : 'green') + '">' + info.event.extendedProps.status +
+                                        '</strong><br>' +
+                                        'Event: <strong>' + info.event.title + '</strong><br>' +
+                                        'Event Organizer: <strong>' + data.eventOrganizerName + '</strong><br>' +
+                                        'Start Time: <strong>' + startTime + '</strong><br>' +
+                                        'End Time: <strong>' + endTime + '</strong><br>' +
+                                        'Location: <strong>' + (data.roomName ? data.roomName : (data.venueName ? data.venueName : 'Unknown')) + '</strong><br>' +
+                                        'Organization: <strong>' + (data.role === 'professor' ? 'FACULTY' : (data.role === 'staff' ? 'STAFF/ADMIN' : (data.role === 'student' ? data.organization : (data.role === 'outsider' ? 'OUTSIDER' : 'UNKNOWN')))) + '</strong><br>' +
+                                        'Department: <strong>' + (data.role === 'professor' ? 'FACULTY' : (data.role === 'staff' ? 'STAFF/ADMIN' : (data.role === 'student' ? data.department : (data.role === 'outsider' ? 'OUTSIDER' : 'UNKNOWN')))) + '</strong><br>' +
+                                        '<strong>ELEVATOR AND AIRCON SHOULD BE TURNED ON</strong>',
+                                    showCloseButton: true,
+                                    showConfirmButton: false,
+                                });
+                            }
+                            else{
+                                Swal.fire({
+                                    title: 'Event Details',
+                                    html: '<div style="text-align: center;"><img src="https://api.qrserver.com/v1/create-qr-code/?data=' + data.feedback_image + '&amp;size=100x100" style="width: 100px; height: 100px; margin: 0 auto; display: block;"><p>QR Code of Feedback Form</p></div>' +
+                                        'Status: <strong style="color: ' + (info.event.extendedProps.status === 'PENDING' ? '#D6AD60' : 'green') + '">' + info.event.extendedProps.status +
+                                        '</strong><br>' +
+                                        'Event: <strong>' + info.event.title + '</strong><br>' +
+                                        'Event Organizer: <strong>' + data.eventOrganizerName + '</strong><br>' +
+                                        'Start Time: <strong>' + startTime + '</strong><br>' +
+                                        'End Time: <strong>' + endTime + '</strong><br>' +
+                                        'Location: <strong>' + (data.roomName ? data.roomName : (data.venueName ? data.venueName : 'Unknown')) + '</strong><br>' +
+                                        'Organization: <strong>' + (data.role === 'professor' ? 'FACULTY' : (data.role === 'staff' ? 'STAFF/ADMIN' : (data.role === 'student' ? data.organization : (data.role === 'outsider' ? 'OUTSIDER' : 'UNKNOWN')))) + '</strong><br>' +
+                                        'Department: <strong>' + (data.role === 'professor' ? 'FACULTY' : (data.role === 'staff' ? 'STAFF/ADMIN' : (data.role === 'student' ? data.department : (data.role === 'outsider' ? 'OUTSIDER' : 'UNKNOWN')))) + '</strong>',
+                                    showCloseButton: true,
+                                    showConfirmButton: false,
                             });
+                            }
+                            // Handle the successful response from the server
+
                         },
                         error: function(xhr, status, error) {
                             // Handle errors
