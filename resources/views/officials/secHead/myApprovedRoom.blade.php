@@ -14,10 +14,8 @@
                                 </div>
                             </div>
                         </div>
-                        <form action="">
-                            @csrf
-                            <input name="officialRejectUserID" type="text" class="form-control" value="{{ Auth::user()->id }}" id="officialRejectUserID" hidden>
-                        </form>
+                        @csrf
+                        <input name="officialRejectUserID" type="text" class="form-control" value="{{ Auth::user()->id }}" id="officialRejectUserID" hidden>
                         <div class="card-body px-0 py-0">
                             <div class="table-responsive p-0">
                                 <table class="table align-items-center mb-0" id="officialRejectsTable">
@@ -86,6 +84,9 @@
                 url: "/api/rooms/approve",
                 method: "GET",
                 dataSrc: "",
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
             },
             dom: 'Bfrtip',
             layout: {

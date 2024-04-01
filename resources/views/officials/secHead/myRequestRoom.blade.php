@@ -228,6 +228,9 @@ $(document).ready(function() {
             url: "/api/my/pendingRooms",
             method: "GET",
             dataSrc: "",
+            headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
         },
         dom: 'Bfrtip',
         buttons: [{

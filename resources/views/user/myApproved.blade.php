@@ -14,6 +14,7 @@
                                 </div>
                             </div>
                         </div>
+                        @csrf
                         <input name="userApproveUserID" type="text" class="form-control" value="{{ Auth::user()->id }}" id="userApproveUserID" hidden>
                         <div class="card-body px-0 py-0">
                             <div class="table-responsive p-0">
@@ -224,6 +225,9 @@
                 url: "/api/user/approved/" + id,
                 method: "POST",
                 dataSrc: "",
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
             },
             dom: 'Bfrtip',
             layout: {
