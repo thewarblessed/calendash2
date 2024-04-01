@@ -14,7 +14,6 @@
                                 </div>
                             </div>
                         </div>
-                        <input name="officialPendingRoomUserID" type="text" class="form-control" value="{{ Auth::user()->id }}" id="officialPendingRoomUserID" hidden>
                         <div class="card-body px-0 py-0">
                             <div class="table-responsive p-0">
                                 <table class="table align-items-center mb-0" id="officialRejectsTable">
@@ -34,6 +33,7 @@
                                             {{-- <th class="text-secondary text-xs font-weight-semibold opacity-7 ps-2">Description</th> --}}
                                             <th class="text-secondary text-xs font-weight-semibold opacity-7 ps-2">Venue</th>
                                             <th class="text-secondary text-xs font-weight-semibold opacity-7 ps-2">Orgnanization</th>
+                                            <th class="text-secondary text-xs font-weight-semibold opacity-7 ps-2">Deparment</th>
                                             <th class="text-secondary text-xs font-weight-semibold opacity-7 ps-2">Type</th>
                                             <th class="text-secondary text-xs font-weight-semibold opacity-7 ps-2">Start Date</th>
                                             <th class="text-secondary text-xs font-weight-semibold opacity-7 ps-2">End Date</th>
@@ -94,6 +94,7 @@
                         <form id="roomApprovalForm" enctype="multipart/form-data" method="POST" action="{{ url('/api/request/approve/{id}') }}" >
                             @csrf
                             <div class="form-group">
+                              <input name="officialPendingRoomUserID" type="text" class="form-control" value="{{ Auth::user()->id }}" id="officialPendingRoomUserID" hidden>
                               <label for="exampleFormControlInput1">Name of the event</label>
                               <input name="roomAuthId" type="text" class="form-control" id="roomAuthId" value={{Auth::user()->id}} hidden>
                               <input name="roomApproveId" type="text" class="form-control" id="roomApproveId" hidden>
@@ -151,23 +152,24 @@
                             @csrf
                             <div class="form-group">
                             <h4 style="text-align: center">Event Description</h4>
+                              <input name="officialPendingRoomUserID" type="text" class="form-control" value="{{ Auth::user()->id }}" id="officialPendingRoomUserID" hidden>
                               <label for="exampleFormControlInput1">Name of the event</label>
-                              <input name="eventAuthRejectId" type="text" class="form-control" id="eventAuthRejectId" value={{Auth::user()->id}} hidden>
-                              <input name="eventRejectId" type="text" class="form-control" id="eventRejectId" hidden>
-                              <input name="eventRejectName" type="text" class="form-control" id="eventRejectName" disabled >
+                              <input name="roomAuthRejectId" type="text" class="form-control" id="roomAuthRejectId" value={{Auth::user()->id}} hidden>
+                              <input name="roomRejectId" type="text" class="form-control" id="roomRejectId" hidden>
+                              <input name="roomRejectName" type="text" class="form-control" id="roomRejectName" disabled >
                             </div>
                             <div class="form-group">
                                 <label for="exampleFormControlInput1">Description</label>
                                 {{-- <input  required> --}}
-                                <textarea name="eventRejectDesc" type="text" class="form-control" id="eventRejectDesc" disabled ></textarea>
+                                <textarea name="roomRejectDesc" type="text" class="form-control" id="roomRejectDesc" disabled ></textarea>
                             </div>
                             <div class="form-group">
                                 <label for="exampleFormControlInput1">No. of Participants</label>
-                                <input name="eventRejectParticipants" type="text" class="form-control" id="eventRejectParticipants" disabled>
+                                <input name="roomRejectParticipants" type="text" class="form-control" id="roomRejectParticipants" disabled>
                             </div>
                             <div class="form-group">
                                 <label for="exampleFormControlInput1">Venue</label>
-                                <input name="eventRejectVenue" type="text" class="form-control" id="eventRejectVenue" disabled>
+                                <input name="roomRejectVenue" type="text" class="form-control" id="roomRejectVenue" disabled>
                             </div>
                             
                             <div class="form-group">
@@ -181,11 +183,11 @@
                             <div class="form-group">
                                 <label for="exampleFormControlInput1">Reason of rejection</label>
                                 {{-- <input  required> --}}
-                                <textarea name="eventRejectReason" type="text" class="form-control" id="eventRejectReason" required></textarea>
+                                <textarea name="roomRejectReason" type="text" class="form-control" id="roomRejectReason" required></textarea>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-white" data-bs-dismiss="modal" id="modalClose">Close</button>
-                                <button type="button" class="btn btn-danger" id="eventReject">Reject</button>
+                                <button type="button" class="btn btn-danger" id="roomReject">Reject</button>
                             </div>
                         </form>
                 
@@ -257,6 +259,19 @@ $(document).ready(function() {
                 },
                 {
                     data: "organization",
+                    render: function(data, type, row) {
+                        if (data === null)
+                        {
+                            return "<span style='color: black; font-weight: bold;'>N/A</span>";
+                        }
+                        else{
+                            return "<span style='color: black; font-weight: bold;'>" + data + "</span>";
+                        }
+                        
+                    }
+                },
+                {
+                    data: "department",
                     render: function(data, type, row) {
                         return "<span style='color: black; font-weight: bold;'>" + data + "</span>";
                     }
@@ -438,6 +453,126 @@ $(document).ready(function() {
         var id = $(this).data("id");
         console.log(id);
         console.log('reject');
+
+        $.ajax({
+            type: "GET",
+            enctype: 'multipart/form-data',
+            processData: false, // Important!
+            contentType: false,
+            cache: false,
+            url: "/api/my/pendingRooms/" + id,
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
+                    "content"
+                ),
+            },
+            dataType: "json",
+            success: function (data) {
+                console.log(data);
+                $('#rejectRoomModal').modal('show');
+                $('#roomRejectId').val(data.rooms.id);
+                $('#roomRejectName').val(data.rooms.event_name);
+                $('#roomRejectDesc').val(data.rooms.description);
+                $('#roomRejectParticipants').val(data.rooms.participants);
+                $('#roomRejectVenue').val(data.rooms.roomName);
+            },
+            error: function (error) {
+                console.log("error");
+            },
+        });
+
+
+        //View PDF
+        $.ajax({
+            type: "GET",
+            url: "/api/show/letter/" + id,
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+            dataType: "json",
+            success: function (data) {
+                console.log(data);
+                var pdfLink = $('<a>', {
+                    href: "/storage/" + data,
+                    text: "Click here to view Request Letter",
+                    target: "_blank",
+                });
+                // console.log(href)
+                $("#viewRejectAnotherTab").empty().append(pdfLink);
+            },
+            error: function (error) {
+                console.log(error);
+            },
+        });
+
+        //rejection of request
+        $("#roomReject").on("click", async function (e) {
+            e.preventDefault();
+            var user_id = $('#roomAuthRejectId').val()
+            $("#rejectRoomModal").modal('hide');
+            var reason = $('#roomRejectReason').val()
+            // console.log(reason);
+            const { value: password } = await Swal.fire({
+                title: "Enter your passcode to confirm approval",
+                input: "password",
+                inputLabel: "Passcode",
+                inputPlaceholder: "Enter your passcode",
+                inputAttributes: {
+                    maxlength: "256",
+                    autocapitalize: "off",
+                    autocorrect: "off"
+                }
+            });
+
+            if (password) {
+                console.log(password)
+                console.log(user_id)
+                const dataToSend = {
+                    key1: password,
+                    key2: user_id,
+                    key3: reason
+                };
+                $.ajax({
+                    type: "POST",
+                    url: "/api/rooms/reject/" + id,
+                    data: dataToSend,
+                    headers: {
+                        'Authorization': 'Bearer ' + sessionStorage.getItem('token'),
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function (data) {
+                        console.log(data);
+
+                        setTimeout(function () {
+                            window.location.href = '/my/rejected';
+                        }, 1500);
+
+                        Swal.fire({
+                            icon: "success",
+                            title: "Request has been declined",
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+
+                    },
+                    error: function (error) {
+                        console.log('error');
+                        Swal.fire({
+                            icon: "error",
+                            title: "Oops...",
+                            text: "Something went wrong!",
+                            footer: '<a href="#">Why do I have this issue?</a>'
+                        });
+
+                    }
+                });
+
+                // Swal.fire(`Entered password: ${password}`);
+            }
+        });
+
+
+
     })
     
 

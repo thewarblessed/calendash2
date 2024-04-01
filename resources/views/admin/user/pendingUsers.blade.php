@@ -127,9 +127,9 @@
                                                   
                                             <td class="align-middle text-center text-sm">
                                                 {{-- <span class="text-sm text-dark font-weight-semibold mb-0">{{$pendingUser->role}}</span> --}}
-                                                <button type="button" class="btn btn-dark btn-sm editRole"
+                                                {{-- <button type="button" class="btn btn-dark btn-sm editRole"
                                                             data-bs-toggle="modal" data-id="{{ $pendingUser->user_id }}"
-                                                            data-bs-target="#checkStatusModal">Edit Role</button>
+                                                            data-bs-target="#checkStatusModal">Edit Role</button> --}}
                                                 @if($pendingUser->email_verified_at === null)
                                                 <button type="button" class="btn btn-dark btn-sm approveAccounts" data-id="{{ $pendingUser->user_id }}" data-bs-toggle="modal" data-bs-target="#approveUserModal">Approve Account</button>
                                                 @endif
@@ -140,13 +140,10 @@
                                     </tbody>
                                 </table>
                             </div>
-                            {{-- <div class="border-top py-3 px-3 d-flex align-items-center">
-                                <p class="font-weight-semibold mb-0 text-dark text-sm">Page 1 of 10</p>
-                                <div class="ms-auto">
-                                    <button class="btn btn-sm btn-white mb-0">Previous</button>
-                                    <button class="btn btn-sm btn-white mb-0">Next</button>
-                                </div>
-                            </div> --}}
+                            <div class="border-top py-3 px-3 d-flex align-items-center">
+                                {{ $pendingUsers->links() }}
+                            </div>
+
                         </div>
                     </div>
                 </div>

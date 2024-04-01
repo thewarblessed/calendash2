@@ -9,7 +9,7 @@
                         <div class="card-header border-bottom pb-0">
                             <div class="" style="text-align: center">
                                 <div>
-                                    <strong><h3>Events list</h3></strong>
+                                    <strong><h3>My Approved Events List</h3></strong>
                                     <p class="text-sm">See information about all events</p>
                                 </div>
                             </div>
@@ -31,6 +31,7 @@
                                             <th class="text-secondary text-xs font-weight-semibold opacity-7 ps-2">Start Time</th>
                                             <th class="text-secondary text-xs font-weight-semibold opacity-7 ps-2">End Time</th>
                                             <th class="text-secondary text-xs font-weight-semibold opacity-7 ps-2">Status</th>
+                                            <th class="text-secondary text-xs font-weight-semibold opacity-7 ps-2">Overall Status</th>
                                             {{-- <th class="text-secondary text-xs font-weight-semibold opacity-7 ps-7">Action</th> --}}
                                             <th class="text-secondary opacity-7"></th>
                                         </tr>
@@ -73,8 +74,8 @@
                         <form id="eventApprovalForm" enctype="multipart/form-data" method="POST" action="{{ url('/api/request/approve/{id}') }}" >
                             @csrf
                             <div class="form-group">
-                              <label for="exampleFormControlInput1">Name of the event</label>
                               <input name="officialApprovedUserID" type="text" class="form-control" value="{{ Auth::user()->id }}" id="officialApprovedUserID" hidden>
+                              <label for="exampleFormControlInput1">Name of the event</label>
                               <input name="eventAuthId" type="text" class="form-control" id="eventAuthId" value={{Auth::user()->id}} hidden>
                               <input name="eventApproveId" type="text" class="form-control" id="eventApproveId" hidden>
                               <input name="eventApproveName" type="text" class="form-control" id="eventApproveName" disabled >
@@ -208,21 +209,27 @@
                 dataSrc: "",
             },
             dom: 'Bfrtip',
-            buttons: [{
-                    extend: 'pdfHtml5',
-                    className: 'btn btn-danger',
-                    exportOptions: {
-                        columns: [0, 1, 2]
-                    }
-                },
-                {
-                    extend: 'excelHtml5',
-                    className: 'btn btn-success',
-                    exportOptions: {
-                        columns: [0, 1, 2]
-                    }
+            layout: {
+                topStart: {
+                    buttons: [{
+                            extend: 'copyHtml5',
+                            footer: true
+                        },
+                        {
+                            extend: 'excelHtml5',
+                            footer: true
+                        },
+                        {
+                            extend: 'csvHtml5',
+                            footer: true
+                        },
+                        {
+                            extend: 'pdfHtml5',
+                            footer: true
+                        }
+                    ]
                 }
-            ],
+            },
             columns: [{ 
                         data: "event_name",
                         render: function(data, type, row) {
@@ -236,10 +243,14 @@
                         }
                     },
                     {
-                        data: "organization",
-                        render: function(data, type, row) {
+                    data: "organization",
+                    render: function(data, type, row) {
+                        if (data === null) {
+                            return "<span style='color: black; font-weight: bold;'>N/A</span>";
+                        } else {
                             return "<span style='color: black; font-weight: bold;'>" + data + "</span>";
                         }
+                    }
                     },
                     {
                         data: "department",
@@ -285,15 +296,20 @@
                         }
                     },
                     {
-                        data: "status",
+                        data: null,
                         render: function(data, type, row) {
-                            return "<span style='color: green; font-weight: bold;'>" + data + "</span>";
+                            return "<span style='color: green; font-weight: bold;'>APPROVED BY ME</span>";
                         }
                     },
                     {
                         data: "status",
                         render: function(data, type, row) {
-                            return "<u><a href='#' style='color: black; font-weight: bold;'>Click here to view request letter</a></u>";
+                            if (data === "PENDING") {
+                                return "<span style='color: orange; font-weight: bold;'>"+ data +"</span>";
+                            } 
+                            else if (data === "APPROVED"){
+                                return "<span style='color: green; font-weight: bold;'>"+ data +"</span>";
+                            }
                         }
                     },
             ],

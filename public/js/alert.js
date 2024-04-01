@@ -810,14 +810,14 @@ $(document).ready(function () {
                 console.log(data);
                 $('#statusList').empty();
                 // $('#checkStatusModal').modal('show');
-                // console.log(data.pendingMsg);
+                console.log(data.pendingMsg);
                 $('#eventStatusText').text(data.pendingMsg);
 
                 var statusElement = $('#eventStatusText');
                 // console.log(statusElement)
                 // Get the value from the element's text content
                 var statusValue = $('#eventStatusText').text();
-
+                console.log(statusValue);
                 statusElement.removeClass();
                 // Apply styling based on the value
                 if (statusValue === 'REJECTED') {

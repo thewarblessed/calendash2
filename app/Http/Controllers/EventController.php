@@ -332,14 +332,14 @@ class EventController extends Controller
                 // $venues->save();
                 Storage::put('public/pdf/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
 
-                $request->validate([
-                    'feedback_image' => 'required|image|mimes:jpeg,png,jpg|max:2048', // Image file validation
-                ]);
+                // $request->validate([
+                //     'feedback_image' => 'required|image|mimes:jpeg,png,jpg|max:2048', // Image file validation
+                // ]);
         
-                $files = $request->file('feedback_image');
-                $feedback_image = 'images/'.time().'-'.$files->getClientOriginalName();
+                // $files = $request->file('feedback_image');
+                $feedback_image = $request->feedback_qr_code;
                 // $venues->save();
-                Storage::put('public/images/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
+                // Storage::put('public/images/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
                 
                 if ($request->event_place === 'room')
                 {
@@ -411,14 +411,14 @@ class EventController extends Controller
                 // $venues->save();
                 Storage::put('public/pdf/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
 
-                $request->validate([
-                    'feedback_image' => 'required|image|mimes:jpeg,png,jpg|max:2048', // Image file validation
-                ]);
+                // $request->validate([
+                //     'feedback_image' => 'required|image|mimes:jpeg,png,jpg|max:2048', // Image file validation
+                // ]);
         
-                $files = $request->file('feedback_image');
-                $feedback_image = 'images/'.time().'-'.$files->getClientOriginalName();
+                // $files = $request->file('feedback_image');
+                $feedback_image = $request->feedback_qr_code;
                 // $venues->save();
-                Storage::put('public/images/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
+                // Storage::put('public/images/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
     
                 if ($request->event_place === 'room')
                 {
@@ -487,14 +487,14 @@ class EventController extends Controller
                 // $venues->save();
                 Storage::put('public/pdf/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
 
-                $request->validate([
-                    'feedback_image' => 'required|image|mimes:jpeg,png,jpg|max:2048', // Image file validation
-                ]);
+                // $request->validate([
+                //     'feedback_image' => 'required|image|mimes:jpeg,png,jpg|max:2048', // Image file validation
+                // ]);
         
-                $files = $request->file('feedback_image');
-                $feedback_image = 'images/'.time().'-'.$files->getClientOriginalName();
+                // $files = $request->file('feedback_image');
+                $feedback_image = $request->feedback_qr_code;
                 // $venues->save();
-                Storage::put('public/images/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
+                // Storage::put('public/images/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
                 
                 if ($request->event_place === 'room')
                 {
@@ -547,7 +547,6 @@ class EventController extends Controller
                     "body" => "Hello {$user->name}!, You have a new pending approval request!"
                 ];
                 Mail::to($email)->send(new MailNotify($data));
-                Mail::to($email)->send(new MailNotify($data));
                 return response()->json(["success" => "Event Created Successfully.", "status" => 200]);
             }
             else
@@ -564,14 +563,14 @@ class EventController extends Controller
                 // $venues->save();
                 Storage::put('public/pdf/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
 
-                $request->validate([
-                    'feedback_image' => 'required|image|mimes:jpeg,png,jpg|max:2048', // Image file validation
-                ]);
+                // $request->validate([
+                //     'feedback_image' => 'required|image|mimes:jpeg,png,jpg|max:2048', // Image file validation
+                // ]);
         
-                $files = $request->file('feedback_image');
-                $feedback_image = 'images/'.time().'-'.$files->getClientOriginalName();
+                // $files = $request->file('feedback_image');
+                $feedback_image = $request->feedback_qr_code;
                 // $venues->save();
-                Storage::put('public/images/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
+                // Storage::put('public/images/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
                 
                 if ($request->event_place === 'room'){
                     Event::create([
@@ -631,7 +630,12 @@ class EventController extends Controller
         {
             $professor = Prof::where('user_id',$request->user_id)->first();
             // dd($professor);
-            $target_dept = $professor->department;
+            $adaf = User::where('role','atty')->first();
+            $adafEmail = $adaf->email;
+            // dd($adafEmail);
+            // dd($professor);
+            $target_dept = $professor->department_id;
+            // dd($target_dept);
 
             if ($inputType === 'wholeWeek') {
                 $weekDate = $request->input('event_date_wholeWeekUser');
@@ -649,37 +653,65 @@ class EventController extends Controller
                 // $venues->save();
                 Storage::put('public/pdf/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
 
-                $request->validate([
-                    'feedback_image' => 'required|image|mimes:jpeg,png,jpg|max:2048', // Image file validation
-                ]);
+                // $request->validate([
+                //     'feedback_image' => 'required|image|mimes:jpeg,png,jpg|max:2048', // Image file validation
+                // ]);
         
-                $files = $request->file('feedback_image');
-                $feedback_image = 'images/'.time().'-'.$files->getClientOriginalName();
+                // $files = $request->file('feedback_image');
+                $feedback_image = $request->feedback_qr_code;
                 // $venues->save();
-                Storage::put('public/images/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
-    
-                Event::create([
-                    'user_id' => $request->user_id,
-                    'event_name' => $request->eventName,
-                    'description' => $request->eventDesc,
-                    'type' => 'whole_week',
-                    'venue_id' => $request->event_venue,
-                    'room_id' => $request->event_venue,
-                    'start_date' => $startDate,
-                    'end_date' => $endDate,
-                    'start_time' => '00:00:00',
-                    'end_time' => '00:00:00',
-                    'whole_week' => true,
-                    'participants' => $request->numParticipants,
-                    'target_dept' => $target_dept,
-                    'target_org' => $target_org,
-                    'event_letter' => $event_letter,
-                    'feedback_image' => $feedback_image,
-                    'status' => 'PENDING',
-                    'color' => '#D6AD60',
-                    'created_at' => now()
-                ]);
+                // Storage::put('public/images/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
                 
+                if ($request->event_place === 'room'){
+                    Event::create([
+                        'user_id' => $request->user_id,
+                        'event_name' => $request->eventName,
+                        'description' => $request->eventDesc,
+                        'type' => 'whole_week',
+                        'room_id' => $request->event_venue,
+                        'start_date' => $startDate,
+                        'end_date' => $endDate,
+                        'start_time' => '00:00:00',
+                        'end_time' => '00:00:00',
+                        'whole_week' => true,
+                        'participants' => $request->numParticipants,
+                        'target_dept' => $target_dept,
+                        'event_letter' => $event_letter,
+                        'feedback_image' => $feedback_image,
+                        'status' => 'PENDING',
+                        'color' => '#D6AD60',
+                        'org_adviser' => 'notnull',
+                        'created_at' => now()
+                    ]);
+                }
+                else{
+                    Event::create([
+                        'user_id' => $request->user_id,
+                        'event_name' => $request->eventName,
+                        'description' => $request->eventDesc,
+                        'type' => 'whole_week',
+                        'venue_id' => $request->event_venue,
+                        'start_date' => $startDate,
+                        'end_date' => $endDate,
+                        'start_time' => '00:00:00',
+                        'end_time' => '00:00:00',
+                        'whole_week' => true,
+                        'participants' => $request->numParticipants,
+                        'target_dept' => $target_dept,
+                        'event_letter' => $event_letter,
+                        'feedback_image' => $feedback_image,
+                        'status' => 'PENDING',
+                        'color' => '#D6AD60',
+                        'adaa' => 'notnull',
+                        'created_at' => now()
+                    ]);
+    
+                }
+                $data = [
+                    "subject" => "Calendash Pending Request",
+                    "body" => "Hello {$adaf->name}!, You have a new pending approval request!"
+                ];
+                Mail::to($adafEmail)->send(new MailNotify($data));
                 return response()->json(["success" => "Event Created Successfully.", "status" => 200]);
             }
             elseif ($inputType === 'withinDay') {
@@ -697,36 +729,63 @@ class EventController extends Controller
                 // $venues->save();
                 Storage::put('public/pdf/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
 
-                $request->validate([
-                    'feedback_image' => 'required|image|mimes:jpeg,png,jpg|max:2048', // Image file validation
-                ]);
+                // $request->validate([
+                //     'feedback_image' => 'required|image|mimes:jpeg,png,jpg|max:2048', // Image file validation
+                // ]);
         
-                $files = $request->file('feedback_image');
-                $feedback_image = 'images/'.time().'-'.$files->getClientOriginalName();
+                // $files = $request->file('feedback_image');
+                $feedback_image = $request->feedback_qr_code;
                 // $venues->save();
-                Storage::put('public/images/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
-    
-                Event::create([
-                    'user_id' => $request->user_id,
-                    'event_name' => $request->eventName,
-                    'description' => $request->eventDesc,
-                    'type' => 'within_day',
-                    'venue_id' => $request->event_venue,
-                    'room_id' => $request->event_venue,
-                    'start_date' => $date,
-                    'end_date' => $date,
-                    'start_time' => $start_time,
-                    'end_time' => $end_time,
-                    'participants' => $request->numParticipants,
-                    'target_dept' => $target_dept,
-                    'target_org' => $target_org,
-                    'event_letter' => $event_letter,
-                    'feedback_image' => $feedback_image,
-                    'whole_week' => false,
-                    'status' => 'PENDING',
-                    'color' => '#D6AD60',
-                    'created_at' => now()
-                ]);
+                // Storage::put('public/images/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
+                if ($request->event_place === 'room'){
+                    Event::create([
+                        'user_id' => $request->user_id,
+                        'event_name' => $request->eventName,
+                        'description' => $request->eventDesc,
+                        'type' => 'within_day',
+                        'room_id' => $request->event_venue,
+                        'start_date' => $date,
+                        'end_date' => $date,
+                        'start_time' => $start_time,
+                        'end_time' => $end_time,
+                        'participants' => $request->numParticipants,
+                        'target_dept' => $target_dept,
+                        'event_letter' => $event_letter,
+                        'feedback_image' => $feedback_image,
+                        'whole_week' => false,
+                        'status' => 'PENDING',
+                        'color' => '#D6AD60',
+                        'org_adviser' => 'notnull',
+                        'created_at' => now()
+                    ]);
+                }
+                else{
+                    Event::create([
+                        'user_id' => $request->user_id,
+                        'event_name' => $request->eventName,
+                        'description' => $request->eventDesc,
+                        'type' => 'within_day',
+                        'venue_id' => $request->event_venue,
+                        'start_date' => $date,
+                        'end_date' => $date,
+                        'start_time' => $start_time,
+                        'end_time' => $end_time,
+                        'participants' => $request->numParticipants,
+                        'target_dept' => $target_dept,
+                        'event_letter' => $event_letter,
+                        'feedback_image' => $feedback_image,
+                        'whole_week' => false,
+                        'status' => 'PENDING',
+                        'color' => '#D6AD60',
+                        'adaa' => 'notnull',
+                        'created_at' => now()
+                    ]);
+                }
+                $data = [
+                    "subject" => "Calendash Pending Request",
+                    "body" => "Hello {$adaf->name}!, You have a new pending approval request!"
+                ];
+                Mail::to($adafEmail)->send(new MailNotify($data));
                 return response()->json(["success" => "Event Created Successfully.", "status" => 200]);
             }   
             else if ($inputType === 'wholeDay'){
@@ -742,36 +801,64 @@ class EventController extends Controller
                 // $venues->save();
                 Storage::put('public/pdf/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
 
-                $request->validate([
-                    'feedback_image' => 'required|image|mimes:jpeg,png,jpg|max:2048', // Image file validation
-                ]);
+                // $request->validate([
+                //     'feedback_image' => 'required|image|mimes:jpeg,png,jpg|max:2048', // Image file validation
+                // ]);
         
-                $files = $request->file('feedback_image');
-                $feedback_image = 'images/'.time().'-'.$files->getClientOriginalName();
+                // $files = $request->file('feedback_image');
+                $feedback_image = $request->feedback_qr_code;
                 // $venues->save();
-                Storage::put('public/images/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
-                
-                Event::create([
-                    'user_id' => $request->user_id,
-                    'event_name' => $request->eventName,
-                    'description' => $request->eventDesc,
-                    'type' => 'whole_day',
-                    'venue_id' => $request->event_venue,
-                    'room_id' => $request->event_venue,
-                    'start_date' => $date,
-                    'end_date' => $date,
-                    'start_time' => '00:00:00',
-                    'end_time' => '00:00:00',
-                    'participants' => $request->numParticipants,
-                    'target_dept' => $target_dept,
-                    'target_org' => $target_org,
-                    'event_letter' => $event_letter,
-                    'feedback_image' => $feedback_image,
-                    'whole_week' => false,
-                    'status' => 'PENDING',
-                    'color' => '#D6AD60',
-                    'created_at' => now()
-                ]);
+                // Storage::put('public/images/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
+                if ($request->event_place === 'room'){
+                    Event::create([
+                        'user_id' => $request->user_id,
+                        'event_name' => $request->eventName,
+                        'description' => $request->eventDesc,
+                        'type' => 'whole_day',
+                        'venue_id' => $request->event_venue,
+                        'room_id' => $request->event_venue,
+                        'start_date' => $date,
+                        'end_date' => $date,
+                        'start_time' => '00:00:00',
+                        'end_time' => '00:00:00',
+                        'participants' => $request->numParticipants,
+                        'target_dept' => $target_dept,
+                        'event_letter' => $event_letter,
+                        'feedback_image' => $feedback_image,
+                        'whole_week' => false,
+                        'status' => 'PENDING',
+                        'color' => '#D6AD60',
+                        'org_adviser' => 'notnull',
+                        'created_at' => now()
+                    ]);
+                }
+                else{
+                    Event::create([
+                        'user_id' => $request->user_id,
+                        'event_name' => $request->eventName,
+                        'description' => $request->eventDesc,
+                        'type' => 'whole_day',
+                        'venue_id' => $request->event_venue,
+                        'start_date' => $date,
+                        'end_date' => $date,
+                        'start_time' => '00:00:00',
+                        'end_time' => '00:00:00',
+                        'participants' => $request->numParticipants,
+                        'target_dept' => $target_dept,
+                        'event_letter' => $event_letter,
+                        'feedback_image' => $feedback_image,
+                        'whole_week' => false,
+                        'status' => 'PENDING',
+                        'color' => '#D6AD60',
+                        'adaa' => 'notnull',
+                        'created_at' => now()
+                    ]);
+                }
+                $data = [
+                    "subject" => "Calendash Pending Request",
+                    "body" => "Hello {$adaf->name}!, You have a new pending approval request!"
+                ];
+                Mail::to($adafEmail)->send(new MailNotify($data));
                 return response()->json(["success" => "Event Created Successfully.", "status" => 200]);
             }
             else
@@ -788,36 +875,63 @@ class EventController extends Controller
                 // $venues->save();
                 Storage::put('public/pdf/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
 
-                $request->validate([
-                    'feedback_image' => 'required|image|mimes:jpeg,png,jpg|max:2048', // Image file validation
-                ]);
+                // $request->validate([
+                //     'feedback_image' => 'required|image|mimes:jpeg,png,jpg|max:2048', // Image file validation
+                // ]);
         
-                $files = $request->file('feedback_image');
-                $feedback_image = 'images/'.time().'-'.$files->getClientOriginalName();
+                // $files = $request->file('feedback_image');
+                $feedback_image = $request->feedback_qr_code;
                 // $venues->save();
-                Storage::put('public/images/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
-                
-                Event::create([
-                    'user_id' => $request->user_id,
-                    'event_name' => $request->eventName,
-                    'description' => $request->eventDesc,
-                    'type' => 'whole_day',
-                    'venue_id' => $request->event_venue,
-                    'room_id' => $request->event_venue,
-                    'start_date' => $startDate,
-                    'end_date' => $endDate,
-                    'start_time' => '05:00:00',
-                    'end_time' => '21:00:00',
-                    'participants' => $request->numParticipants,
-                    'target_dept' => $target_dept,
-                    'target_org' => $target_org,
-                    'event_letter' => $event_letter,
-                    'feedback_image' => $feedback_image,
-                    'whole_week' => false,
-                    'status' => 'PENDING',
-                    'color' => '#D6AD60',
-                    'created_at' => now()
-                ]);
+                // Storage::put('public/images/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
+                if ($request->event_place === 'room'){
+                    Event::create([
+                        'user_id' => $request->user_id,
+                        'event_name' => $request->eventName,
+                        'description' => $request->eventDesc,
+                        'type' => 'whole_day',
+                        'room_id' => $request->event_venue,
+                        'start_date' => $startDate,
+                        'end_date' => $endDate,
+                        'start_time' => '05:00:00',
+                        'end_time' => '21:00:00',
+                        'participants' => $request->numParticipants,
+                        'target_dept' => $target_dept,
+                        'event_letter' => $event_letter,
+                        'feedback_image' => $feedback_image,
+                        'whole_week' => false,
+                        'status' => 'PENDING',
+                        'color' => '#D6AD60',
+                        'org_adviser' => 'notnull',
+                        'created_at' => now()
+                    ]);
+                }
+                else{
+                    Event::create([
+                        'user_id' => $request->user_id,
+                        'event_name' => $request->eventName,
+                        'description' => $request->eventDesc,
+                        'type' => 'whole_day',
+                        'venue_id' => $request->event_venue,
+                        'start_date' => $startDate,
+                        'end_date' => $endDate,
+                        'start_time' => '05:00:00',
+                        'end_time' => '21:00:00',
+                        'participants' => $request->numParticipants,
+                        'target_dept' => $target_dept,
+                        'event_letter' => $event_letter,
+                        'feedback_image' => $feedback_image,
+                        'whole_week' => false,
+                        'status' => 'PENDING',
+                        'color' => '#D6AD60',
+                        'adaa' => 'notnull',
+                        'created_at' => now()
+                    ]);
+                }
+                $data = [
+                    "subject" => "Calendash Pending Request",
+                    "body" => "Hello {$adaf->name}!, You have a new pending approval request!"
+                ];
+                Mail::to($adafEmail)->send(new MailNotify($data));
                 return response()->json(["success" => "Event Created Successfully.", "status" => 200]);
             }
         }
@@ -825,8 +939,8 @@ class EventController extends Controller
         {
             $staff = Staff::where('user_id',$request->user_id)->first();
 
-            $target_dept = $staff->department;
-            $target_org = $staff->organization;
+            $target_dept = $staff->department_id;
+            // $target_org = $staff->organization;
 
             if ($inputType === 'wholeWeek') {
                 $weekDate = $request->input('event_date_wholeWeekUser');
@@ -844,36 +958,59 @@ class EventController extends Controller
                 // $venues->save();
                 Storage::put('public/pdf/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
 
-                $request->validate([
-                    'feedback_image' => 'required|image|mimes:jpeg,png,jpg|max:2048', // Image file validation
-                ]);
+                // $request->validate([
+                //     'feedback_image' => 'required|image|mimes:jpeg,png,jpg|max:2048', // Image file validation
+                // ]);
         
-                $files = $request->file('feedback_image');
-                $feedback_image = 'images/'.time().'-'.$files->getClientOriginalName();
-                // $venues->save();
-                Storage::put('public/images/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
-    
-                Event::create([
-                    'user_id' => $request->user_id,
-                    'event_name' => $request->eventName,
-                    'description' => $request->eventDesc,
-                    'type' => 'whole_week',
-                    'venue_id' => $request->event_venue,
-                    'room_id' => $request->event_venue,
-                    'start_date' => $startDate,
-                    'end_date' => $endDate,
-                    'start_time' => '00:00:00',
-                    'end_time' => '00:00:00',
-                    'whole_week' => true,
-                    'participants' => $request->numParticipants,
-                    'target_dept' => $target_dept,
-                    'target_org' => $target_org,
-                    'event_letter' => $event_letter,
-                    'feedback_image' => $feedback_image,
-                    'status' => 'PENDING',
-                    'color' => '#D6AD60',
-                    'created_at' => now()
-                ]);
+                // $feedback_image = $request->feedback_qr_code;
+                // // $venues->save();
+                // Storage::put('public/images/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
+                $feedback_image = $request->feedback_qr_code;
+
+                
+                if ($request->event_place === 'room'){
+                    Event::create([
+                        'user_id' => $request->user_id,
+                        'event_name' => $request->eventName,
+                        'description' => $request->eventDesc,
+                        'type' => 'whole_week',
+                        'room_id' => $request->event_venue,
+                        'start_date' => $startDate,
+                        'end_date' => $endDate,
+                        'start_time' => '00:00:00',
+                        'end_time' => '00:00:00',
+                        'whole_week' => true,
+                        'participants' => $request->numParticipants,
+                        'target_dept' => $target_dept,
+                        'event_letter' => $event_letter,
+                        'feedback_image' => $feedback_image,
+                        'status' => 'PENDING',
+                        'color' => '#D6AD60',
+                        'created_at' => now()
+                    ]);
+                }
+                else{
+                    Event::create([
+                        'user_id' => $request->user_id,
+                        'event_name' => $request->eventName,
+                        'description' => $request->eventDesc,
+                        'type' => 'whole_week',
+                        'venue_id' => $request->event_venue,
+                        'start_date' => $startDate,
+                        'end_date' => $endDate,
+                        'start_time' => '00:00:00',
+                        'end_time' => '00:00:00',
+                        'whole_week' => true,
+                        'participants' => $request->numParticipants,
+                        'target_dept' => $target_dept,
+                        'event_letter' => $event_letter,
+                        'feedback_image' => $feedback_image,
+                        'status' => 'PENDING',
+                        'color' => '#D6AD60',
+                        'osa' => 'notnull',
+                        'created_at' => now()
+                    ]);
+                }
                 
                 return response()->json(["success" => "Event Created Successfully.", "status" => 200]);
             }
@@ -892,36 +1029,58 @@ class EventController extends Controller
                 // $venues->save();
                 Storage::put('public/pdf/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
 
-                $request->validate([
-                    'feedback_image' => 'required|image|mimes:jpeg,png,jpg|max:2048', // Image file validation
-                ]);
+                // $request->validate([
+                //     'feedback_image' => 'required|image|mimes:jpeg,png,jpg|max:2048', // Image file validation
+                // ]);
         
-                $files = $request->file('feedback_image');
-                $feedback_image = 'images/'.time().'-'.$files->getClientOriginalName();
-                // $venues->save();
-                Storage::put('public/images/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
-    
-                Event::create([
-                    'user_id' => $request->user_id,
-                    'event_name' => $request->eventName,
-                    'description' => $request->eventDesc,
-                    'type' => 'within_day',
-                    'venue_id' => $request->event_venue,
-                    'room_id' => $request->event_venue,
-                    'start_date' => $date,
-                    'end_date' => $date,
-                    'start_time' => $start_time,
-                    'end_time' => $end_time,
-                    'participants' => $request->numParticipants,
-                    'target_dept' => $target_dept,
-                    'target_org' => $target_org,
-                    'event_letter' => $event_letter,
-                    'feedback_image' => $feedback_image,
-                    'whole_week' => false,
-                    'status' => 'PENDING',
-                    'color' => '#D6AD60',
-                    'created_at' => now()
-                ]);
+                $feedback_image = $request->feedback_qr_code;
+                // $feedback_image = 'images/'.time().'-'.$files->getClientOriginalName();
+                // // $venues->save();
+                // Storage::put('public/images/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
+                if ($request->event_place === 'room'){
+                    Event::create([
+                        'user_id' => $request->user_id,
+                        'event_name' => $request->eventName,
+                        'description' => $request->eventDesc,
+                        'type' => 'within_day',
+                        'room_id' => $request->event_venue,
+                        'start_date' => $date,
+                        'end_date' => $date,
+                        'start_time' => $start_time,
+                        'end_time' => $end_time,
+                        'participants' => $request->numParticipants,
+                        'target_dept' => $target_dept,
+                        'event_letter' => $event_letter,
+                        'feedback_image' => $feedback_image,
+                        'whole_week' => false,
+                        'status' => 'PENDING',
+                        'color' => '#D6AD60',
+                        'created_at' => now()
+                    ]);
+                }
+                else{
+                    Event::create([
+                        'user_id' => $request->user_id,
+                        'event_name' => $request->eventName,
+                        'description' => $request->eventDesc,
+                        'type' => 'within_day',
+                        'venue_id' => $request->event_venue,
+                        'start_date' => $date,
+                        'end_date' => $date,
+                        'start_time' => $start_time,
+                        'end_time' => $end_time,
+                        'participants' => $request->numParticipants,
+                        'target_dept' => $target_dept,
+                        'event_letter' => $event_letter,
+                        'feedback_image' => $feedback_image,
+                        'whole_week' => false,
+                        'status' => 'PENDING',
+                        'color' => '#D6AD60',
+                        'osa' => 'notnull',
+                        'created_at' => now()
+                    ]);
+                }
+
                 return response()->json(["success" => "Event Created Successfully.", "status" => 200]);
             }   
             else if ($inputType === 'wholeDay'){
@@ -937,36 +1096,58 @@ class EventController extends Controller
                 // $venues->save();
                 Storage::put('public/pdf/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
 
-                $request->validate([
-                    'feedback_image' => 'required|image|mimes:jpeg,png,jpg|max:2048', // Image file validation
-                ]);
+                // $request->validate([
+                //     'feedback_image' => 'required|image|mimes:jpeg,png,jpg|max:2048', // Image file validation
+                // ]);
         
-                $files = $request->file('feedback_image');
-                $feedback_image = 'images/'.time().'-'.$files->getClientOriginalName();
+                // $files = $request->file('feedback_image');
+                $feedback_image = $request->feedback_qr_code;
                 // $venues->save();
-                Storage::put('public/images/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
+                // Storage::put('public/images/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
+                if ($request->event_place === 'room'){
+                    Event::create([
+                        'user_id' => $request->user_id,
+                        'event_name' => $request->eventName,
+                        'description' => $request->eventDesc,
+                        'type' => 'whole_day',
+                        'room_id' => $request->event_venue,
+                        'start_date' => $date,
+                        'end_date' => $date,
+                        'start_time' => '00:00:00',
+                        'end_time' => '00:00:00',
+                        'participants' => $request->numParticipants,
+                        'target_dept' => $target_dept,
+                        'event_letter' => $event_letter,
+                        'feedback_image' => $feedback_image,
+                        'whole_week' => false,
+                        'status' => 'PENDING',
+                        'color' => '#D6AD60',
+                        'created_at' => now()
+                    ]);
+                }
+                else{
+                    Event::create([
+                        'user_id' => $request->user_id,
+                        'event_name' => $request->eventName,
+                        'description' => $request->eventDesc,
+                        'type' => 'whole_day',
+                        'venue_id' => $request->event_venue,
+                        'start_date' => $date,
+                        'end_date' => $date,
+                        'start_time' => '00:00:00',
+                        'end_time' => '00:00:00',
+                        'participants' => $request->numParticipants,
+                        'target_dept' => $target_dept,
+                        'event_letter' => $event_letter,
+                        'feedback_image' => $feedback_image,
+                        'whole_week' => false,
+                        'status' => 'PENDING',
+                        'color' => '#D6AD60',
+                        'osa' => 'notnull',
+                        'created_at' => now()
+                    ]);
+                }
                 
-                Event::create([
-                    'user_id' => $request->user_id,
-                    'event_name' => $request->eventName,
-                    'description' => $request->eventDesc,
-                    'type' => 'whole_day',
-                    'venue_id' => $request->event_venue,
-                    'room_id' => $request->event_venue,
-                    'start_date' => $date,
-                    'end_date' => $date,
-                    'start_time' => '00:00:00',
-                    'end_time' => '00:00:00',
-                    'participants' => $request->numParticipants,
-                    'target_dept' => $target_dept,
-                    'target_org' => $target_org,
-                    'event_letter' => $event_letter,
-                    'feedback_image' => $feedback_image,
-                    'whole_week' => false,
-                    'status' => 'PENDING',
-                    'color' => '#D6AD60',
-                    'created_at' => now()
-                ]);
                 return response()->json(["success" => "Event Created Successfully.", "status" => 200]);
             }
             else
@@ -983,36 +1164,59 @@ class EventController extends Controller
                 // $venues->save();
                 Storage::put('public/pdf/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
 
-                $request->validate([
-                    'feedback_image' => 'required|image|mimes:jpeg,png,jpg|max:2048', // Image file validation
-                ]);
+                // $request->validate([
+                //     'feedback_image' => 'required|image|mimes:jpeg,png,jpg|max:2048', // Image file validation
+                // ]);
         
-                $files = $request->file('feedback_image');
-                $feedback_image = 'images/'.time().'-'.$files->getClientOriginalName();
-                // $venues->save();
-                Storage::put('public/images/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
+                // $files = $request->file('feedback_image');
+                // $feedback_image = 'images/'.time().'-'.$files->getClientOriginalName();
+                // // $venues->save();
+                // Storage::put('public/images/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
+                $feedback_image = $request->feedback_qr_code;
+                if ($request->event_place === 'room'){
+                    Event::create([
+                        'user_id' => $request->user_id,
+                        'event_name' => $request->eventName,
+                        'description' => $request->eventDesc,
+                        'type' => 'whole_day',
+                        'room_id' => $request->event_venue,
+                        'start_date' => $startDate,
+                        'end_date' => $endDate,
+                        'start_time' => '05:00:00',
+                        'end_time' => '21:00:00',
+                        'participants' => $request->numParticipants,
+                        'target_dept' => $target_dept,
+                        'event_letter' => $event_letter,
+                        'feedback_image' => $feedback_image,
+                        'whole_week' => false,
+                        'status' => 'PENDING',
+                        'color' => '#D6AD60',
+                        'created_at' => now()
+                    ]);
+                }
+                else{
+                    Event::create([
+                        'user_id' => $request->user_id,
+                        'event_name' => $request->eventName,
+                        'description' => $request->eventDesc,
+                        'type' => 'whole_day',
+                        'venue_id' => $request->event_venue,
+                        'start_date' => $startDate,
+                        'end_date' => $endDate,
+                        'start_time' => '05:00:00',
+                        'end_time' => '21:00:00',
+                        'participants' => $request->numParticipants,
+                        'target_dept' => $target_dept,
+                        'event_letter' => $event_letter,
+                        'feedback_image' => $feedback_image,
+                        'whole_week' => false,
+                        'status' => 'PENDING',
+                        'color' => '#D6AD60',
+                        'osa' => 'notnull',
+                        'created_at' => now()
+                    ]);
+                }
                 
-                Event::create([
-                    'user_id' => $request->user_id,
-                    'event_name' => $request->eventName,
-                    'description' => $request->eventDesc,
-                    'type' => 'whole_day',
-                    'venue_id' => $request->event_venue,
-                    'room_id' => $request->event_venue,
-                    'start_date' => $startDate,
-                    'end_date' => $endDate,
-                    'start_time' => '05:00:00',
-                    'end_time' => '21:00:00',
-                    'participants' => $request->numParticipants,
-                    'target_dept' => $target_dept,
-                    'target_org' => $target_org,
-                    'event_letter' => $event_letter,
-                    'feedback_image' => $feedback_image,
-                    'whole_week' => false,
-                    'status' => 'PENDING',
-                    'color' => '#D6AD60',
-                    'created_at' => now()
-                ]);
                 return response()->json(["success" => "Event Created Successfully.", "status" => 200]);
             }
         }

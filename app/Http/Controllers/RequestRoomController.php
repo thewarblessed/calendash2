@@ -37,25 +37,29 @@ class RequestRoomController extends Controller
         //
         $pending = Event::leftjoin('users','users.id','events.user_id')
                         ->leftjoin('students','students.user_id','users.id')
+                        // ->leftjoin('professors','professors.user_id','users.id')
+                        // ->leftjoin('staffs','staffs.user_id','users.id')
                         ->leftjoin('organizations','organizations.id','events.target_org')
                         ->leftjoin('departments','departments.id','events.target_dept')
                         ->leftjoin('rooms','rooms.id','events.room_id')
                         ->orderBy('events.status')
                         ->orderByDesc('events.id')
-                        ->whereNotNull('org_adviser')
                         ->whereNotNull('room_id')
+                        ->whereNotNull('org_adviser')
                         ->where('events.status','PENDING')
+                        // ->orWhere('org_adviser', 'notnull')
                         ->select('organizations.organization',
-                                        'departments.department',
-                                        'events.status',
-                                        'events.event_name',
-                                        'events.start_date',
-                                        'events.end_date',
-                                        'events.start_time',
-                                        'events.end_time',
-                                        'events.type',
-                                        'rooms.name as roomName',
-                                        'events.id')
+                                'departments.department',
+                                'events.status',
+                                'events.event_name',
+                                'events.start_date',
+                                'events.end_date',
+                                'events.start_time',
+                                'events.end_time',
+                                'events.type',
+                                'rooms.name as roomName',
+                                'users.role',
+                                'events.id')
                         ->get();
         return response()->json($pending);
     }
@@ -70,7 +74,7 @@ class RequestRoomController extends Controller
                         ->leftjoin('rooms','rooms.id','events.room_id')
                         ->orderBy('events.status')
                         ->orderByDesc('events.id')
-                        ->whereNotNull('org_adviser')
+                        // ->whereNotNull('org_adviser')
                         ->whereNotNull('room_id')
                         ->where('events.id', $id)
                         ->select('organizations.organization',
@@ -126,6 +130,41 @@ class RequestRoomController extends Controller
         }
     }
 
+    public function rejectRooms(Request $request, String $id)
+    {
+        //
+        $password = $request->input('key1');
+        $user_id = $request->input('key2');
+        $reason = $request->input('key3');
+        $user = User::find($user_id);
+        // $role = $user->role;
+        // dd($role);
+        $event_id = $id;
+
+        $hashedPassword = Hash::make($password);
+        $hashedPasswordFromDatabase = Official::join('users', 'users.id', 'officials.user_id')->where('users.id', $user_id)->select('officials.hash')->first();
+        $hashOfOfficial = $hashedPasswordFromDatabase->hash;
+        
+        if ($hashedPasswordFromDatabase && Hash::check($password, $hashedPasswordFromDatabase->hash)) {
+            // Passwords match, proceed with authentication logic
+            // echo "Password Match";
+            $users = User::find($user_id);
+            $officials = Official::join('users', 'users.id', 'officials.user_id')->where('users.id', $user_id)->first();
+            $events = Event::find($event_id);
+            $events->remarks_sec_head = $reason;
+            $events->rejected_by = $user_id;
+            $events->status = 'REJECTED';
+            $events->updated_at = now(); // DATE OF REJECTION
+            $events->update();
+            return response()->json(["message" => 'Request handled successfully']);
+            // return response()->json(['message' => 'Request handled successfully']);
+        } else {
+            // Passwords do not match, handle invalid password
+            // echo "Password Does Not Match";
+            return response()->json(['error' => 'Invalid passcode'], 422);
+        }
+    }
+
     public function getAllApproveRooms()
     {
         //
@@ -136,7 +175,7 @@ class RequestRoomController extends Controller
                         ->leftjoin('rooms','rooms.id','events.room_id')
                         ->orderBy('events.status')
                         ->orderByDesc('events.id')
-                        ->whereNotNull('org_adviser')
+                        // ->whereNotNull('org_adviser')
                         ->whereNotNull('room_id')
                         ->where('events.status','APPROVED')
                         ->select('organizations.organization',
@@ -159,6 +198,38 @@ class RequestRoomController extends Controller
         return view('officials.secHead.myApprovedRoom');
     }
 
+    public function rejectedRoomsView()
+    {
+        return view('officials.secHead.myRejectedRoom');
+    }
+
+    public function getAllRejectedRooms()
+    {
+        //
+        $pending = Event::leftjoin('users','users.id','events.user_id')
+                        ->leftjoin('students','students.user_id','users.id')
+                        ->leftjoin('organizations','organizations.id','events.target_org')
+                        ->leftjoin('departments','departments.id','events.target_dept')
+                        ->leftjoin('rooms','rooms.id','events.room_id')
+                        ->orderBy('events.status')
+                        ->orderByDesc('events.id')
+                        // ->whereNotNull('org_adviser')
+                        ->whereNotNull('room_id')
+                        ->where('events.status','REJECTED')
+                        ->select('organizations.organization',
+                                        'departments.department',
+                                        'events.status',
+                                        'events.event_name',
+                                        'events.start_date',
+                                        'events.end_date',
+                                        'events.start_time',
+                                        'events.end_time',
+                                        'events.type',
+                                        'rooms.name as roomName',
+                                        'events.id')
+                        ->get();
+        return response()->json($pending);
+    }
 
     /**
      * Store a newly created resource in storage.

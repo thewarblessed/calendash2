@@ -103,9 +103,14 @@ Route::get('/RTL', function () {
     return view('RTL');
 })->name('RTL')->middleware('auth');
 
-Route::get('/profile', function () {
-    return view('account-pages.profile');
-})->name('profile')->middleware('auth');
+// Route::get('/profile', function () {
+
+//     return view('account-pages.profile');
+// })->name('profile');
+
+Route::get('/profile', [ProfileController::class, 'myProfile'])
+    ->middleware('auth')
+    ->name('profiles');
 
 Route::get('/signin', function () {
     return view('account-pages.signin');
@@ -150,7 +155,7 @@ Route::get('/reset-password/{token}', [ResetPasswordController::class, 'create']
 Route::post('/reset-password', [ResetPasswordController::class, 'store'])
     ->middleware('guest');
 
-Route::get('/laravel-examples/user-profile', [ProfileController::class, 'index'])->name('users.profile')->middleware('auth');
+Route::get('/laravel-examples/user-profile', [ProfileController::class, 'index'])->name('usersProfile')->middleware('auth');
 Route::put('/laravel-examples/user-profile/update', [ProfileController::class, 'update'])->name('users.update')->middleware('auth');
 Route::get('/laravel-examples/users-management', [UserController::class, 'index'])->name('users-management')->middleware('auth');
 
@@ -389,6 +394,10 @@ Route::get('/pending/rooms', [RequestRoomController::class, 'index'])
 Route::get('/approved/rooms', [RequestRoomController::class, 'approvedRoomsView'])
     ->middleware('auth')
     ->name('approvedRoomsView');
+
+Route::get('/rejected/rooms', [RequestRoomController::class, 'rejectedRoomsView'])
+    ->middleware('auth')
+    ->name('rejectedRoomsView');
 
 
 //////////////////////////////////////// REPORT CHARTS  ///////////////////////////

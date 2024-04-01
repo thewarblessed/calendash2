@@ -154,7 +154,7 @@ class UserController extends Controller
                                     ->select('pending_users.user_id','pending_users.tupID','pending_users.lastname','pending_users.firstname','organizations.organization','departments.department','sections.section','pending_users.role','users.email_verified_at','users.email')
                                     ->where('pending_users.role', '!=', 'outsider')
                                     ->orderByDesc('pending_users.id')
-                                    ->get();
+                                    ->paginate(10);
                                     
         return view('admin.user.pendingUsers', compact('pendingUsers'));
         
@@ -207,7 +207,7 @@ class UserController extends Controller
                                     "status" => 200]);
         }
         elseif($user->role === 'staff'){
-            $staff = new Student();
+            $staff = new Staff();
             $staff->tupID = $user->tupID;
             $staff->lastname = $user->lastname;
             $staff->firstname = $user->firstname;
@@ -225,15 +225,6 @@ class UserController extends Controller
                                     "status" => 200]);
         }
         else{
-            // $student = new Student();
-            // $student->tupID = $user->tupID;
-            // $student->lastname = $user->lastname;
-            // $student->firstname = $user->firstname;
-            // $student->department_id = $user->department_id;
-            // $student->organization_id = $user->organization_id;
-            // $student->user_id = $user->user_id;
-            // // $student->role = 'student';
-            // $student->save();
 
             $forUser->email_verified_at = now(); // update
             $forUser->role = $user->role;

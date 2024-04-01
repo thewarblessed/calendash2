@@ -165,10 +165,10 @@
             @else
             {{-- EVENTSS --}}
             <li class="nav-item">
-                <a class="nav-link  {{ is_current_route('events') || is_current_route('createEvent') ? 'active' : '' }}"
-                    href="{{ route('events') }}">
+                <a class="nav-link  {{ is_current_route('createEvent') ? 'active' : '' }}"
+                    href="{{ route('createEvent') }}">
                     <i class="fa-solid fa-calendar-plus"
-                        style="color: {{ is_current_route('events') || is_current_route('createEvent') ? '#774dd3' : 'defaultColor' }};font-size: 18px;"></i>
+                        style="color: {{ is_current_route('createEvent') ? '#774dd3' : 'defaultColor' }};font-size: 18px;"></i>
                     <span class="nav-link-text ms-1">Create an Event</span>
                 </a>
             </li>
@@ -228,6 +228,16 @@
                     <span class="nav-link-text ms-1">My Declined Request</span>
                 </a>
             </li>
+
+            <li class="nav-item">
+                <a class="nav-link  {{ is_current_route('usersProfile') || is_current_route('profiles') ? 'active' : '' }}"
+                    href="{{ route('profiles') }}">
+                    <i class="fa-solid fa-id-card-clip"
+                        style="color: {{ is_current_route('usersProfile') || is_current_route('profiles') ? '#774dd3' : 'defaultColor' }};font-size: 18px;"></i>
+                    <span class="nav-link-text ms-1">My Profile</span>
+                </a>
+            </li>
+
             @endif
 
             @endif
@@ -286,8 +296,8 @@
                 </a>
             </li>
             <li class="nav-item border-start my-0 pt-2">
-                <a class="nav-link position-relative ms-0 ps-2 py-2 {{ is_current_route('users-management') ? 'active' : '' }}"
-                    href="{{ route('users-management') }}">
+                <a class="nav-link position-relative ms-0 ps-2 py-2 {{ is_current_route('rejectedRoomsView') ? 'active' : '' }}"
+                    href="{{ route('rejectedRoomsView') }}">
                     <span class="nav-link-text ms-1">Declined Request</span>
                 </a>
             </li>

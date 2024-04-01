@@ -9,15 +9,15 @@
                         <div class="card-header border-bottom pb-0">
                             <div class="" style="text-align: center">
                                 <div>
-                                    <strong><h3>Approved Rooms List</h3></strong>
+                                    <strong><h3>Rejected Rooms List</h3></strong>
                                     <p class="text-sm">See information about all events</p>
                                 </div>
                             </div>
                         </div>
-                        <form action="">
-                            @csrf
-                            <input name="officialRejectUserID" type="text" class="form-control" value="{{ Auth::user()->id }}" id="officialRejectUserID" hidden>
-                        </form>
+                            <form action="">
+                                @csrf
+                                <input name="officialRejectUserID" type="text" class="form-control" value="{{ Auth::user()->id }}" id="officialRejectUserID" hidden>
+                            </form>
                         <div class="card-body px-0 py-0">
                             <div class="table-responsive p-0">
                                 <table class="table align-items-center mb-0" id="officialRejectsTable">
@@ -83,7 +83,7 @@
         console.log(id + 'user_id');
         $("#officialRejectsTable").DataTable({
             ajax: {
-                url: "/api/rooms/approve",
+                url: "/api/rooms/rejected",
                 method: "GET",
                 dataSrc: "",
             },
@@ -161,7 +161,7 @@
                     {
                         data: "status",
                         render: function(data, type, row) {
-                            return "<span style='color: green; font-weight: bold;'>" + data + "</span>";
+                            return "<span style='color: red; font-weight: bold;'>" + data + "</span>";
                         }
                     },
             ],

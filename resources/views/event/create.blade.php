@@ -4,7 +4,21 @@
 
     <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg" id="main">
         <x-app.navbar />
-        <div class="container" style="margin-top: 30px">
+        <div class="container" style="margin-top: 10px">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card card-background card-background-after-none align-items-start mt-4 mb-5">
+                        <div class="full-background"
+                            style="background-image: url('../assets/img/header-blue-purple.jpg')"></div>
+                        <div class="card-body text-start p-4 w-100">
+                            <h3 class="text-white mb-2">Create your event!🎉🤩✨🔥</h3>
+
+                            <img src="../assets/img/puzzle-iso-gradient.png" alt="3d-cube"
+                                class="position-absolute top-0 end-1 w-25 max-width-200 mt-n6 d-sm-block d-none" />
+                        </div>
+                    </div>
+                </div>
+            </div>
             <form class="card" id="createEventForm" enctype="multipart/form-data">
                 @csrf
                 <div class="card-body">
@@ -219,6 +233,17 @@
                             </div>
                         </div>
 
+                        <div class="mb-3 col-md-6" style="align-self: center; margin-top:20px">
+                            <label for="feedback_image" class="form-label"
+                                style="font-size: 25px; text-align:center; color:blueviolet">Link for feedback form</label>
+                            <input type="text" class="form-control" name="feedback_qr_code" id="feedback_qr_code" placeholder="ex. http://docs.google.com/forms/...">
+                            {{-- <onchange="validateFile(this)">
+                            <!-- Call validateFile function when file selection changes -->
+                            <small class="text-danger" id="fileError"></small> <!-- Error message placeholder -->
+                            <small class="form-text text-muted">Max file size: 5MB. File type: PDF only.</small>
+                            <!-- Additional info --> --}}
+                        </div>
+
                         <div class="card-body">
                             {{-- <h4 style="text-align: left">Terms and Conditions</h4> --}}
                             <div class="col-md-12">
@@ -232,17 +257,7 @@
                                 </ul>
                             </div>
                         </div>
-                        <div class="mb-3 col-md-6" style="align-self: center">
-                            <label for="feedback_image" class="form-label"
-                                style="font-size: 25px; text-align:center; color:blueviolet">Upload
-                                QR Code for Feedback</label>
-                            <input type="file" class="form-control" name="feedback_image" id="feedback_image">
-                            {{-- <onchange="validateFile(this)">
-                            <!-- Call validateFile function when file selection changes -->
-                            <small class="text-danger" id="fileError"></small> <!-- Error message placeholder -->
-                            <small class="form-text text-muted">Max file size: 5MB. File type: PDF only.</small>
-                            <!-- Additional info --> --}}
-                        </div>
+                        
 
                     </div>
 

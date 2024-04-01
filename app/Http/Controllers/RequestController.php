@@ -188,6 +188,50 @@ class RequestController extends Controller
         }
         elseif ($user_role === "atty")
         {
+            // $pendings = Event::leftjoin('venues','events.venue_id','venues.id')
+            //                 ->leftjoin('users','users.id','events.user_id')
+            //                 ->leftjoin('organizations','organizations.id','events.target_org')
+            //                 ->leftjoin('departments','departments.id','events.target_dept')
+            //                 ->orderBy('events.status')
+            //                 ->orderByDesc('events.id')
+            //                 ->whereNull('atty')
+            //                 ->where('venues.name', 'IT Auditorium') 
+            //                 ->whereNotNull('adaa')  
+            //                 ->where('events.status','PENDING')
+            //                 ->select('organizations.organization',
+            //                             'departments.department',
+            //                             'events.status',
+            //                             'events.event_name',
+            //                             'events.start_date',
+            //                             'events.end_date',
+            //                             'events.start_time',
+            //                             'events.end_time',
+            //                             'events.type',
+            //                             'venues.name as venueName',
+            //                             'events.id')
+            //                 ->get();
+
+            // $pending = Event::leftjoin('venues','events.venue_id','venues.id')
+            //                 ->leftjoin('users','users.id','events.user_id')
+            //                 ->leftjoin('organizations','organizations.id','events.target_org')
+            //                 ->leftjoin('departments','departments.id','events.target_dept')
+            //                 ->whereNull('atty')
+            //                 ->whereNotNull('adaa')
+            //                 // ->where('venues.name', 'IT Auditorium') 
+            //                 ->where('events.status','PENDING')
+            //                 ->where('users.role','professor')
+            //                 ->select('organizations.organization',
+            //                             'departments.department',
+            //                             'events.status',
+            //                             'events.event_name',
+            //                             'events.start_date',
+            //                             'events.end_date',
+            //                             'events.start_time',
+            //                             'events.end_time',
+            //                             'events.type',
+            //                             'venues.name as venueName',
+            //                             'events.id')
+            //                 ->get();
             $pending = Event::leftjoin('venues','events.venue_id','venues.id')
                             ->leftjoin('users','users.id','events.user_id')
                             ->leftjoin('organizations','organizations.id','events.target_org')
@@ -195,9 +239,16 @@ class RequestController extends Controller
                             ->orderBy('events.status')
                             ->orderByDesc('events.id')
                             ->whereNull('atty')
-                            ->where('venues.name', 'IT Auditorium')
-                            ->whereNotNull('adaa')  
+                            ->whereNotNull('adaa')
                             ->where('events.status','PENDING')
+                            ->where(function ($query) {
+                                $query->where(function ($query) {
+                                        $query->where('users.role', 'professor');
+                                })
+                                ->orWhere(function ($query) {
+                                        $query->where('venues.name', 'IT Auditorium');
+                                });
+                            })
                             ->select('organizations.organization',
                                         'departments.department',
                                         'events.status',
@@ -223,7 +274,9 @@ class RequestController extends Controller
                             ->orderBy('events.id')
                             ->where('venues.name', '!=', 'IT Auditorium')
                             ->whereNotNull('adaa')
+                            
                             ->whereNull('campus_director')
+                            ->where('events.status','PENDING')
                             ->select('organizations.organization',
                                         'departments.department',
                                         'events.status',
@@ -258,19 +311,16 @@ class RequestController extends Controller
         // $date = now();
         // $events = Event::find($id);
         // dd($date);
+        // dd($request->all());
         $password = $request->input('key1');
         $user_id = $request->input('key2');
         $user = User::find($user_id);
         $role = $user->role;
         // dd($role);
         $event_id = $id;
-        
-        // $secHead = Official::where('section_id',) 
-
-        $hashedPassword = Hash::make($password);
-        $hashedPasswordFromDatabase = Official::join('users', 'users.id', 'officials.user_id')->where('users.id', $user_id)->select('officials.hash')->first();
-        $hashOfOfficial = $hashedPasswordFromDatabase->hash;
-        // dd($hashedPassword);
+        $event = Event::where('id',$event_id)->first();
+        $requester = User::where('id',$event->user_id)->first();
+        $requester_role = $requester->role;
 
         $eventType = Event::leftjoin('venues', 'events.venue_id', '=', 'venues.id')
                     ->leftJoin('rooms', 'events.room_id', '=', 'rooms.id')
@@ -286,136 +336,330 @@ class RequestController extends Controller
         
         $place = $eventType->event_type;
 
-        if ($place === "Room")
+
+        if ($requester_role === 'student')
         {
-            $room = Room::join('events', 'rooms.id', 'events.room_id')->where('events.id', $event_id)->select('rooms.name')->first();
-            if($role === 'org_adviser')
-                    {
-                        if ($hashedPasswordFromDatabase && Hash::check($password, $hashedPasswordFromDatabase->hash)) {
-                            // Passwords match, proceed with authentication logic
-                            // echo "Password Match";
-                            $users = User::find($user_id);
-                            $officials = Official::join('users', 'users.id', 'officials.user_id')->where('users.id', $user_id)->first();
-                            $events = Event::find($event_id);
-                            $events->org_adviser = $officials->hash;
-                            $events->approved_org_adviser_at = now();
-                            $events->save();
-                            return response()->json(["message" => 'Request handled successfully']);
-                            // return response()->json(['message' => 'Request handled successfully']);
-                        } else {
-                            // Passwords do not match, handle invalid password
-                            // echo "Password Does Not Match";
-                            return response()->json(['error' => 'Invalid passcode'], 422);
-                        }
-                
-                    }
-        }
-        else
-        {
-            $angEvent = Venue::join('events', 'venues.id', 'events.venue_id')->where('events.id', $event_id)->select('venues.name')->first();
-            // dd($angEvent);
-            $venue = $angEvent->name;
-            if($venue === 'IT Auditorium')
+            $hashedPassword = Hash::make($password);
+            $hashedPasswordFromDatabase = Official::join('users', 'users.id', 'officials.user_id')->where('users.id', $user_id)->select('officials.hash')->first();
+            $hashOfOfficial = $hashedPasswordFromDatabase->hash;
+
+            if ($place === "Room")
             {
+                $room = Room::join('events', 'rooms.id', 'events.room_id')->where('events.id', $event_id)->select('rooms.name')->first();
                 if($role === 'org_adviser')
-                    {
-                        if ($hashedPasswordFromDatabase && Hash::check($password, $hashedPasswordFromDatabase->hash)) {
-                            // Passwords match, proceed with authentication logic
-                            // echo "Password Match";
-                            $users = User::find($user_id);
-                            $officials = Official::join('users', 'users.id', 'officials.user_id')->where('users.id', $user_id)->first();
-                            $events = Event::find($event_id);
-                            $events->org_adviser = $officials->hash;
-                            $events->approved_org_adviser_at = now();
-                            $events->save();
-                            return response()->json(["message" => 'Request handled successfully']);
-                            // return response()->json(['message' => 'Request handled successfully']);
-                        } else {
-                            // Passwords do not match, handle invalid password
-                            // echo "Password Does Not Match";
-                            return response()->json(['error' => 'Invalid passcode'], 422);
-                        }
-                
+                {
+                    if ($hashedPasswordFromDatabase && Hash::check($password, $hashedPasswordFromDatabase->hash)) {
+                        // Passwords match, proceed with authentication logic
+                        // echo "Password Match";
+                        $users = User::find($user_id);
+                        $officials = Official::join('users', 'users.id', 'officials.user_id')->where('users.id', $user_id)->first();
+                        $events = Event::find($event_id);
+                        $events->org_adviser = $officials->hash;
+                        $events->approved_org_adviser_at = now();
+                        $events->save();
+                        return response()->json(["message" => 'Request handled successfully']);
+                        // return response()->json(['message' => 'Request handled successfully']);
+                    } else {
+                        // Passwords do not match, handle invalid password
+                        // echo "Password Does Not Match";
+                        return response()->json(['error' => 'Invalid passcode'], 422);
                     }
-                elseif($role === 'section_head')
-                    {
-                        if ($hashedPasswordFromDatabase && Hash::check($password, $hashedPasswordFromDatabase->hash)) {
-                            // Passwords match, proceed with authentication logic
-                            // echo "Password Match";
-                            $users = User::find($user_id);
-                            $officials = Official::join('users', 'users.id', 'officials.user_id')->where('users.id', $user_id)->first();
-                            $events = Event::find($event_id);
-                            $events->sect_head = $officials->hash;
-                            $events->approved_sec_head_at = now();
-                            $events->save();
-                            return response()->json(["message" => 'Request handled successfully']);
-                            // return response()->json(['message' => 'Request handled successfully']);
-                        } else {
-                            // Passwords do not match, handle invalid password
-                            // echo "Password Does Not Match";
-                            return response()->json(['error' => 'Invalid passcode'], 422);
+            
+                }
+            }
+            else
+            {
+                $angEvent = Venue::join('events', 'venues.id', 'events.venue_id')->where('events.id', $event_id)->select('venues.name')->first();
+                // dd($angEvent);
+                $venue = $angEvent->name;
+                if($venue === 'IT Auditorium')
+                {
+                    if($role === 'org_adviser')
+                        {
+                            if ($hashedPasswordFromDatabase && Hash::check($password, $hashedPasswordFromDatabase->hash)) {
+                                // Passwords match, proceed with authentication logic
+                                // echo "Password Match";
+                                $users = User::find($user_id);
+                                $officials = Official::join('users', 'users.id', 'officials.user_id')->where('users.id', $user_id)->first();
+                                $events = Event::find($event_id);
+                                $events->org_adviser = $officials->hash;
+                                $events->approved_org_adviser_at = now();
+                                $events->save();
+                                return response()->json(["message" => 'Request handled successfully']);
+                                // return response()->json(['message' => 'Request handled successfully']);
+                            } else {
+                                // Passwords do not match, handle invalid password
+                                // echo "Password Does Not Match";
+                                return response()->json(['error' => 'Invalid passcode'], 422);
+                            }
+                    
                         }
-                
-                    }
-                elseif($role === 'department_head')
-                    {
-                        if ($hashedPasswordFromDatabase && Hash::check($password, $hashedPasswordFromDatabase->hash)) {
-                            // Passwords match, proceed with authentication logic
-                            // echo "Password Match";
-                            $users = User::find($user_id);
-                            $officials = Official::join('users', 'users.id', 'officials.user_id')->where('users.id', $user_id)->first();
-                            $events = Event::find($event_id);
-                            $events->dept_head = $officials->hash;
-                            $events->approved_dept_head_at = now();
-                            $events->save();
-                            return response()->json(["message" => 'Request handled successfully']);
-                            // return response()->json(['message' => 'Request handled successfully']);
-                        } else {
-                            // Passwords do not match, handle invalid password
-                            // echo "Password Does Not Match";
-                            return response()->json(['error' => 'Invalid passcode'], 422);
+                    elseif($role === 'section_head')
+                        {
+                            if ($hashedPasswordFromDatabase && Hash::check($password, $hashedPasswordFromDatabase->hash)) {
+                                // Passwords match, proceed with authentication logic
+                                // echo "Password Match";
+                                $users = User::find($user_id);
+                                $officials = Official::join('users', 'users.id', 'officials.user_id')->where('users.id', $user_id)->first();
+                                $events = Event::find($event_id);
+                                $events->sect_head = $officials->hash;
+                                $events->approved_sec_head_at = now();
+                                $events->save();
+                                return response()->json(["message" => 'Request handled successfully']);
+                                // return response()->json(['message' => 'Request handled successfully']);
+                            } else {
+                                // Passwords do not match, handle invalid password
+                                // echo "Password Does Not Match";
+                                return response()->json(['error' => 'Invalid passcode'], 422);
+                            }
+                    
                         }
-                    }
-                elseif($role === 'osa')
-                    {
-                        if ($hashedPasswordFromDatabase && Hash::check($password, $hashedPasswordFromDatabase->hash)) {
-                            // Passwords match, proceed with authentication logic
-                            // echo "Password Match";
-                            $users = User::find($user_id);
-                            $officials = Official::join('users', 'users.id', 'officials.user_id')->where('users.id', $user_id)->first();
-                            $events = Event::find($event_id);
-                            $events->osa = $officials->hash;
-                            $events->approved_osa_at = now();
-                            $events->save();
-                            return response()->json(["message" => 'Request handled successfully']);
-                            // return response()->json(['message' => 'Request handled successfully']);
-                        } else {
-                            // Passwords do not match, handle invalid password
-                            // echo "Password Does Not Match";
-                            return response()->json(['error' => 'Invalid passcode'], 422);
+                    elseif($role === 'department_head')
+                        {
+                            if ($hashedPasswordFromDatabase && Hash::check($password, $hashedPasswordFromDatabase->hash)) {
+                                // Passwords match, proceed with authentication logic
+                                // echo "Password Match";
+                                $users = User::find($user_id);
+                                $officials = Official::join('users', 'users.id', 'officials.user_id')->where('users.id', $user_id)->first();
+                                $events = Event::find($event_id);
+                                $events->dept_head = $officials->hash;
+                                $events->approved_dept_head_at = now();
+                                $events->save();
+                                return response()->json(["message" => 'Request handled successfully']);
+                                // return response()->json(['message' => 'Request handled successfully']);
+                            } else {
+                                // Passwords do not match, handle invalid password
+                                // echo "Password Does Not Match";
+                                return response()->json(['error' => 'Invalid passcode'], 422);
+                            }
                         }
-                    }
-                elseif($role === 'adaa')
-                    {
-                        if ($hashedPasswordFromDatabase && Hash::check($password, $hashedPasswordFromDatabase->hash)) {
-                            // Passwords match, proceed with authentication logic
-                            // echo "Password Match";
-                            $users = User::find($user_id);
-                            $officials = Official::join('users', 'users.id', 'officials.user_id')->where('users.id', $user_id)->first();
-                            $events = Event::find($event_id);
-                            $events->adaa = $officials->hash;
-                            $events->approved_adaa_at = now();
-                            $events->save();
-                            return response()->json(["message" => 'Request handled successfully']);
-                            // return response()->json(['message' => 'Request handled successfully']);
-                        } else {
-                            // Passwords do not match, handle invalid password
-                            // echo "Password Does Not Match";
-                            return response()->json(['error' => 'Invalid passcode'], 422);
+                    elseif($role === 'osa')
+                        {
+                            if ($hashedPasswordFromDatabase && Hash::check($password, $hashedPasswordFromDatabase->hash)) {
+                                // Passwords match, proceed with authentication logic
+                                // echo "Password Match";
+                                $users = User::find($user_id);
+                                $officials = Official::join('users', 'users.id', 'officials.user_id')->where('users.id', $user_id)->first();
+                                $events = Event::find($event_id);
+                                $events->osa = $officials->hash;
+                                $events->approved_osa_at = now();
+                                $events->save();
+                                return response()->json(["message" => 'Request handled successfully']);
+                                // return response()->json(['message' => 'Request handled successfully']);
+                            } else {
+                                // Passwords do not match, handle invalid password
+                                // echo "Password Does Not Match";
+                                return response()->json(['error' => 'Invalid passcode'], 422);
+                            }
                         }
+                    elseif($role === 'adaa')
+                        {
+                            if ($hashedPasswordFromDatabase && Hash::check($password, $hashedPasswordFromDatabase->hash)) {
+                                // Passwords match, proceed with authentication logic
+                                // echo "Password Match";
+                                $users = User::find($user_id);
+                                $officials = Official::join('users', 'users.id', 'officials.user_id')->where('users.id', $user_id)->first();
+                                $events = Event::find($event_id);
+                                $events->adaa = $officials->hash;
+                                $events->approved_adaa_at = now();
+                                $events->save();
+                                return response()->json(["message" => 'Request handled successfully']);
+                                // return response()->json(['message' => 'Request handled successfully']);
+                            } else {
+                                // Passwords do not match, handle invalid password
+                                // echo "Password Does Not Match";
+                                return response()->json(['error' => 'Invalid passcode'], 422);
+                            }
+                        }
+                    elseif($role === 'atty')
+                        {
+                            if ($hashedPasswordFromDatabase && Hash::check($password, $hashedPasswordFromDatabase->hash)) {
+                                // Passwords match, proceed with authentication logic
+                                // echo "Password Match";
+                                $users = User::find($user_id);
+                                $officials = Official::join('users', 'users.id', 'officials.user_id')->where('users.id', $user_id)->first();
+                                $events = Event::find($event_id);
+                                $events->atty = $officials->hash;
+                                $events->approved_atty_at = now();
+                                $events->status = "APPROVED";
+                                $events->color = "#31B4F2";
+                                $events->save();
+                                return response()->json(["message" => 'Request handled successfully']);
+                                // return response()->json(['message' => 'Request handled successfully']);
+                            } else {
+                                // Passwords do not match, handle invalid password
+                                // echo "Password Does Not Match";
+                                return response()->json(['error' => 'Invalid passcode'], 422);
+                            }
+                        }
+                }
+                else
+                {
+                    if($role === 'org_adviser')
+                        {
+                            if ($hashedPasswordFromDatabase && Hash::check($password, $hashedPasswordFromDatabase->hash)) {
+                                // Passwords match, proceed with authentication logic
+                                // echo "Password Match";
+                                $users = User::find($user_id);
+                                $officials = Official::join('users', 'users.id', 'officials.user_id')->where('users.id', $user_id)->first();
+                                $events = Event::find($event_id);
+                                $events->org_adviser = $officials->hash;
+                                $events->approved_org_adviser_at = now();
+                                $events->save();
+                                return response()->json(["message" => 'Request handled successfully']);
+                                // return response()->json(['message' => 'Request handled successfully']);
+                            } else {
+                                // Passwords do not match, handle invalid password
+                                // echo "Password Does Not Match";
+                                return response()->json(['error' => 'Invalid passcode'], 422);
+                            }
+                    
+                        }
+                    elseif($role === 'section_head')
+                        {
+                            if ($hashedPasswordFromDatabase && Hash::check($password, $hashedPasswordFromDatabase->hash)) {
+                                // Passwords match, proceed with authentication logic
+                                // echo "Password Match";
+                                $users = User::find($user_id);
+                                $officials = Official::join('users', 'users.id', 'officials.user_id')->where('users.id', $user_id)->first();
+                                $events = Event::find($event_id);
+                                $events->sect_head = $officials->hash;
+                                $events->approved_sec_head_at = now();
+                                $events->save();
+                                return response()->json(["message" => 'Request handled successfully']);
+                                // return response()->json(['message' => 'Request handled successfully']);
+                            } else {
+                                // Passwords do not match, handle invalid password
+                                // echo "Password Does Not Match";
+                                return response()->json(['error' => 'Invalid passcode'], 422);
+                            }
+                    
+                        }
+                    elseif($role === 'department_head')
+                        {
+                            if ($hashedPasswordFromDatabase && Hash::check($password, $hashedPasswordFromDatabase->hash)) {
+                                // Passwords match, proceed with authentication logic
+                                // echo "Password Match";
+                                $users = User::find($user_id);
+                                $officials = Official::join('users', 'users.id', 'officials.user_id')->where('users.id', $user_id)->first();
+                                $events = Event::find($event_id);
+                                $events->dept_head = $officials->hash;
+                                $events->approved_dept_head_at = now();
+                                $events->updated_at = now();
+                                $events->save();
+                                return response()->json(["message" => 'Request handled successfully']);
+                                // return response()->json(['message' => 'Request handled successfully']);
+                            } else {
+                                // Passwords do not match, handle invalid password
+                                // echo "Password Does Not Match";
+                                return response()->json(['error' => 'Invalid passcode'], 422);
+                            }
+                        }
+                    elseif($role === 'osa')
+                        {
+                            if ($hashedPasswordFromDatabase && Hash::check($password, $hashedPasswordFromDatabase->hash)) {
+                                // Passwords match, proceed with authentication logic
+                                // echo "Password Match";
+                                $users = User::find($user_id);
+                                $officials = Official::join('users', 'users.id', 'officials.user_id')->where('users.id', $user_id)->first();
+                                $events = Event::find($event_id);
+                                $events->osa = $officials->hash;
+                                $events->approved_osa_at = now();
+                                $events->updated_at = now();
+                                $events->save();
+                                return response()->json(["message" => 'Request handled successfully']);
+                                // return response()->json(['message' => 'Request handled successfully']);
+                            } else {
+                                // Passwords do not match, handle invalid password
+                                // echo "Password Does Not Match";
+                                return response()->json(['error' => 'Invalid passcode'], 422);
+                            }
+                        }
+                    elseif($role === 'adaa')
+                        {
+                            // $userRequesterRole = 
+                            if ($hashedPasswordFromDatabase && Hash::check($password, $hashedPasswordFromDatabase->hash)) {
+                                // Passwords match, proceed with authentication logic
+                                // echo "Password Match";
+                                $users = User::find($user_id);
+                                $officials = Official::join('users', 'users.id', 'officials.user_id')->where('users.id', $user_id)->first();
+                                $events = Event::find($event_id);
+                                $events->adaa = $officials->hash;
+                                $events->approved_adaa_at = now();
+                                $events->updated_at = now();
+                                $events->save();
+                                return response()->json(["message" => 'Request handled successfully']);
+                                // return response()->json(['message' => 'Request handled successfully']);
+                            } else {
+                                // Passwords do not match, handle invalid password
+                                // echo "Password Does Not Match";
+                                return response()->json(['error' => 'Invalid passcode'], 422);
+                            }
+                        }
+                    elseif($role === 'campus_director')
+                        {
+                            if ($hashedPasswordFromDatabase && Hash::check($password, $hashedPasswordFromDatabase->hash)) {
+                                // Passwords match, proceed with authentication logic
+                                // echo "Password Match";
+                                $users = User::find($user_id);
+                                $officials = Official::join('users', 'users.id', 'officials.user_id')->where('users.id', $user_id)->first();
+                                $events = Event::find($event_id);
+                                $events->campus_director = $officials->hash;
+                                $events->approved_campus_director_at = now();
+                                $events->updated_at = now();
+                                $events->status = "APPROVED";
+                                $events->color = "#31B4F2";
+                                $events->save();
+                                return response()->json(["message" => 'Request handled successfully']);
+                                // return response()->json(['message' => 'Request handled successfully']);
+                            } else {
+                                // Passwords do not match, handle invalid password
+                                // echo "Password Does Not Match";
+                                return response()->json(['error' => 'Invalid passcode'], 422);
+                            }
+                        }
+                }
+
+
+            }
+        }
+        elseif ($requester_role === 'professor')
+        {
+            $hashedPassword = Hash::make($password);
+            $hashedPasswordFromDatabase = Official::join('users', 'users.id', 'officials.user_id')->where('users.id', $user_id)->select('officials.hash')->first();
+            $hashOfOfficial = $hashedPasswordFromDatabase->hash;
+
+            if ($place === "Room")
+            {
+                $room = Room::join('events', 'rooms.id', 'events.room_id')->where('events.id', $event_id)->select('rooms.name')->first();
+                if($role === 'section_head')
+                {
+                    if ($hashedPasswordFromDatabase && Hash::check($password, $hashedPasswordFromDatabase->hash)) {
+                        // Passwords match, proceed with authentication logic
+                        // echo "Password Match";
+                        $users = User::find($user_id);
+                        $officials = Official::join('users', 'users.id', 'officials.user_id')->where('users.id', $user_id)->first();
+                        $events = Event::find($event_id);
+                        $events->sect_head = $officials->hash;
+                        $events->approved_sec_head_at = now();
+                        $events->status = "APPROVED";
+                        $events->color = "#31B4F2";
+                        $events->save();
+                        return response()->json(["message" => 'Request handled successfully']);
+                        // return response()->json(['message' => 'Request handled successfully']);
+                    } else {
+                        // Passwords do not match, handle invalid password
+                        // echo "Password Does Not Match";
+                        return response()->json(['error' => 'Invalid passcode'], 422);
                     }
-                elseif($role === 'atty')
+            
+                }
+            }
+            else
+            {
+                if($role === 'atty')
                     {
+                        // $userRequesterRole = 
                         if ($hashedPasswordFromDatabase && Hash::check($password, $hashedPasswordFromDatabase->hash)) {
                             // Passwords match, proceed with authentication logic
                             // echo "Password Match";
@@ -424,8 +668,7 @@ class RequestController extends Controller
                             $events = Event::find($event_id);
                             $events->atty = $officials->hash;
                             $events->approved_atty_at = now();
-                            $events->status = "APPROVED";
-                            $events->color = "#31B4F2";
+                            $events->updated_at = now();
                             $events->save();
                             return response()->json(["message" => 'Request handled successfully']);
                             // return response()->json(['message' => 'Request handled successfully']);
@@ -435,91 +678,70 @@ class RequestController extends Controller
                             return response()->json(['error' => 'Invalid passcode'], 422);
                         }
                     }
+                elseif($role === 'campus_director')
+                        {
+                            if ($hashedPasswordFromDatabase && Hash::check($password, $hashedPasswordFromDatabase->hash)) {
+                                // Passwords match, proceed with authentication logic
+                                // echo "Password Match";
+                                $users = User::find($user_id);
+                                $officials = Official::join('users', 'users.id', 'officials.user_id')->where('users.id', $user_id)->first();
+                                $events = Event::find($event_id);
+                                $events->campus_director = $officials->hash;
+                                $events->approved_campus_director_at = now();
+                                $events->updated_at = now();
+                                $events->status = "APPROVED";
+                                $events->color = "#31B4F2";
+                                $events->save();
+                                return response()->json(["message" => 'Request handled successfully']);
+                                // return response()->json(['message' => 'Request handled successfully']);
+                            } else {
+                                // Passwords do not match, handle invalid password
+                                // echo "Password Does Not Match";
+                                return response()->json(['error' => 'Invalid passcode'], 422);
+                            }
+                        }
+                
+
+
+            }
+        }
+        elseif ($requester_role === 'staff')
+        {
+            $hashedPassword = Hash::make($password);
+            $hashedPasswordFromDatabase = Official::join('users', 'users.id', 'officials.user_id')->where('users.id', $user_id)->select('officials.hash')->first();
+            $hashOfOfficial = $hashedPasswordFromDatabase->hash;
+
+            if ($place === "Room")
+            {
+                $room = Room::join('events', 'rooms.id', 'events.room_id')->where('events.id', $event_id)->select('rooms.name')->first();
+                if($role === 'section_head')
+                {
+                    if ($hashedPasswordFromDatabase && Hash::check($password, $hashedPasswordFromDatabase->hash)) {
+                        // Passwords match, proceed with authentication logic
+                        // echo "Password Match";
+                        $users = User::find($user_id);
+                        $officials = Official::join('users', 'users.id', 'officials.user_id')->where('users.id', $user_id)->first();
+                        $events = Event::find($event_id);
+                        $events->sect_head = $officials->hash;
+                        $events->approved_sec_head_at = now();
+                        $events->status = "APPROVED";
+                        $events->color = "#31B4F2";
+                        $events->save();
+                        return response()->json(["message" => 'Request handled successfully']);
+                        // return response()->json(['message' => 'Request handled successfully']);
+                    } else {
+                        // Passwords do not match, handle invalid password
+                        // echo "Password Does Not Match";
+                        return response()->json(['error' => 'Invalid passcode'], 422);
+                    }
+            
+                }
             }
             else
             {
-                if($role === 'org_adviser')
+                if($role === 'adaa')
                     {
-                        if ($hashedPasswordFromDatabase && Hash::check($password, $hashedPasswordFromDatabase->hash)) {
-                            // Passwords match, proceed with authentication logic
-                            // echo "Password Match";
-                            $users = User::find($user_id);
-                            $officials = Official::join('users', 'users.id', 'officials.user_id')->where('users.id', $user_id)->first();
-                            $events = Event::find($event_id);
-                            $events->org_adviser = $officials->hash;
-                            $events->approved_org_adviser_at = now();
-                            $events->save();
-                            return response()->json(["message" => 'Request handled successfully']);
-                            // return response()->json(['message' => 'Request handled successfully']);
-                        } else {
-                            // Passwords do not match, handle invalid password
-                            // echo "Password Does Not Match";
-                            return response()->json(['error' => 'Invalid passcode'], 422);
-                        }
-                
-                    }
-                elseif($role === 'section_head')
-                    {
-                        if ($hashedPasswordFromDatabase && Hash::check($password, $hashedPasswordFromDatabase->hash)) {
-                            // Passwords match, proceed with authentication logic
-                            // echo "Password Match";
-                            $users = User::find($user_id);
-                            $officials = Official::join('users', 'users.id', 'officials.user_id')->where('users.id', $user_id)->first();
-                            $events = Event::find($event_id);
-                            $events->sect_head = $officials->hash;
-                            $events->approved_sec_head_at = now();
-                            $events->save();
-                            return response()->json(["message" => 'Request handled successfully']);
-                            // return response()->json(['message' => 'Request handled successfully']);
-                        } else {
-                            // Passwords do not match, handle invalid password
-                            // echo "Password Does Not Match";
-                            return response()->json(['error' => 'Invalid passcode'], 422);
-                        }
-                
-                    }
-                elseif($role === 'department_head')
-                    {
-                        if ($hashedPasswordFromDatabase && Hash::check($password, $hashedPasswordFromDatabase->hash)) {
-                            // Passwords match, proceed with authentication logic
-                            // echo "Password Match";
-                            $users = User::find($user_id);
-                            $officials = Official::join('users', 'users.id', 'officials.user_id')->where('users.id', $user_id)->first();
-                            $events = Event::find($event_id);
-                            $events->dept_head = $officials->hash;
-                            $events->approved_dept_head_at = now();
-                            $events->updated_at = now();
-                            $events->save();
-                            return response()->json(["message" => 'Request handled successfully']);
-                            // return response()->json(['message' => 'Request handled successfully']);
-                        } else {
-                            // Passwords do not match, handle invalid password
-                            // echo "Password Does Not Match";
-                            return response()->json(['error' => 'Invalid passcode'], 422);
-                        }
-                    }
-                elseif($role === 'osa')
-                    {
-                        if ($hashedPasswordFromDatabase && Hash::check($password, $hashedPasswordFromDatabase->hash)) {
-                            // Passwords match, proceed with authentication logic
-                            // echo "Password Match";
-                            $users = User::find($user_id);
-                            $officials = Official::join('users', 'users.id', 'officials.user_id')->where('users.id', $user_id)->first();
-                            $events = Event::find($event_id);
-                            $events->osa = $officials->hash;
-                            $events->approved_osa_at = now();
-                            $events->updated_at = now();
-                            $events->save();
-                            return response()->json(["message" => 'Request handled successfully']);
-                            // return response()->json(['message' => 'Request handled successfully']);
-                        } else {
-                            // Passwords do not match, handle invalid password
-                            // echo "Password Does Not Match";
-                            return response()->json(['error' => 'Invalid passcode'], 422);
-                        }
-                    }
-                elseif($role === 'adaa')
-                    {
+                        // $userRequesterRole = 
                         if ($hashedPasswordFromDatabase && Hash::check($password, $hashedPasswordFromDatabase->hash)) {
                             // Passwords match, proceed with authentication logic
                             // echo "Password Match";
@@ -539,29 +761,35 @@ class RequestController extends Controller
                         }
                     }
                 elseif($role === 'campus_director')
-                    {
-                        if ($hashedPasswordFromDatabase && Hash::check($password, $hashedPasswordFromDatabase->hash)) {
-                            // Passwords match, proceed with authentication logic
-                            // echo "Password Match";
-                            $users = User::find($user_id);
-                            $officials = Official::join('users', 'users.id', 'officials.user_id')->where('users.id', $user_id)->first();
-                            $events = Event::find($event_id);
-                            $events->campus_director = $officials->hash;
-                            $events->approved_campus_director_at = now();
-                            $events->updated_at = now();
-                            $events->status = "APPROVED";
-                            $events->color = "#31B4F2";
-                            $events->save();
-                            return response()->json(["message" => 'Request handled successfully']);
-                            // return response()->json(['message' => 'Request handled successfully']);
-                        } else {
-                            // Passwords do not match, handle invalid password
-                            // echo "Password Does Not Match";
-                            return response()->json(['error' => 'Invalid passcode'], 422);
+                        {
+                            if ($hashedPasswordFromDatabase && Hash::check($password, $hashedPasswordFromDatabase->hash)) {
+                                // Passwords match, proceed with authentication logic
+                                // echo "Password Match";
+                                $users = User::find($user_id);
+                                $officials = Official::join('users', 'users.id', 'officials.user_id')->where('users.id', $user_id)->first();
+                                $events = Event::find($event_id);
+                                $events->campus_director = $officials->hash;
+                                $events->approved_campus_director_at = now();
+                                $events->updated_at = now();
+                                $events->status = "APPROVED";
+                                $events->color = "#31B4F2";
+                                $events->save();
+                                return response()->json(["message" => 'Request handled successfully']);
+                                // return response()->json(['message' => 'Request handled successfully']);
+                            } else {
+                                // Passwords do not match, handle invalid password
+                                // echo "Password Does Not Match";
+                                return response()->json(['error' => 'Invalid passcode'], 422);
+                            }
                         }
-                    }
+                
+
+
             }
         }
+        
+        
+        
         
         // return response()->json(["events" => $events]);
     }
@@ -748,6 +976,7 @@ class RequestController extends Controller
         $myRejectList = Event::leftjoin('venues','events.venue_id','venues.id')
                             ->orderBy('events.id')
                             ->where('rejected_by', $id)
+                            ->whereNull('events.room_id')
                             ->select('events.event_name',
                             'events.type',
                             'events.start_date',
@@ -888,12 +1117,12 @@ class RequestController extends Controller
             $myRejectList = Event::leftjoin('venues','events.venue_id','venues.id')
                                 ->leftjoin('organizations','organizations.id','events.target_org')
                                 ->leftjoin('departments','departments.id','events.target_dept')
-                                ->orderBy('events.id')
-                                ->whereNotNull('org_adviser')
-                                ->whereNotNull('sect_head')
-                                ->whereNotNull('dept_head')
-                                ->whereNotNull('osa')
+                                // ->whereNotNull('org_adviser')
+                                // ->whereNotNull('sect_head')
+                                // ->whereNotNull('dept_head')
+                                // ->whereNotNull('osa')
                                 ->whereNotNull('adaa')
+                                ->where('adaa', '!=', 'notnull')
                                 ->select('organizations.organization',
                                         'departments.department',
                                         'events.status',
@@ -905,6 +1134,7 @@ class RequestController extends Controller
                                         'events.type',
                                         'venues.name as venueName',
                                         'events.id')
+                                ->orderBy('events.id')
                                 ->get();
             return response()->json($myRejectList);
         }
@@ -914,13 +1144,13 @@ class RequestController extends Controller
                                 ->leftjoin('organizations','organizations.id','events.target_org')
                                 ->leftjoin('departments','departments.id','events.target_dept')
                                 ->orderBy('events.id')
-                                ->whereNotNull('org_adviser')
-                                ->whereNotNull('sect_head')
-                                ->whereNotNull('dept_head')
-                                ->whereNotNull('osa')
-                                ->whereNotNull('adaa')
+                                // ->whereNotNull('org_adviser')
+                                // ->whereNotNull('sect_head')
+                                // ->whereNotNull('dept_head')
+                                // ->whereNotNull('osa')
+                                // ->whereNotNull('adaa')
                                 ->whereNotNull('atty')
-                                ->where('venues.name', 'IT Auditorium')
+                                // ->where('venues.name', 'IT Auditorium')
                                 ->select('organizations.organization',
                                         'departments.department',
                                         'events.status',
@@ -933,6 +1163,7 @@ class RequestController extends Controller
                                         'venues.name as venueName',
                                         'events.id')
                                 ->get();
+            // dd($myRejectList);
             return response()->json($myRejectList);
         }
         elseif ($user_role === "campus_director")
@@ -941,13 +1172,8 @@ class RequestController extends Controller
                                 ->leftjoin('organizations','organizations.id','events.target_org')
                                 ->leftjoin('departments','departments.id','events.target_dept')
                                 ->orderBy('events.id')
-                                ->whereNotNull('org_adviser')
-                                ->whereNotNull('sect_head')
-                                ->whereNotNull('dept_head')
-                                ->whereNotNull('osa')
-                                ->whereNotNull('adaa')
                                 ->whereNotNull('campus_director')
-                                ->where('venues.name', '!=', 'IT Auditorium')
+                                // ->where('venues.name', '!=', 'IT Auditorium')
                                 ->select('organizations.organization',
                                         'departments.department',
                                         'events.status',
@@ -981,92 +1207,55 @@ class RequestController extends Controller
                         ->select('events.id',
                                 'students.section_id')
                         ->first();
+        $user = User::where('id',$events->user_id)->first();
+        $role = $user->role;
         $venues = Venue::find($events->venue_id);
         $rooms = Room::find($events->room_id);
+        
 
         $eventType = Event::leftjoin('venues', 'events.venue_id', '=', 'venues.id')
-                    ->leftJoin('rooms', 'events.room_id', '=', 'rooms.id')
-                    ->where('events.id', $id)
-                    ->select('venues.name as venue_name', 'rooms.name as room_name',
-                        \DB::raw('CASE
-                                    WHEN rooms.id IS NOT NULL THEN "Room"
-                                    ELSE "Venue"
-                                END AS event_type')
-                    )
-                    ->first();
+                            ->leftJoin('rooms', 'events.room_id', '=', 'rooms.id')
+                            ->where('events.id', $id)
+                            ->select('venues.name as venue_name', 'rooms.name as room_name',
+                                \DB::raw('CASE
+                                            WHEN rooms.id IS NOT NULL THEN "Room"
+                                            ELSE "Venue"
+                                        END AS event_type')
+                            )
+                            ->first();
         // dd($eventType->event_type);
         $place = $eventType->event_type;
-        $orgID = $events->target_org;
-        $deptID = $events->target_dept;
-        $sectID = $section->section_id;
-       
-        $official_org = Official::where('organization_id',$orgID)->first();
-        $official_dept = Official::where('department_id',$deptID)->first();
-        $official_section = Official::where('section_id',$sectID)->first();
-        // dd($official_dept);
 
-        $official_user = User::where('id',$official_org->user_id)->first(); // fetch the name of org adviser
-        $dept_user = User::where('id',$official_dept->user_id)->first();    // fetch the name of department head
-        $sect_user = User::where('id',$official_section->user_id)->first(); // fetch the name of section head
-        // $section_official = User::where('id',$)
-        // dd($dept_user);
-
-        // dd($events);
-        $rejectedBy = User::where('id',$events->rejected_by)->first();
-        // dd($rejectedBy);
-
-        $orgAdviser = $events->org_adviser;
-        $secHead = $events->sect_head;
-        $depHead = $events->dept_head;
-        $osa = $events->osa;
-        $adaa = $events->adaa;
-        $atty = $events->atty;
-        $cd = $events->campus_director;
-
-        $message = 'Your Request is on Process';
-        // dd($events->status);
-        if($place === 'Room')
+        if ($role === 'student')
         {
-            // dd($place);
-            if ($orgAdviser === null && $secHead === null && $depHead === null && $osa === null && $adaa === null && $atty === null)
-            {
-                // $appSecDate = $events->approved_sec_head_at;
-                $message = 'Your Request is on Process';
-                return response()->json(["msg" => $message, "status" => 200]);
-            }
-            elseif ($orgAdviser !== null && $secHead === null && $depHead === null && $osa === null && $adaa === null && $atty === null)
-            {
-                // $appSecDate = $events->approved_sec_head_at;
-                $approvalDates = [
-                    $events->approved_org_adviser_at,
-                ];
-                
-                $approvalMessage = [
-                    'APPROVED BY ORGANIZATION ADVISER: ' . $official_user->name,
-                ];
-                $pendingMsg = 'Waiting for Approval of Section Head';
-                return response()->json(["dates" => $approvalDates, "msg" => $approvalMessage, "pendingMsg" => $pendingMsg, "status" => 200]);
-            }
-            elseif ($orgAdviser !== null && $secHead !== null && $depHead === null && $osa === null && $adaa === null && $atty === null)
-            {
-                $approvalDates = [
-                    $events->approved_org_adviser_at,
-                    $events->approved_sec_head_at,
-                ];
-                
-                $approvalMessage = [
-                    'APPROVED BY ORGANIZATION ADVISER',
-                    'APPROVED BY SECTION HEAD OF IT',
-                ];
+            $orgID = $events->target_org;
+            $deptID = $events->target_dept;
+            $sectID = $section->section_id;
+        
+            $official_org = Official::where('organization_id',$orgID)->first();
+            $official_dept = Official::where('department_id',$deptID)->first();
+            $official_section = Official::where('section_id',$sectID)->first();
+            // dd($official_dept);
 
-                $pendingMsg = 'APPROVED';
-                return response()->json(["dates" => $approvalDates, "msg" => $approvalMessage, "pendingMsg" => $pendingMsg, "status" => 200]);
-            }
-        }
-        else
-        {
-            if($venues->name ==='IT Auditorium')
+            $official_user = User::where('id',$official_org->user_id)->first(); // fetch the name of org adviser
+            $dept_user = User::where('id',$official_dept->user_id)->first();    // fetch the name of department head
+            $sect_user = User::where('id',$official_section->user_id)->first(); // fetch the name of section head
+        
+            $rejectedBy = User::where('id',$events->rejected_by)->first();
+
+            $orgAdviser = $events->org_adviser;
+            $secHead = $events->sect_head;
+            $depHead = $events->dept_head;
+            $osa = $events->osa;
+            $adaa = $events->adaa;
+            $atty = $events->atty;
+            $cd = $events->campus_director;
+
+            $message = 'Your Request is on Process';
+            // dd($events->status);
+            if($place === 'Room')
             {
+                // dd($place);
                 if ($orgAdviser === null && $secHead === null && $depHead === null && $osa === null && $adaa === null && $atty === null)
                 {
                     // $appSecDate = $events->approved_sec_head_at;
@@ -1095,100 +1284,26 @@ class RequestController extends Controller
                     
                     $approvalMessage = [
                         'APPROVED BY ORGANIZATION ADVISER',
-                        'APPROVED BY SECTION HEAD',
+                        'APPROVED BY SECTION HEAD OF IT',
                     ];
 
-                    $pendingMsg = 'Waiting for Approval of Department Head';
-                    return response()->json(["dates" => $approvalDates, "msg" => $approvalMessage, "pendingMsg" => $pendingMsg, "status" => 200]);
-                }
-                elseif ($orgAdviser !== null && $secHead !== null && $depHead !== null && $osa === null && $adaa === null && $atty === null) 
-                {
-                    $approvalDates = [
-                        $events->approved_org_adviser_at,
-                        $events->approved_sec_head_at, 
-                        $events->approved_dept_head_at,
-                    ];
-                    
-                    $approvalMessage = [
-                        'APPROVED BY ORGANIZATION ADVISER',
-                        'APPROVED BY SECTION HEAD',
-                        'APPROVED BY DEPARTMENT HEAD',
-                    ];
-                    $pendingMsg = 'Waiting for Approval OSA';
-                    return response()->json(["dates" => $approvalDates, "msg" => $approvalMessage, "pendingMsg" => $pendingMsg, "status" => 200]);
-                }
-                elseif ($orgAdviser !== null && $secHead !== null && $depHead !== null && $osa !== null && $adaa === null && $atty === null) 
-                {
-                    $approvalDates = [
-                        $events->approved_org_adviser_at,
-                        $events->approved_sec_head_at, 
-                        $events->approved_dept_head_at,
-                        $events->approved_osa_at,
-                    ];
-                    
-                    $approvalMessage = [
-                        'APPROVED BY ORGANIZATION ADVISER',
-                        'APPROVED BY SECTION HEAD',
-                        'APPROVED BY DEPARTMENT HEAD',
-                        'APPROVED BY OSA',
-                    ];
-                    $pendingMsg = 'Waiting for Approval of ADAA';
-                    return response()->json(["dates" => $approvalDates, "msg" => $approvalMessage, "pendingMsg" => $pendingMsg, "status" => 200]);
-                    }
-                elseif ($orgAdviser !== null && $secHead !== null && $depHead !== null && $osa !== null && $adaa !== null && $atty === null) 
-                {
-                    $approvalDates = [
-                        $events->approved_org_adviser_at,
-                        $events->approved_sec_head_at, 
-                        $events->approved_dept_head_at,
-                        $events->approved_osa_at,
-                        $events->approved_adaa_at,
-                    ];
-                
-                    $approvalMessage = [
-                        'APPROVED BY ORGANIZATION ADVISER',
-                        'APPROVED BY SECTION HEAD',
-                        'APPROVED BY DEPARTMENT HEAD',
-                        'APPROVED BY OSA',
-                        'APPROVED BY ADAA',
-                    ];
-                    $pendingMsg = 'Waiting for approval of ATTY';
-                    return response()->json(["dates" => $approvalDates, "msg" => $approvalMessage, "pendingMsg" => $pendingMsg, "status" => 200]);
-                }
-                elseif ($orgAdviser !== null && $secHead !== null && $depHead !== null && $osa !== null && $adaa !== null && $atty !== null) 
-                {
-                    $approvalDates = [
-                        $events->approved_org_adviser_at,
-                        $events->approved_sec_head_at, 
-                        $events->approved_dept_head_at,
-                        $events->approved_osa_at,
-                        $events->approved_adaa_at,
-                        $events->approved_atty_at,
-                    ];
-                    
-                    $approvalMessage = [
-                        'APPROVED BY ORGANIZATION ADVISER',
-                        'APPROVED BY SECTION HEAD',
-                        'APPROVED BY DEPARTMENT HEAD',
-                        'APPROVED BY OSA',
-                        'APPROVED BY ADAA',
-                        'APPROVED BY ATTY',
-                    ];
                     $pendingMsg = 'APPROVED';
                     return response()->json(["dates" => $approvalDates, "msg" => $approvalMessage, "pendingMsg" => $pendingMsg, "status" => 200]);
                 }
             }
             else
             {
-                if ($events->status === 'PENDING' || $events->status ==='APPROVED') 
+                if($venues->name ==='IT Auditorium')
                 {
-                    if ($orgAdviser === null && $secHead === null && $depHead === null && $osa === null && $adaa === null && $cd === null)
+                    if ($orgAdviser === null && $secHead === null && $depHead === null && $osa === null && $adaa === null && $atty === null)
                     {
+                        // $appSecDate = $events->approved_sec_head_at;
                         $message = 'Your Request is on Process';
                         return response()->json(["msg" => $message, "status" => 200]);
                     }
-                    elseif ($orgAdviser !== null && $secHead === null && $depHead === null && $osa === null && $adaa === null && $cd === null)
+                    elseif ($orgAdviser !== null && $secHead === null && $depHead === null && $osa === null && $adaa === null && $atty === null)
                     {
+                        // $appSecDate = $events->approved_sec_head_at;
                         $approvalDates = [
                             $events->approved_org_adviser_at,
                         ];
@@ -1199,7 +1314,7 @@ class RequestController extends Controller
                         $pendingMsg = 'Waiting for Approval of Section Head';
                         return response()->json(["dates" => $approvalDates, "msg" => $approvalMessage, "pendingMsg" => $pendingMsg, "status" => 200]);
                     }
-                    elseif ($orgAdviser !== null && $secHead !== null && $depHead === null && $osa === null && $adaa === null && $cd === null)
+                    elseif ($orgAdviser !== null && $secHead !== null && $depHead === null && $osa === null && $adaa === null && $atty === null)
                     {
                         $approvalDates = [
                             $events->approved_org_adviser_at,
@@ -1207,14 +1322,14 @@ class RequestController extends Controller
                         ];
                         
                         $approvalMessage = [
-                            'APPROVED BY ORGANIZATION ADVISER: ' . $official_user->name,
+                            'APPROVED BY ORGANIZATION ADVISER',
                             'APPROVED BY SECTION HEAD',
                         ];
 
                         $pendingMsg = 'Waiting for Approval of Department Head';
                         return response()->json(["dates" => $approvalDates, "msg" => $approvalMessage, "pendingMsg" => $pendingMsg, "status" => 200]);
                     }
-                    elseif ($orgAdviser !== null && $secHead !== null && $depHead !== null && $osa === null && $adaa === null && $cd === null) 
+                    elseif ($orgAdviser !== null && $secHead !== null && $depHead !== null && $osa === null && $adaa === null && $atty === null) 
                     {
                         $approvalDates = [
                             $events->approved_org_adviser_at,
@@ -1223,14 +1338,14 @@ class RequestController extends Controller
                         ];
                         
                         $approvalMessage = [
-                            'APPROVED BY ORGANIZATION ADVISER: ' . $official_user->name,
+                            'APPROVED BY ORGANIZATION ADVISER',
                             'APPROVED BY SECTION HEAD',
                             'APPROVED BY DEPARTMENT HEAD',
                         ];
                         $pendingMsg = 'Waiting for Approval OSA';
                         return response()->json(["dates" => $approvalDates, "msg" => $approvalMessage, "pendingMsg" => $pendingMsg, "status" => 200]);
                     }
-                    elseif ($orgAdviser !== null && $secHead !== null && $depHead !== null && $osa !== null && $adaa === null && $cd === null) 
+                    elseif ($orgAdviser !== null && $secHead !== null && $depHead !== null && $osa !== null && $adaa === null && $atty === null) 
                     {
                         $approvalDates = [
                             $events->approved_org_adviser_at,
@@ -1240,15 +1355,15 @@ class RequestController extends Controller
                         ];
                         
                         $approvalMessage = [
-                            'APPROVED BY ORGANIZATION ADVISER: ' . $official_user->name,
+                            'APPROVED BY ORGANIZATION ADVISER',
                             'APPROVED BY SECTION HEAD',
                             'APPROVED BY DEPARTMENT HEAD',
                             'APPROVED BY OSA',
                         ];
                         $pendingMsg = 'Waiting for Approval of ADAA';
                         return response()->json(["dates" => $approvalDates, "msg" => $approvalMessage, "pendingMsg" => $pendingMsg, "status" => 200]);
-                    }
-                    elseif ($orgAdviser !== null && $secHead !== null && $depHead !== null && $osa !== null && $adaa !== null && $cd === null) 
+                        }
+                    elseif ($orgAdviser !== null && $secHead !== null && $depHead !== null && $osa !== null && $adaa !== null && $atty === null) 
                     {
                         $approvalDates = [
                             $events->approved_org_adviser_at,
@@ -1259,16 +1374,16 @@ class RequestController extends Controller
                         ];
                     
                         $approvalMessage = [
-                            'APPROVED BY ORGANIZATION ADVISER: ' . $official_user->name,
+                            'APPROVED BY ORGANIZATION ADVISER',
                             'APPROVED BY SECTION HEAD',
                             'APPROVED BY DEPARTMENT HEAD',
                             'APPROVED BY OSA',
                             'APPROVED BY ADAA',
                         ];
-                        $pendingMsg = 'Waiting for Approval of Campus Director';
+                        $pendingMsg = 'Waiting for approval of ATTY';
                         return response()->json(["dates" => $approvalDates, "msg" => $approvalMessage, "pendingMsg" => $pendingMsg, "status" => 200]);
                     }
-                    elseif ($orgAdviser !== null && $secHead !== null && $depHead !== null && $osa !== null && $adaa !== null && $cd !== null) 
+                    elseif ($orgAdviser !== null && $secHead !== null && $depHead !== null && $osa !== null && $adaa !== null && $atty !== null) 
                     {
                         $approvalDates = [
                             $events->approved_org_adviser_at,
@@ -1276,14 +1391,462 @@ class RequestController extends Controller
                             $events->approved_dept_head_at,
                             $events->approved_osa_at,
                             $events->approved_adaa_at,
+                            $events->approved_atty_at,
+                        ];
+                        
+                        $approvalMessage = [
+                            'APPROVED BY ORGANIZATION ADVISER',
+                            'APPROVED BY SECTION HEAD',
+                            'APPROVED BY DEPARTMENT HEAD',
+                            'APPROVED BY OSA',
+                            'APPROVED BY ADAA',
+                            'APPROVED BY ATTY',
+                        ];
+                        $pendingMsg = 'APPROVED';
+                        return response()->json(["dates" => $approvalDates, "msg" => $approvalMessage, "pendingMsg" => $pendingMsg, "status" => 200]);
+                    }
+                }
+                else
+                {
+                    if ($events->status === 'PENDING' || $events->status ==='APPROVED') 
+                    {
+                        if ($orgAdviser === null && $secHead === null && $depHead === null && $osa === null && $adaa === null && $cd === null)
+                        {
+                            $message = 'Your Request is on Process';
+                            return response()->json(["msg" => $message, "status" => 200]);
+                        }
+                        elseif ($orgAdviser !== null && $secHead === null && $depHead === null && $osa === null && $adaa === null && $cd === null)
+                        {
+                            $approvalDates = [
+                                $events->approved_org_adviser_at,
+                            ];
+                            
+                            $approvalMessage = [
+                                'APPROVED BY ORGANIZATION ADVISER: ' . $official_user->name,
+                            ];
+                            $pendingMsg = 'Waiting for Approval of Section Head';
+                            return response()->json(["dates" => $approvalDates, "msg" => $approvalMessage, "pendingMsg" => $pendingMsg, "status" => 200]);
+                        }
+                        elseif ($orgAdviser !== null && $secHead !== null && $depHead === null && $osa === null && $adaa === null && $cd === null)
+                        {
+                            $approvalDates = [
+                                $events->approved_org_adviser_at,
+                                $events->approved_sec_head_at,
+                            ];
+                            
+                            $approvalMessage = [
+                                'APPROVED BY ORGANIZATION ADVISER: ' . $official_user->name,
+                                'APPROVED BY SECTION HEAD',
+                            ];
+
+                            $pendingMsg = 'Waiting for Approval of Department Head';
+                            return response()->json(["dates" => $approvalDates, "msg" => $approvalMessage, "pendingMsg" => $pendingMsg, "status" => 200]);
+                        }
+                        elseif ($orgAdviser !== null && $secHead !== null && $depHead !== null && $osa === null && $adaa === null && $cd === null) 
+                        {
+                            $approvalDates = [
+                                $events->approved_org_adviser_at,
+                                $events->approved_sec_head_at, 
+                                $events->approved_dept_head_at,
+                            ];
+                            
+                            $approvalMessage = [
+                                'APPROVED BY ORGANIZATION ADVISER: ' . $official_user->name,
+                                'APPROVED BY SECTION HEAD',
+                                'APPROVED BY DEPARTMENT HEAD',
+                            ];
+                            $pendingMsg = 'Waiting for Approval OSA';
+                            return response()->json(["dates" => $approvalDates, "msg" => $approvalMessage, "pendingMsg" => $pendingMsg, "status" => 200]);
+                        }
+                        elseif ($orgAdviser !== null && $secHead !== null && $depHead !== null && $osa !== null && $adaa === null && $cd === null) 
+                        {
+                            $approvalDates = [
+                                $events->approved_org_adviser_at,
+                                $events->approved_sec_head_at, 
+                                $events->approved_dept_head_at,
+                                $events->approved_osa_at,
+                            ];
+                            
+                            $approvalMessage = [
+                                'APPROVED BY ORGANIZATION ADVISER: ' . $official_user->name,
+                                'APPROVED BY SECTION HEAD',
+                                'APPROVED BY DEPARTMENT HEAD',
+                                'APPROVED BY OSA',
+                            ];
+                            $pendingMsg = 'Waiting for Approval of ADAA';
+                            return response()->json(["dates" => $approvalDates, "msg" => $approvalMessage, "pendingMsg" => $pendingMsg, "status" => 200]);
+                        }
+                        elseif ($orgAdviser !== null && $secHead !== null && $depHead !== null && $osa !== null && $adaa !== null && $cd === null) 
+                        {
+                            $approvalDates = [
+                                $events->approved_org_adviser_at,
+                                $events->approved_sec_head_at, 
+                                $events->approved_dept_head_at,
+                                $events->approved_osa_at,
+                                $events->approved_adaa_at,
+                            ];
+                        
+                            $approvalMessage = [
+                                'APPROVED BY ORGANIZATION ADVISER: ' . $official_user->name,
+                                'APPROVED BY SECTION HEAD',
+                                'APPROVED BY DEPARTMENT HEAD',
+                                'APPROVED BY OSA',
+                                'APPROVED BY ADAA',
+                            ];
+                            $pendingMsg = 'Waiting for Approval of Campus Director';
+                            return response()->json(["dates" => $approvalDates, "msg" => $approvalMessage, "pendingMsg" => $pendingMsg, "status" => 200]);
+                        }
+                        elseif ($orgAdviser !== null && $secHead !== null && $depHead !== null && $osa !== null && $adaa !== null && $cd !== null) 
+                        {
+                            $approvalDates = [
+                                $events->approved_org_adviser_at,
+                                $events->approved_sec_head_at, 
+                                $events->approved_dept_head_at,
+                                $events->approved_osa_at,
+                                $events->approved_adaa_at,
+                                $events->approved_campus_director_at,
+                            ];
+                        
+                            $approvalMessage = [
+                                'APPROVED BY ORGANIZATION ADVISER: ' . $official_user->name,
+                                'APPROVED BY SECTION HEAD',
+                                'APPROVED BY DEPARTMENT HEAD',
+                                'APPROVED BY OSA',
+                                'APPROVED BY ADAA',
+                                'APPROVED BY CAMPUS DIRECTOR',
+                            ];
+                            
+                            $pendingMsg = 'APPROVED';
+                            return response()->json(["dates" => $approvalDates, "msg" => $approvalMessage, "pendingMsg" => $pendingMsg, "status" => 200]);
+                        }
+                    }
+                    else if($events->status === 'REJECTED')
+                    {
+                        // dd($events->remarks_sec_head);
+                        if ($events->remarks_org_adviser !== null)
+                        {
+                            $message = 'Your Request is Rejected By Organization Adviser';
+                            // return response()->json(["msg" => $message, "status" => 200]);
+                            $rejectedDates = [
+                                $events->updated_at,
+                            ];
+                        
+                            $approvalMessage = [
+                                'REJECTED BY ORGANIZATION ADVISER: ' . $rejectedBy->name. '<br>Reason: ' . $events->remarks_org_adviser,
+                            ];
+                            $pendingMsg = 'REJECTED';
+                            return response()->json(["dates" => $rejectedDates, "msg" => $approvalMessage, "pendingMsg" => $pendingMsg, "status" => 200]);
+                        }
+                        else if($events->remarks_sec_head !== null){
+                            $message = 'Your Request is Rejected By Section Head';
+                            // return response()->json(["msg" => $message, "status" => 200]);
+                            $rejectedDates = [
+                                $events->approved_org_adviser_at,
+                                $events->updated_at,
+                            ];
+                        
+                            $approvalMessage = [
+                                'APPROVED BY ORGANIZATION ADVISER: ' . $official_user->name,
+                                'REJECTED BY SECTION HEAD: ' . $rejectedBy->name . '<br>Reason: ' . $events->remarks_sec_head,
+                            ];
+                            $pendingMsg = 'REJECTED';
+                            return response()->json(["dates" => $rejectedDates, "msg" => $approvalMessage, "pendingMsg" => $pendingMsg, "status" => 200]);
+                        }
+                        else if($events->remarks_dept_head !== null){
+                            $message = 'Your Request is Rejected By Department Head';
+                            // return response()->json(["msg" => $message, "status" => 200]);
+                            $rejectedDates = [
+                                $events->approved_org_adviser_at,
+                                $events->approved_sec_head_at,
+                                $events->updated_at,
+                            ];
+                        
+                            $approvalMessage = [
+                                'APPROVED BY ORGANIZATION ADVISER: ' . $official_user->name,
+                                'APPROVED BY SECTION HEAD: ' . $sect_user->name,
+                                'REJECTED BY DEPARTMENT HEAD: ' . $rejectedBy->name . '<br>Reason: ' . $events->remarks_dept_head,
+                            ];
+                            $pendingMsg = 'REJECTED';
+                            return response()->json(["dates" => $rejectedDates, "msg" => $approvalMessage, "pendingMsg" => $pendingMsg, "status" => 200]);
+                        }
+                        else if($events->remarks_osa !== null){
+                            $message = 'Your Request is Rejected By OSA';
+                            // return response()->json(["msg" => $message, "status" => 200]);
+                            $rejectedDates = [
+                                $events->approved_org_adviser_at,
+                                $events->approved_sec_head_at,
+                                $events->approved_dept_head_at,
+                                $events->updated_at,
+                            ];
+                        
+                            $approvalMessage = [
+                                'APPROVED BY ORGANIZATION ADVISER: ' . $official_user->name,
+                                'APPROVED BY SECTION HEAD: ' . $sect_user->name,
+                                'APPROVED BY DEPARTMENT HEAD: ' . $dept_user->name,
+                                'REJECTED BY OSA' .'<br>Reason: '. $events->remarks_osa
+                            ];
+                            $pendingMsg = 'REJECTED';
+                            return response()->json(["dates" => $rejectedDates, "msg" => $approvalMessage, "pendingMsg" => $pendingMsg, "status" => 200]);
+                        }   
+                        else if($events->remarks_adaa !== null){
+                            $message = 'Your Request is Rejected By ADAA';
+                            // return response()->json(["msg" => $message, "status" => 200]);
+                            $rejectedDates = [
+                                $events->approved_org_adviser_at,
+                                $events->approved_sec_head_at,
+                                $events->approved_dept_head_at,
+                                $events->updated_at,
+                            ];
+                        
+                            $approvalMessage = [
+                                'APPROVED BY ORGANIZATION ADVISER: ' . $official_user->name,
+                                'APPROVED BY SECTION HEAD: ' . $sect_user->name,
+                                'APPROVED BY DEPARTMENT HEAD: ' . $dept_user->name,
+                                'APPROVED BY OSA',
+                                'REJECTED BY ADAA' .'<br>Reason: '. $events->remarks_adaa
+                            ];
+                            $pendingMsg = 'REJECTED';
+                            return response()->json(["dates" => $rejectedDates, "msg" => $approvalMessage, "pendingMsg" => $pendingMsg, "status" => 200]);
+                        }
+                        else if($events->remarks_atty !== null){
+                            $message = 'Your Request is Rejected By ADAF';
+                            // return response()->json(["msg" => $message, "status" => 200]);
+                            $rejectedDates = [
+                                $events->approved_org_adviser_at,
+                                $events->approved_sec_head_at,
+                                $events->approved_dept_head_at,
+                                $events->updated_at,
+                            ];
+                        
+                            $approvalMessage = [
+                                'APPROVED BY ORGANIZATION ADVISER: ' . $official_user->name,
+                                'APPROVED BY SECTION HEAD: ' . $sect_user->name,
+                                'APPROVED BY DEPARTMENT HEAD: ' . $dept_user->name,
+                                'APPROVED BY OSA',
+                                'APPROVED BY ADAA',
+                                'REJECTED BY ADAF' .'<br>Reason: '. $events->remarks_atty
+                            ];
+                            $pendingMsg = 'REJECTED';
+                            return response()->json(["dates" => $rejectedDates, "msg" => $approvalMessage, "pendingMsg" => $pendingMsg, "status" => 200]);
+                        }
+                        else if($events->remarks_campus_director !== null){
+                            $message = 'Your Request is Rejected By Campus Director';
+                            // return response()->json(["msg" => $message, "status" => 200]);
+                            $rejectedDates = [
+                                $events->approved_org_adviser_at,
+                                $events->approved_sec_head_at,
+                                $events->approved_dept_head_at,
+                                $events->approved_osa_at,
+                                $events->approved_adaa_at,
+                                $events->updated_at,
+                            ];
+                        
+                            $approvalMessage = [
+                                'APPROVED BY ORGANIZATION ADVISER: ' . $official_user->name,
+                                'APPROVED BY SECTION HEAD: ' . $sect_user->name,
+                                'APPROVED BY DEPARTMENT HEAD: ' . $dept_user->name,
+                                'APPROVED BY OSA',
+                                'APPROVED BY ADAA',
+                                'REJECTED BY CAMPUS DIRECTOR' .'<br>Reason: '. $events->remarks_campus_director
+                            ];
+                            $pendingMsg = 'REJECTED';
+                            return response()->json(["dates" => $rejectedDates, "msg" => $approvalMessage, "pendingMsg" => $pendingMsg, "status" => 200]);
+                        }
+                        
+                    }
+                    
+                }
+            }
+        }
+        elseif ($role === 'professor')
+        {
+            $sec_head = $events->sect_head;
+            $adaa = $events->adaa;
+            $atty = $events->atty;
+            $cd = $events->campus_director;
+
+            $message = 'Your Request is on Process';
+            // dd($events->status);
+            if($place === 'Room')
+            {
+                if ($events->status === 'PENDING' || $events->status ==='APPROVED') 
+                {
+                    if ($sec_head === null){
+                        $message = 'Waiting for approval of section head of IT';
+                        return response()->json(["pendingMsg" => $message, "status" => 200]);
+                    }
+                    else{
+                        $approvalDates = [
+                            $events->approved_sec_head_at,
+                        ];
+                        
+                        $approvalMessage = [
+                            'APPROVED BY SECTION HEAD OF IT',
+                        ];
+                        $pendingMsg = 'APPROVED';
+                        return response()->json(["dates" => $approvalDates, "msg" => $approvalMessage, "pendingMsg" => $pendingMsg, "status" => 200]);
+                    }
+
+                }
+                else if($events->status === 'REJECTED')
+                {
+                    $message = 'Your Request is Rejected By ADAF';
+                    // return response()->json(["msg" => $message, "status" => 200]);
+                    $rejectedDates = [
+                        $events->updated_at,
+                    ];
+                
+                    $approvalMessage = [
+                        'REJECTED BY ADAF',
+                    ];
+                    $pendingMsg = 'REJECTED';
+                    return response()->json(["dates" => $rejectedDates, "msg" => $approvalMessage, "pendingMsg" => $pendingMsg, "status" => 200]);
+                }
+            }
+            else
+            {
+                if ($events->status === 'PENDING' || $events->status ==='APPROVED') 
+                {
+                    if ($atty === null && $cd === null)
+                    {
+                        $message = 'Your Request is on Process';
+                        return response()->json(["msg" => $message, "status" => 200]);
+                    }
+                    elseif ($atty !== null && $cd === null) 
+                    {
+                        $approvalDates = [
+                            $events->approved_atty_at,
+                        ];
+                        
+                        $approvalMessage = [
+                            'APPROVED BY ADAF',
+                        ];
+                        $pendingMsg = 'Waiting for Approval of Campus Director';
+                        return response()->json(["dates" => $approvalDates, "msg" => $approvalMessage, "pendingMsg" => $pendingMsg, "status" => 200]);
+                    }
+                    elseif ($atty !== null && $cd !== null) 
+                    {
+                        $approvalDates = [
+                            $events->approved_atty_at,
                             $events->approved_campus_director_at,
                         ];
                     
                         $approvalMessage = [
-                            'APPROVED BY ORGANIZATION ADVISER: ' . $official_user->name,
-                            'APPROVED BY SECTION HEAD',
-                            'APPROVED BY DEPARTMENT HEAD',
-                            'APPROVED BY OSA',
+                            'APPROVED BY ADAF',
+                            'APPROVED BY CAMPUS DIRECTOR',
+                        ];
+                        
+                        $pendingMsg = 'APPROVED';
+                        return response()->json(["dates" => $approvalDates, "msg" => $approvalMessage, "pendingMsg" => $pendingMsg, "status" => 200]);
+                    }
+                }
+                else if($events->status === 'REJECTED')
+                {
+                    // dd($events->remarks_sec_head);
+                    if ($events->remarks_atty !== null)
+                    {
+                        $message = 'Your Request is Rejected By ADAF';
+                        // return response()->json(["msg" => $message, "status" => 200]);
+                        $rejectedDates = [
+                            $events->updated_at,
+                        ];
+                    
+                        $approvalMessage = [
+                            'REJECTED BY ADAF',
+                        ];
+                        $pendingMsg = 'REJECTED';
+                        return response()->json(["dates" => $rejectedDates, "msg" => $approvalMessage, "pendingMsg" => $pendingMsg, "status" => 200]);
+                    }
+                    else if($events->remarks_campus_director !== null){
+                        $message = 'Your Request is Rejected By Campus Director';
+                        // return response()->json(["msg" => $message, "status" => 200]);
+                        $rejectedDates = [
+                            $events->approved_atty_at,
+                            $events->updated_at,
+                        ];
+                    
+                        $approvalMessage = [
+                            'APPROVED BY ADAF ',
+                            'REJECTED BY CAMPUS DIRECTOR ',
+                        ];
+                        $pendingMsg = 'REJECTED';
+                        return response()->json(["dates" => $rejectedDates, "msg" => $approvalMessage, "pendingMsg" => $pendingMsg, "status" => 200]);
+                    }
+                }
+            }
+        }   
+        elseif ($role === 'staff')
+        {
+            $adaa = $events->adaa;
+            $cd = $events->campus_director;
+
+            $message = 'Your Request is on Process';
+            // dd($events->status);
+            if($place === 'Room')
+            {
+                if ($events->status === 'PENDING' || $events->status ==='APPROVED') 
+                {
+                    if ($sec_head === null){
+                        $message = 'Waiting for approval of section head of IT';
+                        return response()->json(["pendingMsg" => $message, "status" => 200]);
+                    }
+                    else{
+                        $approvalDates = [
+                            $events->approved_sec_head_at,
+                        ];
+                        
+                        $approvalMessage = [
+                            'APPROVED BY SECTION HEAD OF IT',
+                        ];
+                        $pendingMsg = 'APPROVED';
+                        return response()->json(["dates" => $approvalDates, "msg" => $approvalMessage, "pendingMsg" => $pendingMsg, "status" => 200]);
+                    }
+
+                }
+                else if($events->status === 'REJECTED')
+                {
+                    $message = 'Your Request is Rejected By ADAF';
+                    // return response()->json(["msg" => $message, "status" => 200]);
+                    $rejectedDates = [
+                        $events->updated_at,
+                    ];
+                
+                    $approvalMessage = [
+                        'REJECTED BY ADAF',
+                    ];
+                    $pendingMsg = 'REJECTED';
+                    return response()->json(["dates" => $rejectedDates, "msg" => $approvalMessage, "pendingMsg" => $pendingMsg, "status" => 200]);
+                }
+            }
+            else
+            {
+                if ($events->status === 'PENDING' || $events->status ==='APPROVED') 
+                {
+                    if ($adaa === null && $cd === null)
+                    {
+                        $message = 'Your Request is on Process';
+                        return response()->json(["msg" => $message, "status" => 200]);
+                    }
+                    elseif ($adaa !== null && $cd === null) 
+                    {
+                        $approvalDates = [
+                            $events->approved_adaa_at,
+                        ];
+                        
+                        $approvalMessage = [
+                            'APPROVED BY ADAA',
+                        ];
+                        $pendingMsg = 'Waiting for Approval of Campus Director';
+                        return response()->json(["dates" => $approvalDates, "msg" => $approvalMessage, "pendingMsg" => $pendingMsg, "status" => 200]);
+                    }
+                    elseif ($adaa !== null && $cd !== null) 
+                    {
+                        $approvalDates = [
+                            $events->approved_adaa_at,
+                            $events->approved_campus_director_at,
+                        ];
+                    
+                        $approvalMessage = [
                             'APPROVED BY ADAA',
                             'APPROVED BY CAMPUS DIRECTOR',
                         ];
@@ -1295,108 +1858,16 @@ class RequestController extends Controller
                 else if($events->status === 'REJECTED')
                 {
                     // dd($events->remarks_sec_head);
-                    if ($events->remarks_org_adviser !== null)
+                    if ($events->remarks_adaa !== null)
                     {
-                        $message = 'Your Request is Rejected By Organization Adviser';
-                        // return response()->json(["msg" => $message, "status" => 200]);
-                        $rejectedDates = [
-                            $events->updated_at,
-                        ];
-                    
-                        $approvalMessage = [
-                            'REJECTED BY ORGANIZATION ADVISER: ' . $rejectedBy->name. '<br>Reason: ' . $events->remarks_org_adviser,
-                        ];
-                        $pendingMsg = 'REJECTED';
-                        return response()->json(["dates" => $rejectedDates, "msg" => $approvalMessage, "pendingMsg" => $pendingMsg, "status" => 200]);
-                    }
-                    else if($events->remarks_sec_head !== null){
-                        $message = 'Your Request is Rejected By Section Head';
-                        // return response()->json(["msg" => $message, "status" => 200]);
-                        $rejectedDates = [
-                            $events->approved_org_adviser_at,
-                            $events->updated_at,
-                        ];
-                    
-                        $approvalMessage = [
-                            'APPROVED BY ORGANIZATION ADVISER: ' . $official_user->name,
-                            'REJECTED BY SECTION HEAD: ' . $rejectedBy->name . '<br>Reason: ' . $events->remarks_sec_head,
-                        ];
-                        $pendingMsg = 'REJECTED';
-                        return response()->json(["dates" => $rejectedDates, "msg" => $approvalMessage, "pendingMsg" => $pendingMsg, "status" => 200]);
-                    }
-                    else if($events->remarks_dept_head !== null){
-                        $message = 'Your Request is Rejected By Department Head';
-                        // return response()->json(["msg" => $message, "status" => 200]);
-                        $rejectedDates = [
-                            $events->approved_org_adviser_at,
-                            $events->approved_sec_head_at,
-                            $events->updated_at,
-                        ];
-                    
-                        $approvalMessage = [
-                            'APPROVED BY ORGANIZATION ADVISER: ' . $official_user->name,
-                            'APPROVED BY SECTION HEAD: ' . $sect_user->name,
-                            'REJECTED BY DEPARTMENT HEAD: ' . $rejectedBy->name . '<br>Reason: ' . $events->remarks_dept_head,
-                        ];
-                        $pendingMsg = 'REJECTED';
-                        return response()->json(["dates" => $rejectedDates, "msg" => $approvalMessage, "pendingMsg" => $pendingMsg, "status" => 200]);
-                    }
-                    else if($events->remarks_osa !== null){
-                        $message = 'Your Request is Rejected By OSA';
-                        // return response()->json(["msg" => $message, "status" => 200]);
-                        $rejectedDates = [
-                            $events->approved_org_adviser_at,
-                            $events->approved_sec_head_at,
-                            $events->approved_dept_head_at,
-                            $events->updated_at,
-                        ];
-                    
-                        $approvalMessage = [
-                            'APPROVED BY ORGANIZATION ADVISER: ' . $official_user->name,
-                            'APPROVED BY SECTION HEAD: ' . $sect_user->name,
-                            'APPROVED BY DEPARTMENT HEAD: ' . $dept_user->name,
-                            'REJECTED BY OSA' .'<br>Reason: '. $events->remarks_osa
-                        ];
-                        $pendingMsg = 'REJECTED';
-                        return response()->json(["dates" => $rejectedDates, "msg" => $approvalMessage, "pendingMsg" => $pendingMsg, "status" => 200]);
-                    }   
-                    else if($events->remarks_adaa !== null){
                         $message = 'Your Request is Rejected By ADAA';
                         // return response()->json(["msg" => $message, "status" => 200]);
                         $rejectedDates = [
-                            $events->approved_org_adviser_at,
-                            $events->approved_sec_head_at,
-                            $events->approved_dept_head_at,
                             $events->updated_at,
                         ];
                     
                         $approvalMessage = [
-                            'APPROVED BY ORGANIZATION ADVISER: ' . $official_user->name,
-                            'APPROVED BY SECTION HEAD: ' . $sect_user->name,
-                            'APPROVED BY DEPARTMENT HEAD: ' . $dept_user->name,
-                            'APPROVED BY OSA',
-                            'REJECTED BY ADAA' .'<br>Reason: '. $events->remarks_adaa
-                        ];
-                        $pendingMsg = 'REJECTED';
-                        return response()->json(["dates" => $rejectedDates, "msg" => $approvalMessage, "pendingMsg" => $pendingMsg, "status" => 200]);
-                    }
-                    else if($events->remarks_atty !== null){
-                        $message = 'Your Request is Rejected By ADAF';
-                        // return response()->json(["msg" => $message, "status" => 200]);
-                        $rejectedDates = [
-                            $events->approved_org_adviser_at,
-                            $events->approved_sec_head_at,
-                            $events->approved_dept_head_at,
-                            $events->updated_at,
-                        ];
-                    
-                        $approvalMessage = [
-                            'APPROVED BY ORGANIZATION ADVISER: ' . $official_user->name,
-                            'APPROVED BY SECTION HEAD: ' . $sect_user->name,
-                            'APPROVED BY DEPARTMENT HEAD: ' . $dept_user->name,
-                            'APPROVED BY OSA',
-                            'APPROVED BY ADAA',
-                            'REJECTED BY ADAF' .'<br>Reason: '. $events->remarks_atty
+                            'REJECTED BY ADAA',
                         ];
                         $pendingMsg = 'REJECTED';
                         return response()->json(["dates" => $rejectedDates, "msg" => $approvalMessage, "pendingMsg" => $pendingMsg, "status" => 200]);
@@ -1405,30 +1876,25 @@ class RequestController extends Controller
                         $message = 'Your Request is Rejected By Campus Director';
                         // return response()->json(["msg" => $message, "status" => 200]);
                         $rejectedDates = [
-                            $events->approved_org_adviser_at,
-                            $events->approved_sec_head_at,
-                            $events->approved_dept_head_at,
-                            $events->approved_osa_at,
                             $events->approved_adaa_at,
                             $events->updated_at,
                         ];
                     
                         $approvalMessage = [
-                            'APPROVED BY ORGANIZATION ADVISER: ' . $official_user->name,
-                            'APPROVED BY SECTION HEAD: ' . $sect_user->name,
-                            'APPROVED BY DEPARTMENT HEAD: ' . $dept_user->name,
-                            'APPROVED BY OSA',
-                            'APPROVED BY ADAA',
-                            'REJECTED BY CAMPUS DIRECTOR' .'<br>Reason: '. $events->remarks_campus_director
+                            'APPROVED BY ADAA ',
+                            'REJECTED BY CAMPUS DIRECTOR ',
                         ];
                         $pendingMsg = 'REJECTED';
                         return response()->json(["dates" => $rejectedDates, "msg" => $approvalMessage, "pendingMsg" => $pendingMsg, "status" => 200]);
                     }
-                    
                 }
-                
             }
         }
+        else
+        {
+
+        }     
+        
 
     }
 
@@ -1440,8 +1906,8 @@ class RequestController extends Controller
     $events = Event::find($id);
     $venues = Venue::find($events->venue_id);
     $rooms = Room::find($events->room_id);
-    // dd($events);
-    $orgAdviser = $events->org_adviser;
+    $users = User::where('id',$events->user_id)->first();
+    $orgAdviser = $events->org_adviser; 
     $secHead = $events->sect_head;
     $depHead = $events->dept_head;
     $osa = $events->osa;
@@ -1465,7 +1931,7 @@ class RequestController extends Controller
     // Initialize $Message with a default value
     $Message = 'No approval status available.';
     // dd($events->status);
-    if ($events->status === 'PENDING')
+    if ($events->status === 'PENDING' && $users->role === 'student')
     {
         if($orgAdviser === null && $secHead === null && $depHead === null && $osa === null && $adaa === null && $atty === null && $cd === null)
         {
@@ -1493,6 +1959,48 @@ class RequestController extends Controller
             $Message = 'Waiting for approval of ATTY';
         }
         elseif ($cd === null && $venues->name !== 'IT Auditorium')
+        {
+            // $approvedAttyMsg = 'APPROVED BY ATTY';
+            $Message = 'Waiting for approval of Campus Director';
+        }
+        else
+        {
+            $approvedCampDirectorDate = $events->approved_campus_director_at;
+            $approvedCampDirectorMsg = 'APPROVED BY CAMPUS DIRECTOR';
+            $Message = 'APPROVED';
+            $events->status = "APPROVED";
+            $events->save();
+        }
+    }
+    else if ($events->status === 'PENDING' && $users->role === 'professor')
+    {
+        if ($atty === null && $cd === null)
+        {
+            // $approvedAdaaMsg = 'APPROVED BY ADAA';
+            $Message = 'Waiting for approval of ATTY';
+        }
+        elseif ($cd === null)
+        {
+            // $approvedAttyMsg = 'APPROVED BY ATTY';
+            $Message = 'Waiting for approval of Campus Director';
+        }
+        else
+        {
+            $approvedCampDirectorDate = $events->approved_campus_director_at;
+            $approvedCampDirectorMsg = 'APPROVED BY CAMPUS DIRECTOR';
+            $Message = 'APPROVED';
+            $events->status = "APPROVED";
+            $events->save();
+        }
+    }
+    else if ($events->status === 'PENDING' && $users->role === 'staff')
+    {
+        if ($adaa === null && $cd === null)
+        {
+            // $approvedAdaaMsg = 'APPROVED BY ADAA';
+            $Message = 'Waiting for approval of ADAA';
+        }
+        elseif ($cd === null)
         {
             // $approvedAttyMsg = 'APPROVED BY ATTY';
             $Message = 'Waiting for approval of Campus Director';

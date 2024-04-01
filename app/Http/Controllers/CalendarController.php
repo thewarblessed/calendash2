@@ -127,6 +127,8 @@ class CalendarController extends Controller
                                 'users.role',
                                 'users.name as eventOrganizerName',
                                 'rooms.name as roomName',
+                                'events.feedback_image',
+                                'events.type',
                                 'events.id')
                         ->get();
         // dd($events);

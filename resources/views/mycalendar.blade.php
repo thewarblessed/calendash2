@@ -80,35 +80,60 @@
                         },
                         success: function(response) {
                             var data = response;
-                            // console.log(data)
+                            console.log(data);
+                            console.log(data.type);
+
+
+                            var startTime = '';
+                            if (data.type === 'whole_day') {
+                                startTime = 'Whole Day';
+                            } 
+                            else if (data.type === 'whole_week') {
+                                startTime = 'Whole Week';
+                            }
+                            else if (data.type === 'within_day') {
+                                startTime = info.event.start.toLocaleTimeString([], {
+                                    hour: '2-digit',
+                                    minute: '2-digit'
+                                });
+                            }
+
+                            // Determine end time based on data.type
+                            var endTime = '';
+                            if (data.type === 'whole_day') {
+                                endTime = 'Whole Day';
+                            } 
+                            else if (data.type === 'whole_week') {
+                                endTime = 'Whole Week';
+                            }
+                            else if (data.type === 'within_day') {
+                                endTime = info.event.end.toLocaleTimeString([], {
+                                    hour: '2-digit',
+                                    minute: '2-digit'
+                                });
+                            }
+
                             // Handle the successful response from the server
                             Swal.fire({
-                            title: 'Event Details',
-                            html: '<div style="text-align: center;"><img src="https://www.investopedia.com/thmb/hJrIBjjMBGfx0oa_bHAgZ9AWyn0=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/qr-code-bc94057f452f4806af70fd34540f72ad.png" style="width: 100px; height: 100px; margin: 0 auto; display: block;"><p>QR Code of Feedback Form</p></div>' +
-                                'Status: <strong style="color: ' + (info.event.extendedProps.status === 'PENDING' ? '#D6AD60' : 'green') + '">' + info.event.extendedProps.status +
-                                '</strong><br>' +
-                                'Event: <strong>' + info.event.title + '</strong><br>' +
-                                'Event Organizer: <strong>' + data.eventOrganizerName + '</strong><br>' +
-                                'Start Time: <strong>' + info.event.start
-                                .toLocaleTimeString([], {
-                                    hour: '2-digit',
-                                    minute: '2-digit'
-                                }) + '</strong><br>' +
-                                'End Time: <strong>' + info.event.end
-                                .toLocaleTimeString([], {
-                                    hour: '2-digit',
-                                    minute: '2-digit'
-                                }) + '</strong><br>' +
-                                'Location: <strong>' + (data.roomName ? data.roomName : (data.venueName ? data.venueName : 'Unknown')) + '</strong><br>' +
-                                'Organization: <strong>' + (data.role === 'professor' ? 'FACULTY' : (data.role === 'staff' ? 'STAFF/ADMIN' : (data.role === 'student' ? data.organization : (data.role === 'outsider' ? 'OUTSIDER' : 'UNKNOWN')))) + '</strong><br>' +
-                                'Department: <strong>' + (data.role === 'professor' ? 'FACULTY' : (data.role === 'staff' ? 'STAFF/ADMIN' : (data.role === 'student' ? data.department : (data.role === 'outsider' ? 'OUTSIDER' : 'UNKNOWN')))) + '</strong>',   
-                            showCloseButton: true,
-                            showConfirmButton: false,
-                        });
+                                title: 'Event Details',
+                                html: '<div style="text-align: center;"><img src="https://api.qrserver.com/v1/create-qr-code/?data=' + data.feedback_image + '&amp;size=100x100" style="width: 100px; height: 100px; margin: 0 auto; display: block;"><p>QR Code of Feedback Form</p></div>' +
+                                    'Status: <strong style="color: ' + (info.event.extendedProps.status === 'PENDING' ? '#D6AD60' : 'green') + '">' + info.event.extendedProps.status +
+                                    '</strong><br>' +
+                                    'Event: <strong>' + info.event.title + '</strong><br>' +
+                                    'Event Organizer: <strong>' + data.eventOrganizerName + '</strong><br>' +
+                                    'Start Time: <strong>' + startTime + '</strong><br>' +
+                                    'End Time: <strong>' + endTime + '</strong><br>' +
+                                    'Location: <strong>' + (data.roomName ? data.roomName : (data.venueName ? data.venueName : 'Unknown')) + '</strong><br>' +
+                                    'Organization: <strong>' + (data.role === 'professor' ? 'FACULTY' : (data.role === 'staff' ? 'STAFF/ADMIN' : (data.role === 'student' ? data.organization : (data.role === 'outsider' ? 'OUTSIDER' : 'UNKNOWN')))) + '</strong><br>' +
+                                    'Department: <strong>' + (data.role === 'professor' ? 'FACULTY' : (data.role === 'staff' ? 'STAFF/ADMIN' : (data.role === 'student' ? data.department : (data.role === 'outsider' ? 'OUTSIDER' : 'UNKNOWN')))) + '</strong>',
+                                showCloseButton: true,
+                                showConfirmButton: false,
+                            });
                         },
                         error: function(xhr, status, error) {
                             // Handle errors
                             console.error('Error fetching event data:', error);
+                            console.log('Error fetching event data:', error);
                         }
                     });
                     info.el.style.borderColor = 'red';

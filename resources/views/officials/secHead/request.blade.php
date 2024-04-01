@@ -9,47 +9,12 @@
                         <div class="card-header border-bottom pb-0">
                             <div class="" style="text-align: center">
                                 <div>
-                                    <strong><h3>Events list</h3></strong>
+                                    <strong><h3>Event Requests list</h3></strong>
                                     <p class="text-sm">See information about all events</p>
                                 </div>
                             </div>
                         </div>
                         <div class="card-body px-0 py-0">
-                            <div class="border-bottom py-3 px-3 d-sm-flex align-items-center">
-                                <form id="radioForm">
-                                    <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
-                                        
-                                        <input type="radio" class="btn-check" name="btnradiotable" id="btnradiotable1" value="PENDING"
-                                            autocomplete="off" >
-                                        <label class="btn btn-white px-3 mb-0" for="btnradiotable1">Pending</label>
-
-                                        <input type="radio" class="btn-check" name="btnradiotable" id="btnradiotable2" value="appByMe"
-                                            autocomplete="off">
-                                        <label class="btn btn-white px-3 mb-0" for="btnradiotable2">Approved by Me</label>
-
-                                        <input type="radio" class="btn-check" name="btnradiotable" id="btnradiotable3" value="APPROVED"
-                                            autocomplete="off">
-                                        <label class="btn btn-white px-3 mb-0" for="btnradiotable3">Approved Events</label>
-
-                                        <input type="radio" class="btn-check" name="btnradiotable" id="btnradiotable4" value="all"
-                                            autocomplete="off" checked>
-                                        <label class="btn btn-white px-3 mb-0" for="btnradiotable4">All</label>
-
-                                    </div>
-                                </form>
-
-                                <div class="input-group w-sm-25 ms-auto">
-                                    <span class="input-group-text text-body">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px"
-                                            fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z">
-                                            </path>
-                                        </svg>
-                                    </span>
-                                    <input type="text" class="form-control" placeholder="Search" id="searchEvent">
-                                </div>
-                            </div>
                             <div class="table-responsive p-0">
                                 <table class="table align-items-center mb-0" id="eventTable">
                                     
@@ -67,6 +32,7 @@
                                             <th class="text-secondary text-xs font-weight-semibold opacity-7">Event Name</th>
                                             {{-- <th class="text-secondary text-xs font-weight-semibold opacity-7 ps-2">Description</th> --}}
                                             <th class="text-secondary text-xs font-weight-semibold opacity-7 ps-2">Venue</th>
+                                            <th class="text-secondary text-xs font-weight-semibold opacity-7 ps-2">Department</th>
                                             <th class="text-secondary text-xs font-weight-semibold opacity-7 ps-2">Type</th>
                                             <th class="text-secondary text-xs font-weight-semibold opacity-7 ps-2">Start Date</th>
                                             <th class="text-secondary text-xs font-weight-semibold opacity-7 ps-2">End Date</th>
@@ -114,6 +80,9 @@
                                                 @else
                                                 <p class="text-sm text-dark font-weight-semibold mb-0">{{$event->roomName}}</p>
                                                 @endif
+                                            </td>
+                                            <td>
+                                                <p class="text-sm text-dark font-weight-semibold mb-0" style="margin-left: 16px">{{$event->department}}</p>
                                             </td>
                                             <td>
                                                 @if ($event->type === 'whole_day')
@@ -192,13 +161,13 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <div class="border-top py-3 px-3 d-flex align-items-center">
+                            {{-- <div class="border-top py-3 px-3 d-flex align-items-center">
                                 <p class="font-weight-semibold mb-0 text-dark text-sm">Page 1 of 10</p>
                                 <div class="ms-auto">
                                     <button class="btn btn-sm btn-white mb-0">Previous</button>
                                     <button class="btn btn-sm btn-white mb-0">Next</button>
                                 </div>
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
                 </div>

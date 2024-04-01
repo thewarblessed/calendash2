@@ -73,7 +73,7 @@
                                     <label for="organization_id">Select Department</label>
                                     <select class="form-control" id="department_id_user" name="department_id_user">
                                         @foreach ($departments as $id => $department)
-                                            @if ($id >= 1 && $id <= 5)
+                                            @if ($id >= 1 && $id <= 4)
                                                 <option value="{{ $id }}">{{ $department }}</option>
                                             @endif
                                         @endforeach

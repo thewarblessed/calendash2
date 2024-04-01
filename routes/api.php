@@ -166,6 +166,18 @@ Route::get('/rooms/approve',[
         'as' => 'getAllApproveRooms',
 ]);
 
+Route::post('/rooms/reject/{id}',[
+        'uses' => 'RequestRoomController@rejectRooms',
+        'as' => 'rejectRooms',
+]);
+
+
+//////////// GET ALL REJECTED ROOM EVENTS ///////////
+Route::get('/rooms/rejected',[
+        'uses' => 'RequestRoomController@getAllRejectedRooms',
+        'as' => 'getAllRejectedRooms',
+]);
+
 
 ///////////////////// ADMIN EVENTS /////////////////////////
 Route::get('/admin/allEvents/{id}', 'EventController@showAdminSingleEvent')->name('showAdminSingleEvent');
