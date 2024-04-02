@@ -1007,6 +1007,7 @@ $(document).ready(function () {
             $.ajax({
                 url: '/api/check-event-conflict',
                 headers: {
+                    'Authorization': 'Bearer ' + sessionStorage.getItem('token'),
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 type: 'POST',
