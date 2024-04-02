@@ -908,6 +908,9 @@ $(document).ready(function () {
                     room_id: selectedVenueID,
                     selectedVenueType: selectedVenueType
                 },
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
                 success: function (response) {
                     if (response.conflict) {
                         Swal.fire({
@@ -938,6 +941,9 @@ $(document).ready(function () {
                     end_time: selectedEndTime,
                     venue_id: selectedVenueID,
                     selectedVenueType: selectedVenueType
+                },
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 success: function (response) {
                     if (response.conflict) {
@@ -977,6 +983,9 @@ $(document).ready(function () {
                     room_id: selectedVenueID,
                     selectedVenueType: selectedVenueType
                 },
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
                 success: function (response) {
                     if (response.conflict) {
                         Swal.fire({
@@ -1003,6 +1012,9 @@ $(document).ready(function () {
                     date: selectedWholeDay,
                     venue_id: selectedVenueID,
                     selectedVenueType: selectedVenueType
+                },
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 success: function (response) {
                     if (response.conflict) {
@@ -1038,6 +1050,9 @@ $(document).ready(function () {
                     room_id: selectedVenueID,
                     selectedVenueType: selectedVenueType
                 },
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
                 success: function (response) {
                     if (response.conflict) {
                         Swal.fire({
@@ -1064,6 +1079,9 @@ $(document).ready(function () {
                     date: selectedWeek,
                     venue_id: selectedVenueID,
                     selectedVenueType: selectedVenueType
+                },
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 success: function (response) {
                     if (response.conflict) {
@@ -3166,6 +3184,9 @@ $(document).ready(function () {
                 end_time: selectedEndTime,
                 venue_id: selectedVenueID,
             },
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
             success: function (response) {
                 if (response.conflict) {
                     Swal.fire({
@@ -3200,6 +3221,9 @@ $(document).ready(function () {
                 date: selectedWholeDay,
                 venue_id: selectedVenueID,
             },
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
             success: function (response) {
                 if (response.conflict) {
                     Swal.fire({
@@ -3231,6 +3255,9 @@ $(document).ready(function () {
                 date: selectedWeek,
                 venue_id: selectedVenueID,
                 selectedVenueType: selectedVenueType
+            },
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
             success: function (response) {
                 if (response.conflict) {
