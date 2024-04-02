@@ -395,7 +395,7 @@
     </main>
     {{-- tinyMCE --}}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
-    <script src="https://cdn.tiny.cloud/1/efy9kqrdbnc5rwfbz3ogkw1784y0tm6sphy6xvo6iq7azwcf/tinymce/6/tinymce.min.js"
+    <script src="https://cdn.tiny.cloud/1/e705kagjcg1ew4r2d9lhy91xvaqjjtltd3e4mqs6jmvldw5f/tinymce/6/tinymce.min.js"
         referrerpolicy="origin"></script>
     <script>
         tinymce.init({
