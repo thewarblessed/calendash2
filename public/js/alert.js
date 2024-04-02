@@ -976,15 +976,15 @@ $(document).ready(function () {
         if (selectedVenueType === 'room') {
             $.ajax({
                 url: '/api/check-event-conflict',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
                 type: 'POST',
                 data: {
                     event_type: 'wholeDay',
                     date: selectedWholeDay,
                     room_id: selectedVenueID,
                     selectedVenueType: selectedVenueType
-                },
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 success: function (response) {
                     if (response.conflict) {
@@ -1006,15 +1006,15 @@ $(document).ready(function () {
         else {
             $.ajax({
                 url: '/api/check-event-conflict',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
                 type: 'POST',
                 data: {
                     event_type: 'wholeDay',
                     date: selectedWholeDay,
                     venue_id: selectedVenueID,
                     selectedVenueType: selectedVenueType
-                },
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 success: function (response) {
                     if (response.conflict) {
