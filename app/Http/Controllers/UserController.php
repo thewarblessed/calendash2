@@ -44,7 +44,10 @@ class UserController extends Controller
 
         if ($role->role === "student")
         {
-            $students = Student::where('user_id',$id)->first();
+            $students = Student::leftjoin('organizations','organizations.id','students.organization_id')
+                                ->leftjoin('departments','departments.id','students.department_id')
+                                ->leftjoin('sections','sections.id','students.section_id')
+                                ->where('user_id',$id)->first();
             $credentials = User::where('id', $id)->first();
             return response()->json(["data" => $students, "credentials" => $credentials]);
         }

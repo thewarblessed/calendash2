@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use App\Models\Room;
+use DB;
 
 class RoomController extends Controller
 {
@@ -16,6 +17,15 @@ class RoomController extends Controller
         //
         $rooms = Room::All();
         return view('admin.room.index',compact('rooms'));
+    }
+
+    public function roomIndexMobile()
+    {
+        //
+        $rooms = Room::orderBy('id')
+                    ->select('*', DB::raw("'room' as place"))
+                    ->get();
+        return response()->json($rooms);
     }
 
     /**

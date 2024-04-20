@@ -8,6 +8,7 @@ use App\Models\Venue;
 use App\Models\Event;
 use Redirect;
 use View;
+use DB;
 
 class VenueController extends Controller
 {
@@ -167,7 +168,9 @@ class VenueController extends Controller
 
     public function indexMobile()
     {   
-        $venues = Venue::orderBy('id')->get();
+        $venues = Venue::orderBy('id')
+                        ->select('*', DB::raw("'venue' as place"))
+                        ->get();
         // dd($venues);
         return response()->json($venues);
         // return View::make('admin.venue.index', compact('venues'));

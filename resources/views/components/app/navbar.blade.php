@@ -177,44 +177,49 @@
         $.ajax({
         url: '/api/notif/request/' + id, // Update the URL to your endpoint
         method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
         success: function(response) {
             $('#notificationList').empty(); // Clear existing notifications
-            if (response.user === 'student' || response.user === 'prof' || response.user === 'staff' )
-            {   
-                console.log(response.msg.length)
-                if (response.msg.length === 0) {
-                $('#notificationList').append('<li class="text-center">No notifications</li>');
-                } else {
-                    response.msg.forEach(function(notification) {
-                        // console.log(notification);
-                        var timeAgo = moment(notification.created_at).fromNow(); // Use moment.js to calculate time ago
-                        var listItem = '<li class="mb-2">' +
-                            '<a class="dropdown-item border-radius-md" href="{{ url('/request') }}">' +
-                            '<div class="d-flex py-1">' +
-                            '<div class="my-auto">' +
-                            '<img src="../assets/img/team-2.jpg" class="avatar avatar-sm border-radius-sm me-3">' +
-                            '</div>' +
-                            '<div class="d-flex flex-column justify-content-center">' +
-                            '<h6 class="text-sm font-weight-normal mb-1">' +
-                            '<span class="font-weight-bold">New request</span> from ' + notification.name +
-                            '</h6>' +
-                            '<p class="text-xs text-secondary mb-0 d-flex align-items-center">' +
-                            '<i class="fa fa-clock opacity-6 me-1"></i>' + timeAgo +
-                            '</p>' +
-                            '</div>' +
-                            '</div>' +
-                            '</a>' +
-                            '</li>';
+            console.log(response)
+            // if (response.user === 'student' || response.user === 'prof' || response.user === 'staff' )
+            // {   
+            //     console.log(response.msg.length)
+            //     if (response.msg.length === 0) {
+            //     $('#notificationList').append('<li class="text-center">No notifications</li>');
+            //     } else {
+            //         response.msg.forEach(function(notification) {
+            //             // console.log(notification);
+            //             var timeAgo = moment(notification.created_at).fromNow(); // Use moment.js to calculate time ago
+            //             var listItem = '<li class="mb-2">' +
+            //                 '<a class="dropdown-item border-radius-md" href="{{ url('/request') }}">' +
+            //                 '<div class="d-flex py-1">' +
+            //                 '<div class="my-auto">' +
+            //                 '<img src="../assets/img/team-2.jpg" class="avatar avatar-sm border-radius-sm me-3">' +
+            //                 '</div>' +
+            //                 '<div class="d-flex flex-column justify-content-center">' +
+            //                 '<h6 class="text-sm font-weight-normal mb-1">' +
+            //                 '<span class="font-weight-bold">New request</span> from ' + notification.name +
+            //                 '</h6>' +
+            //                 '<p class="text-xs text-secondary mb-0 d-flex align-items-center">' +
+            //                 '<i class="fa fa-clock opacity-6 me-1"></i>' + timeAgo +
+            //                 '</p>' +
+            //                 '</div>' +
+            //                 '</div>' +
+            //                 '</a>' +
+            //                 '</li>';
 
-                        // Check if the notification ID is in the existingNotifications array
-                        if (!existingNotifications.includes(notification.id)) {
-                            $('#notificationList').append(listItem); // Append new notification to the list
-                            existingNotifications.push(notification.id); // Add the ID to the existingNotifications array
-                        }
-                    });
-                }
-            }
-            // console.log(response);
+            //             // Check if the notification ID is in the existingNotifications array
+            //             if (!existingNotifications.includes(notification.id)) {
+            //                 $('#notificationList').append(listItem); // Append new notification to the list
+            //                 existingNotifications.push(notification.id); // Add the ID to the existingNotifications array
+            //             }
+            //         });
+            //     }
+            // }
+            console.log(response.length);
+                
             if (response.length === 0) {
                 $('#notificationList').append('<li class="text-center">No notifications</li>');
             } else {
@@ -247,7 +252,7 @@
                 });
             }
 
-            updateBadge(); // Update the badge count
+            addBadge(); // Update the badge count
         }
     });
     }
@@ -258,14 +263,51 @@
     // Fetch notifications every minute
     setInterval(fetchNotifications, 60000); // Update every minute (60000 milliseconds)
 
-    function updateBadge() {
+    function addBadge() {
         var count = $('#notificationList li').length;
-        console.log(count)
-        // $('#badge').text(count);
+        $('#badge').text(count).show();
+        // if (count === 0) {
+        //     $('#badge').hide(); // Hide the badge if count is zero
+        // } else {
+        //     $('#badge').text(count).show(); // Update and show the badge
+        // }
+    }
+
+    function removeBadge() {
+        $('#badge').hide();
     }
 
     $('#notificationList').on('click', 'li', function () {
         updateBadge();
+        $.ajax({
+            url: '/api/notif/read-request/' + id, // Update the URL to your endpoint
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function(response) {
+
+                console.log(response);
+
+            }
+        });
+    });
+
+    $('#dropdownMenuButton').on('click', function () {
+        // console.log('notif clicked')
+        $.ajax({
+            url: '/api/notif/read-request/' + id, // Update the URL to your endpoint
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function(response) {
+
+                console.log(response);
+                removeBadge();
+            }
+        });
+
     });
 });
 </script>
