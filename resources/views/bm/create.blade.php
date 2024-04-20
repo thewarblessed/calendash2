@@ -37,33 +37,34 @@
 
                             <div class="row">
                                 @foreach ($venues as $venue)
-                                <div class="col-sm" style="display: block;" id="venueDiv">
-                                    <div id="venue{{ $venue->id }}" data-capacity="{{ $venue->capacity }}"
-                                        class="card_capacity"
-                                        style="width: 15rem; margin-top: 30px; box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px; border-radius: 8px">
-                                        <img src="{{ asset('storage/' . $venue->image) }}" height="180"
-                                            class="card-img-top" alt="...">
-                                        <div class="card-body">
-                                            <h4 class="card-title">{{ $venue->name }}</h4>
-                                            <p1 class="card-subtitle mb-2 text-muted">Rules and Regulations</p1>
-                                            <div class="card-text">
-                                                <ul>
-                                                    @foreach (explode("\n", $venue->description) as $item)
-                                                    <li>{{ $item }}</li>
-                                                    @endforeach
-                                                </ul>
-                                            </div>
-                                            <p class="card-text">Capacity: {{ $venue->capacity }}</p>
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="event_venueOutsider"
-                                                    id="event_venueOutsider" value="{{ $venue->id }}" required>
-                                                <label class="custom-control-label" for="event_venueOutsider"
-                                                    style="color: blue; font-size: 18px"><strong>SELECT</strong>
-                                                </label>
+                                    <div class="col-sm" style="display: block;" id="venueDiv">
+                                        <div id="venue{{ $venue->id }}" data-capacity="{{ $venue->capacity }}"
+                                            class="card_capacity"
+                                            style="width: 15rem; margin-top: 30px; box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px; border-radius: 8px">
+                                            <img src="{{ asset('storage/' . $venue->image) }}" height="180"
+                                                class="card-img-top" alt="...">
+                                            <div class="card-body">
+                                                <h4 class="card-title">{{ $venue->name }}</h4>
+                                                <p1 class="card-subtitle mb-2 text-muted">Rules and Regulations</p1>
+                                                <div class="card-text">
+                                                    <ul>
+                                                        @foreach (explode("\n", $venue->description) as $item)
+                                                            <li>{{ $item }}</li>
+                                                        @endforeach
+                                                    </ul>
+                                                </div>
+                                                <p class="card-text">Capacity: {{ $venue->capacity }}</p>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio"
+                                                        name="event_venueOutsider" id="event_venueOutsider"
+                                                        value="{{ $venue->id }}" required>
+                                                    <label class="custom-control-label" for="event_venueOutsider"
+                                                        style="color: blue; font-size: 18px"><strong>SELECT</strong>
+                                                    </label>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
                                 @endforeach
                             </div>
 
@@ -94,14 +95,16 @@
                                 <div class="form-check">
                                     <input class="form-check-input" type="radio" name="event_typeOutsider"
                                         value="wholeWeek" id="wholeWeek" required>
-                                    <label class="custom-control-label" for="wholeWeek" style="font-size: 16px;">Whole
+                                    <label class="custom-control-label" for="wholeWeek"
+                                        style="font-size: 16px;">Whole
                                         Week</label>
                                 </div>
 
                                 <div class="form-check">
                                     <input class="form-check-input" type="radio" name="event_typeOutsider"
                                         value="dateRanges" id="dateRanges" required>
-                                    <label class="custom-control-label" for="dateRanges" style="font-size: 16px;">Date
+                                    <label class="custom-control-label" for="dateRanges"
+                                        style="font-size: 16px;">Date
                                         Range</label>
                                 </div>
                             </div>
@@ -111,14 +114,15 @@
                                 <div class="form-group">
                                     <label for="example-datetime-local-input"
                                         class="form-control-label">Datetime</label>
-                                    <input class="form-control" type="date" value="" name="event_date_withinDayOutsider"
-                                        id="event_date_withinDayOutsider">
+                                    <input class="form-control" type="date" value=""
+                                        name="event_date_withinDayOutsider" id="event_date_withinDayOutsider">
                                 </div>
                                 <div class="row">
                                     <div class="mb-3 col-md-6">
                                         <label for="start_time" class="form-label">Set Start Time</label>
-                                        <input type="time" class="form-control" name="start_time_withinDayOutsider"
-                                            id="start_time_withinDayOutsider" required>
+                                        <input type="time" class="form-control"
+                                            name="start_time_withinDayOutsider" id="start_time_withinDayOutsider"
+                                            required>
                                     </div>
                                     <div class="mb-3 col-md-6">
                                         <label for="end_time" class="form-label">Set End Time</label>
@@ -150,7 +154,8 @@
                                 <h5 style="text-align: center">Date Range</h5>
                                 <div class="form-group" style="text-align: center">
                                     <label for="example-week-input" class="form-control-label"></label>
-                                    <input type="text" name="daterangeOutsider" value="" id="date_range_Outsider" />
+                                    <input type="text" name="daterangeOutsider" value=""
+                                        id="date_range_Outsider" />
                                 </div>
                             </div>
                         </div>
@@ -169,32 +174,47 @@
                             </div>
                         </div>
 
-                        <div class="form-check form-check-info text-center mb-0">
-                            <div class="d-flex justify-content-center align-items-center" style="font-size: 16px">
-                                <input class="form-check-input me-2" type="checkbox" name="terms" id="termsCheckboxOutsider" onchange="toggleSubmitButton()" required>
-                                <label class="font-weight-normal text-dark mb-0" for="terms">
-                                    I agree the <a href="#" id="termsConditions" class="text-dark font-weight-bold">Terms and Conditions</a>.
-                                </label>
-                            </div>
+                        <div class="mb-3 col-md-6" style="align-self: center">
+                            <label for="request_letter" class="form-label"
+                                style="font-size: 25px; text-align:center; color:blueviolet">Upload Request
+                                Letter</label>
+                            <input type="file" class="form-control" name="request_letter" id="request_letter"
+                                required accept=".pdf">
+                            <small class="text-danger" id="fileError"></small> <!-- Error message placeholder -->
+                            <small class="form-text text-muted">Max file size: 5MB. File type: PDF only.</small>
                         </div>
-                        
+
+                        <div class="form-check form-check-info text-left mb-0">
+                            <input class="form-check-input" type="checkbox" name="terms" id="termsCheckbox"
+                                onchange="toggleSubmitButton()" required>
+                            <label class="font-weight-normal text-dark mb-0" for="terms">
+                                I agree to the <a href="#" id="termsConditions"
+                                    class="text-dark font-weight-bold">Terms and Conditions</a>.
+                            </label>
+                        </div>
+
                     </div>
-                    
+
                     <div class="card-footer text-end">
                         <div class="d-flex mt-2">
-                            <button type="button" id="back_button" class="btn btn-link" onclick="back()">Back</button>
-                            <button type="button" id="next_button" class="btn btn-primary ms-auto" onclick="next()">Next</button>
+                            <button type="button" id="back_button" class="btn btn-link"
+                                onclick="back()">Back</button>
+                            <button type="button" id="next_button" class="btn btn-primary ms-auto"
+                                onclick="next()">Next</button>
                         </div>
                     </div>
-                    
+
                     <div class="card-footer text-end" id="submitSection">
                         <div class="d-flex mt-2">
-                            <button type="submit" id="createEvent_submit_outsider" class="btn btn-primary ms-auto" disabled>
+                            <button type="submit" id="createEvent_submit_outsider" class="btn btn-primary ms-auto"
+                                disabled>
                                 <span class="" role="status" id="spinner_outsider" aria-hidden="true"></span>
                                 <span class="sr-only">Loading...</span>Submit your Request
                             </button>
                         </div>
                     </div>
+
+
 
 
                 </div>
@@ -290,8 +310,7 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js">
-    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
     <script>
         $(function() {
             $('input[name="daterangeOutsider"]').daterangepicker({
@@ -315,42 +334,42 @@
                 var selectedRange = $(this).val();
                 console.log(selectedRange);
 
-                    $.ajax({
-                        url: '/api/check-event-conflict',
-                        type: 'POST',
-                        data: {
-                            event_type: 'dateRanges',
-                            daterange: selectedRange,
-                            venue_id: selectedVenueID,
-                        },
-                        success: function(response) {
-                            if (response.conflict) {
-                                Swal.fire({
-                                    icon: "error",
-                                    title: "Oops...",
-                                    html: "There is an existing event with the <strong>same venue and time</strong>. Please check the calendar for available dates and time.",
-                                });
-                                // alert('');
-                                $('#date_range_User').val('');
-                            }
-
-                        },
-                        error: function(xhr, status, error) {
-                            console.error('Error checking event conflict:', error);
+                $.ajax({
+                    url: '/api/check-event-conflict',
+                    type: 'POST',
+                    data: {
+                        event_type: 'dateRanges',
+                        daterange: selectedRange,
+                        venue_id: selectedVenueID,
+                    },
+                    success: function(response) {
+                        if (response.conflict) {
+                            Swal.fire({
+                                icon: "error",
+                                title: "Oops...",
+                                html: "There is an existing event with the <strong>same venue and time</strong>. Please check the calendar for available dates and time.",
+                            });
+                            // alert('');
+                            $('#date_range_User').val('');
                         }
-                    });
+
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error checking event conflict:', error);
+                    }
+                });
             });
         });
     </script>
     <script>
         function toggleSubmitButton() {
-            const submitButtonOutsider = document.getElementById('createEvent_submit_outsider');
-            const termsCheckbox = document.getElementById('termsCheckboxOutsider');
-    
+            const submitButton = document.getElementById('createEvent_submit_outsider');
+            const termsCheckbox = document.getElementById('termsCheckbox');
+
             if (termsCheckbox.checked) {
-                submitButtonOutsider.disabled = false;
+                submitButton.disabled = false;
             } else {
-                submitButtonOutsider.disabled = true;
+                submitButton.disabled = true;
             }
         }
     </script>

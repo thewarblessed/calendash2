@@ -235,8 +235,10 @@
 
                         <div class="mb-3 col-md-6" style="align-self: center; margin-top:20px">
                             <label for="feedback_image" class="form-label"
-                                style="font-size: 25px; text-align:center; color:blueviolet">Link for feedback form</label>
-                            <input type="text" class="form-control" name="feedback_qr_code" id="feedback_qr_code" placeholder="ex. http://docs.google.com/forms/...">
+                                style="font-size: 25px; text-align:center; color:blueviolet">Link for feedback
+                                form</label>
+                            <input type="text" class="form-control" name="feedback_qr_code" id="feedback_qr_code"
+                                placeholder="ex. http://docs.google.com/forms/...">
                             {{-- <onchange="validateFile(this)">
                             <!-- Call validateFile function when file selection changes -->
                             <small class="text-danger" id="fileError"></small> <!-- Error message placeholder -->
@@ -257,7 +259,7 @@
                                 </ul>
                             </div>
                         </div>
-                        
+
 
                     </div>
 
@@ -276,34 +278,25 @@
                             </div>
                         @else
                             <h3>Generate Letter</h3>
-                            <p>To save the Letter in you've created, please these steps.</p>
-                            <ul style="list-style-type: decimal; font-size: 14px">
+                            <p>To save the Letter you've created, please follow these steps:</p>
+                            <ol style="font-size: 14px">
                                 <li>File</li>
                                 <li>Print</li>
                                 <li>Select the Destination to "Save as PDF"</li>
-                                <li>then click "Save"</li>
-                                <li>then upload it to the bottom of this form</li>
-                            </ul>
-                            <div class="container p-4 ">
+                                <li>Click "Save"</li>
+                                <li>Then upload it at the bottom of this form</li>
+                            </ol>
+                            <div class="container p-4">
                                 <textarea name="letter_generator" id="editor"></textarea>
                             </div>
-                            {{-- <div class="mb-3 col-md-6" style="align-self: center">
-                            <label for="request_letter" class="form-label"
-                                style="font-size: 25px; text-align:center; color:blueviolet">Upload Request
-                                Letter</label>
-                            <input type="file" class="form-control" name="request_letter" id="request_letter" required>
-                        </div> --}}
                             <div class="mb-3 col-md-6" style="align-self: center">
                                 <label for="request_letter" class="form-label"
                                     style="font-size: 25px; text-align:center; color:blueviolet">Upload Request
                                     Letter</label>
                                 <input type="file" class="form-control" name="request_letter" id="request_letter"
                                     required accept=".pdf">
-                                <onchange="validateFile(this)">
-                                <!-- Call validateFile function when file selection changes -->
                                 <small class="text-danger" id="fileError"></small> <!-- Error message placeholder -->
                                 <small class="form-text text-muted">Max file size: 5MB. File type: PDF only.</small>
-                                <!-- Additional info -->
                             </div>
                             <script>
                                 function validateFile(input) {
@@ -323,21 +316,12 @@
                             </script>
                         @endif
 
-                        {{-- <div class="card-footer text-end" style="position: absolute; bottom: 5px; right: 0;">
-                            <div class="d-flex mt-2">
-                                <input type="checkbox" id="termsCheckbox" onchange="toggleSubmitButton()">
-                                <label for="termsCheckbox" class="form-check-label" style="font-size: 16px;">I agree to
-                                    the terms and conditions</label>
-                            </div>
-                        </div> --}}
-
                         <div class="form-check form-check-info text-left mb-0">
                             <input class="form-check-input" type="checkbox" name="terms" id="termsCheckbox"
                                 onchange="toggleSubmitButton()" required>
                             <label class="font-weight-normal text-dark mb-0" for="terms">
-                                I agree the <a href="#" id="termsConditions"
-                                    class="text-dark font-weight-bold">Terms
-                                    and Conditions</a>.
+                                I agree to the <a href="#" id="termsConditions"
+                                    class="text-dark font-weight-bold">Terms and Conditions</a>.
                             </label>
                         </div>
 
@@ -397,7 +381,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
     {{-- <script src="https://cdn.tiny.cloud/1/e705kagjcg1ew4r2d9lhy91xvaqjjtltd3e4mqs6jmvldw5f/tinymce/6/tinymce.min.js"
         referrerpolicy="origin"></script> --}}
-    <script src="https://cdn.tiny.cloud/1/e705kagjcg1ew4r2d9lhy91xvaqjjtltd3e4mqs6jmvldw5f/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
+    <script src="https://cdn.tiny.cloud/1/e705kagjcg1ew4r2d9lhy91xvaqjjtltd3e4mqs6jmvldw5f/tinymce/7/tinymce.min.js"
+        referrerpolicy="origin"></script>
     <script>
         tinymce.init({
             selector: 'textarea',

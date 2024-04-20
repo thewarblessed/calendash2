@@ -19,11 +19,12 @@ use App\Http\Controllers\OrganizationAdviserController;
 use App\Http\Controllers\DepartmentHeadController;
 use App\Http\Controllers\SectionHeadController;
 use App\Http\Controllers\AttendanceController;
-use App\Http\Controllers\BusinessManagerController;
+use App\Http\Controllers\BusinessManagerController; 
 use App\Http\Controllers\RequestRoomController;
 use App\Http\Controllers\UserEventController;
 use App\Http\Controllers\ReportController;
-
+use App\Http\Controllers\AccomplishmentController;
+use App\Http\Controllers\AccomplishmentReportsController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -346,6 +347,18 @@ Route::get('/attendance/{id}', [AttendanceController::class, 'attendance'])
     ->middleware('auth')
     ->name('singleAttendance');
 
+//////////////////////////////////////// ACCOMPLISHMENT REPORT  (USER VIEW) ///////////////////////////
+Route::get('/accomplishment', [AccomplishmentController::class, 'index'])
+    ->middleware('auth')
+    ->name('accomplishment');
+
+Route::get('/accomplishment/create', [AccomplishmentController::class, 'create'])->name('accomplishment.create');
+Route::post('/accomplishment/store', [AccomplishmentController::class, 'store'])->name('accomplishment.store');
+
+//////////////////////////////////////// ACCOMPLISHMENT REPORT (ADMIN VIEW)  ///////////////////////////
+Route::get('/accomplishmentreports', [AccomplishmentReportsController::class, 'index'])
+    ->middleware('auth')
+    ->name('accomplishmentreports');
 
 //////////////////////////////////////////////// REJECTED REQUESTS FOR OFFICIALS  ///////////////////////////////////////////////////
 Route::get('/my/rejected', [RequestController::class, 'myRejectRequest'])
@@ -371,6 +384,7 @@ Route::get('/me/approved', [UserEventController::class, 'myApproved'])
 Route::post('/import/studentImport', [AttendanceController::class, 'import'])
 ->middleware('auth')
 ->name('studentImport');
+
 
 //////////////////////////////////////// OUTSIDER & BUSINESS MANAGER  ///////////////////////////
 
@@ -400,5 +414,7 @@ Route::get('/rejected/rooms', [RequestRoomController::class, 'rejectedRoomsView'
     ->name('rejectedRoomsView');
 
 
-//////////////////////////////////////// REPORT CHARTS  ///////////////////////////
+//////////////////////////////////////// REPORT CHARTS  (ADMIN) ///////////////////////////
 Route::get('/admin/report', [ReportController::class, 'countEventPerOrgReport'])->name('countEventPerOrgReport');
+
+

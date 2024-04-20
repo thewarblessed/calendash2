@@ -7,13 +7,14 @@
                 <a href="{{ url('/attendance') }}" class="btn btn-primary">Back</a>
                 <div class="" style="text-align: center">
                     <div>
-                     {{-- <strong><h3>Events list</h3></strong> --}}
+                        {{-- <strong><h3>Events list</h3></strong> --}}
                         <h1>{{ $events->event_name }}</h1>
                         <p class="text-sm">See all participants</p>
                         <button type="button" class="btn btn-dark approveBtn" style="width: 100%; height: 40px;"
                             data-bs-toggle="modal" data-bs-target="#importStudentModal" id="importFile">Import
                             File</button>
-                    </div>
+                            <p class="text-sm mt-2" style="font-weight: bold; color: black; font-size: larger;">Note: The format of the Excel file should be: Yr&Sec, Firstname, Lastname. No header is needed, just put the format as specified.</p>
+                    </div>                    
                 </div>
             </div>
             <table id="attendanceTable" class="table table-striped table-hover" style="width:100%;">
@@ -22,6 +23,7 @@
                         <th>Year & Section</th>
                         <th>Last Name</th>
                         <th>First Name</th>
+                        <th>Time</th>
                         <th>ACTION</th>
                     </tr>
                 </thead>
@@ -90,7 +92,7 @@
     $(document).ready(function() {
         var id = $("#student_event_id").val();
         console.log(id);
-        $("#attendanceTable").DataTable({
+        var table = $("#attendanceTable").DataTable({
             ajax: {
                 url: "/api/studentlists/" + id,
                 dataSrc: "",
@@ -121,9 +123,15 @@
                     data: "firstname",
                 },
                 {
+                    data: "attendance_time",
+                    render: function(data) {
+                        return data ? formatTime(data) : '';
+                    }
+                },
+                {
                     data: null,
                     render: function(data, type, row) {
-                        var isChecked = data.is_present !== null ? 'checked' : '';
+                        var isChecked = data.attendance_time ? 'checked' : '';
                         return "<input type='checkbox' class='markedAttendance' id='markedAttendance_" +
                             data.id +
                             "' data-id='" + data.id + "' " + isChecked + ">";
@@ -134,20 +142,15 @@
 
         $("#attendanceTable tbody").on("click", '.markedAttendance', function(e) {
             var id = $(this).data('id');
-            var isChecked = $(this).prop('checked') ? 1 : 0;
+            var isChecked = $(this).prop('checked');
+            var attendanceTime = isChecked ? getCurrentTime() : null;
 
-            //console.log('gjdhg'); check mo  nga ulit
-
-            console.log(isChecked); 
-            //console.log(id)
             $.ajax({
                 type: "POST",
                 url: '/api/updateAttendance/' + id,
                 data: {
-                    is_present: isChecked
+                    attendance_time: attendanceTime
                 },
-                contentType: false,
-                processData: false,
                 headers: {
                     'Authorization': 'Bearer ' + sessionStorage.getItem('token'),
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -155,12 +158,7 @@
                 dataType: "json",
                 success: function(data) {
                     console.log(data);
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Attendance checked!',
-                        showConfirmButton: false,
-                        timer: 3000
-                    })
+                    table.ajax.reload(); // Reload the table data
                 },
                 error: function(error) {
                     console.log('error');
@@ -168,63 +166,32 @@
             });
         });
 
-        // $(document).on('click', '.markedAttendance', function() {
-        //     var id = $(this).data('id');
-        //     var isChecked = $(this).prop('checked') ? 1 : 0;
-
-        //     console.log(id)
-        //     // Send AJAX request to update the database with the new checkbox status
-        //     // $.ajax({
-        //     //     url: 'api/update-attendance/' + id,
-        //     //     method: 'POST',
-        //     //     data: {
-        //     //         is_present: isChecked
-        //     //     },
-        //     //     success: function(response) {
-        //     //         // Handle success response
-        //     //     },
-        //     //     error: function(xhr, status, error) {
-        //     //         // Handle error
-        //     //     }
-        //     // });
-
-        //     $.ajax({
-        //         type: "POST",
-        //         url: 'api/update-attendance/' + id,
-        //         data: {
-        //             is_present: isChecked
-        //         },
-        //         contentType: false,
-        //         processData: false,
-        //         headers: {
-        //             'Authorization': 'Bearer ' + sessionStorage.getItem('token'),
-        //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        //         },
-        //         dataType: "json",
-        //         success: function(data) {
-        //             console.log(data);
-        //             Swal.fire({
-        //                 icon: 'success',
-        //                 title: 'Event has been Added!',
-        //                 showConfirmButton: false,
-        //                 timer: 3000
-        //             })
-        //         },
-        //         error: function(error) {
-        //             console.log('error');
-        //         }
-        //     });
-        // });
-
-
-
-
         $("#importFile").on("click", function(e) {
-            // var event_id = $("#studentListEventID").val();
-            // console.log(event_id);
             console.log('napindot')
         });
 
-
     })
+
+    function getCurrentTime() {
+        var now = new Date();
+        var hours = now.getHours();
+        var minutes = now.getMinutes();
+        var time = hours + ':' + (minutes < 10 ? '0' + minutes : minutes); // Format time as h:mm
+        return time;
+    }
+
+    function formatTime() {
+        var now = new Date(); // Get the current date and time
+        var hours = now.getHours(); // Get the hours (0-23)
+        var minutes = now.getMinutes(); // Get the minutes (0-59)
+        var ampm = hours >= 12 ? 'PM' : 'AM'; // Determine AM or PM
+        hours = hours % 12 || 12; // Convert hours to 12-hour format
+        var formattedHours = hours < 10 ? '0' + hours : hours; // Ensure double digits for hours
+        var formattedMinutes = minutes < 10 ? '0' + minutes : minutes; // Ensure double digits for minutes
+        var formattedTime = formattedHours + ':' + formattedMinutes + ' ' + ampm; // Combine hours, minutes, and AM/PM
+        return formattedTime;
+    }
+
+
 </script>
+

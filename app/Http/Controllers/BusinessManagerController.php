@@ -101,6 +101,14 @@ class BusinessManagerController extends Controller
             list($year, $week) = explode("-W", $weekDate);
             $startDate = Carbon::now()->setISODate($year, $week, 1)->toDateString();
             $endDate = Carbon::now()->setISODate($year, $week, 7)->toDateString();
+            $request->validate([
+                'request_letter' => 'required|mimes:pdf|max:2048', // PDF file validation
+            ]);
+    
+            $files = $request->file('request_letter');
+            $event_letter = 'pdf/'.time().'-'.$files->getClientOriginalName();
+            // $venues->save();
+            Storage::put('public/pdf/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
             
                 Event::create([
                     'user_id' => $request->user_idOutsider,
@@ -114,6 +122,7 @@ class BusinessManagerController extends Controller
                     'end_time' => '00:00:00',
                     'whole_week' => true,
                     'participants' => $request->numParticipantsOutsider,
+                    'event_letter' => $event_letter,
                     'status' => 'PENDING',
                     'color' => '#D6AD60',
                     'created_at' => now()
@@ -132,6 +141,11 @@ class BusinessManagerController extends Controller
             $start_time = $request->start_time_withinDayOutsider;
             $end_time = $request->end_time_withinDayOutsider;
 
+            $files = $request->file('request_letter');
+            $event_letter = 'pdf/'.time().'-'.$files->getClientOriginalName();
+            // $venues->save();
+            Storage::put('public/pdf/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
+
                 Event::create([
                     'user_id' => $request->user_idOutsider,
                     'event_name' => $request->eventNameOutsider,
@@ -144,6 +158,7 @@ class BusinessManagerController extends Controller
                     'end_time' => $end_time,
                     'participants' => $request->numParticipantsOutsider,
                     'whole_week' => false,
+                    'event_letter' => $event_letter,
                     'status' => 'PENDING',
                     'color' => '#D6AD60',
                     'created_at' => now()
@@ -159,6 +174,11 @@ class BusinessManagerController extends Controller
         else if ($inputType === 'wholeDay'){
             //whole day
             $date = $request->event_date_wholeDayOutsider;
+
+            $files = $request->file('request_letter');
+            $event_letter = 'pdf/'.time().'-'.$files->getClientOriginalName();
+            // $venues->save();
+            Storage::put('public/pdf/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
             
                 Event::create([
                     'user_id' => $request->user_idOutsider,
@@ -172,6 +192,7 @@ class BusinessManagerController extends Controller
                     'end_time' => '21:00:00',
                     'participants' => $request->numParticipantsOutsider,
                     'whole_week' => false,
+                    'event_letter' => $event_letter,
                     'status' => 'PENDING',
                     'color' => '#D6AD60',
                     'created_at' => now()
@@ -183,6 +204,10 @@ class BusinessManagerController extends Controller
             $dateRange = $request->daterangeOutsider;
             [$startDate, $endDate] = explode(' - ', $dateRange);
             // dd($startDate);
+            $files = $request->file('request_letter');
+            $event_letter = 'pdf/'.time().'-'.$files->getClientOriginalName();
+            // $venues->save();
+            Storage::put('public/pdf/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
 
                 Event::create([
                     'user_id' => $request->user_idOutsider,
@@ -196,6 +221,7 @@ class BusinessManagerController extends Controller
                     'end_time' => '21:00:00',
                     'participants' => $request->numParticipantsOutsider,
                     'whole_week' => false,
+                    'event_letter' => $event_letter,
                     'status' => 'PENDING',
                     'color' => '#D6AD60',
                     'created_at' => now()

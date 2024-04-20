@@ -111,9 +111,17 @@
                 <a class="nav-link  {{ is_current_route('countEventPerOrgReport') ? 'active' : '' }}"
                     href="{{ route('countEventPerOrgReport') }}">
                     {{-- <i class="fa-solid fa-calendar-days"></i> --}}
-                    <i class="fa fa-bar-chart"
+                    <i class="fa fa-line-chart"
                         style="color: {{ is_current_route('countEventPerOrgReport') ? '#774dd3' : 'defaultColor' }};font-size: 18px;"></i>
                     <span class="nav-link-text ms-1">REPORTS</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link  {{ is_current_route('accomplishmentreports') ? 'active' : '' }}"
+                    href="{{ route('accomplishmentreports') }}">
+                    <i class="fa fa-bar-chart"
+                        style="color: {{ is_current_route('accomplishmentreports') ? '#774dd3' : 'defaultColor' }};font-size: 18px;"></i>
+                    <span class="nav-link-text ms-1">ACCMPLSHMNT REPORTS</span>
                 </a>
             </li>
 
@@ -163,7 +171,18 @@
                 </a>
             </li>
             @else
-            {{-- EVENTSS --}}
+
+             {{-- MY PROFILE --}}
+            <li class="nav-item">
+                <a class="nav-link  {{ is_current_route('usersProfile') || is_current_route('profiles') ? 'active' : '' }}"
+                    href="{{ route('profiles') }}">
+                    <i class="fa-solid fa-id-card-clip"
+                        style="color: {{ is_current_route('usersProfile') || is_current_route('profiles') ? '#774dd3' : 'defaultColor' }};font-size: 18px;"></i>
+                    <span class="nav-link-text ms-1">My Profile</span>
+                </a>
+            </li>
+
+            {{-- CREATE EVENTS --}}
             <li class="nav-item">
                 <a class="nav-link  {{ is_current_route('createEvent') ? 'active' : '' }}"
                     href="{{ route('createEvent') }}">
@@ -172,6 +191,7 @@
                     <span class="nav-link-text ms-1">Create an Event</span>
                 </a>
             </li>
+            
 
             <!-- EVENT CALENDAR -->
             <li class="nav-item">
@@ -230,11 +250,11 @@
             </li>
 
             <li class="nav-item">
-                <a class="nav-link  {{ is_current_route('usersProfile') || is_current_route('profiles') ? 'active' : '' }}"
-                    href="{{ route('profiles') }}">
-                    <i class="fa-solid fa-id-card-clip"
-                        style="color: {{ is_current_route('usersProfile') || is_current_route('profiles') ? '#774dd3' : 'defaultColor' }};font-size: 18px;"></i>
-                    <span class="nav-link-text ms-1">My Profile</span>
+                <a class="nav-link  {{ is_current_route('accomplishment') ? 'active' : '' }}"
+                    href="{{ route('accomplishment') }}">
+                    <i class="fa-solid fa-clock"
+                        style="color: {{ is_current_route('accomplishment') ? '#774dd3' : 'defaultColor' }};font-size: 18px;"></i>
+                    <span class="nav-link-text ms-1">Accomplishment</span>
                 </a>
             </li>
 

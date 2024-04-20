@@ -92,45 +92,24 @@ class AttendanceController extends Controller
      */
     public function updateAttendance(Request $request, string $id)
     {
-        // Log::info($request);
-        // paload ako web pala check mo laravel log eco ctrl p ka dito sa vs code
-        // Validate the request
-        // $request->validate([
-        //     'is_present' => 'required|boolean',
-        // ]);
-        // dd($request->all());
-        // Find the attendance record
         $attendance = Attendance::findOrFail($id);
         
-        // Update the attendance status
-        if ($attendance->is_present === null)
-        {
-            $attendance->is_present = 1;
-            $attendance->attendance_time = now();
+        // Toggle attendance_time based on whether the checkbox is checked
+        if ($attendance->attendance_time === null) {
+            $attendance->attendance_time = now(); // Assign current time when checked
+        } else {
+            $attendance->attendance_time = null; // Reset to null when unchecked
         }
-        else{
-            $attendance->is_present = null;
-            $attendance->attendance_time = null;
-        }
+    
         $attendance->update();
         
-        // Update the attendance_time if the student is present
-        // dd($attendance->is_present);
-        
-        // if ($attendance->is_present) {
-        //     $attendance->attendance_time = now(); // Set the current timestamp
-        // } else {
-        //     $attendance->attendance_time = null; // Clear the attendance_time if the student is absent
-        // }
-
-        // Save the changes
-       
-
-        return response()->json(['message' => 'Attendance updated successfully']);
+        return response()->json(['attendance_time' => $attendance->attendance_time]); // Return updated attendance_time
     }
-
+    
+    
+    
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified resource from storage.  
      */
     public function destroy(string $id)
     {

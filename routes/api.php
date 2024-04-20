@@ -12,6 +12,8 @@ use App\Http\Controllers\SectionHeadController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\BusinessManagerController;
+use App\Http\Controllers\AccomplishmentController;
+use App\Http\Controllers\AccomplishmentReportsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -329,6 +331,22 @@ Route::post('/admin/editRole/{id}',[
 Route::post('/admin/postCreateMyEvent', [EventController::class, 'storeMyEventsAdmin'])
     ->name('postCreateMyEvent');
 
+////////////////////////////// ACCOMPLISHMENT REPORT (USERS VIEW) //////////////////////////////
+Route::post('/user/get-all-my-approved-events/{id}', [AccomplishmentController::class, 'getMyApprovedEvents'])
+    ->name('getMyApprovedEvents');
+
+Route::post('/user/store-accomplishment', [AccomplishmentController::class, 'storeImage'])
+->name('storeImage');
+
+Route::post('/upload/{id}', [AccomplishmentController::class, 'storeAccomplishment'])
+->name('storeAccomplishment');
+
+////////////////////////////// ALL ACCOMPLISHMENT REPORTS (ADMIN VIEW) //////////////////////////////
+Route::get('get-all-approved-events', [AccomplishmentReportsController::class, 'getAllApprovedEvents'])
+    ->name('getAllApprovedEvents');
+
+Route::get('get-event-images', [AccomplishmentReportsController::class, 'getEventsImages'])
+    ->name('getEventsImages');
 
 
 /////////////////////////////// OUTSIDE & BUSINESS MANAGER ////////////////////////
