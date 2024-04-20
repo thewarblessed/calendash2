@@ -204,6 +204,9 @@
                 url: "/api/approved-event-businessmanager",
                 method: "POST",
                 dataSrc: "",
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
             },
             dom: 'Bfrtip',
             buttons: [{
