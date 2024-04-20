@@ -1325,6 +1325,8 @@ $(document).ready(function () {
             sectDiv.style.display = 'none';
             deptDivStaff.style.display = 'none';
             validID.style.display = 'none';
+            tupID.style.display = 'block';
+            tupIDPhoto.style.display = 'block';
         }
         else if (selectedValue === 'staff') {
             deptDivStaff.style.display = 'block';
@@ -1332,6 +1334,8 @@ $(document).ready(function () {
             deptDiv.style.display = 'none';
             sectDiv.style.display = 'none';
             validID.style.display = 'none';
+            tupID.style.display = 'block';
+            tupIDPhoto.style.display = 'block';
         }
         else {
             deptDivStaff.style.display = 'none';
