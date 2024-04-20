@@ -1,5 +1,3 @@
-
-INDEX.BLADE
 <x-app-layout>
     <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css">
@@ -35,7 +33,8 @@ INDEX.BLADE
                                     </div>
                                 </div>
 
-                                <button class="btn btn-primary btn-sm" onclick="window.location.href='{{ route('createAdminEvents') }}'">
+                                <button class="btn btn-primary btn-sm"
+                                    onclick="window.location.href='{{ route('createAdminEvents') }}'">
                                     <span>Create Event</span>
                                 </button>
 
@@ -50,28 +49,27 @@ INDEX.BLADE
                                 <div class="input-group input-group-sm" style="max-width: 200px;">
                                     <input type="date" class="form-control" id="start-date-picker"
                                         placeholder="Select start date">
-                                    <button class="btn btn-primary id="fetch-events-btn">Fetch Events</button>
+                                    <button class="btn btn-primary id=" fetch-events-btn">Fetch Events</button>
                                 </div>
-                            </div>   --}}
+                            </div> --}}
 
                             <div class="table-responsive p-0">
                                 <table class="table align-items-center mb-0" id="adminAllEvents">
-                                    <thead class="bg-gray-100">
+                                    <thead>
                                         <tr>
-                                            <th class="text-secondary text-xs font-weight-semibold opacity-7">Event
-                                                Name
+                                            <th class="text-secondary text-xs font-weight-semibold opacity-7">Event Name
+                                            </th>
+                                            <th class="text-secondary text-xs font-weight-semibold opacity-7 ps-2">Venue
                                             </th>
                                             <th class="text-secondary text-xs font-weight-semibold opacity-7 ps-2">
-                                                Venue
-                                            </th>
+                                                Organization</th>
                                             <th class="text-secondary text-xs font-weight-semibold opacity-7 ps-2">
-                                                Event
+                                                Department</th>
+                                            <th class="text-secondary text-xs font-weight-semibold opacity-7 ps-2">Event
                                                 Type</th>
-                                            <th class="text-secondary text-xs font-weight-semibold opacity-7 ps-2">
-                                                Start
+                                            <th class="text-secondary text-xs font-weight-semibold opacity-7 ps-2">Start
                                                 Date</th>
-                                            <th class="text-secondary text-xs font-weight-semibold opacity-7 ps-2">
-                                                End
+                                            <th class="text-secondary text-xs font-weight-semibold opacity-7 ps-2">End
                                                 Date</th>
                                             <th
                                                 class="text-center text-secondary text-xs font-weight-semibold opacity-7">
@@ -81,154 +79,22 @@ INDEX.BLADE
                                                 End Time</th>
                                             <th
                                                 class="text-center text-secondary text-xs font-weight-semibold opacity-7">
-                                                Department</th>
-                                            <th
-                                                class="text-center text-secondary text-xs font-weight-semibold opacity-7">
-                                                Organization</th>
-                                            <th
-                                                class="text-center text-secondary text-xs font-weight-semibold opacity-7">
                                                 Status</th>
                                             <th
                                                 class="text-center text-secondary text-xs font-weight-semibold opacity-7">
                                                 Request Letter</th>
                                             <th class="text-secondary opacity-7"></th>
                                             <th class="text-secondary opacity-7"></th>
+                                            <th class="text-secondary opacity-7"></th>
+                                            <th class="text-secondary opacity-7"></th>
 
                                         </tr>
                                     </thead>
-                                    <tbody id="table-body">
-                                        @foreach ($events as $event)
-                                            <tr>
-                                                <td>
-                                                    <div class="d-flex px-2 py-1">
+                                    <tbody id="adminAllEventsBody">
+                                        <tr>
 
-                                                        <div class="d-flex flex-column justify-content-center ms-1">
-                                                            <strong>
-                                                                <h6>{{ $event->event_name }}</h6>
-                                                            </strong>
-                                                            {{-- <p class="text-sm text-secondary mb-0">
-                                                            laurent@creative-tim.com</p> --}}
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td class="align-left">
-                                                    @if ($event->venueName === null)
-                                                        <p class="text-sm text-dark font-weight-semibold mb-0">
-                                                            {{ $event->roomName }}</p>
-                                                    @else
-                                                        <p class="text-sm text-dark font-weight-semibold mb-0">
-                                                            {{ $event->venueName }}</p>
-                                                    @endif
-                                                </td>
-                                                <td>
-                                                    @if ($event->type === 'whole_day')
-                                                        <p class="text-sm text-dark font-weight-semibold mb-0">Whole
-                                                            Day
-                                                        </p>
-                                                    @endif
-                                                    @if ($event->type === 'whole_week')
-                                                        <p class="text-sm text-dark font-weight-semibold mb-0">Whole
-                                                            Week</p>
-                                                    @endif
-                                                    @if ($event->type === 'within_day')
-                                                        <p class="text-sm text-dark font-weight-semibold mb-0">
-                                                            Within
-                                                            the Day</p>
-                                                    @endif
-                                                </td>
-                                                <td>
-                                                    <p class="text-sm text-dark font-weight-semibold mb-0">
-                                                        {{ Carbon\Carbon::parse($event->start_date)->format('j F, Y') }}
-                                                    </p>
-                                                </td>
-                                                <td>
-                                                    <p class="text-sm text-dark font-weight-semibold mb-0">
-                                                        {{ Carbon\Carbon::parse($event->end_date)->format('j F, Y') }}
-                                                    </p>
-                                                </td>
-                                                <td class="align-middle text-center text-sm">
-                                                    <p class="text-sm text-dark font-weight-semibold mb-0">
-                                                        {{ Carbon\Carbon::parse($event->start_time)->format('g:i A') }}
-                                                    </p>
-                                                </td>
-                                                <td class="align-middle text-center text-sm">
-                                                    <p class="text-sm text-dark font-weight-semibold mb-0">
-                                                        {{ Carbon\Carbon::parse($event->end_time)->format('g:i A') }}
-                                                    </p>
-                                                </td>
-                                                <td class="align-middle text-center text-sm">
-                                                    <p class="text-sm text-dark font-weight-semibold mb-0">
-                                                        {{ $event->department }}</p>
-                                                </td>
-                                                <td class="align-middle text-center text-sm">
-                                                    <p class="text-sm text-dark font-weight-semibold mb-0">
-                                                        {{ $event->organization }}</p>
-                                                </td>
+                                        </tr>
 
-                                                <td class="align-middle text-center text-sm">
-                                                    @if ($event->status === 'APPROVED')
-                                                        <span
-                                                            class="badge badge-sm border border-success text-success bg-success">
-                                                            <svg width="9" height="9" viewBox="0 0 10 9"
-                                                                fill="none" xmlns="http://www.w3.org/2000/svg"
-                                                                stroke="currentColor" class="me-1">
-                                                                <path d="M1 4.42857L3.28571 6.71429L9 1"
-                                                                    stroke-width="2" stroke-linecap="round"
-                                                                    stroke-linejoin="round" />
-                                                            </svg>
-                                                            APPROVED
-                                                        </span>
-                                                    @endif
-
-                                                    @if ($event->status === 'PENDING')
-                                                        <span style="font-size: 12px"
-                                                            class="badge badge-sm border border-warning text-warning bg-warning">
-                                                            <svg width="12" height="12"
-                                                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                                                                fill="currentColor" class="me-1ca">
-                                                                <path fill-rule="evenodd"
-                                                                    d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 6a.75.75 0 00-1.5 0v6c0 .414.336.75.75.75h4.5a.75.75 0 000-1.5h-3.75V6z"
-                                                                    clip-rule="evenodd" />
-                                                            </svg>
-                                                            PENDING
-                                                        </span>
-                                                        {{-- <p class="text-secondary text-sm mb-0">{{$status}}</p> --}}
-                                                    @endif
-                                                </td>
-
-                                                <td class="align-middle text-center text-sm">
-                                                    {{-- <p class="text-sm text-dark font-weight-semibold mb-0"
-                                                    id="viewRequestLetter">Request Letter</p> --}}
-                                                    <u><strong><a href="#" style="color: black" id="reqLetter"
-                                                                class="viewRequestLetter"
-                                                                data-id="{{ $event->id }}">Request
-                                                                Letter</a></strong>
-                                                </td>
-
-                                                <td class="align-middle">
-                                                    <a type="button" class="btn btn-dark btn-sm adminViewStatus"
-                                                        data-id="{{ $event->id }}">View Status
-                                                    </a>
-                                                </td>
-
-                                                <td class="align-middle">
-                                                    <a href="javascript:;"
-                                                        class="text-secondary font-weight-bold text-xs editAdminEvents"
-                                                        data-bs-toggle="modal" data-bs-target="#editAdminEventsModal"
-                                                        data-id="{{ $event->id }}">
-                                                        <i class="fa-solid fa-pen-to-square fa-2xl"
-                                                            style="color: #5a38b7;"></i>
-                                                    </a>
-                                                </td>
-
-                                                {{-- <td class="align-middle">
-                                                <a href="javascript:;" class="text-secondary font-weight-bold "
-                                                    data-bs-toggle="tooltip" data-bs-title="Delete event">
-                                                    <i class="fa-solid fa-trash fa-xl" style="color:red"></i>
-                                                </a>
-                                            </td> --}}
-                                            </tr>
-                                        @endforeach
                                     </tbody>
                                 </table>
                             </div>
@@ -243,6 +109,8 @@ INDEX.BLADE
                             </div>
                         </div>
                     </div>
+
+                    <div id="pdfViewer"></div>
                 </div>
 
                 <div class="modal fade" id="adminAllEventStatus" tabindex="-1" role="dialog"
@@ -361,91 +229,32 @@ INDEX.BLADE
                     </div>
                 </div>
 
-                <!-- Edit Admin Events Modal -->
-                <div class="modal fade" id="editAdminEventsModal" tabindex="-1" role="dialog"
-                    aria-labelledby="createVenueModalLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h2 class="modal-title" id="createVenueModalLabel">Edit Events</h2>
-                                <button type="button" class="btn-close text-dark" data-bs-dismiss="modal"
-                                    aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <form id="AdminEventUpdateForm" enctype="multipart/form-data">
-                                    @csrf
-                                    <div class="form-group">
-                                        <label for="AdminEventsEditName">Event Name</label>
-                                        <input name="AdminEventsEditId" type="text" class="form-control"
-                                            id="AdminEventsEditId" hidden>
-                                        <input name="AdminEventsEditName" type="text" class="form-control"
-                                            id="AdminEventsEditName" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="AdminEventsEditVenue">Venue</label>
-                                        <input name="AdminEventsEditVenue" type="text" class="form-control"
-                                            id="AdminEventsEditVenue" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="AdminEventsEditType">Event Type</label>
-                                        <input name="AdminEventsEditType" type="text" class="form-control"
-                                            id="AdminEventsEditType" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="AdminEventsEditStartDate">Start Date</label>
-                                        <input name="AdminEventsEditStartDate" type="date" class="form-control"
-                                            id="AdminEventsEditStartDate" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="AdminEventsEditEndDate">End Date</label>
-                                        <input name="AdminEventsEditEndDate" type="date" class="form-control"
-                                            id="AdminEventsEditEndDate" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="AdminEventsEditStartTime">Start Time</label>
-                                        <input name="AdminEventsEditStartTime" type="time" class="form-control"
-                                            id="AdminEventsEditStartTime" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="AdminEventsEditEndTime">End Time</label>
-                                        <input name="AdminEventsEditEndTime" type="time" class="form-control"
-                                            id="AdminEventsEditEndTime" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="AdminEventsEditDepartment">Department</label>
-                                        <input name="AdminEventsEditDepartment" type="text" class="form-control"
-                                            id="AdminEventsEditDepartment" readonly="true" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="AdminEventsEditOrganization">Organization</label>
-                                        <input name="AdminEventsEditOrganization" type="text" class="form-control"
-                                            id="AdminEventsEditOrganization"readonly="true" required>
-                                    </div>
-                                </form>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-white" data-bs-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-dark" id="updateAdminEvents">Save
-                                    changes</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-
                 <x-app.footer />
             </div>
     </main>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" type="text/css"
+        href="https://cdn.datatables.net/buttons/1.7.1/css/buttons.dataTables.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    {{-- jspdf --}}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"> </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    {{-- /tapos --}}
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" charset="utf8"
+        src="https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js">
+    </script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.print.min.js">
+    </script>
     <script
         src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js">
     </script>
-
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
     <script type="text/javascript" src="/js/alert.js"></script>
-   
+
     <script>
         // Initialize the datetime picker
         $(document).ready(function() {
@@ -542,14 +351,15 @@ INDEX.BLADE
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const editButtons = document.querySelectorAll('.editAdminEvents');
-    
+
             editButtons.forEach(button => {
                 button.addEventListener('click', function() {
                     const eventId = this.getAttribute('data-id');
                     //   console.log(response);
                     // AJAX request to fetch event data
                     $.ajax({
-                        url: '/api/admin/allEvents/' + eventId, // Replace '/events/' with your actual endpoint
+                        url: '/api/admin/allEvents/' +
+                            eventId, // Replace '/events/' with your actual endpoint
                         type: 'GET',
                         success: function(response) {
                             console.log(response);
@@ -563,8 +373,9 @@ INDEX.BLADE
                             $('#AdminEventsEditStartTime').val(response.start_time);
                             $('#AdminEventsEditEndTime').val(response.end_time);
                             $('#AdminEventsEditDepartment').val(response.department);
-                            $('#AdminEventsEditOrganization').val(response.organization);
-                            
+                            $('#AdminEventsEditOrganization').val(response
+                                .organization);
+
                             // Show the edit modal
                             $('#editAdminEventsModal').modal('show');
                         },
@@ -576,77 +387,143 @@ INDEX.BLADE
             });
         });
     </script>
-    
-    
-    {{-- END AdminEventModal --}}
 
-    <style>
-        .rightbox {
-            padding: 0;
-            height: 0%;
-        }
 
-        /* .rb-container {
-      font-family: "PT Sans", sans-serif;
-      width: 50%;
-      margin: auto;
-      display: block;
-      position: relative;
-    } */
+    {{-- DATATABLES --}}
+    <script>
+        // Define the generatePDF function
+        $(document).ready(function() {
+            
+            $("#adminAllEvents").DataTable({
+                "pageLength": 5,
+                ajax: {
+                    url: "/api/admin/all-events",
+                    method: "GET",
+                    dataSrc: "",
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                },      
+                dom: 'Bfrtip',
+                layout: {
+                    topStart: {
+                        buttons: [
+                            'copy',
+                            'print',
+                            {
+                                extend: 'spacer',
+                                style: 'bar',
+                                text: 'Export files:'
+                            },
+                            'csv',
+                            'excel',
+                            'spacer',
+                            'pdf'
+                        ]
+                    }
+                },
+                columns: [{
+                        data: "event_name",
+                        render: function(data, type, row) {
+                            return "<span style='color: black; font-weight: bold;'>" + data +
+                                "</span>";
+                        }
+                    },
+                    {
+                        data: "venueName",
+                        render: function(data, type, row) {
+                            return "<span style='color: black; font-weight: bold;'>" + data +
+                                "</span>";
+                        }
+                    },
+                    {
+                        data: "organization",
+                        render: function(data, type, row) {
+                            if (data === null) {
+                                return "<span style='color: black; font-weight: bold;'>N/A</span>";
+                            } else {
+                                return "<span style='color: black; font-weight: bold;'>" + data +
+                                    "</span>";
+                            }
 
-        .rb-container ul.rb {
-            margin: 2.5em 0;
-            padding: 0;
-            display: inline-block;
-        }
+                        }
+                    },
+                    {
+                        data: "department",
+                        render: function(data, type, row) {
+                            if (data === null) {
+                                return "<span style='color: black; font-weight: bold;'>OUTSIDER</span>";
+                            } else {
+                                return "<span style='color: black; font-weight: bold;'>" + data +
+                                    "</span>";
+                            }
 
-        .rb-container ul.rb li {
-            list-style: none;
-            margin: auto;
-            margin-left: 5em;
-            min-height: 50px;
-            border-left: 3px dashed #fff;
-            padding: 0 0 50px 30px;
-            position: relative;
-        }
+                        }
+                    },
+                    {
+                        data: "type",
+                        render: function(data, type, row) {
+                            if (data === "whole_day") {
+                                return "<span style='color: black; font-weight: bold;'>Whole Day</span>";
+                            } else if (data === "whole_week") {
+                                return "<span style='color: black; font-weight: bold;'>Whole Week</span>";
+                            } else if (data === "within_day") {
+                                return "<span style='color: black; font-weight: bold;'>Within the Day</span>";
+                            }
+                        }
+                    },
+                    {
+                        data: "start_date",
+                        render: function(data, type, row) {
+                            return "<span style='color: black; font-weight: bold;'>" + moment(data)
+                                .format('MMMM D, YYYY') + "</span>";
+                        }
+                    },
+                    {
+                        data: "end_date",
+                        render: function(data, type, row) {
+                            return "<span style='color: black; font-weight: bold;'>" + moment(data)
+                                .format('MMMM D, YYYY') + "</span>";
+                        }
+                    },
+                    {
+                        data: "start_time",
+                        render: function(data, type, row) {
+                            return "<span style='color: black; font-weight: bold;'>" + moment(data,
+                                'HH:mm').format('h:mm A') + "</span>";
+                        }
+                    },
+                    {
+                        data: "end_time",
+                        render: function(data, type, row) {
+                            return "<span style='color: black; font-weight: bold;'>" + moment(data,
+                                'HH:mm').format('h:mm A') + "</span>";
+                        }
+                    },
+                    {
+                        data: "status",
+                        render: function(data, type, row) {
+                            if (data === "APPROVED") {
+                                return "<span style='color: green; font-weight: bold;'>APPROVED</span>";
+                            } else if (data === "PENDING") {
+                                return "<span style='color: orange; font-weight: bold;'>PENDING</span>";
+                            } else if (data === "REJECTED") {
+                                return "<span style='color: red; font-weight: bold;'>REJECTED</span>";
+                            }
+                        }
+                    },
+                    {
+                        data: "event_letter",
+                        render: function(data, type, row) {
+                            return "<a href='/storage/" + data + "' target='_blank'>Open PDF</a>";
+                        }
+                    }
 
-        .rb-container ul.rb li:last-child {
-            border-left: 0;
-        }
+                ],
+            });
 
-        .rb-container ul.rb li::before {
-            position: absolute;
-            left: -18px;
-            top: -5px;
-            content: " ";
-            border: 8px solid rgba(255, 255, 255, 1);
-            border-radius: 500%;
-            background: #50d890;
-            height: 20px;
-            width: 20px;
-            transition: all 500ms ease-in-out;
-        }
+        })
+    </script>
 
-        .rb-container ul.rb li:hover::before {
-            border-color: #f5f105;
-            transition: all 1000ms ease-in-out;
-        }
 
-        ul.rb li .timestamp {
-            color: #00ff77;
-            position: relative;
-            /* width: 100px; */
-            font-size: 13px;
-        }
-
-        .item-title {
-            color: #fff;
-        }
-
-        .rb-container ul.rb li:first-child {
-            margin-left: 70px;
-            font-size: 18px;
-            font-weight: 900;
-        }
-    </style>
 </x-app-layout>

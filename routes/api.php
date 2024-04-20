@@ -14,6 +14,7 @@ use App\Http\Controllers\ReportController;
 use App\Http\Controllers\BusinessManagerController;
 use App\Http\Controllers\AccomplishmentController;
 use App\Http\Controllers\AccomplishmentReportsController;
+use App\Http\Controllers\RoomController;
 
 /*
 |--------------------------------------------------------------------------
@@ -194,6 +195,8 @@ Route::post('/events',[
 // REPORTS
 // Route::get('/admin/report/venue', [ReportController::class, 'showVenueReport'])->name('admin.report.venue');
 Route::get('/admin/report/event', [ReportController::class, 'showEventReport'])->name('admin.report.event');
+
+Route::get('/admin/all-events', 'EventController@getAdminAllEvents')->name('getAdminAllEvents');
 
 
 
@@ -422,6 +425,11 @@ Route::post('/notif/request/{id}',[
         'as' => 'getNotif',
 ]);
 
+Route::post('/notif/read-request/{id}',[
+        'uses' => 'NotificationController@readNotif',
+        'as' => 'readNotif',
+]);
+
 ////////////////////////////// EXTERNAL API  //////////////////////
 Route::get('/getAllCalendars',[
         'uses' => 'CalendarController@myApiCalendar',
@@ -467,3 +475,22 @@ Route::post('/mobileAdmin/event/store', [EventController::class, 'storeMobileEve
 Route::get('/mobileAdmin/event/index', [EventController::class, 'getMobileEvents']);
 Route::get('/mobileAdmin/department', [DepartmentHeadController::class, 'getAllDepartments']);
 Route::get('/mobileAdmin/organization', [OrganizationAdviserController::class, 'getAllOrganizations']);
+
+//////////////////////////// MOBILE CALENDAR ///////////////////
+Route::get('/getAllCalendars/mobile',[
+        'uses' => 'CalendarController@myApiCalendarMobile',
+        'as' => 'myApiCalendarMobile',
+]);
+
+//ROOM INDEX 
+Route::get('/mobileAdmin/room/index', [RoomController::class, 'roomIndexMobile']);
+
+
+//CREATE EVENT
+Route::post('/mobile/event-store', [EventController::class, 'storeEventMobile']);
+
+//get events of user
+Route::post('/mobile/my-events', [EventController::class, 'myEventsMobile']);
+
+//status of events of user
+Route::post('/mobile/my-event-status/{id}', [EventController::class, 'myEventStatusMobile']);
