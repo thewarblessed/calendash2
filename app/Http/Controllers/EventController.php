@@ -391,7 +391,7 @@ class EventController extends Controller
                 
                 $data = [
                     "subject" => "Calendash Pending Request",
-                    "body" => "Hello {$user->name}!, You have a new pending approval request!"
+                    "body" => "Hello {$users->name}!, You have a new pending approval request!"
                 ];
                 Mail::to($email)->send(new MailNotify($data));
                 return response()->json(["success" => "Event Created Successfully.", "status" => 200]);
@@ -469,7 +469,7 @@ class EventController extends Controller
                 
                 $data = [
                     "subject" => "Calendash Pending Request",
-                    "body" => "Hello {$user->name}!, You have a new pending approval request!"
+                    "body" => "Hello {$users->name}!, You have a new pending approval request!"
                 ];
                 Mail::to($email)->send(new MailNotify($data));
                 return response()->json(["success" => "Event Created Successfully.", "status" => 200]);
@@ -544,7 +544,7 @@ class EventController extends Controller
                 
                 $data = [
                     "subject" => "Calendash Pending Request",
-                    "body" => "Hello {$user->name}!, You have a new pending approval request!"
+                    "body" => "Hello {$users->name}!, You have a new pending approval request!"
                 ];
                 Mail::to($email)->send(new MailNotify($data));
                 return response()->json(["success" => "Event Created Successfully.", "status" => 200]);
@@ -619,7 +619,7 @@ class EventController extends Controller
                 
                 $data = [
                     "subject" => "Calendash Pending Request",
-                    "body" => "Hello {$user->name}!, You have a new pending approval request!"
+                    "body" => "Hello {$users->name}!, You have a new pending approval request!"
                 ];
                 Mail::to($email)->send(new MailNotify($data));
                 return response()->json(["success" => "Event Created Successfully.", "status" => 200]);
