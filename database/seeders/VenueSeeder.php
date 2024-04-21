@@ -15,7 +15,7 @@ class VenueSeeder extends Seeder
     {
         //
         Venue::create([
-            'name' => 'Multi-purpose Hall',
+            'name' => 'Multipurpose Hall',
             'description' => 'Up to 200 participants',
             'capacity' => 200,
             'image' => 'venue.jpg'
@@ -33,7 +33,7 @@ class VenueSeeder extends Seeder
             'image' => 'venue.jpg'
         ]);
         Venue::create([
-            'name' => 'Open Court',
+            'name' => 'Outside Court',
             'description' => 'No Roof',
             'capacity' => 200,
             'image' => 'venue.jpg'
