@@ -17,6 +17,8 @@ use Carbon\Carbon;
 use DB;
 // use Auth;
 use Illuminate\Support\Facades\Auth;
+use Mail;
+use App\Mail\MailNotify;
 
 class RequestController extends Controller
 {
@@ -357,6 +359,11 @@ class RequestController extends Controller
                         $events->org_adviser = $officials->hash;
                         $events->approved_org_adviser_at = now();
                         $events->save();
+                        $data = [
+                            "subject" => "Calendash Approved Request",
+                            "body" => "Hello {$requester->name}!, Your request has been approved by the Organization Adviser. Approval from the Section Head of IT is pending."
+                        ];
+                        Mail::to($requester->email)->send(new MailNotify($data));
                         return response()->json(["message" => 'Request handled successfully']);
                         // return response()->json(['message' => 'Request handled successfully']);
                     } else {
@@ -385,6 +392,11 @@ class RequestController extends Controller
                                 $events->org_adviser = $officials->hash;
                                 $events->approved_org_adviser_at = now();
                                 $events->save();
+                                $data = [
+                                    "subject" => "Calendash Approved Request",
+                                    "body" => "Hello {$requester->name}!, Your request has been approved by the Organization Adviser. Approval from the Section Head is pending."
+                                ];
+                                Mail::to($requester->email)->send(new MailNotify($data));
                                 return response()->json(["message" => 'Request handled successfully']);
                                 // return response()->json(['message' => 'Request handled successfully']);
                             } else {
@@ -405,6 +417,11 @@ class RequestController extends Controller
                                 $events->sect_head = $officials->hash;
                                 $events->approved_sec_head_at = now();
                                 $events->save();
+                                $data = [
+                                    "subject" => "Calendash Approved Request",
+                                    "body" => "Hello {$requester->name}!, Your request has been approved by the Section Head. Approval from the Department Head is now pending."
+                                ];
+                                Mail::to($requester->email)->send(new MailNotify($data));
                                 return response()->json(["message" => 'Request handled successfully']);
                                 // return response()->json(['message' => 'Request handled successfully']);
                             } else {
@@ -425,6 +442,11 @@ class RequestController extends Controller
                                 $events->dept_head = $officials->hash;
                                 $events->approved_dept_head_at = now();
                                 $events->save();
+                                $data = [
+                                    "subject" => "Calendash Approved Request",
+                                    "body" => "Hello {$requester->name}!, Your request has been approved by the Department Head. Approval from the OSA is now pending."
+                                ];
+                                Mail::to($requester->email)->send(new MailNotify($data));
                                 return response()->json(["message" => 'Request handled successfully']);
                                 // return response()->json(['message' => 'Request handled successfully']);
                             } else {
@@ -444,6 +466,11 @@ class RequestController extends Controller
                                 $events->osa = $officials->hash;
                                 $events->approved_osa_at = now();
                                 $events->save();
+                                $data = [
+                                    "subject" => "Calendash Approved Request",
+                                    "body" => "Hello {$requester->name}!, Your request has been approved by the OSA. Approval from the ADAA is now pending."
+                                ];
+                                Mail::to($requester->email)->send(new MailNotify($data));
                                 return response()->json(["message" => 'Request handled successfully']);
                                 // return response()->json(['message' => 'Request handled successfully']);
                             } else {
@@ -463,6 +490,11 @@ class RequestController extends Controller
                                 $events->adaa = $officials->hash;
                                 $events->approved_adaa_at = now();
                                 $events->save();
+                                $data = [
+                                    "subject" => "Calendash Approved Request",
+                                    "body" => "Hello {$requester->name}!, Your request has been approved by the ADAA Head. Approval from the ADAF is now pending."
+                                ];
+                                Mail::to($requester->email)->send(new MailNotify($data));
                                 return response()->json(["message" => 'Request handled successfully']);
                                 // return response()->json(['message' => 'Request handled successfully']);
                             } else {
@@ -484,6 +516,11 @@ class RequestController extends Controller
                                 $events->status = "APPROVED";
                                 $events->color = "#31B4F2";
                                 $events->save();
+                                $data = [
+                                    "subject" => "Calendash Approved Request",
+                                    "body" => "Hello {$requester->name}!, Your event has been officially approved!"
+                                ];
+                                Mail::to($requester->email)->send(new MailNotify($data));
                                 return response()->json(["message" => 'Request handled successfully']);
                                 // return response()->json(['message' => 'Request handled successfully']);
                             } else {
@@ -506,6 +543,11 @@ class RequestController extends Controller
                                 $events->org_adviser = $officials->hash;
                                 $events->approved_org_adviser_at = now();
                                 $events->save();
+                                $data = [
+                                    "subject" => "Calendash Approved Request",
+                                    "body" => "Hello {$requester->name}!, Your request has been approved by the Organization Adviser. Approval from the Section Head is pending."
+                                ];
+                                Mail::to($requester->email)->send(new MailNotify($data));
                                 return response()->json(["message" => 'Request handled successfully']);
                                 // return response()->json(['message' => 'Request handled successfully']);
                             } else {
@@ -526,6 +568,11 @@ class RequestController extends Controller
                                 $events->sect_head = $officials->hash;
                                 $events->approved_sec_head_at = now();
                                 $events->save();
+                                $data = [
+                                    "subject" => "Calendash Approved Request",
+                                    "body" => "Hello {$requester->name}!, Your request has been approved by the Section Head. Approval from the Department Head is now pending."
+                                ];
+                                Mail::to($requester->email)->send(new MailNotify($data));
                                 return response()->json(["message" => 'Request handled successfully']);
                                 // return response()->json(['message' => 'Request handled successfully']);
                             } else {
@@ -547,6 +594,11 @@ class RequestController extends Controller
                                 $events->approved_dept_head_at = now();
                                 $events->updated_at = now();
                                 $events->save();
+                                $data = [
+                                    "subject" => "Calendash Approved Request",
+                                    "body" => "Hello {$requester->name}!, Your request has been approved by the Department Head. Approval from the OSA is now pending."
+                                ];
+                                Mail::to($requester->email)->send(new MailNotify($data));
                                 return response()->json(["message" => 'Request handled successfully']);
                                 // return response()->json(['message' => 'Request handled successfully']);
                             } else {
@@ -567,6 +619,11 @@ class RequestController extends Controller
                                 $events->approved_osa_at = now();
                                 $events->updated_at = now();
                                 $events->save();
+                                $data = [
+                                    "subject" => "Calendash Approved Request",
+                                    "body" => "Hello {$requester->name}!, Your request has been approved by the OSA. Approval from the ADAA is now pending."
+                                ];
+                                Mail::to($requester->email)->send(new MailNotify($data));
                                 return response()->json(["message" => 'Request handled successfully']);
                                 // return response()->json(['message' => 'Request handled successfully']);
                             } else {
@@ -588,6 +645,11 @@ class RequestController extends Controller
                                 $events->approved_adaa_at = now();
                                 $events->updated_at = now();
                                 $events->save();
+                                $data = [
+                                    "subject" => "Calendash Approved Request",
+                                    "body" => "Hello {$requester->name}!, Your request has been approved by the ADAA Head. Approval from the ADAF is now pending."
+                                ];
+                                Mail::to($requester->email)->send(new MailNotify($data));
                                 return response()->json(["message" => 'Request handled successfully']);
                                 // return response()->json(['message' => 'Request handled successfully']);
                             } else {
@@ -610,6 +672,11 @@ class RequestController extends Controller
                                 $events->status = "APPROVED";
                                 $events->color = "#31B4F2";
                                 $events->save();
+                                $data = [
+                                    "subject" => "Calendash Approved Request",
+                                    "body" => "Hello {$requester->name}!, Your event request has been officially approved!"
+                                ];
+                                Mail::to($requester->email)->send(new MailNotify($data));
                                 return response()->json(["message" => 'Request handled successfully']);
                                 // return response()->json(['message' => 'Request handled successfully']);
                             } else {
@@ -619,7 +686,6 @@ class RequestController extends Controller
                             }
                         }
                 }
-
 
             }
         }
@@ -645,6 +711,11 @@ class RequestController extends Controller
                         $events->status = "APPROVED";
                         $events->color = "#31B4F2";
                         $events->save();
+                        $data = [
+                            "subject" => "Calendash Approved Request",
+                            "body" => "Hello {$requester->name}!, Your request has been approved by the Section Head of IT. Your event request has been officially approved!"
+                        ];
+                        Mail::to($requester->email)->send(new MailNotify($data));
                         return response()->json(["message" => 'Request handled successfully']);
                         // return response()->json(['message' => 'Request handled successfully']);
                     } else {
@@ -670,6 +741,11 @@ class RequestController extends Controller
                             $events->approved_atty_at = now();
                             $events->updated_at = now();
                             $events->save();
+                            $data = [
+                                "subject" => "Calendash Approved Request",
+                                "body" => "Hello {$requester->name}!, Your request has been approved by the ADAF. Approval from the Campus Director is now pending."
+                            ];
+                            Mail::to($requester->email)->send(new MailNotify($data));
                             return response()->json(["message" => 'Request handled successfully']);
                             // return response()->json(['message' => 'Request handled successfully']);
                         } else {
@@ -692,6 +768,11 @@ class RequestController extends Controller
                                 $events->status = "APPROVED";
                                 $events->color = "#31B4F2";
                                 $events->save();
+                                $data = [
+                                "subject" => "Calendash Approved Request",
+                                "body" => "Hello {$requester->name}!, Your request has been approved by the Campus Director. Event has been officially approved!"
+                                ];
+                                Mail::to($requester->email)->send(new MailNotify($data));
                                 return response()->json(["message" => 'Request handled successfully']);
                                 // return response()->json(['message' => 'Request handled successfully']);
                             } else {
@@ -727,6 +808,11 @@ class RequestController extends Controller
                         $events->status = "APPROVED";
                         $events->color = "#31B4F2";
                         $events->save();
+                        $data = [
+                            "subject" => "Calendash Approved Request",
+                            "body" => "Hello {$requester->name}!, Your request has been approved by the Section Head of IT. Event has been officially approved!"
+                            ];
+                        Mail::to($requester->email)->send(new MailNotify($data));
                         return response()->json(["message" => 'Request handled successfully']);
                         // return response()->json(['message' => 'Request handled successfully']);
                     } else {
@@ -752,6 +838,11 @@ class RequestController extends Controller
                             $events->approved_adaa_at = now();
                             $events->updated_at = now();
                             $events->save();
+                            $data = [
+                                "subject" => "Calendash Approved Request",
+                                "body" => "Hello {$requester->name}!, Your request has been approved by the ADAA. Approval from the Campus Director is now pending."
+                                ];
+                            Mail::to($requester->email)->send(new MailNotify($data));
                             return response()->json(["message" => 'Request handled successfully']);
                             // return response()->json(['message' => 'Request handled successfully']);
                         } else {
@@ -774,6 +865,11 @@ class RequestController extends Controller
                                 $events->status = "APPROVED";
                                 $events->color = "#31B4F2";
                                 $events->save();
+                                $data = [
+                                    "subject" => "Calendash Approved Request",
+                                    "body" => "Hello {$requester->name}!, Your request has been approved by the Campus Director. Event has been officially approved!"
+                                    ];
+                                Mail::to($requester->email)->send(new MailNotify($data));
                                 return response()->json(["message" => 'Request handled successfully']);
                                 // return response()->json(['message' => 'Request handled successfully']);
                             } else {
@@ -803,6 +899,9 @@ class RequestController extends Controller
         $role = $user->role;
         // dd($role);
         $event_id = $id;
+
+        $event = Event::where('id',$event_id)->first();
+        $requester = User::where('id',$event->user_id)->first();
         
         $angEvent = Venue::join('events', 'venues.id', 'events.venue_id')->where('events.id', $event_id)->select('venues.name')->first();
         $venue = $angEvent->name;
@@ -824,6 +923,12 @@ class RequestController extends Controller
                         $events->status = 'REJECTED';
                         $events->updated_at = now(); // DATE OF REJECTION
                         $events->update();
+                        $data = [
+                            "subject" => "Calendash Rejected Request",
+                            "body" => "Hello {$requester->name}!,\n\nWe regret to inform you that your request has been declined. 
+                                        Your Organization Adviser has reviewed your request and has decided not to approve it at this time.\n\nReason of rejection: ''{$reason}''."
+                            ];
+                        Mail::to($requester->email)->send(new MailNotify($data));
                         return response()->json(["message" => 'Request handled successfully']);
                         // return response()->json(['message' => 'Request handled successfully']);
                     } else {
@@ -846,6 +951,12 @@ class RequestController extends Controller
                         $events->status = 'REJECTED';
                         $events->updated_at = now(); // DATE OF REJECTION
                         $events->save();
+                        $data = [
+                            "subject" => "Calendash Rejected Request",
+                            "body" => "Hello {$requester->name}!,\n\nWe regret to inform you that your request has been declined. 
+                                        Your Section Head has reviewed your request and has decided not to approve it at this time.\n\nReason of rejection: {$reason}."
+                            ];
+                        Mail::to($requester->email)->send(new MailNotify($data));
                         return response()->json(["message" => 'Request handled successfully']);
                         // return response()->json(['message' => 'Request handled successfully']);
                     } else {
@@ -868,6 +979,12 @@ class RequestController extends Controller
                         $events->status = 'REJECTED';
                         $events->updated_at = now(); // DATE OF REJECTION
                         $events->save();
+                        $data = [
+                            "subject" => "Calendash Rejected Request",
+                            "body" => "Hello {$requester->name}!,\n\nWe regret to inform you that your request has been declined. 
+                                        Your Department Head has reviewed your request and has decided not to approve it at this time.\n\nReason of rejection: {$reason}."
+                            ];
+                        Mail::to($requester->email)->send(new MailNotify($data));
                         return response()->json(["message" => 'Request handled successfully']);
                         // return response()->json(['message' => 'Request handled successfully']);
                     } else {
@@ -889,6 +1006,12 @@ class RequestController extends Controller
                         $events->status = 'REJECTED';
                         $events->updated_at = now(); // DATE OF REJECTION
                         $events->save();
+                        $data = [
+                            "subject" => "Calendash Rejected Request",
+                            "body" => "Hello {$requester->name}!,\n\nWe regret to inform you that your request has been declined. 
+                                        The OSA has reviewed your request and has decided not to approve it at this time.\n\nReason of rejection: {$reason}."
+                            ];
+                        Mail::to($requester->email)->send(new MailNotify($data));
                         return response()->json(["message" => 'Request handled successfully']);
                         // return response()->json(['message' => 'Request handled successfully']);
                     } else {
@@ -910,6 +1033,12 @@ class RequestController extends Controller
                         $events->status = 'REJECTED';
                         $events->updated_at = now(); // DATE OF REJECTION
                         $events->save();
+                        $data = [
+                            "subject" => "Calendash Rejected Request",
+                            "body" => "Hello {$requester->name}!,\n\nWe regret to inform you that your request has been declined. 
+                                        The ADAA has reviewed your request and has decided not to approve it at this time.\n\nReason of rejection: {$reason}."
+                            ];
+                        Mail::to($requester->email)->send(new MailNotify($data));
                         return response()->json(["message" => 'Request handled successfully']);
                         // return response()->json(['message' => 'Request handled successfully']);
                     } else {
@@ -931,6 +1060,12 @@ class RequestController extends Controller
                         $events->status = 'REJECTED';
                         $events->updated_at = now(); // DATE OF REJECTION
                         $events->save();
+                        $data = [
+                            "subject" => "Calendash Rejected Request",
+                            "body" => "Hello {$requester->name}!,\n\nWe regret to inform you that your request has been declined. 
+                                        The Campus Director has reviewed your request and has decided not to approve it at this time.\n\nReason of rejection: {$reason}."
+                            ];
+                        Mail::to($requester->email)->send(new MailNotify($data));
                         return response()->json(["message" => 'Request handled successfully']);
                         // return response()->json(['message' => 'Request handled successfully']);
                     } else {
@@ -952,6 +1087,12 @@ class RequestController extends Controller
                         $events->status = 'REJECTED';
                         $events->updated_at = now(); // DATE OF REJECTION
                         $events->save();
+                        $data = [
+                            "subject" => "Calendash Rejected Request",
+                            "body" => "Hello {$requester->name}!,\n\nWe regret to inform you that your request has been declined. 
+                                        The ADAF has reviewed your request and has decided not to approve it at this time.\n\nReason of rejection: {$reason}."
+                            ];
+                        Mail::to($requester->email)->send(new MailNotify($data));
                         return response()->json(["message" => 'Request handled successfully']);
                         // return response()->json(['message' => 'Request handled successfully']);
                     } else {

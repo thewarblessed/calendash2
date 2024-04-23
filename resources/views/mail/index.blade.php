@@ -1,7 +1,7 @@
 <x-mail::message>
-    <h1>Hello! You have a pending request!</h1>
+    <h1>Hello! Here is an update on your request!</h1>
     <h2>{{ $data['body'] }}</h2>
     <p>
-        Click <a href="https://calendash.online/request">here</a> to view pending request.
+        Click <a href="https://calendash.online/">here</a> to view page.
     </p>
 </x-mail::message>

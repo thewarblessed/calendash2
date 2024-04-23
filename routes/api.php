@@ -436,6 +436,18 @@ Route::get('/getAllCalendars',[
         'as' => 'myApiCalendar',
 ]);
 
+////////////////////////////// Check Passcode //////////////////////
+Route::post('/me/check-passcode',[
+        'uses' => 'ProfileController@checkPasscode',
+        'as' => 'checkPasscode',
+]);
+
+////////////////////////////// Update Passcode //////////////////////
+Route::post('/me/update-passcode',[
+        'uses' => 'ProfileController@updatePasscode',
+        'as' => 'updatePasscode',
+]);
+
 ////////////////================ MOBILE ROUTES ================//////////////////
 //REGISTRATION MOBILE
 Route::post('/auth/sign-up',[

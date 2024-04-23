@@ -76,7 +76,7 @@
                             @foreach ($events as $event)
                                 <div class="col-xl-4 col-md-6 mb-xl-0 mb-4">
                                     <div class="card card-background border-radius-xl card-background-after-none align-items-start mb-4">
-                                        <div class="full-background bg-cover" style="background-image: url('https://i.pinimg.com/originals/e5/27/9f/e5279f5b58c4d921d8439c253bb15362.gif'); background-size: cover;"></div>
+                                        <div class="full-background bg-cover" style="background-image: url('https://i.pinimg.com/originals/63/be/5f/63be5f30749ff7be7bb4a633ffac763f.gif'); background-size: cover;"></div>
                                         <span class="mask bg-dark opacity-1 border-radius-sm"></span>
                                         <div class="card-body text-start p-3 w-100">
                                             <div class="row">

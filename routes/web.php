@@ -418,3 +418,6 @@ Route::get('/rejected/rooms', [RequestRoomController::class, 'rejectedRoomsView'
 Route::get('/admin/report', [ReportController::class, 'countEventPerOrgReport'])->name('countEventPerOrgReport');
 
 
+
+//////////////////////////////////////// CHANGE PASSCODE ////////////////////////////////////////
+Route::get('/me/change-passcode', [ProfileController::class, 'changePasscodeView'])->name('changePasscodeView');

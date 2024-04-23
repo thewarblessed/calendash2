@@ -47,26 +47,37 @@ class EventController extends Controller
         });
         $appointments = $filteredAppointments->map(function ($appointment) {
             $color = $appointment->status === 'Pending' ? '#D6AD60' : ($appointment->status === 'Approved' ? '#31B4F2' : '#808080');
+            $timeStart = $appointment->timeStart ? new \DateTime($appointment->timeStart) : null;
+            $timeEnd = $appointment->timeEnd ? new \DateTime($appointment->timeEnd) : null;
+
             return [
-                'id' => $appointment->_id ?? null, // Assuming _id is the unique identifier for appointments in MongoDB
+                'id' => $appointment->_id ?? null,
                 'title' => $appointment->title ?? '',
                 'description' => $appointment->description ?? '',
                 'status' => $appointment->status,
                 'color' => $color,
                 'venueName' => $appointment->location,
-                'start' => $appointment->timeStart ?? '',
-                'end' => $appointment->timeEnd ?? '',
+                'start' => $timeStart ? $timeStart->format('Y-m-d\TH:i:s') : '',
+                'end' => $timeEnd ? $timeEnd->format('Y-m-d\TH:i:s') : '',
+                'start_time' => $timeStart ? $timeStart->format('H:i:s') : '',
+                'end_time' => $timeEnd ? $timeEnd->format('H:i:s') : '',
+                'start_date' => $timeStart ? $timeStart->format('Y-m-d') : '',
+                'end_date' => $timeEnd ? $timeEnd->format('Y-m-d') : '',
             ];
         })->values();
 
         $events = Event::orderBy('events.id')
-                        ->leftjoin('venues','venues.id','events.venue_id')
-                        ->select('events.id','events.event_name as title','events.description','events.status','events.color','venues.name as venueName')
-                        ->selectRaw('CONCAT(events.start_date, "T", events.start_time) as start')
-                        ->selectRaw('CONCAT(events.end_date, "T", events.end_time) as end')
-                        ->where('events.status', 'PENDING')
-                        ->orWhere('events.status', 'APPROVED')
-                        ->get();
+                                ->leftJoin('venues', 'venues.id', 'events.venue_id')
+                                ->select('events.id', 'events.event_name as title', 'events.description', 'events.status', 'events.color', 'venues.name as venueName')
+                                ->selectRaw('CONCAT(events.start_date, "T", events.start_time) as start')
+                                ->selectRaw('CONCAT(events.end_date, "T", events.end_time) as end')
+                                ->selectRaw('DATE_FORMAT(events.start_date, "%Y-%m-%d") as start_date')
+                                ->selectRaw('TIME_FORMAT(events.start_time, "%H:%i:%s") as start_time')
+                                ->selectRaw('DATE_FORMAT(events.end_date, "%Y-%m-%d") as end_date')
+                                ->selectRaw('TIME_FORMAT(events.end_time, "%H:%i:%s") as end_time')
+                                ->where('events.status', 'PENDING')
+                                ->orWhere('events.status', 'APPROVED')
+                                ->get();
 
         $appointmentsCollection = collect($appointments);
         $eventsCollection = collect($events);
@@ -129,18 +140,29 @@ class EventController extends Controller
             // return response()->json(['conflict' => $conflict]);
             
                 $eventData = $this->eventData()->getData();
-                
+                // dd($eventData);
+                // Assuming $startDate, $endDate, $startTime, $endTime, and $venueName are defined before this code snippet
+
                 $conflict = collect($eventData)->filter(function ($event) use ($date, $startTime, $endTime, $venueName) {
-                    // dd($venueName);
                     // Check if the event's venue name matches and if there's a time overlap
                     return $event->venueName == $venueName &&
                         $event->status != 'REJECTED' &&
-                        (Carbon::parse($event->start)->between($date, $endTime) ||
-                            Carbon::parse($event->end)->between($startTime, $endTime) ||
-                            Carbon::parse($date)->between($event->start, $event->end));
+                        (
+                            ($event->start_date <= $date && $event->end_date >= $date) ||  // Check if event starts during the new event
+                            ($event->start_date <= $date && $event->end_date >= $date) ||      // Check if event ends during the new event
+                            ($event->start_date >= $date && $event->end_date <= $date) ||    // Check if event is completely within the new event
+                            ($event->start_date <= $date && $event->end_date >= $date)       // Check if new event is completely within the event
+                        ) &&
+                        (
+                            ($event->start_time <= $startTime && $event->end_time >= $startTime) ||  // Check if event starts during the new event
+                            ($event->start_time <= $endTime && $event->end_time >= $endTime) ||      // Check if event ends during the new event
+                            ($event->start_time >= $startTime && $event->end_time <= $endTime) ||    // Check if event is completely within the new event
+                            ($event->start_time <= $startTime && $event->end_time >= $endTime)       // Check if new event is completely within the event
+                        );
                 })->isEmpty();
 
-                return response()->json(['conflict' => $conflict]);
+                return response()->json(['conflict' => !$conflict]);
+
             }
         }
         elseif($event_type ==='wholeDay')
@@ -176,15 +198,11 @@ class EventController extends Controller
                 $eventData = $this->eventData()->getData();
                 // dd($eventData);
                 $conflict = collect($eventData)->filter(function ($event) use ($date, $venueName) {
-                    // dd($venueName);
-                    // Check if the event's venue name matches and if the date overlaps
+                    // Check if the event's venue name matches and if there's a date overlap
                     return $event->venueName == $venueName &&
                         $event->status != 'REJECTED' &&
-                        (Carbon::parse($event->start)->isSameDay($date) ||
-                            Carbon::parse($event->end)->isSameDay($date) ||
-                            (Carbon::parse($event->start) < $date && Carbon::parse($event->end) > $date));
+                        $event->start_date == $date; // Check if the event's start date is the same as the given date
                 })->isNotEmpty();
-                
                 return response()->json(['conflict' => $conflict]);
             }
             
@@ -217,14 +235,34 @@ class EventController extends Controller
                 return response()->json(['conflict' => $conflict]);
             }
             else{
-                $conflict = Event::where('venue_id', $venueId)
-                ->where('status', '!=', 'REJECTED')
-                ->where(function ($query) use ($startDate, $endDate) {
-                    $query->where('start_date', '<=', $endDate)
-                        ->where('end_date', '>=', $startDate);
-                })
-                ->exists();
-                // dd($conflict);
+                // $conflict = Event::where('venue_id', $venueId)
+                // ->where('status', '!=', 'REJECTED')
+                // ->where(function ($query) use ($startDate, $endDate) {
+                //     $query->where('start_date', '<=', $endDate)
+                //         ->where('end_date', '>=', $startDate);
+                // })
+                // ->exists();
+                // // dd($conflict);
+                // return response()->json(['conflict' => $conflict]);
+                $eventData = $this->eventData()->getData();
+
+                $conflict = false;
+                // Iterate over each day in the week
+                for ($currentDate = $startDate; $currentDate <= $endDate; $currentDate = date("Y-m-d", strtotime($currentDate . "+1 day"))) {
+                    // Check for conflicts for each day
+                    $conflict = collect($eventData)->filter(function ($event) use ($currentDate, $venueName) {
+                        // Check if the event's venue name matches and if there's a date overlap
+                        return $event->venueName == $venueName &&
+                            $event->status != 'REJECTED' &&
+                            $event->start_date == $currentDate; // Check if the event's start date is the same as the current date
+                    })->isNotEmpty();
+
+                    // If a conflict is found for any day, break out of the loop
+                    if ($conflict) {
+                        break;
+                    }
+                }
+
                 return response()->json(['conflict' => $conflict]);
             }
             // Check if there are any events with the same venue and overlapping dates
@@ -237,6 +275,8 @@ class EventController extends Controller
             $dateRange = $request->input('daterange');
             [$startDate, $endDate] = explode(' - ', $dateRange);
             $venueId = $request->input('venue_id');
+            $venue = Venue::where('id', $venueId)->select('name')->first();
+            $venueName = $venue->name;
             $roomId = $request->input('room_id');
             // dd($endDate);
             if($venueType ==='room'){
@@ -259,21 +299,40 @@ class EventController extends Controller
             return response()->json(['conflict' => $conflict]);
             }
             else{
-                $conflict = Event::where('venue_id', $venueId)
-                    ->where('status', '!=', 'REJECTED')
-                    ->where(function ($query) use ($startDate, $endDate) {
-                    $query->where(function ($q) use ($startDate, $endDate) {
-                        $q->where('start_date', '<=', $endDate)
-                            ->where('end_date', '>=', $startDate);
-                    })->orWhere(function ($q) use ($startDate, $endDate) {
-                        $q->where('start_date', '>=', $startDate)
-                            ->where('end_date', '<=', $endDate);
-                    })->orWhere(function ($q) use ($startDate, $endDate) {
-                        $q->where('start_date', '<=', $startDate)
-                            ->where('end_date', '>=', $endDate);
-                    });
-                })
-                ->exists();
+                // $conflict = Event::where('venue_id', $venueId)
+                //     ->where('status', '!=', 'REJECTED')
+                //     ->where(function ($query) use ($startDate, $endDate) {
+                //     $query->where(function ($q) use ($startDate, $endDate) {
+                //         $q->where('start_date', '<=', $endDate)
+                //             ->where('end_date', '>=', $startDate);
+                //     })->orWhere(function ($q) use ($startDate, $endDate) {
+                //         $q->where('start_date', '>=', $startDate)
+                //             ->where('end_date', '<=', $endDate);
+                //     })->orWhere(function ($q) use ($startDate, $endDate) {
+                //         $q->where('start_date', '<=', $startDate)
+                //             ->where('end_date', '>=', $endDate);
+                //     });
+                // })
+                // ->exists();
+            $eventData = $this->eventData()->getData();
+
+            $conflict = false;
+            // Iterate over each day in the date range
+            for ($currentDate = $startDate; $currentDate <= $endDate; $currentDate = date("Y-m-d", strtotime($currentDate . "+1 day"))) {
+                // Check for conflicts for each day
+                $conflict = collect($eventData)->filter(function ($event) use ($currentDate, $venueName) {
+                    // Check if the event's venue name matches and if there's a date overlap
+                    return $event->venueName == $venueName &&
+                        $event->status != 'REJECTED' &&
+                        $event->start_date <= $currentDate &&
+                        $event->end_date >= $currentDate; // Check if the current date is between the event's start and end dates
+                })->isNotEmpty();
+
+                // If a conflict is found for any day, break out of the loop
+                if ($conflict) {
+                    break;
+                }
+            }
 
             return response()->json(['conflict' => $conflict]);
             }
@@ -421,6 +480,15 @@ class EventController extends Controller
                     "body" => "Hello {$users->name}!, You have a new pending approval request!"
                 ];
                 Mail::to($email)->send(new MailNotify($data));
+
+                Notification::create([
+                    'to_user_id' => $users->id,
+                    'subject' => "Calendash Pending Request",
+                    'message' => "You have a pending request!",
+                    'from_user_id' => $request->user_id,
+                    'created_at' => now()
+                ]);
+
                 return response()->json(["success" => "Event Created Successfully.", "status" => 200]);
             }
             elseif ($inputType === 'withinDay') {
@@ -499,6 +567,13 @@ class EventController extends Controller
                     "body" => "Hello {$users->name}!, You have a new pending approval request!"
                 ];
                 Mail::to($email)->send(new MailNotify($data));
+                Notification::create([
+                    'to_user_id' => $users->id,
+                    'subject' => "Calendash Pending Request",
+                    'message' => "You have a pending request!",
+                    'from_user_id' => $request->user_id,
+                    'created_at' => now()
+                ]);
                 return response()->json(["success" => "Event Created Successfully.", "status" => 200]);
             }   
             else if ($inputType === 'wholeDay'){
@@ -574,6 +649,13 @@ class EventController extends Controller
                     "body" => "Hello {$users->name}!, You have a new pending approval request!"
                 ];
                 Mail::to($email)->send(new MailNotify($data));
+                Notification::create([
+                    'to_user_id' => $users->id,
+                    'subject' => "Calendash Pending Request",
+                    'message' => "You have a pending request!",
+                    'from_user_id' => $request->user_id,
+                    'created_at' => now()
+                ]);
                 return response()->json(["success" => "Event Created Successfully.", "status" => 200]);
             }
             else
@@ -649,6 +731,13 @@ class EventController extends Controller
                     "body" => "Hello {$users->name}!, You have a new pending approval request!"
                 ];
                 Mail::to($email)->send(new MailNotify($data));
+                Notification::create([
+                    'to_user_id' => $users->id,
+                    'subject' => "Calendash Pending Request",
+                    'message' => "You have a pending request!",
+                    'from_user_id' => $request->user_id,
+                    'created_at' => now()
+                ]);
                 return response()->json(["success" => "Event Created Successfully.", "status" => 200]);
             }
 
@@ -739,6 +828,13 @@ class EventController extends Controller
                     "body" => "Hello {$adaf->name}!, You have a new pending approval request!"
                 ];
                 Mail::to($adafEmail)->send(new MailNotify($data));
+                Notification::create([
+                    'to_user_id' => $adaf->id,
+                    'subject' => "Calendash Pending Request",
+                    'message' => "You have a pending request!",
+                    'from_user_id' => $request->user_id,
+                    'created_at' => now()
+                ]);
                 return response()->json(["success" => "Event Created Successfully.", "status" => 200]);
             }
             elseif ($inputType === 'withinDay') {
@@ -813,6 +909,13 @@ class EventController extends Controller
                     "body" => "Hello {$adaf->name}!, You have a new pending approval request!"
                 ];
                 Mail::to($adafEmail)->send(new MailNotify($data));
+                Notification::create([
+                    'to_user_id' => $adaf->id,
+                    'subject' => "Calendash Pending Request",
+                    'message' => "You have a pending request!",
+                    'from_user_id' => $request->user_id,
+                    'created_at' => now()
+                ]);
                 return response()->json(["success" => "Event Created Successfully.", "status" => 200]);
             }   
             else if ($inputType === 'wholeDay'){
@@ -886,6 +989,13 @@ class EventController extends Controller
                     "body" => "Hello {$adaf->name}!, You have a new pending approval request!"
                 ];
                 Mail::to($adafEmail)->send(new MailNotify($data));
+                Notification::create([
+                    'to_user_id' => $adaf->id,
+                    'subject' => "Calendash Pending Request",
+                    'message' => "You have a pending request!",
+                    'from_user_id' => $request->user_id,
+                    'created_at' => now()
+                ]);
                 return response()->json(["success" => "Event Created Successfully.", "status" => 200]);
             }
             else
@@ -959,6 +1069,13 @@ class EventController extends Controller
                     "body" => "Hello {$adaf->name}!, You have a new pending approval request!"
                 ];
                 Mail::to($adafEmail)->send(new MailNotify($data));
+                Notification::create([
+                    'to_user_id' => $adaf->id,
+                    'subject' => "Calendash Pending Request",
+                    'message' => "You have a pending request!",
+                    'from_user_id' => $request->user_id,
+                    'created_at' => now()
+                ]);
                 return response()->json(["success" => "Event Created Successfully.", "status" => 200]);
             }
         }
@@ -968,6 +1085,9 @@ class EventController extends Controller
 
             $target_dept = $staff->department_id;
             // $target_org = $staff->organization;
+            
+            $adaa = User::where('role','adaa')->first();
+            $adaaEmail = $adaa->email;
 
             if ($inputType === 'wholeWeek') {
                 $weekDate = $request->input('event_date_wholeWeekUser');
@@ -1038,7 +1158,18 @@ class EventController extends Controller
                         'created_at' => now()
                     ]);
                 }
-                
+                $data = [
+                    "subject" => "Calendash Pending Request",
+                    "body" => "Hello {$adaa->name}!, You have a new pending approval request!"
+                ];
+                Mail::to($adaaEmail)->send(new MailNotify($data));
+                Notification::create([
+                    'to_user_id' => $adaa->id,
+                    'subject' => "Calendash Pending Request",
+                    'message' => "You have a pending request!",
+                    'from_user_id' => $request->user_id,
+                    'created_at' => now()
+                ]);
                 return response()->json(["success" => "Event Created Successfully.", "status" => 200]);
             }
             elseif ($inputType === 'withinDay') {
@@ -1107,7 +1238,18 @@ class EventController extends Controller
                         'created_at' => now()
                     ]);
                 }
-
+                $data = [
+                    "subject" => "Calendash Pending Request",
+                    "body" => "Hello {$adaa->name}!, You have a new pending approval request!"
+                ];
+                Mail::to($adaaEmail)->send(new MailNotify($data));
+                Notification::create([
+                    'to_user_id' => $adaa->id,
+                    'subject' => "Calendash Pending Request",
+                    'message' => "You have a pending request!",
+                    'from_user_id' => $request->user_id,
+                    'created_at' => now()
+                ]);
                 return response()->json(["success" => "Event Created Successfully.", "status" => 200]);
             }   
             else if ($inputType === 'wholeDay'){
@@ -1174,7 +1316,18 @@ class EventController extends Controller
                         'created_at' => now()
                     ]);
                 }
-                
+                $data = [
+                    "subject" => "Calendash Pending Request",
+                    "body" => "Hello {$adaa->name}!, You have a new pending approval request!"
+                ];
+                Mail::to($adaaEmail)->send(new MailNotify($data));
+                Notification::create([
+                    'to_user_id' => $adaa->id,
+                    'subject' => "Calendash Pending Request",
+                    'message' => "You have a pending request!",
+                    'from_user_id' => $request->user_id,
+                    'created_at' => now()
+                ]);
                 return response()->json(["success" => "Event Created Successfully.", "status" => 200]);
             }
             else
@@ -1243,7 +1396,18 @@ class EventController extends Controller
                         'created_at' => now()
                     ]);
                 }
-                
+                $data = [
+                    "subject" => "Calendash Pending Request",
+                    "body" => "Hello {$adaa->name}!, You have a new pending approval request!"
+                ];
+                Mail::to($adaaEmail)->send(new MailNotify($data));
+                Notification::create([
+                    'to_user_id' => $adaa->id,
+                    'subject' => "Calendash Pending Request",
+                    'message' => "You have a pending request!",
+                    'from_user_id' => $request->user_id,
+                    'created_at' => now()
+                ]);
                 return response()->json(["success" => "Event Created Successfully.", "status" => 200]);
             }
         }

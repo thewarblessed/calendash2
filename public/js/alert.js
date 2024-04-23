@@ -889,11 +889,11 @@ $(document).ready(function () {
 
         var selectedStartTime = $('#start_time_withinDayUser').val();
         var selectedEndTime = $(this).val();
-        console.log(selectedDate);
-        console.log(selectedVenueID);
-        console.log(selectedStartTime);
-        console.log(selectedEndTime);
-        console.log(selectedVenueType);
+        console.log("date: " + selectedDate);
+        console.log("venue id: " + selectedVenueID);
+        console.log("StartTime: " +selectedStartTime);
+        console.log("Endtime: " +selectedEndTime);
+        console.log("venuetype: " +selectedVenueType);
 
 
         if (selectedVenueType === 'room') {
@@ -946,6 +946,7 @@ $(document).ready(function () {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 success: function (response) {
+                    console.log(response)
                     if (response.conflict) {
                         Swal.fire({
                             icon: "error",
@@ -3955,5 +3956,78 @@ $(document).ready(function () {
           });
     })
 
+    ///////////////////// change of passcode ///////////////
+    $('#currentPasscode').on('keyup', function () {
+        var currentInput = $(this).val();
+        var user_id = $("#user_id").val();
+        const dataToSend = {
+            currentPasscode: currentInput,
+            user_id: user_id
+        };
+    
+        $.ajax({
+            url: '/api/me/check-passcode',
+            type: 'POST',
+            data: JSON.stringify(dataToSend),
+            contentType: 'application/json',
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function (response) {
+                if (response.message === 'Passcode matched!'){
+                    $('#passcodeCheckResult').text(response.message);
+                    $('#passcodeCheckResult').removeClass('text-danger');
+                    $('#passcodeCheckResult').addClass('text-success');
+                } 
+                else{
+                    $('#passcodeCheckResult').text(response.message);
+                    $('#passcodeCheckResult').addClass('text-danger');
+                    $('#passcodeCheckResult').removeClass('text-success');
+                }
+            },
+            error: function (xhr, status, error) {
+                $('#passcodeCheckResult').text('Failed to check passcode.');
+            }
+        });
+    });
+    
+    $('#passcodeSubmit').on('click', function (e) {
+        e.preventDefault();
+        var user_id = $('#user_id').val();
+        var passcode = $('#retypeNewPasscode').val();
 
+        const dataToSend = {
+            user_id: user_id,
+            passcode: passcode,
+        };
+    
+        $.ajax({
+            url: '/api/me/update-passcode',
+            type: 'POST',
+            data: JSON.stringify(dataToSend),
+            contentType: 'application/json',
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function (response) {
+                console.log(response);
+                // Handle success response
+                setTimeout(function () {
+                    window.location.href = '/me/change-passcode';
+                }, 1500);
+
+                Swal.fire({
+                    icon: "success",
+                    title: "Passcode Updated",
+                    showConfirmButton: false,
+                    timer: 1500
+                  });
+            },
+            error: function (xhr, status, error) {
+                // Handle error response
+                console.error(xhr.responseText);
+                $('#passcodeUpdateResult').text('Failed to update passcode');
+            }
+        });
+    });
 })

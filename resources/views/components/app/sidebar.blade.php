@@ -321,7 +321,6 @@
                     <span class="nav-link-text ms-1">Declined Request</span>
                 </a>
             </li>
-
             @endif
 
             <li class="nav-item">
@@ -342,6 +341,14 @@
                 </a>
             </li>
 
+            <li class="nav-item">
+                <a class="nav-link  {{ is_current_route('changePasscodeView') ? 'active' : '' }}"
+                    href="{{ route('changePasscodeView') }}">
+                    <i class="fa-solid fa-unlock"
+                        style="color: {{ is_current_route('changePasscodeView') ? '#774dd3' : 'defaultColor' }}; font-size:{{ is_current_route('adaaRequest') ? '23px' : '18px' }};"></i>
+                    <span class="nav-link-text ms-1">Change Passcode</span>
+                </a>
+            </li>
 
             @endif
 
