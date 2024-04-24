@@ -200,8 +200,7 @@ class CalendarController extends Controller
                                 WHEN rooms.name IS NULL THEN venues.name
                                 ELSE rooms.name END AS venueName'))
                         ->selectRaw('CONCAT(start_date, "T", start_time) as start')
-                        ->selectRaw('CONCAT(end_date, "T", end_time) as end')       
-                        ->where('events.room_id', null)
+                        ->selectRaw('CONCAT(end_date, "T", end_time) as end')
                         ->where('status', 'PENDING')
                         ->orWhere('status', 'APPROVED')
                         ->get();
@@ -222,7 +221,8 @@ class CalendarController extends Controller
                 'description' => $event->description, // Assuming `description` field exists in your events table
                 'venue' => $event->venueName,
                 'eventOrganizer' => $event->eventOrganizerName,
-                'backgroundColor' => $randomColor
+                'backgroundColor' => $randomColor,
+                'status' => $event->status
             ];
         }
     

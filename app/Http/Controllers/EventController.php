@@ -2789,37 +2789,52 @@ class EventController extends Controller
                 // dd($place);
                 if ($orgAdviser === null && $secHead === null && $depHead === null && $osa === null && $adaa === null && $atty === null)
                 {
-                    // $appSecDate = $events->approved_sec_head_at;
-                    $message = 'Your Request is on Process';
-                    return response()->json(["msg" => $message, "status" => 200]);
+                    $message = 'Your Request is on process...';
+                            return response()->json([
+                                                    ["pendingMsg" => $message],
+                                                ]);
                 }
                 elseif ($orgAdviser !== null && $secHead === null && $depHead === null && $osa === null && $adaa === null && $atty === null)
                 {
                     // $appSecDate = $events->approved_sec_head_at;
-                    $approvalDates = [
-                        $events->approved_org_adviser_at,
+                    $classes = [
+                        [
+                            'pendingMsg' => 'Your Request is on process...',
+                            'dateApproved' => $events->created_at,
+                        ],
+                        [
+                            'dateApproved' => $events->approved_org_adviser_at,
+                            'approvalMessage' => 'APPROVED BY ORGANIZATION ADVISER: ' . $official_user->name,
+                            'pendingMsg' => 'Waiting for Approval of Section Head of IT',
+                            'bgColor' => '#E0FFFF',
+                        ],
+                        // Add more classes as needed
                     ];
-                    
-                    $approvalMessage = [
-                        'APPROVED BY ORGANIZATION ADVISER: ' . $official_user->name,
-                    ];
-                    $pendingMsg = 'Waiting for Approval of Section Head';
-                    return response()->json(["dates" => $approvalDates, "msg" => $approvalMessage, "pendingMsg" => $pendingMsg, "status" => 200]);
+
+                    return response()->json($classes);
                 }
                 elseif ($orgAdviser !== null && $secHead !== null && $depHead === null && $osa === null && $adaa === null && $atty === null)
                 {
-                    $approvalDates = [
-                        $events->approved_org_adviser_at,
-                        $events->approved_sec_head_at,
-                    ];
-                    
-                    $approvalMessage = [
-                        'APPROVED BY ORGANIZATION ADVISER',
-                        'APPROVED BY SECTION HEAD OF IT',
+                    $classes = [
+                        [
+                            'pendingMsg' => 'Your Request is on process...',
+                            'dateApproved' => $events->created_at,
+                        ],
+                        [
+                            'dateApproved' => $events->approved_org_adviser_at,
+                            'approvalMessage' => 'APPROVED BY ORGANIZATION ADVISER: ' . $official_user->name,
+                            'bgColor' => '#E0FFFF',
+                        ],
+                        [
+                            'dateApproved' => $events->approved_sec_head_at,
+                            'approvalMessage' => 'APPROVED BY SECTION HEAD OF IT',
+                            'pendingMsg' => 'Officially Approved!',
+                            'bgColor' => '#E6E6FA',
+                        ],
+                        // Add more classes as needed
                     ];
 
-                    $pendingMsg = 'APPROVED';
-                    return response()->json(["dates" => $approvalDates, "msg" => $approvalMessage, "pendingMsg" => $pendingMsg, "status" => 200]);
+                    return response()->json($classes);
                 }
             }
             else

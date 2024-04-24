@@ -18,7 +18,7 @@
                         <input name="officialApprovedUserID" type="text" class="form-control" value="{{ Auth::user()->id }}" id="officialApprovedUserID" hidden>
                         <div class="card-body px-0 py-0">
                             <div class="table-responsive p-0">
-                                <table class="table align-items-center mb-0" id="officialApprovedTable">
+                                <table class="table align-items-center mb-0" id="officialApprovedTable" style="width: 100%">
                                     
                                     <thead >
                                         <tr>
@@ -260,7 +260,9 @@
                     {
                         data: "department",
                         render: function(data, type, row) {
-                            return "<span style='color: black; font-weight: bold;'>" + data + "</span>";
+                            var words = data.split(" "); // Split the data into an array of words
+                            var firstWord = words[0]; // Get the first word
+                            return "<span style='color: black; font-weight: bold;'>" + firstWord + "</span>";
                         }
                     },
                     {

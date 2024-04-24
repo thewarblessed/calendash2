@@ -330,11 +330,18 @@
                                 const submitButton = document.getElementById('createEvent_submit');
                                 const submitButtonOutsider = document.getElementById('createEvent_submit_outsider');
                                 const termsCheckbox = document.getElementById('termsCheckbox');
+                                const requestLetterInput = document.getElementById('request_letter');
 
-                                if (termsCheckbox.checked) {
+                                if (termsCheckbox.checked && requestLetterInput.files.length !== 0) {
                                     submitButton.disabled = false;
                                     submitButtonOutsider.disabled = false;
                                 } else {
+                                    Swal.fire({
+                                        icon: "error",
+                                        title: "Oops...",
+                                        text: "Please upload a file!"
+                                    });
+                                    termsCheckbox.checked = false;
                                     submitButton.disabled = true;
                                     submitButtonOutsider.disabled = true;
                                 }
@@ -348,6 +355,8 @@
                                 onclick="back()">Back</button>
                             <button type="button" id="next_button" class="btn btn-primary ms-auto"
                                 onclick="next()">Next</button>
+                                {{-- <button type="button" id="showModal" class="btn btn-primary ms-auto"
+                                >Modal</button>     --}}
                         </div>
                     </div>
 
@@ -363,13 +372,79 @@
                             @else
                                 <button type="submit" id="createEvent_submit" class="btn btn-primary ms-auto"
                                     disabled>
-                                    <span class="" role="status" id="spinner" aria-hidden="true"></span>
+                                    {{-- <span class="" role="status" id="spinner" aria-hidden="true"></span> --}}
                                     <span class="sr-only">Loading...</span>Submit
                                 </button>
                             @endif
                         </div>
                     </div>
+                    
+                    <div class="modal fade modal-lg" id="confirmModal" tabindex="-1" role="dialog"
+                        aria-labelledby="createeventModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h2 class="modal-title" id="createeventModalLabel">Confirm Event Details</h2>
+                                    <button type="button" class="btn-close text-dark" data-bs-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                {{-- <div>
+                                    <p style="margin-left: 20px; text-align:center; margin-top: 10px">EVENT DETAILS</p>
+                                </div> --}}
+                                <div class="modal-body">
+                                    
+                                        {{-- <p><strong>Event Name:</strong> John Doe</p>
+                                        <p><strong>Event Description:</strong> 123 Main Street</p>
+                                        <p><strong>Num. of Participants:</strong> 555-1234</p> --}}
 
+                                        {{-- venue --}}
+                                        {{-- <p><strong>Venue Name:</strong> John Doe</p> --}}
+
+{{-- 
+                                        <p><strong>Event Type:</strong> 123 Main Street</p>
+                                        <p><strong>Start Date:</strong> 555-1234</p>
+                                        <p><strong>End Date:</strong> 555-1234</p>
+                                        <p><strong>Start Time:</strong> 555-1234</p>
+                                        <p><strong>End Time:</strong> 555-1234</p>
+
+
+                                        <p><strong>Link of the feedback form:</strong> John Doe</p>
+                                        <p><strong>Event Requester: </strong> {{ Auth::user()->name }}</p>    --}}
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <input type="text" class="form-control" id="venue_id" placeholder="Enter contact number" hidden>
+                                                <p id="eventNameOutput"><strong>Event Name:</strong> </p>
+                                                <p id="eventDescOutput"><strong>Event Description:</strong> </p>
+                                                <p id="numParticipantsOutput"><strong>Num. of Participants:</strong> </p>
+                                                <br>
+                                                <p id="eventTypeOutput"><strong>Event Type:</strong> </p>
+                                                <p id="startDateOutput"><strong>Start Date:</strong> </p>
+                                                <p id="endDateOutput"><strong>End Date:</strong> </p>
+                                                <p id="startTimeOutput"><strong>Start Time:</strong> </p>
+                                                <p id="endTimeOutput"><strong>End Time:</strong> </p>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p id="venueNameOutput"><strong>Venue Name:</strong> </p>
+                                                <br>
+                                                <p id="linkOutput"><strong>Link of the feedback form:</strong> </p>
+                                                <p><strong>Event Requester: </strong> {{ Auth::user()->name }}</p>
+                                            </div>
+                                        </div>
+                                        <p>Please review the event details and click "Confirm" to proceed.</p>
+                                        
+                                    
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-white" data-bs-dismiss="modal"
+                                            id="modalClose">Close</button>
+                                        {{-- <a type="" class="btn btn-dark" id="eventApprove">Approve Request</a> --}}
+                                        <button type="button" class="btn btn-primary" id="storeCreateEventUser"><span class="" role="status" id="spinner" aria-hidden="true"></span> Confirm</button>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
 
 
 
@@ -413,7 +488,7 @@
 
         function loadFormData(n) {
             var role = "{{ Auth::user()->role }}";
-            console.log(role);
+
             if (role === 'outsider') {
                 $(tabs_pill[n]).addClass("active");
                 $(tabs[n]).removeClass("d-none");
@@ -438,12 +513,32 @@
 
         }
 
+        function validateRadios() {
+            const radios = document.getElementsByName('event_type');
+            let isChecked = false;
+
+            radios.forEach(radio => {
+                if (radio.checked) {
+                    isChecked = true;
+                }
+            });
+
+            return isChecked;
+        }
+
+        function validateInput() {
+            const input = document.getElementById('feedback_qr_code').value.trim();
+            return input !== '';
+        }
+
         function next() {
             // if()
+            // console.log(current + ": current page")
             const eventName = $('#eventName').val();
             const eventDesc = $('#eventDesc').val();
             const numParticipants = $('#numParticipants').val();
-            if (eventName === '' || eventDesc === '' || numParticipants === '') {
+
+            if (eventName === '' || eventDesc === '' || numParticipants === '' && current == 0) {
                 Swal.fire({
                     icon: "error",
                     title: "Oops...",
@@ -451,12 +546,119 @@
                 });
                 return false;
             }
+
+            // page 2
+            const eventPlace = document.querySelector('input[name="event_place"]:checked');
+            const eventVenue = document.querySelector('input[name="event_venue"]:checked');
+            
+            if (!eventPlace && current == 1) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "Please select an option for Event Place!"
+                });
+                return false;
+            }
+
+            if (eventPlace && eventPlace.value === 'venue' && !eventVenue && current == 1) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "Please select a venue!"
+                });
+                return false;
+            }
+
+            if (eventPlace && eventPlace.value === 'room' && !eventVenue && current == 1) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "Please select a room!"
+                });
+                return false;
+            }
+
+            //page 3
+            const radiosChecked = validateRadios();
+            const input = document.getElementById('feedback_qr_code').value.trim();
+            const isValid = validateInput();
+            if (current == 2) {
+                if (!radiosChecked) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "Please select an option for preferred Date and Time!"
+                });
+                return false;
+                }
+
+                if (!isValid) {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Oops...",
+                        text: "Please enter a valid feedback form URL!"
+                    });
+                    return false;
+                }
+            
+                
+                const eventType = $('input[name="event_type"]:checked').val();
+                if (eventType === 'withinDay') { 
+                    const eventDate = $('#event_date_withinDayUser').val();
+                    const startTime = $('#start_time_withinDayUser').val();
+                    const endTime = $('#end_time_withinDayUser').val();
+                    if (eventDate === '' || startTime === '' || endTime === '') {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Oops...",
+                            text: "Please select a date and provide start/end times!"
+                        });
+                        return false;
+                    }
+                }
+                else if (eventType === 'wholeDay') {
+                    const eventDateWholeDay = $('#event_date_wholeDayUser').val();
+                    if (eventDateWholeDay === '') {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Oops...",
+                            text: "Please select a date!"
+                        });
+                        return false;
+                    }
+                }
+                else if (eventType === 'wholeWeek'){
+                    const eventDateWholeWeek = $('#event_date_wholeWeekUser').val();
+                    if (eventDateWholeWeek === '') {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Oops...",
+                            text: "Please select a week!"
+                        });
+                        return false;
+                    }
+                }
+                else if (eventType === 'date_range'){
+                    const eventDateRange = $('#date_range_User').val();
+                    if (eventDateRange === '') {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Oops...",
+                            text: "Please provide a date range for Date Range event!"
+                        });
+                        return false;
+                    }
+                }
+            }
+
+
             $(tabs[current]).addClass("d-none");
             $(tabs_pill[current]).removeClass("active");
 
             current++;
             loadFormData(current);
         }
+      
 
         function back() {
             $(tabs[current]).addClass("d-none");

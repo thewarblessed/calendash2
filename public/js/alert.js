@@ -309,59 +309,243 @@ $(document).ready(function () {
         });
     });
 
+    
+    $("#showModal").on("click", function (e) {
+        $('#confirmModal').modal('show');
+    })
+
     $("#createEvent_submit").on("click", function (e) {
         // alert('default')
-        $('#spinner').addClass('spinner-border spinner-border-sm');
-        console.log(data);
+        // $('#spinner').addClass('spinner-border spinner-border-sm');
+        // console.log(data);
         e.preventDefault();
+        function formatTime(timeString) {
+            const [hours, minutes] = timeString.split(':');
+            const hour = parseInt(hours, 10);
+            const period = hour >= 12 ? 'PM' : 'AM';
+            const formattedHour = hour % 12 || 12;
+            return `${formattedHour}:${minutes} ${period}`;
+        }
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            const options = { month: 'long', day: 'numeric', year: 'numeric' };
+            return date.toLocaleDateString('en-US', options);
+        }
+        function getWeekDates(weekString) {
+            const [year, week] = weekString.split('-W');
+            const simple = new Date(year, 0, 1 + (week - 1) * 7); // January 1 + 7 days for each week number
+            const dow = simple.getDay();
+            const ISOweekStart = simple;
+            if (dow <= 4) {
+                ISOweekStart.setDate(simple.getDate() - simple.getDay() + 1);
+            } else {
+                ISOweekStart.setDate(simple.getDate() + 8 - simple.getDay());
+            }
+            const ISOweekEnd = new Date(ISOweekStart);
+            ISOweekEnd.setDate(ISOweekEnd.getDate() + 6);
+        
+            const startDate = ISOweekStart.toDateString();
+            const endDate = ISOweekEnd.toDateString();
+        
+            return { startDate, endDate };
+        }
+        function formatDateRange(dateRange) {
+            const dates = dateRange.split(' - ');
+            const startDate = new Date(dates[0]);
+            const endDate = new Date(dates[1]);
+        
+            const options = { month: 'long', day: 'numeric', year: 'numeric' };
+            const formattedStartDate = startDate.toLocaleDateString('en-US', options);
+            const formattedEndDate = endDate.toLocaleDateString('en-US', options);
+        
+            return formattedStartDate + ' - ' + formattedEndDate;
+        }
+
         // $('#serviceSubmit').show()
         var data = $('#createEventForm')[0];
-        console.log(data);
+        var venueName = '';
+        
+        // console.log(data);
         let formData = new FormData($('#createEventForm')[0]);
-        console.log(formData);
+        // console.log(formData);
 
         for (var pair of formData.entries()) {
             console.log(pair[0] + ',' + pair[1]);
         }
         console.log(formData)
-        $.ajax({
-            type: "POST",
-            url: "/api/create/newEvent",
-            data: formData,
-            contentType: false,
-            processData: false,
-            headers: {
-                'Authorization': 'Bearer ' + sessionStorage.getItem('token'),
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            dataType: "json",
-            success: function (data) {
-                console.log(data);
-                $('#spinner').removeClass('spinner-border spinner-border-sm');
-                // var $ctable = $('#ctable').DataTable();
-                // $ctable.ajax.reload();
-                // $ctable.row.add(data.customer).draw(false);
-                // // $etable.row.add(data.client).draw(false);
-                setTimeout(function () {
-                    window.location.href = '/myEvents';
-                }, 1500);
+        //venue
+        var venue_id = formData.get('event_venue');
 
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Event has been Requested!',
-                    showConfirmButton: false,
-                    timer: 3000
-                })
-            },
-            error: function (error) {
-                $('#spinner').removeClass('spinner-border spinner-border-sm');
-                Swal.fire({
-                    icon: "error",
-                    title: "Oops...",
-                    text: "Something went wrong!"
-                });
-            }
-        });
+        var weekString = formData.get('event_date_wholeWeekUser');
+        const { startDate, endDate } = getWeekDates(weekString);
+        
+        var dateRange = formData.get('daterange');
+        console.log(venue_id);
+        if (formData.get('event_place') === 'venue'){
+            $.ajax({
+                type: "GET",
+                enctype: 'multipart/form-data',
+                processData: false, // Important!
+                contentType: false,
+                cache: false,
+                url: "/api/admin/venue/"+ venue_id + "/edit",
+                headers: {
+                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
+                        "content"
+                    ),
+                },
+                dataType: "json",
+                success: function (data) {
+                    console.log(data);
+                    $('#eventNameOutput').html("<strong>Event Name:</strong> " + formData.get('eventName'));
+                    $('#eventDescOutput').html("<strong>Event Description:</strong> " + formData.get('eventDesc'));
+                    $('#numParticipantsOutput').html("<strong>Num. of Participants:</strong> " + formData.get('numParticipants'));
+
+                    if (formData.get('event_type') === 'withinDay'){
+                        $('#endDateOutput').show();
+                        $('#startTimeOutput').show();
+                        $('#endTimeOutput').show();
+                        $('#eventTypeOutput').html("<strong>Event Type:</strong> Within the Day");
+                        $('#startDateOutput').html("<strong>Start Date:</strong> " + formatDate(formData.get('event_date_withinDayUser')));
+                        $('#endDateOutput').html("<strong>End Date:</strong> " + formatDate(formData.get('event_date_withinDayUser')));
+                        $('#startTimeOutput').html("<strong>Start Time:</strong> " + formatTime(formData.get('start_time_withinDayUser')));
+                        $('#endTimeOutput').html("<strong>End Time:</strong> " + formatTime(formData.get('end_time_withinDayUser')))
+                    }   
+                    else if (formData.get('event_type') === 'wholeDay'){
+                        $('#eventTypeOutput').html("<strong>Event Type:</strong> Whole Day");
+                        $('#startDateOutput').html("<strong>Date:</strong> " + formatDate(formData.get('event_date_wholeDayUser')));
+                        $('#endDateOutput').hide();
+                        $('#startTimeOutput').hide();
+                        $('#endTimeOutput').hide();
+                    }
+                    else if (formData.get('event_type') === 'wholeWeek'){
+                        $('#endDateOutput').show();
+                        $('#eventTypeOutput').html("<strong>Event Type:</strong> Whole Week");
+                        $('#startDateOutput').html("<strong>Start Date:</strong> " + startDate);
+                        $('#endDateOutput').html("<strong>End Date:</strong> " + endDate);
+                        $('#startTimeOutput').hide();
+                        $('#endTimeOutput').hide();
+                    }
+                    else if (formData.get('event_type') === 'dateRanges'){
+                        $('#eventTypeOutput').html("<strong>Event Type:</strong> Date Range");
+                        $('#startDateOutput').html("<strong>Date:</strong> " + formatDateRange (formData.get('daterange')));
+                        $('#startTimeOutput').hide();
+                        $('#endTimeOutput').hide();
+                        $('#endDateOutput').hide();
+                    }
+                    $('#venueNameOutput').html("<strong>Venue Name:</strong> " + data.Venues.name);
+                    $('#linkOutput').html("<strong>Link for the feedback form:</strong> " + formData.get('feedback_qr_code'));
+                },
+                error: function (error) {
+                    console.log("error");
+                },
+            }); 
+        }
+        else {
+            $.ajax({
+                type: "GET",
+                enctype: 'multipart/form-data',
+                processData: false, // Important!
+                contentType: false,
+                cache: false,
+                url: "/api/admin/room/"+ venue_id + "/edit",
+                headers: {
+                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
+                        "content"
+                    ),
+                },
+                dataType: "json",
+                success: function (data) {
+                    console.log(data);
+                    $('#eventNameOutput').html("<strong>Event Name:</strong> " + formData.get('eventName'));
+                    $('#eventDescOutput').html("<strong>Event Description:</strong> " + formData.get('eventDesc'));
+                    $('#numParticipantsOutput').html("<strong>Num. of Participants:</strong> " + formData.get('numParticipants'));
+
+                    if (formData.get('event_type') === 'withinDay'){
+                        $('#endDateOutput').show();
+                        $('#startTimeOutput').show();
+                        $('#endTimeOutput').show();
+                        $('#eventTypeOutput').html("<strong>Event Type:</strong> Within the Day");
+                        $('#startDateOutput').html("<strong>Start Date:</strong> " + formatDate(formData.get('event_date_withinDayUser')));
+                        $('#endDateOutput').html("<strong>End Date:</strong> " + formatDate(formData.get('event_date_withinDayUser')));
+                        $('#startTimeOutput').html("<strong>Start Time:</strong> " + formatTime(formData.get('start_time_withinDayUser')));
+                        $('#endTimeOutput').html("<strong>End Time:</strong> " + formatTime(formData.get('end_time_withinDayUser')))
+                    }   
+                    else if (formData.get('event_type') === 'wholeDay'){
+                        $('#eventTypeOutput').html("<strong>Event Type:</strong> Whole Day");
+                        $('#startDateOutput').html("<strong>Date:</strong> " + formatDate(formData.get('event_date_wholeDayUser')));
+                        $('#endDateOutput').hide();
+                        $('#startTimeOutput').hide();
+                        $('#endTimeOutput').hide();
+                    }
+                    else if (formData.get('event_type') === 'wholeWeek'){
+                        $('#endDateOutput').show();
+                        $('#eventTypeOutput').html("<strong>Event Type:</strong> Whole Week");
+                        $('#startDateOutput').html("<strong>Start Date:</strong> " + startDate);
+                        $('#endDateOutput').html("<strong>End Date:</strong> " + endDate);
+                        $('#startTimeOutput').hide();
+                        $('#endTimeOutput').hide();
+                    }
+                    else if (formData.get('event_type') === 'dateRanges'){
+                        $('#eventTypeOutput').html("<strong>Event Type:</strong> Date Range");
+                        $('#startDateOutput').html("<strong>Date:</strong> " + formatDateRange (formData.get('daterange')));
+                        $('#startTimeOutput').hide();
+                        $('#endTimeOutput').hide();
+                        $('#endDateOutput').hide();
+                    }
+                    $('#venueNameOutput').html("<strong>Venue Name:</strong> " + data.rooms.name);
+                    $('#linkOutput').html("<strong>Link for the feedback form:</strong> " + formData.get('feedback_qr_code'));
+                },
+                error: function (error) {
+                    console.log("error");
+                },
+            }); 
+        }
+        $('#confirmModal').modal('show');
+
+        $("#storeCreateEventUser").on("click", function (e) {
+            $('#spinner').addClass('spinner-border spinner-border-sm');
+            e.preventDefault();
+            $.ajax({
+                type: "POST",
+                url: "/api/create/newEvent",
+                data: formData,
+                contentType: false,
+                processData: false,
+                headers: {
+                    'Authorization': 'Bearer ' + sessionStorage.getItem('token'),
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                dataType: "json",
+                success: function (data) {
+                    console.log(data);
+                    $('#spinner').removeClass('spinner-border spinner-border-sm');
+                    // var $ctable = $('#ctable').DataTable();
+                    // $ctable.ajax.reload();
+                    // $ctable.row.add(data.customer).draw(false);
+                    // // $etable.row.add(data.client).draw(false);
+                    setTimeout(function () {
+                        window.location.href = '/myEvents';
+                    }, 1500);
+    
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Event has been Requested!',
+                        showConfirmButton: false,
+                        timer: 3000
+                    })
+                },
+                error: function (error) {
+                    $('#spinner').removeClass('spinner-border spinner-border-sm');
+                    Swal.fire({
+                        icon: "error",
+                        title: "Oops...",
+                        text: "Something went wrong!"
+                    });
+                }
+            });
+        })
+        
         //Swal.fire('SweetAlert2 is working!')
     });//end create event
 
