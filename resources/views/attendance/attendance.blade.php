@@ -132,7 +132,7 @@
                     data: "attendance_time",
                     render: function(data) {
                         if (data === null) {
-                            return "Absent";
+                            return "";
                         } else {
                             const date = new Date(data);
                             const formattedTime = date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });

@@ -3603,6 +3603,29 @@ $(document).ready(function () {
             },
         });
 
+         // //PDF
+         $.ajax({
+            type: "GET",
+            url: "/api/show/letter/" + id,
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+            dataType: "json",
+            success: function (data) {
+                console.log(data);
+                var pdfLink = $('<a>', {
+                    href: "/storage/" + data,
+                    text: "Click here to view Request Letter",
+                    target: "_blank",
+                });
+                // console.log(href)
+                $("#viewAnotherTabOutsider").empty().append(pdfLink);
+            },
+            error: function (error) {
+                console.log(error);
+            },
+        });
+
         $("#eventOutsiderApprove").on("click", async function (e) {
             e.preventDefault();
 
@@ -3959,9 +3982,12 @@ $(document).ready(function () {
                             contentType: false,
                             processData: false,
                             success: function (response) {
+                                setTimeout(function () {
+                                    window.location.href = '/outside/myRequest';
+                                }, 1500);
                                 Swal.fire({
                                     title: "Success!",
-                                    text: "Image uploaded successfully.",
+                                    text: "Image successfully uploaded/sent.",
                                     icon: "success"
                                 });
                             },

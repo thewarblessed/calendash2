@@ -553,22 +553,24 @@ class BusinessManagerController extends Controller
 
     public function getAllApprovedEventsBusinessManager()
     {
-        $pending = Event::leftjoin('users','users.id','events.user_id')
-                        ->leftjoin('outside_events','outside_events.event_id','events.id')
-                        ->leftjoin('venues','events.venue_id','venues.id')
-                        ->orderBy('events.status')
-                        ->orderByDesc('events.id')
-                        ->where('events.status','APPROVED')
-                        ->select('events.status',
-                                'events.event_name',
-                                'events.start_date',
-                                'events.end_date',
-                                'events.start_time',
-                                'events.end_time',
-                                'events.type',
-                                'venues.name as venueName',
-                                'events.id')
-                        ->get();
+        $pending = OutsideEvent::leftJoin('events as e1', 'e1.id', 'outside_events.event_id')
+                                ->leftJoin('users', 'users.id', 'e1.user_id')
+                                ->leftJoin('outside_events as oe', 'oe.event_id', 'e1.id')
+                                ->leftJoin('venues', 'e1.venue_id', 'venues.id')
+                                ->orderBy('e1.status')
+                                ->orderByDesc('e1.id')
+                                ->where('e1.status', 'APPROVED')
+                                ->select('e1.status',
+                                    'e1.event_name',
+                                    'e1.start_date',
+                                    'e1.end_date',
+                                    'e1.start_time',
+                                    'e1.end_time',
+                                    'e1.type',
+                                    'venues.name as venueName',
+                                    'e1.id')
+                                ->get();
+        // dd($pending);
         return response()->json($pending);
     }
 

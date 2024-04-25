@@ -38,11 +38,11 @@ class VenueController extends Controller
     public function indexUser()
     {
         $venues = Venue::orderBy('id')->get();
-        $approvedVenues = Venue::whereHas('events', function ($query) {
-        $query->where('status', 'APPROVED');
-        })->orderBy('id')->get();
+        // $approvedVenues = Venue::whereHas('events', function ($query) {
+        // $query->where('status', 'APPROVED');
+        // })->orderBy('id')->get();
 
-        return view('venues.index', compact('venues', 'approvedVenues'));
+        return view('venues.index', compact('venues'));
     }
 
 

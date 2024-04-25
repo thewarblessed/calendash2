@@ -442,6 +442,12 @@ Route::post('/me/check-passcode',[
         'as' => 'checkPasscode',
 ]);
 
+////////////////////////////// Check Password //////////////////////
+Route::post('/me/check-password',[
+        'uses' => 'ProfileController@verifyPassword',
+        'as' => 'verifyPassword',
+]);
+
 ////////////////////////////// Update Passcode //////////////////////
 Route::post('/me/update-passcode',[
         'uses' => 'ProfileController@updatePasscode',

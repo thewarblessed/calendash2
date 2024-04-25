@@ -207,4 +207,24 @@ class ProfileController extends Controller
             return response()->json(['error' => 'Official not found'], 404);
         }
     }
+
+    public function verifyPassword(Request $request)
+    {
+        $passcode = $request->input('password');
+        $user_id = $request->input('user_id');
+        $user = User::where('id', $user_id)->first();
+        
+        // Check if user exists
+        if (!$user) {
+            return response()->json(['message' => 'User not found'], 404);
+        }
+
+        // Check if password matches
+        if (Hash::check($passcode, $user->password)) {
+            return response()->json(['message' => 'Password matched'], 200);
+        } else {
+            return response()->json(['message' => 'Incorrect password']);
+        }
+
+    }
 }

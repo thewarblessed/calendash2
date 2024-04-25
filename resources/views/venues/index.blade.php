@@ -16,18 +16,16 @@
                         <div class="card-body">
                             <div class="container">
                                 <div class="row">
-                                    @foreach ($approvedVenues as $venue)
-                                        @foreach ($venue->events as $event)
-                                            <div class="card" style="width: 15rem; border: 2px solid rgb(216, 200, 231)">
-                                                <img src="{{ asset('storage/'. $venue->image) }}" height="200" class="card-img-top" alt="...">
-                                                <div class="card-body">
-                                                    <h5 class="card-title">{{ $event->name }}</h5>
-                                                    <p>Venue: {{ $venue->name }}</p> <!-- Display the venue name -->
-                                                    <a href="{{ route('venueRulesreg', ['id' => $venue->id]) }}" class="btn btn-info mr-2" style="flex: 1;">Policies</a>
-                                                    <a href="{{ route('venueFeedback', ['id' => $venue->id]) }}" class="btn btn-primary ml-2" style="flex: 1;">Feedback</a>
-                                                </div>
+                                    @foreach ($venues as $event)
+                                        <div class="card" style="width: 15rem; border: 2px solid rgb(216, 200, 231)">
+                                            <img src="{{ asset('storage/'. $event->image) }}" height="200" class="card-img-top" alt="...">
+                                            <div class="card-body">
+                                                {{-- <h5 class="card-title">{{ $event->name }}</h5> --}}
+                                                <p>Venue: {{ $event->name }}</p> <!-- Display the venue name -->
+                                                <a href="{{ route('venueRulesreg', ['id' => $event->id]) }}" class="btn btn-info mr-2" style="flex: 1;">Policies</a>
+                                                <a href="{{ route('venueFeedback', ['id' => $event->id]) }}" class="btn btn-primary ml-2" style="flex: 1;">Feedback</a>
                                             </div>
-                                        @endforeach
+                                        </div>
                                     @endforeach
                                 </div>
                             </div>

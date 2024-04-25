@@ -195,4 +195,52 @@
     {{-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script> --}}
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script type="text/javascript" src="/js/alert.js"></script>
+    <script>
+        $(document).ready(function() {
+            var user_id = {{ Auth::user()->id }};
+            // console.log(user_id + ": User ID ito");
+            Swal.fire({
+                title: 'Input Password',
+                text: 'Please enter your password:',
+                input: 'password',
+                inputAttributes: {
+                    autocapitalize: 'off',
+                    autocorrect: 'off'
+                },
+                showCancelButton: false,
+                allowOutsideClick: false, // Prevents closing on outside click
+                confirmButtonText: 'Submit',
+                showLoaderOnConfirm: true,
+                preConfirm: (password) => {
+                    return new Promise((resolve, reject) => {
+                        const dataToSend = {
+                            password: password,
+                            user_id: user_id
+                        };
+                        $.ajax({
+                            type: "POST",
+                            url: "/api/me/check-password",
+                            data: dataToSend,
+                            headers: {
+                                'Authorization': 'Bearer ' + sessionStorage.getItem('token'),
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            success: function (response) {
+                                if (response.message === 'Password matched') {
+                                    resolve(); // Resolve if password is correct
+                                } else {
+                                    reject('Incorrect password!'); // Reject with error message if password is incorrect
+                                }
+                            },
+                            error: function (error) {
+                                reject('Error validating password'); // Reject with error message if there is an error
+                            }
+                        });
+                    }).catch(error => {
+                        Swal.showValidationMessage(error);
+                    });
+                }
+            });
+        });
+    </script>
 </x-app-layout>

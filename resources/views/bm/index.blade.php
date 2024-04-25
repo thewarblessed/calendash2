@@ -224,6 +224,14 @@
                                 <p style="color: black" id="eventApproveParticipants" ></p>
                                 {{-- <input name="eventApproveParticipants" type="text" class="form-control" id="eventApproveParticipants" disabled> --}}
                             </div>
+                            <div class="form-group">
+                                <label for="exampleFormControlInput1">Request Letter</label>
+                                {{-- <input name="eventApproveVenue" type="file" class="form-control" id="eventApproveVenue" required> --}}
+                                {{-- <br><button type="button" class="btn btn-info" id="showLetter">Show Letter</button> --}}
+                                <div id="pdfContainer"></div>
+                                <u><strong><a href="" id="viewAnotherTabOutsider">View Letter Here</a></strong></u>
+                                
+                            </div>
                             <br><br>
                             <div class="form-group">
                                 <label for="exampleFormControlInput1" style="font-size: 18px">Please input the amount to be paid:</label>
