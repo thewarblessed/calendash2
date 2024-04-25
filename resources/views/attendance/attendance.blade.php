@@ -98,21 +98,27 @@
                 dataSrc: "",
             },
             dom: 'Bfrtip',
-            buttons: [{
-                    extend: 'pdfHtml5',
-                    className: 'btn btn-danger',
-                    exportOptions: {
-                        columns: [0, 1, 2]
-                    }
-                },
-                {
-                    extend: 'excelHtml5',
-                    className: 'btn btn-success',
-                    exportOptions: {
-                        columns: [0, 1, 2]
-                    }
+            layout: {
+                topStart: {
+                    buttons: [{
+                            extend: 'copyHtml5',
+                            footer: true
+                        },
+                        {
+                            extend: 'excelHtml5',
+                            footer: true
+                        },
+                        {
+                            extend: 'csvHtml5',
+                            footer: true
+                        },
+                        {
+                            extend: 'pdfHtml5',
+                            footer: true
+                        }
+                    ]
                 }
-            ],
+            },
             columns: [{
                     data: "yearsection",
                 },
@@ -125,7 +131,13 @@
                 {
                     data: "attendance_time",
                     render: function(data) {
-                        return data ? formatTime(data) : '';
+                        if (data === null) {
+                            return "Absent";
+                        } else {
+                            const date = new Date(data);
+                            const formattedTime = date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+                            return formattedTime;
+                        }
                     }
                 },
                 {
