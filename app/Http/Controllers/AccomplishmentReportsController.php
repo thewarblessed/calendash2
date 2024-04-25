@@ -14,7 +14,7 @@ class AccomplishmentReportsController extends Controller
     {
         $events = Event::where('status', 'APPROVED')->orderBy('id')->get();
 
-        return view('admin.accomplishmentreports.index', compact('events'));
+        return view('admin.accomplishmentReports.index', compact('events'));
     }
 
     public function getAllApprovedEvents()
