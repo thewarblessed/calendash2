@@ -15,6 +15,7 @@
 
                         <div class="card-body">
                             <button onclick="generatePDF()">Download PDF</button>
+                            <a href="{{ route('userCountTable') }}">Download Users</a>
                             <h3 class="text-sm text-center">Total Number of Events Per Organization (Bar Chart)</h3>
                             <div class="card shadow-xs border mb-4">
                                 <div class="card-body p-3">

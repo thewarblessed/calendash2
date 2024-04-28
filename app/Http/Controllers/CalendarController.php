@@ -195,6 +195,8 @@ class CalendarController extends Controller
                                 'events.start_time',
                                 'events.end_time',
                                 'users.role',
+                                'events.id',
+                                'events.feedback_image',
                                 'users.name as eventOrganizerName',
                                 DB::raw('CASE
                                 WHEN rooms.name IS NULL THEN venues.name
@@ -222,7 +224,9 @@ class CalendarController extends Controller
                 'venue' => $event->venueName,
                 'eventOrganizer' => $event->eventOrganizerName,
                 'backgroundColor' => $randomColor,
-                'status' => $event->status
+                'status' => $event->status,
+                'id' => $event->id,
+                'qr' => $event->feedback_image,
             ];
         }
     

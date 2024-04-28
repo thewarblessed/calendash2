@@ -76,7 +76,7 @@
                                         <div class="col-sm" style="display: block;" id="venueDiv">
                                             <div id="venue{{ $venue->id }}" data-capacity="{{ $venue->capacity }}"
                                                 class="card_capacity"
-                                                style="width: 15rem; margin-top: 30px; box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px; border-radius: 8px">
+                                                style="width: 20rem; margin-top: 30px; box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px; border-radius: 8px">
                                                 <img src="{{ asset('storage/' . $venue->image) }}" height="180"
                                                     class="card-img-top" alt="...">
                                                 <div class="card-body">
@@ -652,21 +652,36 @@
             }
 
 
-            $(tabs[current]).addClass("d-none");
-            $(tabs_pill[current]).removeClass("active");
+            // $(tabs[current]).addClass("d-none");
+            // $(tabs_pill[current]).removeClass("active");
 
-            current++;
-            loadFormData(current);
+            // current++;
+            // loadFormData(current);
+            $(tabs[current]).fadeOut(function() {
+                current++;
+                loadFormData(current);
+                $(tabs[current]).fadeIn();
+            });
         }
       
 
         function back() {
-            $(tabs[current]).addClass("d-none");
-            $(tabs_pill[current]).removeClass("active");
-            $("#next_button").show()
-            $("#createEvent_submit").hide()
-            current--;
-            loadFormData(current);
+            // Fade out the current step and fade in the previous step
+            $(tabs[current]).fadeOut(function() {
+                $(tabs_pill[current]).removeClass("active");
+                current--;
+                loadFormData(current);
+                $(tabs[current]).fadeIn();
+            });
+
+            // Show or hide buttons based on current step
+            if (current == 0) {
+                $("#next_button").show();
+                $("#createEvent_submit").hide();
+            } else {
+                $("#next_button").attr("type", "button").text("Next").attr("onclick", "next()").show();
+                $("#createEvent_submit").hide();
+            }
         }
 
         ////// DATE  ///////

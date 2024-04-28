@@ -25,6 +25,7 @@ use App\Http\Controllers\UserEventController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\AccomplishmentController;
 use App\Http\Controllers\AccomplishmentReportsController;
+use App\Http\Controllers\PdfController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -416,6 +417,8 @@ Route::get('/rejected/rooms', [RequestRoomController::class, 'rejectedRoomsView'
 
 //////////////////////////////////////// REPORT CHARTS  (ADMIN) ///////////////////////////
 Route::get('/admin/report', [ReportController::class, 'countEventPerOrgReport'])->name('countEventPerOrgReport');
+
+Route::get('/users-count', [PdfController::class, 'userCountTable'])->name('userCountTable');
 
 
 

@@ -2112,37 +2112,28 @@ class EventController extends Controller
             // dd($professor);
             $adaf = User::where('role','atty')->first();
             $adafEmail = $adaf->email;
+            $inputType = $request->dateType;
             // dd($adafEmail);
             // dd($professor);
             $target_dept = $professor->department_id;
             // dd($target_dept);
 
             if ($inputType === 'wholeWeek') {
-                $weekDate = $request->input('event_date_wholeWeekUser');
-                // dd($weekDate);
-                list($year, $week) = explode("-W", $weekDate);
-                $startDate = Carbon::now()->setISODate($year, $week, 1)->toDateString();
-                $endDate = Carbon::now()->setISODate($year, $week, 7)->toDateString();
-    
-                $request->validate([
+                $weekDate = $request->selectedDate;
+                $startDate = $weekDate;
+                $endDate = Carbon::parse($weekDate)->addDays(6)->toDateString();
+
+                $request->validate([    
                     'request_letter' => 'required|mimes:pdf|max:2048', // PDF file validation
                 ]);
         
                 $files = $request->file('request_letter');
                 $event_letter = 'pdf/'.time().'-'.$files->getClientOriginalName();
-                // $venues->save();
                 Storage::put('public/pdf/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
-
-                // $request->validate([
-                //     'feedback_image' => 'required|image|mimes:jpeg,png,jpg|max:2048', // Image file validation
-                // ]);
-        
-                // $files = $request->file('feedback_image');
                 $feedback_image = $request->feedback_qr_code;
-                // $venues->save();
-                // Storage::put('public/images/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
                 
-                if ($request->event_place === 'room'){
+                if ($request->event_place === 'room')
+                {
                     Event::create([
                         'user_id' => $request->user_id,
                         'event_name' => $request->eventName,
@@ -2160,11 +2151,11 @@ class EventController extends Controller
                         'feedback_image' => $feedback_image,
                         'status' => 'PENDING',
                         'color' => '#D6AD60',
-                        'org_adviser' => 'notnull',
                         'created_at' => now()
                     ]);
                 }
-                else{
+                else
+                {
                     Event::create([
                         'user_id' => $request->user_id,
                         'event_name' => $request->eventName,
@@ -2182,11 +2173,11 @@ class EventController extends Controller
                         'feedback_image' => $feedback_image,
                         'status' => 'PENDING',
                         'color' => '#D6AD60',
-                        'adaa' => 'notnull',
                         'created_at' => now()
                     ]);
     
                 }
+                
                 $data = [
                     "subject" => "Calendash Pending Request",
                     "body" => "Hello {$adaf->name}!, You have a new pending approval request!"
@@ -2196,9 +2187,9 @@ class EventController extends Controller
             }
             elseif ($inputType === 'withinDay') {
                 // Handle whole_day or within_day events
-                $date = $request->event_date_withinDayUser;
-                $start_time = $request->start_time_withinDayUser;
-                $end_time = $request->end_time_withinDayUser;
+                $date = $request->event_date;
+                $start_time = $request->startTime;
+                $end_time = $request->endTime;
     
                 $request->validate([
                     'request_letter' => 'required|mimes:pdf|max:2048', // PDF file validation
@@ -2209,15 +2200,10 @@ class EventController extends Controller
                 // $venues->save();
                 Storage::put('public/pdf/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
 
-                // $request->validate([
-                //     'feedback_image' => 'required|image|mimes:jpeg,png,jpg|max:2048', // Image file validation
-                // ]);
-        
-                // $files = $request->file('feedback_image');
                 $feedback_image = $request->feedback_qr_code;
-                // $venues->save();
-                // Storage::put('public/images/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
-                if ($request->event_place === 'room'){
+    
+                if ($request->event_place === 'room')
+                {
                     Event::create([
                         'user_id' => $request->user_id,
                         'event_name' => $request->eventName,
@@ -2235,11 +2221,11 @@ class EventController extends Controller
                         'whole_week' => false,
                         'status' => 'PENDING',
                         'color' => '#D6AD60',
-                        'org_adviser' => 'notnull',
                         'created_at' => now()
                     ]);
                 }
-                else{
+                else
+                {
                     Event::create([
                         'user_id' => $request->user_id,
                         'event_name' => $request->eventName,
@@ -2257,10 +2243,10 @@ class EventController extends Controller
                         'whole_week' => false,
                         'status' => 'PENDING',
                         'color' => '#D6AD60',
-                        'adaa' => 'notnull',
                         'created_at' => now()
                     ]);
                 }
+                
                 $data = [
                     "subject" => "Calendash Pending Request",
                     "body" => "Hello {$adaf->name}!, You have a new pending approval request!"
@@ -2270,7 +2256,7 @@ class EventController extends Controller
             }   
             else if ($inputType === 'wholeDay'){
                 //whole day
-                $date = $request->event_date_wholeDayUser;
+                $date = $request->event_date;
                 
                 $request->validate([
                     'request_letter' => 'required|mimes:pdf|max:2048', // PDF file validation
@@ -2289,18 +2275,19 @@ class EventController extends Controller
                 $feedback_image = $request->feedback_qr_code;
                 // $venues->save();
                 // Storage::put('public/images/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
-                if ($request->event_place === 'room'){
+                
+                if ($request->event_place === 'room')
+                {
                     Event::create([
                         'user_id' => $request->user_id,
                         'event_name' => $request->eventName,
                         'description' => $request->eventDesc,
                         'type' => 'whole_day',
-                        'venue_id' => $request->event_venue,
                         'room_id' => $request->event_venue,
                         'start_date' => $date,
                         'end_date' => $date,
-                        'start_time' => '00:00:00',
-                        'end_time' => '00:00:00',
+                        'start_time' => '05:00:00',
+                        'end_time' => '21:00:00',
                         'participants' => $request->numParticipants,
                         'target_dept' => $target_dept,
                         'event_letter' => $event_letter,
@@ -2308,7 +2295,6 @@ class EventController extends Controller
                         'whole_week' => false,
                         'status' => 'PENDING',
                         'color' => '#D6AD60',
-                        'org_adviser' => 'notnull',
                         'created_at' => now()
                     ]);
                 }
@@ -2321,8 +2307,8 @@ class EventController extends Controller
                         'venue_id' => $request->event_venue,
                         'start_date' => $date,
                         'end_date' => $date,
-                        'start_time' => '00:00:00',
-                        'end_time' => '00:00:00',
+                        'start_time' => '05:00:00',
+                        'end_time' => '21:00:00',
                         'participants' => $request->numParticipants,
                         'target_dept' => $target_dept,
                         'event_letter' => $event_letter,
@@ -2330,10 +2316,10 @@ class EventController extends Controller
                         'whole_week' => false,
                         'status' => 'PENDING',
                         'color' => '#D6AD60',
-                        'adaa' => 'notnull',
                         'created_at' => now()
                     ]);
                 }
+                
                 $data = [
                     "subject" => "Calendash Pending Request",
                     "body" => "Hello {$adaf->name}!, You have a new pending approval request!"
@@ -2343,8 +2329,11 @@ class EventController extends Controller
             }
             else
             {
-                $dateRange = $request->daterange;
-                [$startDate, $endDate] = explode(' - ', $dateRange);
+                // $dateRange = $request->daterange;
+                // [$startDate, $endDate] = explode(' - ', $dateRange);
+                // // dd($startDate);
+                $startDate = $request->startDate;
+                $endDate = $request->endDate;
 
                 $request->validate([
                     'request_letter' => 'required|mimes:pdf|max:2048', // PDF file validation
@@ -2363,6 +2352,7 @@ class EventController extends Controller
                 $feedback_image = $request->feedback_qr_code;
                 // $venues->save();
                 // Storage::put('public/images/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
+                
                 if ($request->event_place === 'room'){
                     Event::create([
                         'user_id' => $request->user_id,
@@ -2381,7 +2371,6 @@ class EventController extends Controller
                         'whole_week' => false,
                         'status' => 'PENDING',
                         'color' => '#D6AD60',
-                        'org_adviser' => 'notnull',
                         'created_at' => now()
                     ]);
                 }
@@ -2403,10 +2392,10 @@ class EventController extends Controller
                         'whole_week' => false,
                         'status' => 'PENDING',
                         'color' => '#D6AD60',
-                        'adaa' => 'notnull',
                         'created_at' => now()
                     ]);
                 }
+                
                 $data = [
                     "subject" => "Calendash Pending Request",
                     "body" => "Hello {$adaf->name}!, You have a new pending approval request!"
@@ -2420,35 +2409,28 @@ class EventController extends Controller
             $staff = Staff::where('user_id',$request->user_id)->first();
 
             $target_dept = $staff->department_id;
+
+            $adaa = User::where('role','adaa')->first();
+
+            $adaaEmail = $adaa->email;
             // $target_org = $staff->organization;
 
             if ($inputType === 'wholeWeek') {
-                $weekDate = $request->input('event_date_wholeWeekUser');
-                // dd($weekDate);
-                list($year, $week) = explode("-W", $weekDate);
-                $startDate = Carbon::now()->setISODate($year, $week, 1)->toDateString();
-                $endDate = Carbon::now()->setISODate($year, $week, 7)->toDateString();
-    
-                $request->validate([
+                $weekDate = $request->selectedDate;
+                $startDate = $weekDate;
+                $endDate = Carbon::parse($weekDate)->addDays(6)->toDateString();
+
+                $request->validate([    
                     'request_letter' => 'required|mimes:pdf|max:2048', // PDF file validation
                 ]);
         
                 $files = $request->file('request_letter');
                 $event_letter = 'pdf/'.time().'-'.$files->getClientOriginalName();
-                // $venues->save();
                 Storage::put('public/pdf/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
-
-                // $request->validate([
-                //     'feedback_image' => 'required|image|mimes:jpeg,png,jpg|max:2048', // Image file validation
-                // ]);
-        
-                // $feedback_image = $request->feedback_qr_code;
-                // // $venues->save();
-                // Storage::put('public/images/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
                 $feedback_image = $request->feedback_qr_code;
-
                 
-                if ($request->event_place === 'room'){
+                if ($request->event_place === 'room')
+                {
                     Event::create([
                         'user_id' => $request->user_id,
                         'event_name' => $request->eventName,
@@ -2469,7 +2451,8 @@ class EventController extends Controller
                         'created_at' => now()
                     ]);
                 }
-                else{
+                else
+                {
                     Event::create([
                         'user_id' => $request->user_id,
                         'event_name' => $request->eventName,
@@ -2487,18 +2470,23 @@ class EventController extends Controller
                         'feedback_image' => $feedback_image,
                         'status' => 'PENDING',
                         'color' => '#D6AD60',
-                        'osa' => 'notnull',
                         'created_at' => now()
                     ]);
+    
                 }
                 
+                $data = [
+                    "subject" => "Calendash Pending Request",
+                    "body" => "Hello {$adaa->name}!, You have a new pending approval request!"
+                ];
+                Mail::to($adaaEmail)->send(new MailNotify($data));
                 return response()->json(["success" => "Event Created Successfully.", "status" => 200]);
             }
             elseif ($inputType === 'withinDay') {
                 // Handle whole_day or within_day events
-                $date = $request->event_date_withinDayUser;
-                $start_time = $request->start_time_withinDayUser;
-                $end_time = $request->end_time_withinDayUser;
+                $date = $request->event_date;
+                $start_time = $request->startTime;
+                $end_time = $request->endTime;
     
                 $request->validate([
                     'request_letter' => 'required|mimes:pdf|max:2048', // PDF file validation
@@ -2509,15 +2497,10 @@ class EventController extends Controller
                 // $venues->save();
                 Storage::put('public/pdf/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
 
-                // $request->validate([
-                //     'feedback_image' => 'required|image|mimes:jpeg,png,jpg|max:2048', // Image file validation
-                // ]);
-        
                 $feedback_image = $request->feedback_qr_code;
-                // $feedback_image = 'images/'.time().'-'.$files->getClientOriginalName();
-                // // $venues->save();
-                // Storage::put('public/images/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
-                if ($request->event_place === 'room'){
+    
+                if ($request->event_place === 'room')
+                {
                     Event::create([
                         'user_id' => $request->user_id,
                         'event_name' => $request->eventName,
@@ -2538,7 +2521,8 @@ class EventController extends Controller
                         'created_at' => now()
                     ]);
                 }
-                else{
+                else
+                {
                     Event::create([
                         'user_id' => $request->user_id,
                         'event_name' => $request->eventName,
@@ -2556,16 +2540,20 @@ class EventController extends Controller
                         'whole_week' => false,
                         'status' => 'PENDING',
                         'color' => '#D6AD60',
-                        'osa' => 'notnull',
                         'created_at' => now()
                     ]);
                 }
-
+                
+                $data = [
+                    "subject" => "Calendash Pending Request",
+                    "body" => "Hello {$adaa->name}!, You have a new pending approval request!"
+                ];
+                Mail::to($adaaEmail)->send(new MailNotify($data));
                 return response()->json(["success" => "Event Created Successfully.", "status" => 200]);
             }   
             else if ($inputType === 'wholeDay'){
                 //whole day
-                $date = $request->event_date_wholeDayUser;
+                $date = $request->event_date;
                 
                 $request->validate([
                     'request_letter' => 'required|mimes:pdf|max:2048', // PDF file validation
@@ -2584,7 +2572,9 @@ class EventController extends Controller
                 $feedback_image = $request->feedback_qr_code;
                 // $venues->save();
                 // Storage::put('public/images/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
-                if ($request->event_place === 'room'){
+                
+                if ($request->event_place === 'room')
+                {
                     Event::create([
                         'user_id' => $request->user_id,
                         'event_name' => $request->eventName,
@@ -2593,8 +2583,8 @@ class EventController extends Controller
                         'room_id' => $request->event_venue,
                         'start_date' => $date,
                         'end_date' => $date,
-                        'start_time' => '00:00:00',
-                        'end_time' => '00:00:00',
+                        'start_time' => '05:00:00',
+                        'end_time' => '21:00:00',
                         'participants' => $request->numParticipants,
                         'target_dept' => $target_dept,
                         'event_letter' => $event_letter,
@@ -2614,8 +2604,8 @@ class EventController extends Controller
                         'venue_id' => $request->event_venue,
                         'start_date' => $date,
                         'end_date' => $date,
-                        'start_time' => '00:00:00',
-                        'end_time' => '00:00:00',
+                        'start_time' => '05:00:00',
+                        'end_time' => '21:00:00',
                         'participants' => $request->numParticipants,
                         'target_dept' => $target_dept,
                         'event_letter' => $event_letter,
@@ -2623,17 +2613,24 @@ class EventController extends Controller
                         'whole_week' => false,
                         'status' => 'PENDING',
                         'color' => '#D6AD60',
-                        'osa' => 'notnull',
                         'created_at' => now()
                     ]);
                 }
                 
+                $data = [
+                    "subject" => "Calendash Pending Request",
+                    "body" => "Hello {$adaa->name}!, You have a new pending approval request!"
+                ];
+                Mail::to($adaa)->send(new MailNotify($data));
                 return response()->json(["success" => "Event Created Successfully.", "status" => 200]);
             }
             else
             {
-                $dateRange = $request->daterange;
-                [$startDate, $endDate] = explode(' - ', $dateRange);
+                // $dateRange = $request->daterange;
+                // [$startDate, $endDate] = explode(' - ', $dateRange);
+                // // dd($startDate);
+                $startDate = $request->startDate;
+                $endDate = $request->endDate;
 
                 $request->validate([
                     'request_letter' => 'required|mimes:pdf|max:2048', // PDF file validation
@@ -2649,10 +2646,10 @@ class EventController extends Controller
                 // ]);
         
                 // $files = $request->file('feedback_image');
-                // $feedback_image = 'images/'.time().'-'.$files->getClientOriginalName();
-                // // $venues->save();
-                // Storage::put('public/images/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
                 $feedback_image = $request->feedback_qr_code;
+                // $venues->save();
+                // Storage::put('public/images/'.time().'-'.$files->getClientOriginalName(), file_get_contents($files));
+                
                 if ($request->event_place === 'room'){
                     Event::create([
                         'user_id' => $request->user_id,
@@ -2692,11 +2689,15 @@ class EventController extends Controller
                         'whole_week' => false,
                         'status' => 'PENDING',
                         'color' => '#D6AD60',
-                        'osa' => 'notnull',
                         'created_at' => now()
                     ]);
                 }
                 
+                $data = [
+                    "subject" => "Calendash Pending Request",
+                    "body" => "Hello {$adaa->name}!, You have a new pending approval request!"
+                ];
+                Mail::to($adaaEmail)->send(new MailNotify($data));
                 return response()->json(["success" => "Event Created Successfully.", "status" => 200]);
             }
         }
@@ -2756,7 +2757,7 @@ class EventController extends Controller
                             ->first();
         // dd($eventType->event_type);
         $place = $eventType->event_type;
-
+        // dd($role);
         if ($role === 'student')
         {
             $orgID = $events->target_org;
@@ -3322,132 +3323,250 @@ class EventController extends Controller
                         // dd($events->remarks_sec_head);
                         if ($events->remarks_org_adviser !== null)
                         {
-                            $message = 'Your Request is Rejected By Organization Adviser';
-                            // return response()->json(["msg" => $message, "status" => 200]);
-                            $rejectedDates = [
-                                $events->updated_at,
-                            ];
+                            // $message = 'Your Request is Rejected By Organization Adviser';
+                            // // return response()->json(["msg" => $message, "status" => 200]);
+                            // $rejectedDates = [
+                            //     $events->updated_at,
+                            // ];
                         
-                            $approvalMessage = [
-                                'REJECTED BY ORGANIZATION ADVISER: ' . $rejectedBy->name. '<br>Reason: ' . $events->remarks_org_adviser,
+                            // $approvalMessage = [
+                            //     'REJECTED BY ORGANIZATION ADVISER: ' . $rejectedBy->name. '<br>Reason: ' . $events->remarks_org_adviser,
+                            // ];
+                            // $pendingMsg = 'REJECTED';
+                            // return response()->json(["dates" => $rejectedDates, "msg" => $approvalMessage, "pendingMsg" => $pendingMsg, "status" => 200]);
+                            $classes = [
+                                [
+                                    'pendingMsg' => 'Your Request is on process...',
+                                    'dateApproved' => $events->created_at,
+                                ],
+                                [
+                                    'dateApproved' => $events->updated_at,
+                                    'approvalMessage' => 'REJECTED BY ORGANIZATION ADVISER: ' . $official_user->name,
+                                    'pendingMsg' => 'Remarks: ' .$events->remarks_org_adviser,
+                                    'bgColor' => '#D6AD60',
+                                ],
+                                // Add more classes as needed
                             ];
-                            $pendingMsg = 'REJECTED';
-                            return response()->json(["dates" => $rejectedDates, "msg" => $approvalMessage, "pendingMsg" => $pendingMsg, "status" => 200]);
+
+                            return response()->json($classes);
+
                         }
                         else if($events->remarks_sec_head !== null){
-                            $message = 'Your Request is Rejected By Section Head';
-                            // return response()->json(["msg" => $message, "status" => 200]);
-                            $rejectedDates = [
-                                $events->approved_org_adviser_at,
-                                $events->updated_at,
-                            ];
+                            // $message = 'Your Request is Rejected By Section Head';
+                            // // return response()->json(["msg" => $message, "status" => 200]);
+                            // $rejectedDates = [
+                            //     $events->approved_org_adviser_at,
+                            //     $events->updated_at,
+                            // ];
                         
-                            $approvalMessage = [
-                                'APPROVED BY ORGANIZATION ADVISER: ' . $official_user->name,
-                                'REJECTED BY SECTION HEAD: ' . $rejectedBy->name . '<br>Reason: ' . $events->remarks_sec_head,
+                            // $approvalMessage = [
+                            //     'APPROVED BY ORGANIZATION ADVISER: ' . $official_user->name,
+                            //     'REJECTED BY SECTION HEAD: ' . $rejectedBy->name . '<br>Reason: ' . $events->remarks_sec_head,
+                            // ];
+                            // $pendingMsg = 'REJECTED';
+                            // return response()->json(["dates" => $rejectedDates, "msg" => $approvalMessage, "pendingMsg" => $pendingMsg, "status" => 200]);
+                            $classes = [
+                                [
+                                    'pendingMsg' => 'Your Request is on process...',
+                                    'dateApproved' => $events->created_at,
+                                ],
+                                [
+                                    'dateApproved' => $events->approved_org_adviser_at,
+                                    'approvalMessage' => 'APPROVED BY ORGANIZATION ADVISER: ' . $official_user->name,
+                                    'bgColor' => '#E0FFFF',
+                                ],
+                                [
+                                    'dateApproved' => $events->updated_at,
+                                    'approvalMessage' => 'REJECTED BY SECTION HEAD ADVISER: ' . $official_user->name,
+                                    'pendingMsg' => 'Remarks: ' .$events->remarks_sec_head,
+                                    'bgColor' => '#D6AD60',
+                                ],
+                                // Add more classes as needed
                             ];
-                            $pendingMsg = 'REJECTED';
-                            return response()->json(["dates" => $rejectedDates, "msg" => $approvalMessage, "pendingMsg" => $pendingMsg, "status" => 200]);
+
+                            return response()->json($classes);
                         }
                         else if($events->remarks_dept_head !== null){
-                            $message = 'Your Request is Rejected By Department Head';
-                            // return response()->json(["msg" => $message, "status" => 200]);
-                            $rejectedDates = [
-                                $events->approved_org_adviser_at,
-                                $events->approved_sec_head_at,
-                                $events->updated_at,
+                            $classes = [
+                                [
+                                    'pendingMsg' => 'Your Request is on process...',
+                                    'dateApproved' => $events->created_at,
+                                ],
+                                [
+                                    'dateApproved' => $events->approved_org_adviser_at,
+                                    'approvalMessage' => 'APPROVED BY ORGANIZATION ADVISER: ' . $official_user->name,
+                                    'bgColor' => '#E0FFFF',
+                                ],
+                                [
+                                    'dateApproved' => $events->approved_sec_head_at,
+                                    'approvalMessage' => 'APPROVED BY SECTION HEAD',
+                                    'bgColor' => '#E6E6FA',
+                                ],
+                                [
+                                    'dateApproved' => $events->updated_at,
+                                    'approvalMessage' => 'REJECTED BY DEPARTMENT HEAD',
+                                    'pendingMsg' => 'Remarks: ' .$events->remarks_dept_head,
+                                    'bgColor' => '#D6AD60',
+                                ],
+                                // Add more classes as needed
                             ];
-                        
-                            $approvalMessage = [
-                                'APPROVED BY ORGANIZATION ADVISER: ' . $official_user->name,
-                                'APPROVED BY SECTION HEAD: ' . $sect_user->name,
-                                'REJECTED BY DEPARTMENT HEAD: ' . $rejectedBy->name . '<br>Reason: ' . $events->remarks_dept_head,
-                            ];
-                            $pendingMsg = 'REJECTED';
-                            return response()->json(["dates" => $rejectedDates, "msg" => $approvalMessage, "pendingMsg" => $pendingMsg, "status" => 200]);
+
+                            return response()->json($classes);
                         }
                         else if($events->remarks_osa !== null){
-                            $message = 'Your Request is Rejected By OSA';
-                            // return response()->json(["msg" => $message, "status" => 200]);
-                            $rejectedDates = [
-                                $events->approved_org_adviser_at,
-                                $events->approved_sec_head_at,
-                                $events->approved_dept_head_at,
-                                $events->updated_at,
+                            $classes = [
+                                [
+                                    'pendingMsg' => 'Your Request is on process...',
+                                    'dateApproved' => $events->created_at,
+                                ],
+                                [
+                                    'dateApproved' => $events->approved_org_adviser_at,
+                                    'approvalMessage' => 'APPROVED BY ORGANIZATION ADVISER: ' . $official_user->name,
+                                    'bgColor' => '#E0FFFF',
+                                ],
+                                [
+                                    'dateApproved' => $events->approved_sec_head_at,
+                                    'approvalMessage' => 'APPROVED BY SECTION HEAD',
+                                    'bgColor' => '#E6E6FA',
+                                ],
+                                [
+                                    'dateApproved' => $events->approved_dept_head_at,
+                                    'approvalMessage' => 'APPROVED BY DEPARTMENT HEAD',
+                                    'bgColor' => '#E6E6FA',
+                                ],
+                                [
+                                    'dateApproved' => $events->updated_at,
+                                    'approvalMessage' => 'REJECTED BY OSA',
+                                    'pendingMsg' => 'Remarks: ' .$events->remarks_osa,
+                                    'bgColor' => '#D6AD60',
+                                ],
+                                // Add more classes as needed
                             ];
-                        
-                            $approvalMessage = [
-                                'APPROVED BY ORGANIZATION ADVISER: ' . $official_user->name,
-                                'APPROVED BY SECTION HEAD: ' . $sect_user->name,
-                                'APPROVED BY DEPARTMENT HEAD: ' . $dept_user->name,
-                                'REJECTED BY OSA' .'<br>Reason: '. $events->remarks_osa
-                            ];
-                            $pendingMsg = 'REJECTED';
-                            return response()->json(["dates" => $rejectedDates, "msg" => $approvalMessage, "pendingMsg" => $pendingMsg, "status" => 200]);
+
+                            return response()->json($classes);
                         }   
                         else if($events->remarks_adaa !== null){
-                            $message = 'Your Request is Rejected By ADAA';
-                            // return response()->json(["msg" => $message, "status" => 200]);
-                            $rejectedDates = [
-                                $events->approved_org_adviser_at,
-                                $events->approved_sec_head_at,
-                                $events->approved_dept_head_at,
-                                $events->updated_at,
+                            $classes = [
+                                [
+                                    'pendingMsg' => 'Your Request is on process...',
+                                    'dateApproved' => $events->created_at,
+                                ],
+                                [
+                                    'dateApproved' => $events->approved_org_adviser_at,
+                                    'approvalMessage' => 'APPROVED BY ORGANIZATION ADVISER: ' . $official_user->name,
+                                    'bgColor' => '#E0FFFF',
+                                ],
+                                [
+                                    'dateApproved' => $events->approved_sec_head_at,
+                                    'approvalMessage' => 'APPROVED BY SECTION HEAD',
+                                    'bgColor' => '#E6E6FA',
+                                ],
+                                [
+                                    'dateApproved' => $events->approved_dept_head_at,
+                                    'approvalMessage' => 'APPROVED BY DEPARTMENT HEAD',
+                                    'bgColor' => '#E6E6FA',
+                                ],
+                                [
+                                    'dateApproved' => $events->approved_osa_at,
+                                    'approvalMessage' => 'APPROVED BY OSA',
+                                    'bgColor' => '#E6E6FA',
+                                ],
+                                [
+                                    'dateApproved' => $events->updated_at,
+                                    'approvalMessage' => 'REJECTED BY ADAA',
+                                    'pendingMsg' => 'Remarks: ' .$events->remarks_adaa,
+                                    'bgColor' => '#D6AD60',
+                                ],
+                                // Add more classes as needed
                             ];
-                        
-                            $approvalMessage = [
-                                'APPROVED BY ORGANIZATION ADVISER: ' . $official_user->name,
-                                'APPROVED BY SECTION HEAD: ' . $sect_user->name,
-                                'APPROVED BY DEPARTMENT HEAD: ' . $dept_user->name,
-                                'APPROVED BY OSA',
-                                'REJECTED BY ADAA' .'<br>Reason: '. $events->remarks_adaa
-                            ];
-                            $pendingMsg = 'REJECTED';
-                            return response()->json(["dates" => $rejectedDates, "msg" => $approvalMessage, "pendingMsg" => $pendingMsg, "status" => 200]);
+
+                            return response()->json($classes);
                         }
                         else if($events->remarks_atty !== null){
-                            $message = 'Your Request is Rejected By ADAF';
-                            // return response()->json(["msg" => $message, "status" => 200]);
-                            $rejectedDates = [
-                                $events->approved_org_adviser_at,
-                                $events->approved_sec_head_at,
-                                $events->approved_dept_head_at,
-                                $events->updated_at,
+                            $classes = [
+                                [
+                                    'pendingMsg' => 'Your Request is on process...',
+                                    'dateApproved' => $events->created_at,
+                                ],
+                                [
+                                    'dateApproved' => $events->approved_org_adviser_at,
+                                    'approvalMessage' => 'APPROVED BY ORGANIZATION ADVISER: ' . $official_user->name,
+                                    'bgColor' => '#E0FFFF',
+                                ],
+                                [
+                                    'dateApproved' => $events->approved_sec_head_at,
+                                    'approvalMessage' => 'APPROVED BY SECTION HEAD',
+                                    'bgColor' => '#E6E6FA',
+                                ],
+                                [
+                                    'dateApproved' => $events->approved_dept_head_at,
+                                    'approvalMessage' => 'APPROVED BY DEPARTMENT HEAD',
+                                    'bgColor' => '#E6E6FA',
+                                ],
+                                [
+                                    'dateApproved' => $events->approved_osa_at,
+                                    'approvalMessage' => 'APPROVED BY OSA',
+                                    'bgColor' => '#E6E6FA',
+                                ],
+                                [
+                                    'dateApproved' => $events->approved_adaa_at,
+                                    'approvalMessage' => 'APPROVED BY ADAA',
+                                    'pendingMsg' => 'Waiting for Approval of Campus Director',
+                                    'bgColor' => '#E6E6FA',
+                                ],
+                                [
+                                    'dateApproved' => $events->updated_at,
+                                    'approvalMessage' => 'REJECTED BY ADAF',
+                                    'pendingMsg' => 'Remarks: ' .$events->remarks_atty,
+                                    'bgColor' => '#D6AD60',
+                                ],
+                                // Add more classes as needed
                             ];
-                        
-                            $approvalMessage = [
-                                'APPROVED BY ORGANIZATION ADVISER: ' . $official_user->name,
-                                'APPROVED BY SECTION HEAD: ' . $sect_user->name,
-                                'APPROVED BY DEPARTMENT HEAD: ' . $dept_user->name,
-                                'APPROVED BY OSA',
-                                'APPROVED BY ADAA',
-                                'REJECTED BY ADAF' .'<br>Reason: '. $events->remarks_atty
-                            ];
-                            $pendingMsg = 'REJECTED';
-                            return response()->json(["dates" => $rejectedDates, "msg" => $approvalMessage, "pendingMsg" => $pendingMsg, "status" => 200]);
+
+                            return response()->json($classes);
                         }
                         else if($events->remarks_campus_director !== null){
-                            $message = 'Your Request is Rejected By Campus Director';
-                            // return response()->json(["msg" => $message, "status" => 200]);
-                            $rejectedDates = [
-                                $events->approved_org_adviser_at,
-                                $events->approved_sec_head_at,
-                                $events->approved_dept_head_at,
-                                $events->approved_osa_at,
-                                $events->approved_adaa_at,
-                                $events->updated_at,
+                            $classes = [
+                                [
+                                    'pendingMsg' => 'Your Request is on process...',
+                                    'dateApproved' => $events->created_at,
+                                ],
+                                [
+                                    'dateApproved' => $events->approved_org_adviser_at,
+                                    'approvalMessage' => 'APPROVED BY ORGANIZATION ADVISER: ' . $official_user->name,
+                                    'bgColor' => '#E0FFFF',
+                                ],
+                                [
+                                    'dateApproved' => $events->approved_sec_head_at,
+                                    'approvalMessage' => 'APPROVED BY SECTION HEAD',
+                                    'bgColor' => '#E6E6FA',
+                                ],
+                                [
+                                    'dateApproved' => $events->approved_dept_head_at,
+                                    'approvalMessage' => 'APPROVED BY DEPARTMENT HEAD',
+                                    'bgColor' => '#E6E6FA',
+                                ],
+                                [
+                                    'dateApproved' => $events->approved_osa_at,
+                                    'approvalMessage' => 'APPROVED BY OSA',
+                                    'bgColor' => '#E6E6FA',
+                                ],
+                                [
+                                    'dateApproved' => $events->approved_adaa_at,
+                                    'approvalMessage' => 'APPROVED BY ADAA',
+                                    'pendingMsg' => 'Waiting for Approval of Campus Director',
+                                    'bgColor' => '#E6E6FA',
+                                ],
+                                [
+                                    'dateApproved' => $events->updated_at,
+                                    'approvalMessage' => 'REJECTED BY CAMPUS DIRECTOR',
+                                    'pendingMsg' => 'Remarks: ' .$events->remarks_campus_director,
+                                    'bgColor' => '#D6AD60',
+                                ],
+                                // Add more classes as needed
                             ];
-                        
-                            $approvalMessage = [
-                                'APPROVED BY ORGANIZATION ADVISER: ' . $official_user->name,
-                                'APPROVED BY SECTION HEAD: ' . $sect_user->name,
-                                'APPROVED BY DEPARTMENT HEAD: ' . $dept_user->name,
-                                'APPROVED BY OSA',
-                                'APPROVED BY ADAA',
-                                'REJECTED BY CAMPUS DIRECTOR' .'<br>Reason: '. $events->remarks_campus_director
-                            ];
-                            $pendingMsg = 'REJECTED';
-                            return response()->json(["dates" => $rejectedDates, "msg" => $approvalMessage, "pendingMsg" => $pendingMsg, "status" => 200]);
+
+                            return response()->json($classes);
                         }
                         
                     }
@@ -3466,109 +3585,165 @@ class EventController extends Controller
             // dd($events->status);
             if($place === 'Room')
             {
-                if ($events->status === 'PENDING' || $events->status ==='APPROVED') 
+                // dd($place);
+                if ($sec_head === null)
                 {
-                    if ($sec_head === null){
-                        $message = 'Waiting for approval of section head of IT';
-                        return response()->json(["pendingMsg" => $message, "status" => 200]);
-                    }
-                    else{
-                        $approvalDates = [
-                            $events->approved_sec_head_at,
-                        ];
-                        
-                        $approvalMessage = [
-                            'APPROVED BY SECTION HEAD OF IT',
-                        ];
-                        $pendingMsg = 'APPROVED';
-                        return response()->json(["dates" => $approvalDates, "msg" => $approvalMessage, "pendingMsg" => $pendingMsg, "status" => 200]);
-                    }
+                    $message = 'Your Request is on process...';
+                            return response()->json([
+                                                    ["pendingMsg" => $message],
+                                                ]);
+                }
+                elseif ($sec_head !== null)
+                {
+                    // $appSecDate = $events->approved_sec_head_at;
+                    $classes = [
+                        [
+                            'pendingMsg' => 'Your Request is on process...',
+                            'dateApproved' => $events->created_at,
+                        ],
+                        [
+                            'dateApproved' => $events->approved_org_adviser_at,
+                            'approvalMessage' => 'APPROVED BY IT SECTION HEAD',
+                            'pendingMsg' => 'Officially Approved!',
+                            'bgColor' => '#E0FFFF',
+                        ],
+                        // Add more classes as needed
+                    ];
 
+                    return response()->json($classes);
                 }
-                else if($events->status === 'REJECTED')
-                {
-                    $message = 'Your Request is Rejected By ADAF';
-                    // return response()->json(["msg" => $message, "status" => 200]);
-                    $rejectedDates = [
-                        $events->updated_at,
-                    ];
-                
-                    $approvalMessage = [
-                        'REJECTED BY ADAF',
-                    ];
-                    $pendingMsg = 'REJECTED';
-                    return response()->json(["dates" => $rejectedDates, "msg" => $approvalMessage, "pendingMsg" => $pendingMsg, "status" => 200]);
-                }
+
             }
             else
             {
-                if ($events->status === 'PENDING' || $events->status ==='APPROVED') 
+                if($venues->name ==='IT Auditorium')
                 {
-                    if ($atty === null && $cd === null)
+                    if ($atty === null)
                     {
-                        $message = 'Your Request is on Process';
-                        return response()->json(["msg" => $message, "status" => 200]);
+                        $message = 'Your Request is on process...';
+                            return response()->json([
+                                                    ["pendingMsg" => $message],
+                                                ]);
                     }
-                    elseif ($atty !== null && $cd === null) 
+                    elseif ($atty !== null)
                     {
-                        $approvalDates = [
-                            $events->approved_atty_at,
+                        $classes = [
+                            [
+                                'pendingMsg' => 'Your Request is on process...',
+                                'dateApproved' => $events->created_at,
+                            ],
+                            [
+                                'dateApproved' => $events->approved_org_adviser_at,
+                                'approvalMessage' => 'APPROVED BY ADAF: ',
+                                'pendingMsg' => 'Officially Approved!',
+                                'bgColor' => '#E0FFFF',
+                            ],
+                            // Add more classes as needed
                         ];
-                        
-                        $approvalMessage = [
-                            'APPROVED BY ADAF',
-                        ];
-                        $pendingMsg = 'Waiting for Approval of Campus Director';
-                        return response()->json(["dates" => $approvalDates, "msg" => $approvalMessage, "pendingMsg" => $pendingMsg, "status" => 200]);
-                    }
-                    elseif ($atty !== null && $cd !== null) 
-                    {
-                        $approvalDates = [
-                            $events->approved_atty_at,
-                            $events->approved_campus_director_at,
-                        ];
-                    
-                        $approvalMessage = [
-                            'APPROVED BY ADAF',
-                            'APPROVED BY CAMPUS DIRECTOR',
-                        ];
-                        
-                        $pendingMsg = 'APPROVED';
-                        return response()->json(["dates" => $approvalDates, "msg" => $approvalMessage, "pendingMsg" => $pendingMsg, "status" => 200]);
+
+                        return response()->json($classes);
                     }
                 }
-                else if($events->status === 'REJECTED')
+                else
                 {
-                    // dd($events->remarks_sec_head);
-                    if ($events->remarks_atty !== null)
+                    if ($events->status === 'PENDING' || $events->status ==='APPROVED') 
                     {
-                        $message = 'Your Request is Rejected By ADAF';
-                        // return response()->json(["msg" => $message, "status" => 200]);
-                        $rejectedDates = [
-                            $events->updated_at,
-                        ];
-                    
-                        $approvalMessage = [
-                            'REJECTED BY ADAF',
-                        ];
-                        $pendingMsg = 'REJECTED';
-                        return response()->json(["dates" => $rejectedDates, "msg" => $approvalMessage, "pendingMsg" => $pendingMsg, "status" => 200]);
+                        if ($atty === null && $cd === null)
+                        {
+                            $message = 'Your Request is on process...';
+                            return response()->json([
+                                                    ["pendingMsg" => $message],
+                                                ]);
+                        }
+                        elseif ($atty !== null && $cd === null)
+                        {
+                            $classes = [
+                                [
+                                    'pendingMsg' => 'Your Request is on process...',
+                                    'dateApproved' => $events->created_at,
+                                ],
+                                [
+                                    'dateApproved' => $events->approved_atty_at,
+                                    'approvalMessage' => 'APPROVED BY ADAF',
+                                    'pendingMsg' => 'Waiting for Campus Director',
+                                    'bgColor' => '#E0FFFF',
+                                ],
+                                // Add more classes as needed
+                            ];
+
+                            return response()->json($classes);
+                        }
+                        elseif ($atty !== null && $cd !== null)
+                        {
+                            $classes = [
+                                [
+                                    'pendingMsg' => 'Your Request is on process...',
+                                    'dateApproved' => $events->created_at,
+                                ],
+                                [
+                                    'dateApproved' => $events->approved_atty_at,
+                                    'approvalMessage' => 'APPROVED BY ADAF',
+                                    'pendingMsg' => 'Waiting for Campus Director',
+                                    'bgColor' => '#E0FFFF',
+                                ],
+                                [
+                                    'dateApproved' => $events->approved_sec_head_at,
+                                    'approvalMessage' => 'APPROVED BY CAMPUS DIRECTOR',
+                                    'pendingMsg' => 'Officially Approved!',
+                                    'bgColor' => '#E6E6FA',
+                                ],
+                                // Add more classes as needed
+                            ];
+
+                            return response()->json($classes);
+                        }
                     }
-                    else if($events->remarks_campus_director !== null){
-                        $message = 'Your Request is Rejected By Campus Director';
-                        // return response()->json(["msg" => $message, "status" => 200]);
-                        $rejectedDates = [
-                            $events->approved_atty_at,
-                            $events->updated_at,
-                        ];
-                    
-                        $approvalMessage = [
-                            'APPROVED BY ADAF ',
-                            'REJECTED BY CAMPUS DIRECTOR ',
-                        ];
-                        $pendingMsg = 'REJECTED';
-                        return response()->json(["dates" => $rejectedDates, "msg" => $approvalMessage, "pendingMsg" => $pendingMsg, "status" => 200]);
+                    else if($events->status === 'REJECTED')
+                    {
+                        // dd($events->remarks_sec_head);
+                        if ($events->remarks_atty !== null)
+                        {
+                            $classes = [
+                                [
+                                    'pendingMsg' => 'Your Request is on process...',
+                                    'dateApproved' => $events->created_at,
+                                ],
+                                [
+                                    'dateApproved' => $events->updated_at,
+                                    'approvalMessage' => 'REJECTED BY ADAF',
+                                    'pendingMsg' => 'Remarks: ' .$events->remarks_atty,
+                                    'bgColor' => '#D6AD60',
+                                ],
+                                // Add more classes as needed
+                            ];
+
+                            return response()->json($classes);
+
+                        }
+                        else if($events->remarks_campus_director !== null){
+                            $classes = [
+                                [
+                                    'pendingMsg' => 'Your Request is on process...',
+                                    'dateApproved' => $events->created_at,
+                                ],
+                                [
+                                    'dateApproved' => $events->approved_org_adviser_at,
+                                    'approvalMessage' => 'APPROVED BY ADAF',
+                                    'bgColor' => '#E0FFFF',
+                                ],
+                                [
+                                    'dateApproved' => $events->updated_at,
+                                    'approvalMessage' => 'REJECTED BY CAMPUS DIRECTOR',
+                                    'pendingMsg' => 'Remarks: ' .$events->remarks_campus_director,
+                                    'bgColor' => '#D6AD60',
+                                ],
+                                // Add more classes as needed
+                            ];
+
+                            return response()->json($classes);
+                        }
                     }
+                    
                 }
             }
         }   
@@ -3576,7 +3751,7 @@ class EventController extends Controller
         {
             $adaa = $events->adaa;
             $cd = $events->campus_director;
-
+            $sec_head = $events->sect_head;
             $message = 'Your Request is on Process';
             // dd($events->status);
             if($place === 'Room')

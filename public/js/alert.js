@@ -3065,16 +3065,18 @@ $(document).ready(function () {
 
             if ($(this).val() === 'venue') {
                 console.log('venue');
-                dateRangeDiv.style.display = 'none';
-                venueDiv.style.display = 'block';
-                roomDiv.style.display = 'none';
-
+                // dateRangeDiv.style.display = 'none';
+                // venueDiv.style.display = 'block';
+                // roomDiv.style.display = 'none';
+                $(dateRangeDiv).fadeOut();
+                $(venueDiv).fadeIn();
+                $(roomDiv).fadeOut();
             }
             else {
                 console.log('rroom');
-                dateRangeDiv.style.display = 'none';
-                venueDiv.style.display = 'none';
-                roomDiv.style.display = 'block';
+                $(dateRangeDiv).fadeOut();
+                $(venueDiv).fadeOut();
+                $(roomDiv).fadeIn();
 
             }
             // console.log('Selected value:', $(this).val());
