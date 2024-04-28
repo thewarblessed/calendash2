@@ -9,28 +9,86 @@
                         <div class="card-header">
                             <h5 class="card-title">Rules and Regulations</h5>
                         </div>
+
                         <div class="card-body">
                             <p class="text-sm text-dark font-weight-semibold mb-0">
-                                <!-- Fetch and display description from the database -->
-                                @foreach ($venues as $venue)
-                                    <h5 class="card-title" style="text-align: center">{{$venue->name}}</h5>
-                                    <div class="text-center"> <!-- Added text-center class here -->
-                                        <img src="{{ asset('storage/'.$venue->image) }}" width="500" height="300" style="border-radius: 8px;"/>
-                                    </div>
-                                    <br>
-                                    <ul>
-                                        @foreach (explode("\n", $venue->description) as $bullet)
-                                            <li>{{ $bullet }}</li>
-                                        @endforeach
-                                    </ul>
-                                @endforeach
+                                <!-- Button for modal -->
+                                <label class="font-weight-normal text-dark mb-0" for="terms">
+                                    <button type="button" id="processLetter"
+                                        class="btn btn-primary text-white font-weight-bold no-hover">
+                                        <a href="#" class="btn-link text-white"
+                                            onclick="showProcessLetterModal()">PROCESS OF THE LETTER CLICK HERE</a>
+                                    </button>
+                                </label>
                             </p>
                         </div>
-                        <div class="card-footer">
-                            <a href="{{ url('venues')}}" class="btn btn-primary">Back</a>
+
+                        <!-- Modal for Process of letter -->
+                        <div class="modal fade" id="processLetterModal" tabindex="-1" role="dialog"
+                            aria-labelledby="processLetterModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="processLetterModalLabel">Process of the Letter for
+                                            this Venue</h5>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div style="text-align: justify; text-justify: inter-word; padding: 20px;">
+                                            <p>ORGANIZATION ADVISER</p>
+                                            <p>SECTION HEAD</p>
+                                            <p>DEPARTMENT HEAD</p>
+                                            <p>OSA</p>
+                                            <p>ADAA</p>
+                                            <p id="campusDirector" style="display: none;">CAMPUS DIRECTOR</p>
+                                            <p id="adaf" style="display: none;">ADAF</p>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-primary"
+                                            data-bs-dismiss="modal">Close</button>
+                                        <span aria-hidden="true"></span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
+
+                        <script>
+                            function showProcessLetterModal() {
+                                $('#processLetterModal').modal('show');
+                                var venueName = document.getElementById('venueName').innerText.trim();
+                                var campusDirector = document.getElementById('campusDirector');
+                                var adaf = document.getElementById('adaf');
+
+                                // Check condition and toggle visibility
+                                if (venueName === 'IT Auditorium') {
+                                    adaf.style.display = 'block';
+                                } else {
+                                    campusDirector.style.display = 'block';
+                                }
+                            }
+                        </script>
+                        <!-- Fetch and display description from the database -->
+                        @foreach ($venues as $venue)
+                            <h5 id = 'venueName' class="card-title" style="text-align: center">{{ $venue->name }}</h5>
+                            <div class="text-center"> <!-- Added text-center class here -->
+                                <img src="{{ asset('storage/' . $venue->image) }}" width="500" height="300"
+                                    style="border-radius: 8px;" />
+                            </div>
+                            <br>
+                            <ul>
+                                @foreach (explode("\n", $venue->description) as $bullet)
+                                    <li>{{ $bullet }}</li>
+                                @endforeach
+                            </ul>
+                        @endforeach
+                        </p>
+                    </div>
+                    <div class="card-footer">
+                        <a href="{{ url('venues') }}" class="btn btn-primary">Back</a>
                     </div>
                 </div>
             </div>
+        </div>
         </div>
 </x-app-layout>

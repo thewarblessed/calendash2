@@ -17,7 +17,7 @@ class AccomplishmentController extends Controller
         return view('accomplishment', compact('events'));
     }
 
-    public function getMyApprovedEvents(String $id)
+   public function getMyApprovedEvents(String $id)
     {
         $user_id = $id;
         $events = Event::leftJoin('venues', 'venues.id', 'events.venue_id')
@@ -49,6 +49,7 @@ class AccomplishmentController extends Controller
         return response()->json($events);
     }
 
+
     public function create()
     {
         return view('accomplishment');  
@@ -56,30 +57,47 @@ class AccomplishmentController extends Controller
     
     public function storeAccomplishment(Request $request, String $id)
     {
-       
         $request->validate([
-            // 'event_id' => 'required|string',
             'images.*' => 'nullable|image|max:2048', // Max size: 2MB
             'pdf' => 'nullable|mimes:pdf|max:2048', // PDF file
         ]);
-
-
-         // Upload PDF
-         if ($request->hasFile('pdf')) {
+    
+        // Check if an accomplishment report with the given event_id exists
+        $existingAccomplishment = Accomplishment::where('event_id', $id)->first();
+    
+        // Upload PDF
+        if ($request->hasFile('pdf')) {
             $pdfName = time() . '_' . $request->file('pdf')->getClientOriginalName();
             $request->file('pdf')->storeAs('public/pdfs', $pdfName);
-            
-            Accomplishment::create([
-                'event_id' => $id,
-                'letter' => 'pdf/'.$pdfName
-            ]);
+    
+            if ($existingAccomplishment) {
+                // Update the existing accomplishment report with the new PDF file
+                $existingAccomplishment->update([
+                    'letter' => 'pdf/' . $pdfName
+                ]);
+            } else {
+                // Create a new accomplishment report
+                $newAccomplishment = Accomplishment::create([
+                    'event_id' => $id,
+                    'letter' => 'pdf/' . $pdfName
+                ]);
+    
+                // Save the ID of the newly created accomplishment report
+                $lastid = $newAccomplishment->id;
+            }
         }
-        
-         // Upload images
-        $lastid = DB::getPdo()->lastInsertId();
-        
+    
+        // If no accomplishment report exists and no new one was created, return an error
+        if (!$existingAccomplishment && !isset($lastid)) {
+            return response()->json(['error' => 'No accomplishment report found for the given event ID.'], 404);
+        }
+    
+        // Upload images
         if ($request->hasFile('images')) {
             $files = $request->file('images');
+    
+            // Use the ID of the existing or newly created accomplishment report
+            $lastid = $existingAccomplishment ? $existingAccomplishment->id : $lastid;
     
             foreach ($files as $file) {
                 $this->documentation_img_upload($file);
@@ -90,9 +108,10 @@ class AccomplishmentController extends Controller
                 DB::table('documentations')->insert($upload);
             }
         }
-       
+    
         return response()->json(['Message' => 'Successfully!']);
     }
+    
 
     public function documentation_img_upload($file)
     {

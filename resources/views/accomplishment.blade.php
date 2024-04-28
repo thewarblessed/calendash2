@@ -357,7 +357,7 @@
                         }
                     },
                     {
-                        data: "letter",
+                        data: "event_letter",
                         render: function(data, type, row) {
                             return "<a href='/storage/" + data + "' target='_blank'>Open PDF</a>";
                         }

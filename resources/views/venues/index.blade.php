@@ -8,8 +8,8 @@
                         <div class="card-header border-bottom pb-0">
                             <div class="d-sm-flex align-items-center">
                                 <div>
-                                    <h3>Upcoming Events</h3>
-                                    <p class="text-sm">List of your approved events</p>
+                                    <h3>VENUES</h3>
+                                    <p class="text-sm">INDICATED THE PROCESS OF THE LETTER PER VENUE</p>
                                 </div>
                             </div>
                         </div>
@@ -23,7 +23,7 @@
                                                 {{-- <h5 class="card-title">{{ $event->name }}</h5> --}}
                                                 <p>Venue: {{ $event->name }}</p> <!-- Display the venue name -->
                                                 <a href="{{ route('venueRulesreg', ['id' => $event->id]) }}" class="btn btn-info mr-2" style="flex: 1;">Policies</a>
-                                                <a href="{{ route('venueFeedback', ['id' => $event->id]) }}" class="btn btn-primary ml-2" style="flex: 1;">Feedback</a>
+                                                {{-- <a href="{{ route('venueFeedback', ['id' => $event->id]) }}" class="btn btn-primary ml-2" style="flex: 1;">Feedback</a> --}}
                                             </div>
                                         </div>
                                     @endforeach

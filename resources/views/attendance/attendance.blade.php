@@ -10,11 +10,45 @@
                         {{-- <strong><h3>Events list</h3></strong> --}}
                         <h1>{{ $events->event_name }}</h1>
                         <p class="text-sm">See all participants</p>
+
                         <button type="button" class="btn btn-dark approveBtn" style="width: 100%; height: 40px;"
                             data-bs-toggle="modal" data-bs-target="#importStudentModal" id="importFile">Import
                             File</button>
-                            <p class="text-sm mt-2" style="font-weight: bold; color: black; font-size: larger;">Note: The format of the Excel file should be: Yr&Sec, Firstname, Lastname. No header is needed, just put the format as specified.</p>
-                    </div>                    
+                    </div>
+
+                    <!-- Modal for Process of letter -->
+                    <div class="modal fade" id="notesModal" tabindex="-1" role="dialog"
+                    aria-labelledby="processLetterModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="notesModalLabel">IMPORTANT REMINDERS</h5>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div style="text-align: justify; text-justify: inter-word; padding: 20px;">
+                                    <b><p style="color: #000000; font-size: 18px; font-weight: bold;">The Excel file should follow a specific format:</p></b>
+                                    <p style="color: #000000;">On the First Column, It should be <b>Year and Section</b>
+                                    <br>On the Second Column, It should be <b>First name</b> 
+                                    <br>On the Third Column, It Shoul be <b>Last name</b> of the participants. 
+                                    <b><p style="color: #000000; font-size: 18px; font-weight: bold;">You only need to include this information without adding any headers like 
+                                    "Year and Section," "First name," or "Last name." </b> Just ensure that the data 
+                                    is arranged in the specified format without any additional labels.</p></b>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-primary"
+                                    data-bs-dismiss="modal">Close</button>
+                                <span aria-hidden="true"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <script>
+                        $(document).ready(function(){
+                        $('#notesModal').modal('show');
+                        });
+                    </script>   
+                </div>
                 </div>
             </div>
             <table id="attendanceTable" class="table table-striped table-hover" style="width:100%;">
@@ -135,7 +169,11 @@
                             return "";
                         } else {
                             const date = new Date(data);
-                            const formattedTime = date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+                            const formattedTime = date.toLocaleTimeString('en-US', {
+                                hour: 'numeric',
+                                minute: '2-digit',
+                                hour12: true
+                            });
                             return formattedTime;
                         }
                     }
@@ -203,7 +241,4 @@
         var formattedTime = formattedHours + ':' + formattedMinutes + ' ' + ampm; // Combine hours, minutes, and AM/PM
         return formattedTime;
     }
-
-
 </script>
-
