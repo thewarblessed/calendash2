@@ -24,6 +24,8 @@ class AccomplishmentController extends Controller
             ->leftJoin('rooms', 'rooms.id', 'events.room_id')
             ->leftJoin('organizations', 'organizations.id', 'events.target_org')
             ->leftJoin('departments', 'departments.id', 'events.target_dept')
+            ->leftJoin('accomplishmentreports', 'events.id', 'accomplishmentreports.event_id')
+            ->leftJoin('documentations','accomplishmentreports.id','documentations.accomplishmentreports_id')
             ->select('organizations.organization',
                 'departments.department',
                 'events.status',
@@ -34,6 +36,8 @@ class AccomplishmentController extends Controller
                 'events.end_time',
                 'events.type',
                 'events.event_letter',
+                'accomplishmentreports.letter',
+                'documentations.image',
                 DB::raw('CASE
                                     WHEN rooms.name IS NULL THEN venues.name
                                     ELSE rooms.name END AS venueName'),

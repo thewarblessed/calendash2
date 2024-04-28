@@ -348,7 +348,7 @@ Route::post('/upload/{id}', [AccomplishmentController::class, 'storeAccomplishme
 Route::get('get-all-approved-events', [AccomplishmentReportsController::class, 'getAllApprovedEvents'])
     ->name('getAllApprovedEvents');
 
-Route::get('get-event-images', [AccomplishmentReportsController::class, 'getEventsImages'])
+Route::get('get-event-images/{id}', [AccomplishmentReportsController::class, 'getEventsImages'])
     ->name('getEventsImages');
 
 

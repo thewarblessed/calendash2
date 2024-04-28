@@ -43,12 +43,11 @@ class AccomplishmentReportsController extends Controller
         return response()->json($events);
     }
 
-    public function getEventsImages()
+    public function getEventsImages(string $id)
     {
-        $documentations = Documentation::select('image')->orderBy('id')->get();
+        $documentations = Documentation::join('accomplishmentreports','accomplishmentreports.id','documentations.accomplishmentreports_id')
+        ->select('image')->where('accomplishmentreports.event_id',$id)->get();
         
         return response()->json($documentations);
-    }
-    
-
+    } 
 }

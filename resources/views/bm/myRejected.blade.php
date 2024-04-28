@@ -9,39 +9,60 @@
                         <div class="card-header border-bottom pb-0">
                             <div class="" style="text-align: center">
                                 <div>
-                                    <strong><h3>Rejected Request List</h3></strong>
+                                    <strong>
+                                        <h3>Rejected Request List</h3>
+                                    </strong>
                                     <p class="text-sm">See information about all events</p>
                                 </div>
                             </div>
                         </div>
                         @csrf
-                        <input name="businessManagerRejectUserID" type="text" class="form-control" value="{{ Auth::user()->id }}" id="businessManagerRejectUserID" hidden>
+                        <div>
+                            <label for="min">Start Date:</label>
+                            <input type="text" id="min" name="min" class="form-control">
+                        </div>
+                        <div>
+                            <label for="max">End Date:</label>
+                            <input type="text" id="max" name="max" class="form-control">
+                        </div>
+                        <br>
+                        <input name="businessManagerRejectUserID" type="text" class="form-control"
+                            value="{{ Auth::user()->id }}" id="businessManagerRejectUserID" hidden>
                         <div class="card-body px-0 py-0">
                             <div class="table-responsive p-0">
                                 <table class="table align-items-center mb-0" id="outsiderRejectsTable">
-                                    
-                                    <thead >
+
+                                    <thead>
                                         <tr>
 
-                                            <th class="text-secondary text-xs font-weight-semibold opacity-7" style="font-weight: bold; color:black;">Event Name</th>
+                                            <th class="text-secondary text-xs font-weight-semibold opacity-7"
+                                                style="font-weight: bold; color:black;">Event Name</th>
                                             {{-- <th class="text-secondary text-xs font-weight-semibold opacity-7 ps-2">Description</th> --}}
-                                            <th class="text-secondary text-xs font-weight-semibold opacity-7 ps-2">Venue</th>
-                                            <th class="text-secondary text-xs font-weight-semibold opacity-7 ps-2">Type</th>
-                                            <th class="text-secondary text-xs font-weight-semibold opacity-7 ps-2">Start Date</th>
-                                            <th class="text-secondary text-xs font-weight-semibold opacity-7 ps-2">End Date</th>
-                                            <th class="text-secondary text-xs font-weight-semibold opacity-7 ps-2">Start Time</th>
-                                            <th class="text-secondary text-xs font-weight-semibold opacity-7 ps-2">End Time</th>
-                                            <th class="text-secondary text-xs font-weight-semibold opacity-7 ps-2">Status</th>
-                                            <th class="text-secondary text-xs font-weight-semibold opacity-7 ps-2">Date Rejected</th>
+                                            <th class="text-secondary text-xs font-weight-semibold opacity-7 ps-2">Venue
+                                            </th>
+                                            <th class="text-secondary text-xs font-weight-semibold opacity-7 ps-2">Type
+                                            </th>
+                                            <th class="text-secondary text-xs font-weight-semibold opacity-7 ps-2">Start
+                                                Date</th>
+                                            <th class="text-secondary text-xs font-weight-semibold opacity-7 ps-2">End
+                                                Date</th>
+                                            <th class="text-secondary text-xs font-weight-semibold opacity-7 ps-2">Start
+                                                Time</th>
+                                            <th class="text-secondary text-xs font-weight-semibold opacity-7 ps-2">End
+                                                Time</th>
+                                            <th class="text-secondary text-xs font-weight-semibold opacity-7 ps-2">
+                                                Status</th>
+                                            <th class="text-secondary text-xs font-weight-semibold opacity-7 ps-2">Date
+                                                Rejected</th>
                                             {{-- <th class="text-secondary text-xs font-weight-semibold opacity-7 ps-7">Action</th> --}}
                                             <th class="text-secondary opacity-7">Remarks</th>
                                         </tr>
                                     </thead>
                                     <tbody id="officialRejectsBody">
-                                        
+
                                         <tr>
                                         </tr>
-                                       
+
 
                                     </tbody>
                                 </table>
@@ -57,7 +78,7 @@
                     </div>
                 </div>
             </div>
-           
+
             {{-- <x-app.footer /> --}}
         </div>
     </main>
@@ -74,15 +95,18 @@
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.print.min.js">
     </script>
     <script src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="https://cdn.datatables.net/plug-ins/1.10.25/range_dates/dataTables.rangeDates.min.js"></script>
 </x-app-layout>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-    
     $(document).ready(function() {
         var id = $("#businessManagerRejectUserID").val();
         console.log(id + 'user_idng nakallogin');
-        $("#outsiderRejectsTable").DataTable({
+        var dataTable = $("#outsiderRejectsTable").DataTable({
             ajax: {
                 url: "/api/rejected-event-businessmanager/" + id,
                 method: "POST",
@@ -113,75 +137,102 @@
                     ]
                 }
             },
-            columns: [{ 
-                        data: "event_name",
-                        render: function(data, type, row) {
-                            return "<span style='color: black; font-weight: bold;'>" + data + "</span>";
+            columns: [{
+                    data: "event_name",
+                    render: function(data, type, row) {
+                        return "<span style='color: black; font-weight: bold;'>" + data +
+                            "</span>";
+                    }
+                },
+                {
+                    data: "venueName",
+                    render: function(data, type, row) {
+                        return "<span style='color: black; font-weight: bold;'>" + data +
+                            "</span>";
+                    }
+                },
+                {
+                    data: "type",
+                    render: function(data, type, row) {
+                        if (data === "whole_day") {
+                            return "<span style='color: black; font-weight: bold;'>Whole Day</span>";
+                        } else if (data === "whole_week") {
+                            return "<span style='color: black; font-weight: bold;'>Whole Week</span>";
+                        } else if (data === "within_day") {
+                            return "<span style='color: black; font-weight: bold;'>Within the Day</span>";
                         }
-                    },
-                    {
-                        data: "venueName",
-                        render: function(data, type, row) {
-                            return "<span style='color: black; font-weight: bold;'>" + data + "</span>";
-                        }
-                    },
-                    {
-                        data: "type",
-                        render: function(data, type, row) {
-                            if (data === "whole_day") {
-                                return "<span style='color: black; font-weight: bold;'>Whole Day</span>";
-                            } else if (data === "whole_week"){
-                                return "<span style='color: black; font-weight: bold;'>Whole Week</span>";
-                            }
-                            else if (data === "within_day"){
-                                return "<span style='color: black; font-weight: bold;'>Within the Day</span>";
-                            }
-                        }
-                    },
-                    {
-                        data: "start_date",
-                        render: function(data, type, row) {
-                            return "<span style='color: black; font-weight: bold;'>" + moment(data).format('MMMM D, YYYY') + "</span>";
-                        }
-                    },
-                    {
-                        data: "end_date",
-                        render: function(data, type, row) {
-                            return "<span style='color: black; font-weight: bold;'>" + moment(data).format('MMMM D, YYYY') + "</span>";
-                        }
-                    },
-                    {
-                        data: "start_time",
-                        render: function(data, type, row) {
-                            return "<span style='color: black; font-weight: bold;'>" + moment(data, 'HH:mm').format('h:mm A') + "</span>";
-                        }
-                    },
-                    {
-                        data: "end_time",
-                        render: function(data, type, row) {
-                            return "<span style='color: black; font-weight: bold;'>" + moment(data, 'HH:mm').format('h:mm A') + "</span>";
-                        }
-                    },
-                    {
-                        data: "status",
-                        render: function(data, type, row) {
-                            return "<span style='color: red; font-weight: bold;'>" + data + "</span>";
-                        }
-                    },
-                    {
-                        data: "updated_at",
-                        render: function(data, type, row) {
-                            return "<span style='color: black; font-weight: bold;'>" + moment(data).format('MMMM D, YYYY') + " " + moment(data).format('h:mm A') + "</span>";
-                        }
+                    }
+                },
+                {
+                    data: "start_date",
+                    render: function(data, type, row) {
+                        return "<span style='color: black; font-weight: bold;'>" + moment(data)
+                            .format('MMMM D, YYYY') + "</span>";
+                    }
+                },
+                {
+                    data: "end_date",
+                    render: function(data, type, row) {
+                        return "<span style='color: black; font-weight: bold;'>" + moment(data)
+                            .format('MMMM D, YYYY') + "</span>";
+                    }
+                },
+                {
+                    data: "start_time",
+                    render: function(data, type, row) {
+                        return "<span style='color: black; font-weight: bold;'>" + moment(data,
+                            'HH:mm').format('h:mm A') + "</span>";
+                    }
+                },
+                {
+                    data: "end_time",
+                    render: function(data, type, row) {
+                        return "<span style='color: black; font-weight: bold;'>" + moment(data,
+                            'HH:mm').format('h:mm A') + "</span>";
+                    }
+                },
+                {
+                    data: "status",
+                    render: function(data, type, row) {
+                        return "<span style='color: red; font-weight: bold;'>" + data +
+                            "</span>";
+                    }
+                },
+                {
+                    data: "updated_at",
+                    render: function(data, type, row) {
+                        return "<span style='color: black; font-weight: bold;'>" + moment(data)
+                            .format('MMMM D, YYYY') + " " + moment(data).format('h:mm A') +
+                            "</span>";
+                    }
 
-                    },
-                    {
-                        data: "reason",
-                        render: function(data, type, row) {
-                            return "<span style='color: black; font-weight: bold;'>" + data + "</span>";
-                        }
-                    },
+                },
+                {
+                    data: "reason",
+                    render: function(data, type, row) {
+                        return "<span style='color: black; font-weight: bold;'>" + data +
+                            "</span>";
+                    }
+                },
             ],
+        });
+
+        // Initialize Date Range Filter
+        $.fn.dataTable.ext.search.push(
+            function(settings, data, dataIndex) {
+                var min = $('#min').datepicker("getDate");
+                var max = $('#max').datepicker("getDate");
+                var startDate = new Date(data[4]); // Assuming start_date is the fifth column
+                return (min === null || max === null) || (startDate >= min && startDate <= max);
+            }
+        );
+
+        // Add Datepickers for Date Range
+        $('#min, #max').datepicker({
+            dateFormat: 'yy-mm-dd',
+            onSelect: function() {
+                dataTable.draw();
+            }
         });
 
     })

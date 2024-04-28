@@ -15,6 +15,15 @@
                             </div>
                         </div>
                         @csrf
+                        <div>
+                            <label for="min">Start Date:</label>
+                            <input type="text" id="min" name="min" class="form-control">
+                        </div>
+                        <div>
+                            <label for="max">End Date:</label>
+                            <input type="text" id="max" name="max" class="form-control">
+                        </div>
+                        <br>
                         <input name="officialRejectUserID" type="text" class="form-control" value="{{ Auth::user()->id }}" id="officialRejectUserID" hidden>
                         <div class="card-body px-0 py-0">
                             <div class="table-responsive p-0">
@@ -202,18 +211,18 @@
         </div>
     </main>
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
-    <link rel="stylesheet" type="text/css"
-        href="https://cdn.datatables.net/buttons/1.7.1/css/buttons.dataTables.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.7.1/css/buttons.dataTables.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-    <script type="text/javascript" charset="utf8"
-        src="https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js">
-    </script>
-    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.print.min.js">
-    </script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.print.min.js"></script>
     <script src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="https://cdn.datatables.net/plug-ins/1.10.25/range_dates/dataTables.rangeDates.min.js"></script>
 </x-app-layout>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -222,7 +231,7 @@
     $(document).ready(function() {
         var id = $("#officialRejectUserID").val();
         console.log(id + 'user_id');
-        $("#officialRejectsTable").DataTable({
+        var dataTable = $("#officialRejectsTable").DataTable({
             ajax: {
                 url: "/api/my/reject/" + id,
                 method: "POST",
@@ -338,6 +347,24 @@
                         }
                     },
             ],
+        });
+
+         // Initialize Date Range Filter
+         $.fn.dataTable.ext.search.push(
+            function(settings, data, dataIndex) {
+                var min = $('#min').datepicker("getDate");
+                var max = $('#max').datepicker("getDate");
+                var startDate = new Date(data[4]); // Assuming start_date is the fifth column
+                return (min === null || max === null) || (startDate >= min && startDate <= max);
+            }
+        );
+
+        // Add Datepickers for Date Range
+        $('#min, #max').datepicker({
+            dateFormat: 'yy-mm-dd',
+            onSelect: function() {
+                dataTable.draw();
+            }
         });
 
     })

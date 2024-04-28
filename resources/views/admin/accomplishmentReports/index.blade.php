@@ -15,6 +15,17 @@
                         </div>
                     </div>
                 </div>
+
+                <div>
+                    <label for="min">Start Date:</label>
+                    <input type="text" id="min" name="min" class="form-control">
+                </div>
+                <div>
+                    <label for="max">End Date:</label>
+                    <input type="text" id="max" name="max" class="form-control">
+                </div>
+                <br>
+
                 <table id="userAccomplishmentTable" class="table table-striped table-hover" style="width:100%;">
                     <thead>
                         <tr>
@@ -76,6 +87,10 @@
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.print.min.js">
     </script>
     <script src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="https://cdn.datatables.net/plug-ins/1.10.25/range_dates/dataTables.rangeDates.min.js"></script>
 
     <script>
         $(document).ready(function() {
@@ -236,6 +251,24 @@
                         }
                     });
                     $("#uploadDocumentsModal").modal("show"); // Show the modal
+                }
+            });
+
+            // Initialize Date Range Filter
+            $.fn.dataTable.ext.search.push(
+                function(settings, data, dataIndex) {
+                    var min = $('#min').datepicker("getDate");
+                    var max = $('#max').datepicker("getDate");
+                    var startDate = new Date(data[4]); // Assuming start_date is the fifth column
+                    return (min === null || max === null) || (startDate >= min && startDate <= max);
+                }
+            );
+
+            // Add Datepickers for Date Range
+            $('#min, #max').datepicker({
+                dateFormat: 'yy-mm-dd',
+                onSelect: function() {
+                    dataTable.draw();
                 }
             });
         });
