@@ -454,6 +454,13 @@ Route::post('/me/update-passcode',[
         'as' => 'updatePasscode',
 ]);
 
+////////////////////////////// Check if the user uploaded a accomplishment report ///////////////////
+
+Route::post('/me/check-accomplishments/{id}',[
+        'uses' => 'AccomplishmentReportsController@checkUserAccomplishment',
+        'as' => 'checkUserAccomplishment',
+]);
+
 ////////////////================ MOBILE ROUTES ================//////////////////
 //REGISTRATION MOBILE
 Route::post('/auth/sign-up',[

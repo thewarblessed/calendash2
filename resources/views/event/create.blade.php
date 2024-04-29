@@ -858,4 +858,39 @@
             });
         });
     </script>
+       
+    <script>
+        $(document).ready(function() {
+            var id = "{{ Auth::user()->id }}"
+            // console.log(id + ": Please ID NYA TO")
+            $.ajax({
+                url: '/api/me/check-accomplishments/' + id,
+                type: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                contentType: 'application/json',
+                dataType: 'json',
+                success: function(response) {
+                    if (response.error === 'No approved events found' || response.success === 'User has pending accomplishment report') {
+                        return true;
+                    } else {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Pending Accomplishment Report",
+                            text: "Accomplishment report not found!",
+                            footer: '<a href="#">Why do I have this issue?</a>'
+                        }).then(function() {
+                            window.location.href = "/accomplishment";
+                        });
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error checking accomplishment:', error);
+                }
+            });
+            
+            
+       })
+    </script>
 </x-app-layout>

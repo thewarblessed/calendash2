@@ -97,11 +97,6 @@ class EventController extends Controller
             $endTime = $request->input('end_time');
             $venueId = $request->input('venue_id');
             $roomId = $request->input('room_id');
-
-            $venue = Venue::where('id', $venueId)
-                                ->select('name')
-                                ->first();
-            $venueName = $venue->name;
             // dd($venueName);
 
             $venueType = $request->input('selectedVenueType');
@@ -124,6 +119,10 @@ class EventController extends Controller
             return response()->json(['conflict' => $conflict]);
             }
             else{
+            $venue = Venue::where('id', $venueId)
+                            ->select('name')
+                            ->first();
+            $venueName = $venue->name;
             //     $conflict = Event::where('venue_id', $venueId)
             //     ->where('status', '!=', 'REJECTED')
             //     ->where(function ($query) use ($date, $startTime, $endTime) {
@@ -169,8 +168,8 @@ class EventController extends Controller
         {   
             $date = $request->input('date');
             $venueId = $request->input('venue_id');
-            $venue = Venue::where('id', $venueId)->select('name')->first();
-            $venueName = $venue->name;
+            // $venue = Venue::where('id', $venueId)->select('name')->first();
+            // $venueName = $venue->name;
             $roomId = $request->input('room_id');
 
             $venueType = $request->input('selectedVenueType');
@@ -186,6 +185,10 @@ class EventController extends Controller
                 return response()->json(['conflict' => $conflict]);
             }
             else{
+                $venue = Venue::where('id', $venueId)
+                            ->select('name')
+                            ->first();
+            $venueName = $venue->name;
                 // $conflict = Event::where('venue_id', $venueId)
                 // ->where('status', '!=', 'REJECTED')
                 // ->where(function ($query) use ($date) {
@@ -219,8 +222,8 @@ class EventController extends Controller
             $endDate = date("Y-m-d", strtotime($year . "W" . $weekNumber . "7"));
 
             $venueId = $request->input('venue_id');
-            $venue = Venue::where('id', $venueId)->select('name')->first();
-            $venueName = $venue->name;
+            // $venue = Venue::where('id', $venueId)->select('name')->first();
+            // $venueName = $venue->name;
             $roomId = $request->input('room_id');
             // $venueId = $request->input('venue_id');
             if ($venueType === 'room'){
@@ -235,6 +238,10 @@ class EventController extends Controller
                 return response()->json(['conflict' => $conflict]);
             }
             else{
+                $venue = Venue::where('id', $venueId)
+                            ->select('name')
+                            ->first();
+            $venueName = $venue->name;
                 // $conflict = Event::where('venue_id', $venueId)
                 // ->where('status', '!=', 'REJECTED')
                 // ->where(function ($query) use ($startDate, $endDate) {
@@ -275,8 +282,8 @@ class EventController extends Controller
             $dateRange = $request->input('daterange');
             [$startDate, $endDate] = explode(' - ', $dateRange);
             $venueId = $request->input('venue_id');
-            $venue = Venue::where('id', $venueId)->select('name')->first();
-            $venueName = $venue->name;
+            // $venue = Venue::where('id', $venueId)->select('name')->first();
+            // $venueName = $venue->name;
             $roomId = $request->input('room_id');
             // dd($endDate);
             if($venueType ==='room'){
@@ -299,6 +306,10 @@ class EventController extends Controller
             return response()->json(['conflict' => $conflict]);
             }
             else{
+                $venue = Venue::where('id', $venueId)
+                            ->select('name')
+                            ->first();
+            $venueName = $venue->name;
                 // $conflict = Event::where('venue_id', $venueId)
                 //     ->where('status', '!=', 'REJECTED')
                 //     ->where(function ($query) use ($startDate, $endDate) {
