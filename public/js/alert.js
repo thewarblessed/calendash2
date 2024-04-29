@@ -435,6 +435,16 @@ $(document).ready(function () {
                     }
                     $('#venueNameOutput').html("<strong>Venue Name:</strong> " + data.Venues.name);
                     $('#linkOutput').html("<strong>Link for the feedback form:</strong> " + formData.get('feedback_qr_code'));
+                    
+                    if (data.Venues.name === 'IT Auditorium'){
+                        $('#itBuilding').css('display', 'block');
+                        $('#notItBuilding').css('display', 'none');
+                    }
+                    else{
+                        $('#notItBuilding').css('display', 'block');
+                        $('#itBuilding').css('display', 'none');
+                    }
+                    
                 },
                 error: function (error) {
                     console.log("error");
@@ -501,7 +511,10 @@ $(document).ready(function () {
                 },
             }); 
         }
+
         $('#confirmModal').modal('show');
+        
+        
 
         $("#storeCreateEventUser").on("click", function (e) {
             $('#spinner').addClass('spinner-border spinner-border-sm');

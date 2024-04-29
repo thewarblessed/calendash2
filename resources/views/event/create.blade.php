@@ -433,7 +433,29 @@
                                         </div>
                                         <p>Please review the event details and click "Confirm" to proceed.</p>
                                         
-                                    
+                                        <div id="itBuilding" style="display: none;">
+                                            <h5>Flow of the request letter:</h5>
+                                            <ol>
+                                                <li>ORGANIZATION ADVISER</li>
+                                                <li>SECTION HEAD</li>
+                                                <li>DEPARTMENT HEAD</li>
+                                                <li>OSA</li>
+                                                <li>ADAA</li>
+                                                <li>ADAF</li>
+                                            </ol>
+                                        </div>
+
+                                        <div id="notItBuilding" style="display: none;">
+                                            <h5>Flow of the request letter:</h5>
+                                            <ol>
+                                                <li>ORGANIZATION ADVISER</li>
+                                                <li>SECTION HEAD</li>
+                                                <li>DEPARTMENT HEAD</li>
+                                                <li>OSA</li>
+                                                <li>ADAA</li>
+                                                <li>CAMPUS DIRECTOR</li>
+                                            </ol>
+                                        </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-white" data-bs-dismiss="modal"
                                             id="modalClose">Close</button>
