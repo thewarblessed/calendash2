@@ -209,7 +209,7 @@
                             href="{{ route('myEvents') }}">
                             <i class="fa-solid fa-circle-check"
                                 style="color: {{ is_current_route('myEvents') ? '#774dd3' : 'defaultColor' }};font-size: 18px;"></i>
-                            <span class="nav-link-text ms-1">My Status Events</span>
+                            <span class="nav-link-text ms-1">My Event Status</span>
                         </a>
                     </li>
 
