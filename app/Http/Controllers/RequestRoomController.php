@@ -12,6 +12,8 @@ use App\Models\Student;
 use App\Models\Prof;
 use App\Models\Staff;
 use App\Models\Room;
+use Mail;
+use App\Mail\MailNotify;
 
 class RequestRoomController extends Controller
 {
@@ -104,6 +106,7 @@ class RequestRoomController extends Controller
         // dd($role);
         $event_id = $id;
         
+
         // $secHead = Official::where('section_id',) 
 
         $hashedPassword = Hash::make($password);
@@ -116,11 +119,17 @@ class RequestRoomController extends Controller
             $users = User::find($user_id);
             $officials = Official::join('users', 'users.id', 'officials.user_id')->where('users.id', $user_id)->first();
             $events = Event::find($event_id);
+            $requester = User::where('id',$events->user_id)->first();
             $events->sect_head = $officials->hash;
             $events->approved_sec_head_at = now();
             $events->status = "APPROVED";
             $events->color = "#31B4F2";
             $events->update();
+            $data = [
+                "subject" => "Calendash Approved Request",
+                "body" => "Hello {$requester->name}!, Your request has been officially approved by the Section Head of IT!"
+            ];
+            Mail::to($requester->email)->send(new MailNotify($data));
             return response()->json(["message" => 'Request handled successfully']);
             // return response()->json(['message' => 'Request handled successfully']);
         } else {
@@ -151,11 +160,18 @@ class RequestRoomController extends Controller
             $users = User::find($user_id);
             $officials = Official::join('users', 'users.id', 'officials.user_id')->where('users.id', $user_id)->first();
             $events = Event::find($event_id);
+            $requester = User::where('id',$events->user_id)->first();
             $events->remarks_sec_head = $reason;
             $events->rejected_by = $user_id;
             $events->status = 'REJECTED';
             $events->updated_at = now(); // DATE OF REJECTION
             $events->update();
+            $data = [
+                "subject" => "Calendash Rejected Request",
+                "body" => "Hello {$requester->name}!,\n\nWe regret to inform you that your request has been declined. 
+                            Your Organization Adviser has reviewed your request and has decided not to approve it at this time.\n\nReason of rejection: ''{$reason}''."
+                ];
+            Mail::to($requester->email)->send(new MailNotify($data));
             return response()->json(["message" => 'Request handled successfully']);
             // return response()->json(['message' => 'Request handled successfully']);
         } else {
