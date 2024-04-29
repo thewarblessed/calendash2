@@ -213,27 +213,52 @@
                 }
             },
             dom: 'Bfrtip',
-            layout: {
-                topStart: {
-                    buttons: [{
-                            extend: 'copyHtml5',
-                            footer: true
-                        },
-                        {
-                            extend: 'excelHtml5',
-                            footer: true
-                        },
-                        {
-                            extend: 'csvHtml5',
-                            footer: true
-                        },
-                        {
-                            extend: 'pdfHtml5',
-                            footer: true
-                        }
-                    ]
+            buttons: [{
+                extend: 'copyHtml5',
+                footer: true
+            },
+            {
+                extend: 'excelHtml5',
+                footer: true
+            },
+            {
+                extend: 'csvHtml5',
+                footer: true
+            },
+            {
+                extend: 'pdfHtml5',
+                footer: true,
+                customize: function(doc) {
+                    // Remove the action column from the PDF output
+                    $(doc.content[1].table.body).each(function(i, row) {
+                        row.splice(-1, 1);
+                    });
                 }
             },
+            {
+                extend: 'print',
+                footer: true,
+                customize: function(win) {
+                    // Add your custom header
+                    var header = '<h4 style="margin-top: 30px; text-align: center; margin-right: 20;">My Declined Requests</h4>';
+
+                    // Wrap logo and header in a container
+                    var headerContainer = '<div style="overflow: auto;">' + header + '</div>';
+
+                    // Prepend the container to the document body
+                    $(win.document.body).prepend(headerContainer);
+                    // Modify the table styles to ensure all columns are visible without cutoffs
+                    $(win.document.body).find('table').css('table-layout', 'auto');
+                    // $(win.document.body).find('table tr').each(function() {
+                    //     $(this).find('td:eq(2), th:eq(2)').remove();
+                    // });
+
+                    // Remove the "Calendash" header
+                    $(win.document.body).find('h1').remove();
+                }
+            }
+
+            ],
             columns: [{ 
                         data: "event_name",
                         render: function(data, type, row) {

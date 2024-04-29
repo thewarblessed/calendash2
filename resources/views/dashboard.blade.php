@@ -848,8 +848,129 @@
                 
                       </div>
                     </section><!-- End Team Section -->
-                
-                    <!-- ======= Contact Section ======= -->
+                    
+                    <!-- ======= FAQ's Section ======= -->
+                    <section id="faq" class="faq">
+                        <div class="accordion-1">
+                            <div class="container">
+                              <div class="row mt-5 mb-2">
+                                <div class="col-md-6">
+                                  <h3>Frequently Asked Questions</h3>
+                                  <p>A lot of people don’t appreciate the moment until it’s passed. I'm not trying my hardest, and I'm not trying to do </p>
+                                </div>
+                              </div>
+                              <div class="row">
+                                <div class="col-md-10">
+                                  <div class="accordion" id="accordionRental">
+                                    <div class="accordion-item mb-3">
+                                      <h5 class="accordion-header" id="headingOne">
+                                        <button class="accordion-button border-bottom font-weight-bold collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                                          <h5>How do I create/request an event?</h5>
+                                          <i class="collapse-close fa fa-plus text-xs pt-1 position-absolute end-0 me-3" aria-hidden="true"></i>
+                                          <i class="collapse-open fa fa-minus text-xs pt-1 position-absolute end-0 me-3" aria-hidden="true"></i>
+                                        </button>
+                                      </h5>
+                                      <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionRental" style="color:black;">
+                                        <div class="accordion-body text-sm opacity-8">
+                                                <ul style="font-size: 16px">
+                                                    <li>Click <b>"Create an Event"</b> on the left side of the screen / sidebar</li>
+                                                    <li>After that, fill out the forms for the event details. It includes the <b>Event Name, Event Description, No. of participants</b></li>
+                                                    <li>Next, Choose if your requesting a <b>Venues</b> or <b>Rooms</b>. For <b>OUTSIDERS</b>, venues option is only option available for renting</li>
+                                                    <li>After choosing if venues or rooms. <b>Please select the radio button/ circle button to choose your desired venue or room.</b> </li>
+                                                    <li>Now, choose what is your preferred date and time. You will choose if your event is Within the Day, Whole Day, Whole Week, Date Range
+                                                        <ul>
+                                                            <li>If you select <b>"Within the Day,"</b> you will need to specify the date, start and end times for your event</li>
+                                                            <li>If you select <b>"Whole Day,"</b> your event will be scheduled for the entire day</li>
+                                                            <li>If you select <b>"Whole Week,"</b> your event will be scheduled for the entire week</li>
+                                                            <li>If you select <b>"Date Range,"</b> you will need to specify the start and end dates for your event</li>
+                                                        </ul>
+                                                    </li>
+                                                    <li>After choosing date and time, please fill out the link for the <b>feedback form</b>. For example, <b>"docs.google.com/forms/u/...."</b></li>
+                                                    <li>Explore our formatting tool on the final page to customize your request letter. <b>If you're composing your letter in the textarea, follow the steps above the form to generate it effectively.</b></li>
+                                                    <li>After that, you are going to upload your request letter. Please make sure its file type is <b>PDF</b>!</li>
+                                                    <li>Please read and check <b>"Accept"</b> on our <b>"Term and conditions"</b> first to submit your event!  </li>
+                                                    <li>Now after clicking the submit button it will show your summary on creating your event.</li>
+                                                    <li>After confirming it. Congrats! Your event is now created!</li>
+                                                </ul>
+            
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="accordion-item mb-3">
+                                      <h5 class="accordion-header" id="headingTwo">
+                                        <button class="accordion-button border-bottom font-weight-bold" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                            How will I know the status of my events?
+                                          <i class="collapse-close fa fa-plus text-xs pt-1 position-absolute end-0 me-3" aria-hidden="true"></i>
+                                          <i class="collapse-open fa fa-minus text-xs pt-1 position-absolute end-0 me-3" aria-hidden="true"></i>
+                                        </button>
+                                      </h5>
+                                      <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionRental">
+                                        <div class="accordion-body text-sm opacity-8" style="color: black">
+                                            <p style="font-size: 16px">
+                                                Just click the <b>"My Event Status"</b> on the <b>sidebar</b> to redirect to your events list.
+                                                <br>
+                                                Now click the <b>"View Details"</b> button and now you can see your event status!
+                                            </p>
+                                          
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="accordion-item mb-3">
+                                      <h5 class="accordion-header" id="headingThree">
+                                        <button class="accordion-button border-bottom font-weight-bold" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                          How much time does it take to approve my event request?
+                                          <i class="collapse-close fa fa-plus text-xs pt-1 position-absolute end-0 me-3" aria-hidden="true"></i>
+                                          <i class="collapse-open fa fa-minus text-xs pt-1 position-absolute end-0 me-3" aria-hidden="true"></i>
+                                        </button>
+                                      </h5>
+                                      <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionRental">
+                                        <div class="accordion-body text-sm opacity-8" style="color: black" >
+                                            <p style="font-size: 16px">
+                                                We apologize, but our system cannot guarantee a specific approval timeline for your request. Approval times may vary depending on the officials' review process.
+                                            </p>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="accordion-item mb-3">
+                                      <h5 class="accordion-header" id="headingFour">
+                                        <button class="accordion-button border-bottom font-weight-bold" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                                          Can I resell the products?
+                                          <i class="collapse-close fa fa-plus text-xs pt-1 position-absolute end-0 me-3" aria-hidden="true"></i>
+                                          <i class="collapse-open fa fa-minus text-xs pt-1 position-absolute end-0 me-3" aria-hidden="true"></i>
+                                        </button>
+                                      </h5>
+                                      <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#accordionRental">
+                                        <div class="accordion-body text-sm opacity-8">
+                                          I always felt like I could do anything. That’s the main thing people are controlled by! Thoughts- their perception of themselves! They're slowed down by their perception of themselves. If you're taught you can’t do anything, you won’t do anything. I was taught I could do everything.
+                                          <br><br>
+                                          If everything I did failed - which it doesn't, it actually succeeds - just the fact that I'm willing to fail is an inspiration. People are so scared to lose that they don't even try. Like, one thing people can't say is that I'm not trying, and I'm not trying my hardest, and I'm not trying to do the best way I know how.
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="accordion-item mb-3">
+                                      <h5 class="accordion-header" id="headingFifth">
+                                        <button class="accordion-button border-bottom font-weight-bold" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFifth" aria-expanded="false" aria-controls="collapseFifth">
+                                          Where do I find the shipping details?
+                                          <i class="collapse-close fa fa-plus text-xs pt-1 position-absolute end-0 me-3" aria-hidden="true"></i>
+                                          <i class="collapse-open fa fa-minus text-xs pt-1 position-absolute end-0 me-3" aria-hidden="true"></i>
+                                        </button>
+                                      </h5>
+                                      <div id="collapseFifth" class="accordion-collapse collapse" aria-labelledby="headingFifth" data-bs-parent="#accordionRental">
+                                        <div class="accordion-body text-sm opacity-8">
+                                          There’s nothing I really wanted to do in life that I wasn’t able to get good at. That’s my skill. I’m not really specifically talented at anything except for the ability to learn. That’s what I do. That’s what I’m here for. Don’t be afraid to be wrong because you can’t learn anything from a compliment.
+                                          I always felt like I could do anything. That’s the main thing people are controlled by! Thoughts- their perception of themselves! They're slowed down by their perception of themselves. If you're taught you can’t do anything, you won’t do anything. I was taught I could do everything.
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                    </section><!-- End Contact Section -->
+
+                    
+                      <!-- ======= Contact Section ======= -->
                     <section id="contact" class="contact">
                       <div class="container">
                 
@@ -917,7 +1038,7 @@
                         </div>
                 
                       </div>
-                    </section><!-- End Contact Section -->
+                    </section><!-- End FAQ's Section -->
                 
                 </main><!-- End #main -->
     
