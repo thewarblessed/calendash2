@@ -36,160 +36,181 @@
             <!-- ======= SLIDER UPCOMING EVENTS ======= -->
             <hr class="my-0">
             <div class="row">
+                <h3 style="text-align: center; margin-top: 2%">Process of Request Letter</h3>
+                <p>Welcome to CALENDASH, where scheduling events is as seamless as sending a letter. Our
+                    intuitive platform simplifies the process of organizing events,
+                    ensuring that your planning experience is smooth and efficient. To schedule an event using
+                    CALENDASH, simply follow these easy steps:</p><br>
                 <div class="position-relative overflow-hidden">
                     <div class="swiper mySwiper mt-4 mb-2">
                         <div class="swiper-wrapper">
+
                             <div class="swiper-slide">
-                                <div>
-                                    <div
-                                        class="card card-background shadow-none border-radius-xl card-background-after-none align-items-start mb-0">
-                                        <div class="full-background bg-cover"
-                                            style="background-image: url('../assets/img/img-2.jpg')"></div>
-                                        <div class="card-body text-start px-3 py-0 w-100">
-                                            <div class="row mt-12">
-                                                <div class="col-sm-3 mt-auto">
-                                                    <h4 class="text-dark font-weight-bolder">#1</h4>
-                                                    <p class="text-dark opacity-6 text-xs font-weight-bolder mb-0">Name
-                                                    </p>
-                                                    <h5 class="text-dark font-weight-bolder">Secured</h5>
-                                                </div>
-                                                <div class="col-sm-3 ms-auto mt-auto">
-                                                    <p class="text-dark opacity-6 text-xs font-weight-bolder mb-0">
-                                                        Category</p>
-                                                    <h5 class="text-dark font-weight-bolder">Banking</h5>
-                                                </div>
-                                            </div>
+                                <div class="card card-background border-radius-xl align-items-start mb-0">
+                                    <div class="card-body text-center ">
+                                        <div class="row mt-4">
+                                            <h5 class="card-title font-weight-bold text-center" style="color:rgb(25, 7, 90)">Welcome to CALENDASH,<br></h5>
+                                               <h6>To schedule an event using CALENDASH, simply follow these easy steps:</h6>
                                         </div>
                                     </div>
-                                </div>
+                                </div>      
                             </div>
+
                             <div class="swiper-slide">
-                                <div
-                                    class="card card-background shadow-none border-radius-xl card-background-after-none align-items-start mb-0">
-                                    <div class="full-background bg-cover"
-                                        style="background-image: url('../assets/img/img-1.jpg')"></div>
-                                    <div class="card-body text-start px-3 py-0 w-100">
-                                        <div class="row mt-12">
-                                            <div class="col-sm-3 mt-auto">
-                                                <h4 class="text-dark font-weight-bolder">#2</h4>
-                                                <p class="text-dark opacity-6 text-xs font-weight-bolder mb-0">Name</p>
-                                                <h5 class="text-dark font-weight-bolder">Cyber</h5>
-                                            </div>
-                                            <div class="col-sm-3 ms-auto mt-auto">
-                                                <p class="text-dark opacity-6 text-xs font-weight-bolder mb-0">Category
-                                                </p>
-                                                <h5 class="text-dark font-weight-bolder">Security</h5>
-                                            </div>
+                                <div class="card card-background border-radius-xl align-items-start mb-0">
+                                    <div class="card-body text-center ">
+                                        <div class="row mt-4">
+                                            <h5 class="card-title font-weight-bold text-center" style="color:rgb(25, 7, 90)">1. LOGIN</h5>
+                                            <ul>
+                                                <p class="card-text" style="color: black;">Users or event organizers should login their google account first to schedule an event.</p>
+                                            </ul>     
                                         </div>
                                     </div>
-                                </div>
+                                </div>  
                             </div>
+
                             <div class="swiper-slide">
-                                <div
-                                    class="card card-background shadow-none border-radius-xl card-background-after-none align-items-start mb-0">
-                                    <div class="full-background bg-cover"
-                                        style="background-image: url('../assets/img/img-3.jpg')"></div>
-                                    <div class="card-body text-start px-3 py-0 w-100">
-                                        <div class="row mt-12">
-                                            <div class="col-sm-3 mt-auto">
-                                                <h4 class="text-dark font-weight-bolder">#3</h4>
-                                                <p class="text-dark opacity-6 text-xs font-weight-bolder mb-0">Name</p>
-                                                <h5 class="text-dark font-weight-bolder">Alpha</h5>
-                                            </div>
-                                            <div class="col-sm-3 ms-auto mt-auto">
-                                                <p class="text-dark opacity-6 text-xs font-weight-bolder mb-0">Category
-                                                </p>
-                                                <h5 class="text-dark font-weight-bolder">Blockchain</h5>
-                                            </div>
+                                <div class="card card-background border-radius-xl align-items-start mb-0">
+                                    <div class="card-body text-center ">
+                                        <div class="row mt-4">
+                                            <h5 class="card-title font-weight-bold text-center" style="color:rgb(25, 7, 90)">2. COMPLETE PROFILE</h5>
+                                            <ul>
+                                                <p class="card-text" style="color: black;">User or event organizer must complete their details accurately
+                                                    and wait for the admin to approve your account.</p>
+                                            </ul>     
                                         </div>
                                     </div>
-                                </div>
+                                </div>  
                             </div>
                             <div class="swiper-slide">
-                                <div
-                                    class="card card-background shadow-none border-radius-xl card-background-after-none align-items-start mb-0">
-                                    <div class="full-background bg-cover"
-                                        style="background-image: url('../assets/img/img-4.jpg')"></div>
-                                    <div class="card-body text-start px-3 py-0 w-100">
-                                        <div class="row mt-12">
-                                            <div class="col-sm-3 mt-auto">
-                                                <h4 class="text-dark font-weight-bolder">#4</h4>
-                                                <p class="text-dark opacity-6 text-xs font-weight-bolder mb-0">Name</p>
-                                                <h5 class="text-dark font-weight-bolder">Beta</h5>
-                                            </div>
-                                            <div class="col-sm-3 ms-auto mt-auto">
-                                                <p class="text-dark opacity-6 text-xs font-weight-bolder mb-0">Category
-                                                </p>
-                                                <h5 class="text-dark font-weight-bolder">Web3</h5>
-                                            </div>
+                                <div class="card card-background border-radius-xl align-items-start mb-0">
+                                    <div class="card-body text-center ">
+                                        <div class="row mt-4">
+                                            <h5 class="card-title font-weight-bold text-center" style="color:rgb(25, 7, 90)">3. CLICK CREATE EVENTS</h5>
+                                            <ul>
+                                                <p class="card-text" style="color: black;">Users or event organizers are required to fill up the form
+                                                    that includes details of the event.</p>
+                                            </ul>     
                                         </div>
                                     </div>
-                                </div>
+                                </div>  
                             </div>
                             <div class="swiper-slide">
-                                <div
-                                    class="card card-background shadow-none border-radius-xl card-background-after-none align-items-start mb-0">
-                                    <div class="full-background bg-cover"
-                                        style="background-image: url('../assets/img/img-5.jpg')"></div>
-                                    <div class="card-body text-start px-3 py-0 w-100">
-                                        <div class="row mt-12">
-                                            <div class="col-sm-3 mt-auto">
-                                                <h4 class="text-dark font-weight-bolder">#5</h4>
-                                                <p class="text-dark opacity-6 text-xs font-weight-bolder mb-0">Name</p>
-                                                <h5 class="text-dark font-weight-bolder">Gama</h5>
-                                            </div>
-                                            <div class="col-sm-3 ms-auto mt-auto">
-                                                <p class="text-dark opacity-6 text-xs font-weight-bolder mb-0">Category
-                                                </p>
-                                                <h5 class="text-dark font-weight-bolder">Design</h5>
-                                            </div>
+                                <div class="card card-background border-radius-xl align-items-start mb-0">
+                                    <div class="card-body text-center ">
+                                        <div class="row mt-4">
+                                            <h5 class="card-title font-weight-bold text-center" style="color:rgb(25, 7, 90)">4. SELECT VENUE</h5>
+                                            <ul>
+                                                <p class="card-text" style="color: black;">After inputing details about the event, Users or event
+                                                    organizers are required to select the preferred venue for their event that is
+                                                    suitable for the capacity of attendees.</p>
+                                            </ul>     
                                         </div>
                                     </div>
-                                </div>
+                                </div>  
                             </div>
                             <div class="swiper-slide">
-                                <div
-                                    class="card card-background shadow-none border-radius-xl card-background-after-none align-items-start mb-0">
-                                    <div class="full-background bg-cover"
-                                        style="background-image: url('../assets/img/img-1.jpg')"></div>
-                                    <div class="card-body text-start px-3 py-0 w-100">
-                                        <div class="row mt-12">
-                                            <div class="col-sm-3 mt-auto">
-                                                <h4 class="text-dark font-weight-bolder">#6</h4>
-                                                <p class="text-dark opacity-6 text-xs font-weight-bolder mb-0">Name</p>
-                                                <h5 class="text-dark font-weight-bolder">Rompro</h5>
-                                            </div>
-                                            <div class="col-sm-3 ms-auto mt-auto">
-                                                <p class="text-dark opacity-6 text-xs font-weight-bolder mb-0">Category
-                                                </p>
-                                                <h5 class="text-dark font-weight-bolder">Security</h5>
-                                            </div>
+                                <div class="card card-background border-radius-xl align-items-start mb-0">
+                                    <div class="card-body text-center ">
+                                        <div class="row mt-4">
+                                            <h5 class="card-title font-weight-bold text-center" style="color:rgb(25, 7, 90)">5. CREATE A FEEDBACK FORM FOR THE EVENT</h5>
+                                            <ul>
+                                                <p class="card-text" style="color: black;">Please provide a link for your feedback form since the system
+                                                    requires a feedback form to turn into QR code for more accessible for
+                                                    participants</p>
+                                            </ul>     
                                         </div>
                                     </div>
-                                </div>
+                                </div>  
                             </div>
+                            <div class="swiper-slide">
+                                <div class="card card-background border-radius-xl align-items-start mb-0">
+                                    <div class="card-body text-center ">
+                                        <div class="row mt-4">
+                                            <h5 class="card-title font-weight-bold text-center" style="color:rgb(25, 7, 90)">6. CREATE/UPLOAD REQUEST LETTER</h5>
+                                            <ul>
+                                                <p class="card-text" style="color: black;">The user or event organizers can upload or create their
+                                                    request letter using the system. After creating the letter, it can be saved as PDF.</p>
+                                            </ul>     
+                                        </div>
+                                    </div>
+                                </div>  
+                            </div>
+                            <div class="swiper-slide">
+                                <div class="card card-background border-radius-xl align-items-start mb-0">
+                                    <div class="card-body text-center ">
+                                        <div class="row mt-4">
+                                            <h5 class="card-title font-weight-bold text-center" style="color:rgb(25, 7, 90)">7. APPROVAL STATUS</h5>
+                                            <ul>
+                                                <p class="card-text" style="color: black;">After the user or event organizer submit its request letter,
+                                                    the system will show the timeline status to notify the event organizers if their
+                                                    letter is approved, pending or rejected.</p>
+                                            </ul>     
+                                        </div>
+                                    </div>
+                                </div>  
+                            </div>
+                            <div class="swiper-slide">
+                                <div class="card card-background border-radius-xl align-items-start mb-0">
+                                    <div class="card-body text-center ">
+                                        <div class="row mt-4">
+                                            <h5 class="card-title font-weight-bold text-center" style="color:rgb(25, 7, 90)">8. UPLOAD LIST OF ATTENDEES</h5>
+                                            <ul>
+                                                <p class="card-text" style="color: black;">The system requires event organizers to upload an Excel file
+                                                    containing their list of attendees. This enables organizers to monitor
+                                                    attendance effectively within the system.</p>
+                                            </ul>     
+                                        </div>
+                                    </div>
+                                </div>  
+                            </div>
+                            <div class="swiper-slide">
+                                <div class="card card-background border-radius-xl align-items-start mb-0">
+                                    <div class="card-body text-center ">
+                                        <div class="row mt-4">
+                                            <h5 class="card-title font-weight-bold text-center" style="color:rgb(25, 7, 90)">9. UPLOAD LIST OF ATTENDEES</h5>
+                                            <ul>
+                                                <p class="card-text" style="color: black;">The system requires event organizers to upload an Excel file
+                                                    containing their list of attendees. This enables organizers to monitor
+                                                    attendance effectively within the system.</p>
+                                            </ul>     
+                                        </div>
+                                    </div>
+                                </div>  
+                            </div>
+                            <div class="swiper-slide">
+                                <div class="card card-background border-radius-xl align-items-start mb-0">
+                                    <div class="card-body text-center ">
+                                        <div class="row mt-4">
+                                            <h5 class="card-title font-weight-bold text-center" style="color:rgb(25, 7, 90)">10. UPLOAD ACCOMPLISHMENT REPORT</h5>
+                                            <ul>
+                                                <p class="card-text" style="color: black;">After the event concludes, organizers must submit their
+                                                    accomplishment reports through the system; failure to do so will result in their
+                                                    inability to schedule future events.</p>
+                                            </ul>     
+                                        </div>
+                                    </div>
+                                </div>  
+                            </div>
+
+
+
                         </div>
                     </div>
                     <div class="swiper-button-prev"></div>
                     <div class="swiper-button-next"></div>
                 </div>
             </div><br><br>
-            <!-- END SLIDER UPCOMING EVENTS -->
+            <!-- END SLIDER PROCESS OF REQUEST LETTER -->
 
-            <!-- ======= ABOUT US SECTION ======= -->
+            <!-- ======= DESCRIPTION ======= -->
             <section id="about" class="about">
                 <div class="container">
-                    <div class="section-title text-center">
-                        <h2 >About Us</h2>
-                        <p>Welcome to CALENDASH, your premier solution for School Event Scheduling and Monitoring at TUP
-                            Taguig. Our platform is designed to streamline the scheduling process and enhance the
-                            monitoring of school events, ensuring efficiency and organization throughout the academic
-                            calendar.</p>
-                    </div><br><br>
-
                     <div class="row">
                         <div class="col-lg-6 order-1 order-lg-2">
-                            <img src="../assets/img/aboutss.png" class="img-fluid" alt="" style="width: 500px; margin-top: 10px; ">
+                            <img src="../assets/img/aboutss.png" class="img-fluid" alt=""
+                                style="width: 500px;
+                             margin-top: 10px; border-radius: 20px ">
                         </div>
                         <div class="col-lg-6 pt-4 pt-lg-0 order-2 order-lg-1 content ">
                             <h3>Experience the convenience and reliability of CALENDASH today!</h3>
@@ -221,7 +242,7 @@
 
                 </div>
             </section><br><br>
-            <!-- End ABOUT US SECTION -->
+            <!-- End DESCRIPTION SECTION -->
 
             <!-- ======= CTA SECTION ======= -->
             <section id="cta" class="cta">
@@ -229,46 +250,98 @@
 
                     <div class="row">
                         <div class="col-lg-9 text-center text-lg-start">
-                            <h3>Terms and Conditions</h3>
-                            {{-- <p>The condition in which the venue should be returned after use, including cleanliness and
-                                any specific requirements for repairs or maintenance.</p> --}}
-
                             <h5 class="accordion-header" id="headingOne">
                                 <button class="accordion-button border-bottom font-weight-bold collapsed"
                                     type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour"
                                     aria-expanded="false" aria-controls="collapseFour">
-                                    <h6>The condition in which the venue should be returned after use, including
-                                        cleanliness and any <br> specific requirements for repairs or maintenance.</h6>
+                                    <h2>Term and Conditions</h2>
                                     <i class="collapse-close fa fa-plus text-xs pt-1 position-absolute end-0 me-3"
                                         aria-hidden="true"></i>
                                     <i class="collapse-open fa fa-minus text-xs pt-1 position-absolute end-0 me-3"
                                         aria-hidden="true"></i>
                                 </button>
+                                <p>These Terms and Conditions <b>("Terms")</b> govern the scheduling of events in
+                                    Technological University of the Philippines - Taguig <b>("TUP-T")</b> by CALENDASH
+                                    for
+                                    the TUP-T students, faculty, and guests <b>(Users)</b>. <br>By engaging our
+                                    services,
+                                    the Users agree to abide by these Terms.</p>
                             </h5>
 
                             <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingOne"
                                 data-bs-parent="#accordionRental" style="color:black;">
                                 <div class="accordion-body text-sm opacity-8">
-                                    <ul style="font-size: 16px">
-                                        <li>The condition in which the venue should be returned after use, including
-                                            cleanliness and
-                                            any specific requirements for repairs or maintenance.</li>
-                                        <li>Responsibility for any damages or loss of property during the event period.
-                                        </li>
-                                        <li>The condition in which the venue should be returned after use, including
-                                            cleanliness and
-                                            any specific requirements for repairs or maintenance.</li>
-                                        <li>The specific dates and times allotted during which the venue is in use,
-                                            including setup
-                                            and teardown times must be followed.</li>
-                                        <li>If the event lasts longer than the time allotted for it, a warning will be
-                                            sent followed
-                                            by punishment.</li>
-                                        <li>It is the responsibility of an organization if any injuries, damages, arise
-                                            from the
-                                            event.</li>
-
-                                    </ul>
+                                    <ol style="font-size: 16px">
+                                        <b>
+                                            <li>Event Details</li>
+                                        </b>
+                                        <ul>
+                                            <li>The Users agree to provide accurate and complete information regarding
+                                                the
+                                                event, including date, time, location, and any specific requirements.
+                                            </li>
+                                            <li>Once the event is approved by the school officials, any changes to the
+                                                event
+                                                details will not be tolerated.</li>
+                                        </ul>
+                                        <b>
+                                            <li>Booking and Approval</li>
+                                        </b>
+                                        <ul>
+                                            <li>Events must be booked through the CALENDASH platform.</li>
+                                            <li>Submission of event details does not guarantee approval. CALENDASH will
+                                                seek
+                                                approval from school officials, and only approved events will be
+                                                scheduled.
+                                            </li>
+                                            <li>The specific dates and times allotted during which the venue is in use,
+                                                including setup and teardown times must be followed.</li>
+                                        </ul>
+                                        <b>
+                                            <li>Cancellation</li>
+                                        </b>
+                                        <ul>
+                                            <li>CALENDASH reserves the right to cancel or reschedule an event in
+                                                consultation with school officials due to unforeseen circumstances.</li>
+                                        </ul>
+                                        <b>
+                                            <li>Responsibilities</li>
+                                        </b>
+                                        <ul>
+                                            <li>The Users are responsible for obtaining any necessary permits or
+                                                permissions
+                                                for the event.</li>
+                                            <li>CALENDASH is not liable for any damages, injuries, or losses incurred
+                                                during
+                                                the event unless caused by gross negligence or willful misconduct.</li>
+                                            <li>Venue should be returned after use, including cleanliness and any
+                                                specific
+                                                requirements for repairs or maintenance.</li>
+                                        </ul>
+                                        <b>
+                                            <li>Approval Process</li>
+                                        </b>
+                                        <ul>
+                                            <li>The approval process involves coordination with TUP-T officials. Users
+                                                are
+                                                advised to submit event request letter in advance to allow for the
+                                                approval
+                                                process.</li>
+                                        </ul>
+                                        <b>
+                                            <li>Termination</li>
+                                        </b>
+                                        <ul>
+                                            <li>CALENDASH reserves the right to terminate or suspend services if Users
+                                                breach any material provision of these Terms.</li>
+                                        </ul>
+                                    </ol>
+                                    <b>
+                                        <p>By engaging our services, the Users acknowledge that they have read,
+                                            understood,
+                                            and agreed to these <br>Terms and Conditions. These Terms may be subject to
+                                            change, and Users will be notified of any revisions.</p>
+                                    </b>
                                 </div>
                             </div>
                         </div>
@@ -415,6 +488,22 @@
             </section><br><br>
             <!-- End FAQ's Section -->
 
+            <!-- ======= ABOUT US SECTION ======= -->
+            <section id="about" class="about">
+                <div class="container">
+                    <div class="row">
+                        <div class="section-title text-center">
+                            <h2>About Us</h2>
+                            <p>Welcome to CALENDASH, your premier solution for School Event Scheduling and Monitoring at TUP
+                                Taguig. Our platform is designed to streamline the scheduling process and enhance the
+                                monitoring of school events, ensuring efficiency and organization throughout the academic
+                                calendar.</p>
+                        </div>
+                    </div><br><br>
+                </div>
+                <section id="about" class="about">
+               <!-- End ABOUT US SECTION -->
+
             <!-- ======= Team Section ======= -->
             <section id="team" class="team section-bg">
                 <div class="container">
@@ -422,32 +511,37 @@
                     <div class="section-title">
                         <h2 style="text-align: center">Meet the Team</h2>
                         <p>Our team comprises dedicated individuals with diverse skill sets and backgrounds,
-                           all united by a common goal: to create innovative solutions that enhance productivity and efficiency. 
-                           Each member brings unique expertise and perspectives to the table, fostering a collaborative environment
-                           where creativity thrives and challenges are met with enthusiasm.</p>
+                            all united by a common goal: to create innovative solutions that enhance productivity and
+                            efficiency.
+                            Each member brings unique expertise and perspectives to the table, fostering a collaborative
+                            environment
+                            where creativity thrives and challenges are met with enthusiasm.</p>
                     </div>
 
                     <div class="container">
                         <div class="row">
                             <div class="col-lg-4 col-md-6 d-flex align-items-stretch">
                                 <div class="member">
-                                    <img src="assets/img/dom.png" alt="" style="max-width: 100%; border-radius: 50%; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);">
+                                    <img src="assets/img/dom.png" alt=""
+                                        style="max-width: 100%; border-radius: 50%; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);">
                                     <h4>John Dominic M. Acuisa</h4>
                                     {{-- Additional content --}}
                                 </div>
                             </div>
-                        
+
                             <div class="col-lg-4 col-md-6 d-flex align-items-stretch">
                                 <div class="member">
-                                    <img src="assets/img/xy.png" alt="" style="max-width: 80%; border-radius: 50%; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);">
+                                    <img src="assets/img/xy.png" alt=""
+                                        style="max-width: 80%; border-radius: 50%; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);">
                                     <h4>Xyra C. Ebron</h4>
                                     {{-- Additional content --}}
                                 </div>
                             </div>
-                        
+
                             <div class="col-lg-4 col-md-6 d-flex align-items-stretch">
                                 <div class="member">
-                                    <img src="assets/img/je.png" alt="" style="max-width: 80%; border-radius: 50%; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);">
+                                    <img src="assets/img/je.png" alt=""
+                                        style="max-width: 80%; border-radius: 50%; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);">
                                     <h4>Jerico B. Agguire</h4>
                                     {{-- Additional content --}}
                                 </div>
@@ -457,20 +551,21 @@
 
                     <style>
                         .member {
-                            text-align: center; /* Center the content horizontally */
-                            margin-bottom: 100px; /* Add some space between each member */
+                            text-align: center;
+                            /* Center the content horizontally */
+                            margin-bottom: 100px;
+                            /* Add some space between each member */
                         }
-                    
+
                         .member img {
-                            max-width: 100%; /* Make sure the image doesn't exceed the container width */
-                            height: 250px; /* Set the desired height for all images */
-                            object-fit: cover; /* Ensure the image covers the entire container */
+                            max-width: 100%;
+                            /* Make sure the image doesn't exceed the container width */
+                            height: 250px;
+                            /* Set the desired height for all images */
+                            object-fit: cover;
+                            /* Ensure the image covers the entire container */
                         }
                     </style>
-                    
-                    
-                    
-
                 </div>
             </section><!-- End Team Section -->
         </div>

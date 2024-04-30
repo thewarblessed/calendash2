@@ -320,6 +320,12 @@ Route::post('/admin/confirmPendingUsers/{id}',[
         'uses' => 'UserController@confirmPendingUsers',
         'as' => 'approveAccount',
 ]);
+
+Route::post('/admin/rejectPendingUser/{id}',[
+        'uses' => 'UserController@rejectUser',
+        'as' => 'rejectUser',
+]);
+
 // get single User
 Route::get('/admin/getUser/{id}',[
         'uses' => 'UserController@getUser',

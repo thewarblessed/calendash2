@@ -13,6 +13,8 @@ use App\Models\Section;
 use App\Models\PendingUser;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Mail;
+use App\Mail\RejectAccountNotify;
 
 class UserController extends Controller
 {
@@ -334,6 +336,25 @@ class UserController extends Controller
 
         // $user->email_verified_at = now();
         // $user->save();
+        return response()->json(["user" => $user, "status" => 200]);
+        
+    }
+    public function rejectUser(Request $request, String $id)
+    {
+        $user = User::leftJoin('pending_users', 'pending_users.user_id', 'users.id')
+                    ->leftJoin('organizations', 'pending_users.organization_id', 'organizations.id')
+                    ->leftJoin('departments', 'pending_users.department_id', 'departments.id')
+                    ->leftJoin('sections', 'pending_users.section_id', 'sections.id')
+                    ->where('users.id', $id)
+                    ->first();
+        
+        $email = $user->email;
+        $data = [
+            "subject" => "Calendash Rejected Request",
+            "body" => "Hello {$user->name}!,\n\nWe regret to inform you that your account has been declined."
+            ];
+        Mail::to($email)->send(new RejectAccountNotify($data));
+        
         return response()->json(["user" => $user, "status" => 200]);
         
     }

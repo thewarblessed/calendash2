@@ -169,6 +169,39 @@ $(document).ready(function () {
 
     });//end delete venue
 
+    $("#rejectAccount").on("click", function (e) {
+        e.preventDefault();
+        alert('hehe')
+        $.ajax({
+            type: "POST",
+            url: "/api/admin/rejectPendingUser/" + id,
+            data: editformData,
+            contentType: false,
+            processData: false,
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+            dataType: "json",
+            success: function (data) {
+                console.log(data);
+                setTimeout(function () {
+                    window.location.href = '/admin/venues';
+                }, 1500);
+
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Venue Updated!',
+                    showConfirmButton: false,
+                    timer: 3000
+                })
+
+            },
+            error: function (error) {
+                console.log("error");
+            },
+        });
+    });//end update venue
+
     $("#filterCapacity").on("input", function () {
         // let elements = document.querySelectorAll(".card-title");
         // let cards = document.querySelectorAll(".card_capacity");
@@ -424,7 +457,8 @@ $(document).ready(function () {
                         $('#startDateOutput').html("<strong>Start Date:</strong> " + startDate);
                         $('#endDateOutput').html("<strong>End Date:</strong> " + endDate);
                         $('#startTimeOutput').hide();
-                        $('#endTimeOutput').hide();
+                        $(
+                            '#endTimeOutput').hide();
                     }
                     else if (formData.get('event_type') === 'dateRanges'){
                         $('#eventTypeOutput').html("<strong>Event Type:</strong> Date Range");
