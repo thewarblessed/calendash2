@@ -18,37 +18,45 @@
 
                     <!-- Modal for Process of letter -->
                     <div class="modal fade" id="notesModal" tabindex="-1" role="dialog"
-                    aria-labelledby="processLetterModalLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="notesModalLabel">IMPORTANT REMINDERS</h5>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <div style="text-align: justify; text-justify: inter-word; padding: 20px;">
-                                    <b><p style="color: #000000; font-size: 18px; font-weight: bold;">The Excel file should follow a specific format:</p></b>
-                                    <p style="color: #000000;">On the First Column, It should be <b>Year and Section</b>
-                                    <br>On the Second Column, It should be <b>First name</b> 
-                                    <br>On the Third Column, It Shoul be <b>Last name</b> of the participants. 
-                                    <b><p style="color: #000000; font-size: 18px; font-weight: bold;">You only need to include this information without adding any headers like 
-                                    "Year and Section," "First name," or "Last name." </b> Just ensure that the data 
-                                    is arranged in the specified format without any additional labels.</p></b>
+                        aria-labelledby="processLetterModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="notesModalLabel">IMPORTANT REMINDERS</h5>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <div style="text-align: justify; text-justify: inter-word; padding: 20px;">
+                                        <b>
+                                            <p style="color: #000000; font-size: 18px; font-weight: bold;">The Excel
+                                                file should follow a specific format:</p>
+                                        </b>
+                                        <p style="color: #000000;">• On the First Column, It should be <b>Year and
+                                                Section</b>
+                                            <br>• On the Second Column, It should be <b>First name</b>
+                                            <br>• On the Third Column, It should be <b>Last name</b> of the participants.
+                                            <b>
+                                                <p style="color: #000000; font-size: 18px; font-weight: bold;">You only
+                                                    need to include this information without adding any headers like
+                                                    "Year and Section," "First name," or "Last name."
+                                            </b> Just ensure that the data
+                                            is arranged in the specified format without any additional labels.
+                                        </p></b>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-primary"
+                                        data-bs-dismiss="modal">Close</button>
+                                    <span aria-hidden="true"></span>
                                 </div>
                             </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-primary"
-                                    data-bs-dismiss="modal">Close</button>
-                                <span aria-hidden="true"></span>
-                            </div>
                         </div>
+                        <script>
+                            $(document).ready(function() {
+                                $('#notesModal').modal('show');
+                            });
+                        </script>
                     </div>
-                    <script>
-                        $(document).ready(function(){
-                        $('#notesModal').modal('show');
-                        });
-                    </script>   
-                </div>
                 </div>
             </div>
             <table id="attendanceTable" class="table table-striped table-hover" style="width:100%;">
@@ -132,6 +140,27 @@
                 dataSrc: "",
             },
             dom: 'Bfrtip',
+            layout: {
+                topStart: {
+                    buttons: [{
+                            extend: 'copyHtml5',
+                            footer: true
+                        },
+                        {
+                            extend: 'excelHtml5',
+                            footer: true
+                        },
+                        {
+                            extend: 'csvHtml5',
+                            footer: true
+                        },
+                        {
+                            extend: 'pdfHtml5',
+                            footer: true
+                        }
+                    ]
+                }
+            },
             columns: [{
                     data: "yearsection",
                 },
@@ -167,50 +196,6 @@
                     },
                 },
             ],
-            buttons: [{
-                extend: 'copyHtml5',
-                footer: true
-            },
-            {
-                extend: 'excelHtml5',
-                footer: true
-            },
-            {
-                extend: 'csvHtml5',
-                footer: true
-            },
-            {
-                extend: 'pdfHtml5',
-                footer: true,
-                customize: function(doc) {
-                    // Remove the action column from the PDF output
-                    $(doc.content[1].table.body).each(function(i, row) {
-                        row.splice(-1, 1);
-                    });
-                }
-            },
-            {
-                extend: 'print',
-                footer: true,
-                customize: function(win) {
-                    // Add your custom header
-                    var header = '<h4 style="margin-top: 30px; text-align: center; margin-right: 20;">Attendance Lists</h4>';
-
-                    // Wrap logo and header in a container
-                    var headerContainer = '<div style="overflow: auto;">' + header + '</div>';
-
-                    // Prepend the container to the document body
-                    $(win.document.body).prepend(headerContainer);
-
-                    // Remove the last column of both headers (th) and cells (td) in the table
-                    $(win.document.body).find('table th:last-child, table td:last-child').remove();
-
-                    // Remove the "Calendash" header
-                    $(win.document.body).find('h1').remove();
-                }
-            }
-
-        ]
         });
 
         $("#attendanceTable tbody").on("click", '.markedAttendance', function(e) {

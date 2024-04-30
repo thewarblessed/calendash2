@@ -1,21 +1,17 @@
 <aside class="sidenav navbar navbar-vertical navbar-expand-xs border-0 bg-slate-900 fixed-start " id="sidenav-main">
-    <div class="sidenav-header">
-        <i class="fas fa-times p-3 cursor-pointer text-secondary opacity-5 position-absolute end-0 top-0 d-none d-xl-none"
-            aria-hidden="true" id="iconSidenav"></i>
-        <a class="navbar-brand d-flex align-items-center m-0"
-            href=" https://demos.creative-tim.com/corporate-ui-dashboard/pages/dashboard.html " target="_blank">
-            <span class="font-weight-bold" style="font-size: 28px; color:#bfa7f3; ">CALENDASH</span>
-        </a>
-    </div>
-    {{-- class="collapse navbar-collapse px-4 w-auto " id="sidenav-collapse-main" --}}
+    <div class="sidenav-header text-center" style="margin-top: -50px;">
+        <img src="../assets/img/calendash.png" class="img-fluid" alt="" style="width: 230px;"> 
+    </div><br><br><br>
+
+        {{-- class="collapse navbar-collapse px-4 w-auto " id="sidenav-collapse-main" --}}
     <div class="collapse navbar-collapse px-4  w-auto " id="sidenav-collapse-main">
         <ul class="navbar-nav">
             <li class="nav-item">
                 <a class="nav-link  {{ is_current_route('dashboard') ? 'active' : '' }}"
                     href="{{ route('dashboard') }}">
-                    <i class="fa-solid fa-gauge"
+                    <i class="fa-solid fa-home"
                         style="color: {{ is_current_route('dashboard') ? '#774dd3' : 'defaultColor' }};font-size: 18px;"></i>
-                    <span class="nav-link-text ms-1">DASHBOARD</span>
+                    <span class="nav-link-text ms-1">Home</span>
                 </a>
             </li>
 
@@ -209,7 +205,7 @@
                             href="{{ route('myEvents') }}">
                             <i class="fa-solid fa-circle-check"
                                 style="color: {{ is_current_route('myEvents') ? '#774dd3' : 'defaultColor' }};font-size: 18px;"></i>
-                            <span class="nav-link-text ms-1">My Event Status</span>
+                            <span class="nav-link-text ms-1">My Event Status    </span>
                         </a>
                     </li>
 
