@@ -377,6 +377,12 @@
                     }
                 },
                 {
+                    data: null,
+                    render: function(data, type, row) {
+                        return "<span style='color: green; font-weight: bold;'>APPROVED BY ME</span>";
+                    }
+                },
+                {
                     data: "status",
                     render: function(data, type, row) {
                         if (data === "PENDING") {
