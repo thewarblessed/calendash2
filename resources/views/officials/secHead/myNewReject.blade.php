@@ -241,27 +241,53 @@
                 }
             },
             dom: 'Bfrtip',
-            layout: {
-                topStart: {
-                    buttons: [{
-                            extend: 'copyHtml5',
-                            footer: true
-                        },
-                        {
-                            extend: 'excelHtml5',
-                            footer: true
-                        },
-                        {
-                            extend: 'csvHtml5',
-                            footer: true
-                        },
-                        {
-                            extend: 'pdfHtml5',
-                            footer: true
-                        }
-                    ]
+            buttons: [{
+                    extend: 'copyHtml5',
+                    footer: true
+                },
+                {
+                    extend: 'excelHtml5',
+                    footer: true
+                },
+                {
+                    extend: 'csvHtml5',
+                    footer: true
+                },
+                {
+                    extend: 'pdfHtml5',
+                    footer: true,
+                    customize: function(doc) {
+                        // Remove the action column from the PDF output
+                        $(doc.content[1].table.body).each(function(i, row) {
+                            row.splice(-1, 1);
+                        });
+                    }
+                },
+                {
+                    extend: 'print',
+                    footer: true,
+                    customize: function(win) {
+                        // Add your custom logo
+                        var logo = '<img src="https://upload.wikimedia.org/wikipedia/en/thumb/c/c8/Technological_University_of_the_Philippines_Seal.svg/1200px-Technological_University_of_the_Philippines_Seal.svg.png" style="width: 100px; height: auto; float: left; margin-right: 10px;">';
+
+                        // Add your custom header
+                        var header = '<h4 style="margin-top: 30px; text-align: center; margin-right: 20;">Technological University of the Philippines</h4><br><h4 style="margin-top: 30px; text-align: center; margin-right: 20;">Declined Events</h4>';
+
+                        // Wrap logo and header in a container
+                        var headerContainer = '<div style="overflow: auto;">' + logo + header + '</div>';
+
+                        // Prepend the container to the document body
+                        $(win.document.body).prepend(headerContainer);
+
+                        // Remove the last column of both headers (th) and cells (td) in the table
+                        $(win.document.body).find('table th:last-child, table td:last-child').remove();
+
+                        // Remove the "Calendash" header
+                        $(win.document.body).find('h1').remove();
+                    }
                 }
-            },
+
+            ],
             columns: [{ 
                         data: "event_name",
                         render: function(data, type, row) {
