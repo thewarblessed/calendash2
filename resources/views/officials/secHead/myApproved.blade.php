@@ -391,7 +391,11 @@
                         } else if (data === "APPROVED") {
                             return "<span style='color: green; font-weight: bold;'>" + data +
                                 "</span>";
+                        } else if (data === 'REJECTED'){
+                            return "<span style='color: red; font-weight: bold;'>" + data +
+                                "</span>";
                         }
+                    
                     }
                 },
             ],
