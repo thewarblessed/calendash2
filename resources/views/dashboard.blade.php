@@ -420,7 +420,7 @@
                 <div class="container">
 
                     <div class="section-title">
-                        <h2>Meet the Team</h2>
+                        <h2 style="text-align: center">Meet the Team</h2>
                         <p>Our team comprises dedicated individuals with diverse skill sets and backgrounds,
                            all united by a common goal: to create innovative solutions that enhance productivity and efficiency. 
                            Each member brings unique expertise and perspectives to the table, fostering a collaborative environment
@@ -431,7 +431,7 @@
                         <div class="row">
                             <div class="col-lg-4 col-md-6 d-flex align-items-stretch">
                                 <div class="member">
-                                    <img src="assets/img/doms.jpg" alt="" style="max-width: 100%;">
+                                    <img src="assets/img/dom.png" alt="" style="max-width: 100%; border-radius: 50%; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);">
                                     <h4>John Dominic M. Acuisa</h4>
                                     {{-- Additional content --}}
                                 </div>
@@ -439,7 +439,7 @@
                         
                             <div class="col-lg-4 col-md-6 d-flex align-items-stretch">
                                 <div class="member">
-                                    <img src="assets/img/xyra.jpg" alt="" style="max-width: 80%;">
+                                    <img src="assets/img/xy.png" alt="" style="max-width: 80%; border-radius: 50%; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);">
                                     <h4>Xyra C. Ebron</h4>
                                     {{-- Additional content --}}
                                 </div>
@@ -447,7 +447,7 @@
                         
                             <div class="col-lg-4 col-md-6 d-flex align-items-stretch">
                                 <div class="member">
-                                    <img src="assets/img/jerico.jpg" alt="" style="max-width: 70%;">
+                                    <img src="assets/img/je.png" alt="" style="max-width: 80%; border-radius: 50%; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);">
                                     <h4>Jerico B. Agguire</h4>
                                     {{-- Additional content --}}
                                 </div>
