@@ -3992,7 +3992,7 @@ $(document).ready(function () {
     //         reader.readAsDataURL(file);
     //       }
     // })
-    $("#eventOutsiderStatus tbody").on("click", 'button.uploadImgReceipt', async function (e) {
+    $("#eventOutsiderStatus tbody").on("click", 'button.uploadImgReceipt', function (e) {
         var id = $(this).data("id");
         console.log(id);
         $("#outsider_event_id").val(id);
@@ -4001,7 +4001,7 @@ $(document).ready(function () {
 
 
         
-            $("#outsiderSubmitReceipt").on("click", async function (e) {
+            $("#outsiderSubmitReceipt").on("click",function (e) {
                 var data = $('#uploadReceiptForm')[0];
                 console.log(data);
                 let formData = new FormData($('#uploadReceiptForm')[0]);
