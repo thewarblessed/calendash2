@@ -4027,6 +4027,11 @@ $(document).ready(function () {
                         $.ajax({
                             url: '/api/upload-receipt/' + id,
                             type: 'POST',
+                            headers: {
+                                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
+                                    "content"
+                                ),
+                            },
                             data: formData,
                             contentType: false,
                             processData: false,
