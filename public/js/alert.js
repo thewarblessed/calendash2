@@ -3993,60 +3993,13 @@ $(document).ready(function () {
     //       }
     // })
     $("#eventOutsiderStatus tbody").on("click", 'button.uploadImgReceipt', function (e) {
+        e.preventDefault();
         var id = $(this).data("id");
         console.log(id);
         $("#outsider_event_id").val(id);
         
         $("#uploadReceipt").modal('show');
-
-
-        
-            $("#outsiderSubmitReceipt").on("click",function (e) {
-                var data = $('#uploadReceiptForm')[0];
-                console.log(data);
-                let formData = new FormData($('#uploadReceiptForm')[0]);
-                console.log(formData);
-
-                for (var pair of formData.entries()) {
-                    console.log(pair[0] + ',' + pair[1]);
-                }
-                console.log(formData)
-                $.ajax({
-                    type: "POST",
-                    url: '/api/upload-receipt/' + id,
-                    data: formData,
-                    contentType: false,
-                    processData: false,
-                    headers: {
-                        'Authorization': 'Bearer ' + sessionStorage.getItem('token'),
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    dataType: "json",
-                    success: function (data) {
-                        console.log(data);
-
-                        // var $ctable = $('#ctable').DataTable();
-                        // $ctable.ajax.reload();
-                        // $ctable.row.add(data.customer).draw(false);
-                        // // $etable.row.add(data.client).draw(false);
-                        setTimeout(function () {
-                            window.location.href = '/outside/myRequest';
-                        }, 1500);
-
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Receipt Uploaded!',
-                            showConfirmButton: false,
-                            timer: 3000
-                        })
-                    },
-                    error: function (error) {
-                        console.log('error');
-                    }
-                });
-            })
-        
-
+    });
         // $.ajax({
         //     url: '/api/upload-receipt/' + id,
         //     type: 'POST',
@@ -4074,8 +4027,55 @@ $(document).ready(function () {
         //         });
         //     }
         // });
-    });
+    
 
+    $("#outsiderSubmitReceipt").on("click",function (e) {
+        e.preventDefault();
+        var id = $("#outsider_event_id").val();
+        console.log(id);
+        var data = $('#uploadReceiptForm')[0];
+        console.log(data);
+        let formData = new FormData($('#uploadReceiptForm')[0]);
+        console.log(formData);
+
+        for (var pair of formData.entries()) {
+            console.log(pair[0] + ',' + pair[1]);
+        }
+        console.log(formData)
+        $.ajax({
+            type: "POST",
+            url: '/api/upload-receipt/' + id,
+            data: formData,
+            contentType: false,
+            processData: false,
+            headers: {
+                'Authorization': 'Bearer ' + sessionStorage.getItem('token'),
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            dataType: "json",
+            success: function (data) {
+                console.log(data);
+
+                // var $ctable = $('#ctable').DataTable();
+                // $ctable.ajax.reload();
+                // $ctable.row.add(data.customer).draw(false);
+                // // $etable.row.add(data.client).draw(false);
+                setTimeout(function () {
+                    window.location.href = '/outside/myRequest';
+                }, 1500);
+
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Receipt Uploaded!',
+                    showConfirmButton: false,
+                    timer: 3000
+                })
+            },
+            error: function (error) {
+                console.log('error');
+            }
+        });
+    })
 
     $("#eventOutsiderTable tbody").on("click", 'button.approveBtnOutsiderReceipt', async function (e) {
         var id = $(this).data('id');
