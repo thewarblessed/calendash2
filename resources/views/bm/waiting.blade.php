@@ -201,6 +201,40 @@
                 </div>
                 </div>
             </div>
+
+            <div class="modal fade" id="checkReceiptModal" tabindex="-1" role="dialog" aria-labelledby="createeventModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2 class="modal-title" id="createeventModalLabel" >Uploaded Receipt</h2>
+                        <button type="button" class="btn-close text-dark" data-bs-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+               
+                        <form id="eventApprovalForm" enctype="multipart/form-data" method="POST" action="{{ url('/api/request/approve/{id}') }}" >
+                            @csrf
+
+                            <div class="form-group">
+                                <input name="event_id" type="text" class="form-control" id="event_id_of_outsider" hidden>
+                                <div id="checkReceiptIdContainer">
+
+                                </div>
+                              </div>
+                            
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-white" data-bs-dismiss="modal" id="modalClose">Close</button>
+                                <a type="" class="btn btn-dark" id="eventOutsiderApproveReceipt">Approve Request</a>
+                                {{-- <button type="button" class="btn btn-danger" id="eventReject">Reject</button> --}}
+                            </div>
+                        </form>
+                
+                    </div>
+                    
+                </div>
+                </div>
+            </div>
            
             {{-- <x-app.footer /> --}}
         </div>

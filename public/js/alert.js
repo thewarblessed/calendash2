@@ -4080,6 +4080,7 @@ $(document).ready(function () {
     $("#eventOutsiderTable tbody").on("click", 'button.approveBtnOutsiderReceipt', async function (e) {
         var id = $(this).data('id');
         console.log(id);
+        $("#checkReceiptIdContainer").empty();
         $.ajax({
             type: "GET",
             enctype: 'multipart/form-data',
@@ -4093,68 +4094,65 @@ $(document).ready(function () {
                 ),
             },
             dataType: "json",
-            success: function (data) {
-                console.log(data);
-                var img = data.events.receipt_image;
-                var imageUrl = window.location.origin +'/storage/' + img;
-                console.log(imageUrl);
+            success: function (data) {  
+                console.log(data.events.id);
+                var image = data.events.receipt_image;
+                // Assuming 'image' is the filename of the image in the public path
+                    var imgSrc = "/storage/" + image; // Adjust the path if necessary
 
-                Swal.fire({
-                    title: "Confirm Reciept Upload",
-                    text: "This is the uploaded receipt",
-                    imageUrl: imageUrl,
-                    imageWidth: 400,
-                    imageHeight: 700,
-                    imageAlt: "Uploaded image",
-                    showCancelButton: true,
-                    confirmButtonText: "Approve",
-                    cancelButtonText: "Cancel"
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        // Image confirmed, proceed with AJAX upload
-                        
-                        $.ajax({
-                            url: '/api/approve-receipt/' + id,
-                            type: 'POST',
-                            headers: {
-                                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
-                                    "content"
-                                ),
-                            },
-                            contentType: false,
-                            processData: false,
-                            success: function (response) {
-                                Swal.fire({
-                                    title: "Success!",
-                                    text: "Event successfully approved!.",
-                                    icon: "success"
-                                });
-                            },
-                            error: function (xhr, status, error) {
-                                Swal.fire({
-                                    title: "Error",
-                                    text: "Failed to upload image.",
-                                    icon: "error"
-                                });
-                            }
+                    // Create an image element with the specified source and styles
+                    var img = $("<img>")
+                        .attr("src", imgSrc)
+                        .css({
+                            "width": "450px",
+                            "height": "450px",
+                            "margin-right": "10px",
+                            "margin-bottom": "10px"
                         });
-                    } else {
-                        // Image not confirmed, show cancellation message
-                        Swal.fire({
-                            title: "Cancelled",
-                            text: "Image upload cancelled.",
-                            icon: "error"
-                        });
-                    }
-                });
-
-
+                $("#checkReceiptIdContainer").append(img);
+                $("#event_id_of_outsider").val(data.events.id);
+                $("#checkReceiptModal").modal('show');
             },
             error: function (error) {
                 console.log("error");
             },
         });
     });
+
+    $("#eventOutsiderApproveReceipt").on("click", async function (e) {
+        var id = $("#event_id_of_outsider").val();
+        console.log(id);
+        $.ajax({
+            url: '/api/approve-receipt/' + id,
+            type: 'POST',
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
+                    "content"
+                ),
+            },
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                setTimeout(function () {
+                    window.location.href = '/bm/approved-request';
+                }, 1500);
+
+                Swal.fire({
+                    title: "Success!",
+                    text: "Event successfully approved!.",
+                    icon: "success"
+                });
+            },
+            error: function (xhr, status, error) {
+                Swal.fire({
+                    title: "Error",
+                    text: "Failed to upload image.",
+                    icon: "error"
+                });
+            }
+        });
+    })
+    
 
     /////// REJECTION OF OUTSIDER ///////////
     $("#eventOutsiderTable tbody").on("click", 'button.rejectBtnOutsider', async function (e) {

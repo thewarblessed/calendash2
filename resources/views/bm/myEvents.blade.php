@@ -421,6 +421,25 @@
                 </div>
             </div>
         </div>
+
+        <div class="modal fade" id="checkReceipt" tabindex="-1" role="dialog"
+            aria-labelledby="checkStatusModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2 class="modal-title" id="createeventModalLabel">Photo of Receipt</h2>
+                        <button type="button" class="btn-close text-dark" data-bs-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    
+                    <div class="modal-body">
+                        <div id="imageReceiptContainer"></div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
     </main>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
