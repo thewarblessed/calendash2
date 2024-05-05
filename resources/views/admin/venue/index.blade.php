@@ -92,8 +92,8 @@
                                             <td>
                                                 <p class="text-sm text-dark font-weight-semibold mb-0">
                                                     <ul>
-                                                        @foreach (explode("\n", $venue->description) as $bullet)
-                                                            <li>{{ $bullet }}</li>
+                                                        @foreach (explode("\n", $venue->description) as $line)
+                                                            <ol>{{ $line }}</ol>
                                                         @endforeach
                                                     </ul>
                                                 </p>

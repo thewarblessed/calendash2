@@ -10,9 +10,9 @@
                         <div class="full-background"
                             style="background-image: url('../assets/img/header-blue-purple.jpg')"></div>
                         <div class="card-body text-start p-4 w-100">
-                            <h3 class="text-white mb-2">Event Calendar</h3>
-                            <p class="mb-4 font-weight-semibold">
-                                Check all the pendind and approved events!.
+                            <h3 class="text-white mb-2 text-center">Event Calendar</h3>
+                            <p class="mb-4 font-weight-semibold text-center">
+                                Check all the pending and approved events
                             </p>
 
                             <!-- Button trigger modal -->

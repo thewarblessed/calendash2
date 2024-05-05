@@ -25,4 +25,5 @@ class PendingUser extends Model
         "image",
         "user_id"
     ];
+
 }

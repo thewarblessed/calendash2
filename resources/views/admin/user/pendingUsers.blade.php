@@ -215,6 +215,7 @@
                                     <div class="form-group">
                                         <label for="exampleFormControlInput1">Last Name:</label>
                                         <input name="userId" type="text" class="form-control" id="userApproveId" hidden>
+                                        <input name="rejectId" type="text" class="form-control" id="userRejectId" hidden>
                                         <p style="color: black" id="userApproveLastname" ></p>
                                       </div>
                                 </div>

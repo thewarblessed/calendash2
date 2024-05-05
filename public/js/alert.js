@@ -169,39 +169,151 @@ $(document).ready(function () {
 
     });//end delete venue
 
-    $("#rejectAccount").on("click", function (e) {
-        e.preventDefault();
-        alert('hehe')
+     //<-------- REJECTED ACCOUNT----------------->
+
+     $("#pendingUsersTable tbody").on("click", 'button.rejectAccounts ', function (e) {
+        var id = $(this).data("id");
+        // e.preventDefault();
+        console.log(id);
+
         $.ajax({
-            type: "POST",
-            url: "/api/admin/rejectPendingUser/" + id,
-            data: editformData,
+            type: "GET",
+            enctype: 'multipart/form-data',
+            processData: false, // Important!
             contentType: false,
-            processData: false,
+            cache: false,
+            url: "/api/admin/getUser/" + id,
             headers: {
-                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
+                    "content"
+                ),
             },
             dataType: "json",
             success: function (data) {
                 console.log(data);
-                setTimeout(function () {
-                    window.location.href = '/admin/venues';
-                }, 1500);
+                var role = data.user.role;
+                var newrole;
+                if (role === 'student') {
+                    newrole = 'Student';
+                    $('#orgDeptRowDiv').css('display', 'block');
+                    $('#orgDiv').css('display', 'block');
+                    $('#sectionDiv').css('display', 'block');
+                }
+                else if (role === 'professor') {
+                    newrole = 'Faculty';
+                    $('#orgDiv').css('display', 'none');
+                    $('#sectionDiv').css('display', 'none');
+                }
+                else if (role === 'staff') {
+                    newrole = 'Staff/Admin';
+                }
+                else {
+                    newrole = 'Outside the TUPT Campus'
+                    $('#orgDeptRowDiv').css('display', 'none');
+                    $('#sectionDiv').css('display', 'none');
+                    $('#tupIDdiv').css('display', 'none');
+                    // $('#userApproveTupID').css('display', 'none');
 
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Venue Updated!',
-                    showConfirmButton: false,
-                    timer: 3000
-                })
-
+                }
+                console.log(data);
+                //     $('#createVenueModal').modal('show');
+                $('#userRejectId').val(id);
+                $('#userRejectLastname').text(data.user.lastname);
+                $('#userRejectFirstname').text(data.user.firstname);
+                $('#userRejectOrganization').text(data.user.organization);
+                $('#userRejectDepartment').text(data.user.department);
+                $('#userRejectRole').text(newrole);
+                $('#userRejectSection').text(data.user.section);
+                $('#userRejectTupID').text(data.user.tupID);
+                $("#userRejectTupIDPhoto").html(
+                    `<img src="/storage/${data.user.image}" width="400" height="400" style="border-radius: 20px;">`);
             },
             error: function (error) {
                 console.log("error");
             },
         });
-    });//end update venue
 
+    });
+
+    $("#pendingOutsidersTable tbody").on("click", 'button.rejectAccounts ', function (e) {
+        var id = $(this).data("id");
+        // e.preventDefault();
+        console.log(id);
+
+        $.ajax({
+            type: "GET",
+            enctype: 'multipart/form-data',
+            processData: false, // Important!
+            contentType: false,
+            cache: false,
+            url: "/api/admin/getUser/" + id,
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
+                    "content"
+                ),
+            },
+            dataType: "json",
+            success: function (data) {
+                console.log(data);
+                var newrole = '';
+                if (data.user.role === 'outsider') {
+                    newrole = 'Outsider';
+                }
+                //     $('#createVenueModal').modal('show');
+                $('#outsiderApproveId').val(id);
+                $('#outsiderApproveLastname').text(data.user.lastname);
+                $('#outsiderApproveFirstname').text(data.user.firstname);
+                $('#outsiderApproveRole').text(newrole);
+                $("#outsiderApproveTupIDPhoto").html(
+                    `<img src="/storage/${data.user.image}" width="400" height="400" style="border-radius: 20px;">`);
+            },
+            error: function (error) {
+                console.log("error");
+            },
+        });
+
+    });
+    //end outsider reject account
+
+    $("#rejectAccount").on("click", function (e) {
+        e.preventDefault();
+        // var data = $('#roleUpdateForm')[0];
+        var id = $("#userRejectId").val();
+        console.log(id);
+        // alert('hehe')
+        $.ajax({
+            type: "POST",
+            enctype: 'multipart/form-data',
+            processData: false, // Important!
+            contentType: false,
+            cache: false,
+            url: "/api/admin/rejectPendingUser/" + id,
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
+                    "content"
+                ),
+            },
+            dataType: "json",
+            success: function (data) {
+                console.log(data);
+                Swal.fire({
+                    icon: "success",
+                    title: "Account not verified!",
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+
+                setTimeout(function () {
+                    window.location.href = '/admin/pendingUsers';
+                }, 1500);
+            },
+            error: function (error) {
+                console.log("error");
+            },
+        });
+    });//end account rejected
+     //<-------- END REJECTED ACCOUNT----------------->
+     
     $("#filterCapacity").on("input", function () {
         // let elements = document.querySelectorAll(".card-title");
         // let cards = document.querySelectorAll(".card_capacity");

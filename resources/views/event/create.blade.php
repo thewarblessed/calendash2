@@ -11,8 +11,11 @@
                         <div class="full-background"
                             style="background-image: url('../assets/img/header-blue-purple.jpg')"></div>
                         <div class="card-body text-start p-4 w-100">
-                            <h3 class="text-white mb-2">Create your event!🎉🤩✨🔥</h3>
-
+                            <h3 class="text-white mb-2 text-center">Create your Event</h3>
+                            <p class="mb-4 font-weight-semibold text-center">
+                                Ready to host your next big event? With CALENDASH, creating an event is as easy as 1-2-3.
+                            </p>
+                      
                             <img src="../assets/img/puzzle-iso-gradient.png" alt="3d-cube"
                                 class="position-absolute top-0 end-1 w-25 max-width-200 mt-n6 d-sm-block d-none" />
                         </div>
@@ -81,14 +84,7 @@
                                                     class="card-img-top" alt="...">
                                                 <div class="card-body">
                                                     <h4 class="card-title">{{ $venue->name }}</h4>
-                                                    <p1 class="card-subtitle mb-2 text-muted">Rules and Regulations</p1>
-                                                    <div class="card-text">
-                                                        <ul>
-                                                            @foreach (explode("\n", $venue->description) as $item)
-                                                                <li>{{ $item }}</li>
-                                                            @endforeach
-                                                        </ul>
-                                                    </div>
+                                                    {{-- <p1 class="card-subtitle mb-2 text-muted">Rules and Regulations</p1>    --}}
                                                     <p class="card-text">Capacity: {{ $venue->capacity }}</p>
                                                     <div class="form-check">
                                                         <input class="form-check-input" type="radio"

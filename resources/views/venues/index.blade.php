@@ -21,8 +21,8 @@
                                             <img src="{{ asset('storage/'. $event->image) }}" height="200" class="card-img-top" alt="...">
                                             <div class="card-body">
                                                 {{-- <h5 class="card-title">{{ $event->name }}</h5> --}}
-                                                <p>Venue: {{ $event->name }}</p> <!-- Display the venue name -->
-                                                <a href="{{ route('venueRulesreg', ['id' => $event->id]) }}" class="btn btn-info mr-2" style="flex: 1;">Policies</a>
+                                                <p>{{ $event->name }}</p> <!-- Display the venue name -->
+                                                <a href="{{ route('venueRulesreg', ['id' => $event->id]) }}" class="btn btn-info mr-2" style="flex: 1;">Policies & Guidelines</a>
                                                 {{-- <a href="{{ route('venueFeedback', ['id' => $event->id]) }}" class="btn btn-primary ml-2" style="flex: 1;">Feedback</a> --}}
                                             </div>
                                         </div>

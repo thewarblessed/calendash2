@@ -20,31 +20,41 @@ class AccomplishmentController extends Controller
    public function getMyApprovedEvents(String $id)
     {
         $user_id = $id;
-        $events = Event::leftJoin('venues', 'venues.id', 'events.venue_id')
-            ->leftJoin('rooms', 'rooms.id', 'events.room_id')
-            ->leftJoin('organizations', 'organizations.id', 'events.target_org')
-            ->leftJoin('departments', 'departments.id', 'events.target_dept')
-            ->leftJoin('accomplishmentreports', 'events.id', 'accomplishmentreports.event_id')
-            ->leftJoin('documentations','accomplishmentreports.id','documentations.accomplishmentreports_id')
-            ->select('organizations.organization',
-                'departments.department',
-                'events.status',
-                'events.event_name',
-                'events.start_date',
-                'events.end_date',
-                'events.start_time',
-                'events.end_time',
-                'events.type',
-                'events.event_letter',
-                'accomplishmentreports.letter',
-                'documentations.image',
-                DB::raw('CASE
-                                    WHEN rooms.name IS NULL THEN venues.name
-                                    ELSE rooms.name END AS venueName'),
-                'events.id')
-            ->where('status', 'APPROVED')
-            ->where('events.user_id', $user_id)
-            ->get();
+        $eventIds = Event::where('status', 'APPROVED')
+                        ->where('user_id', $user_id)
+                        ->distinct('events.id')
+                        ->pluck('events.id');
+                        $events = [];
+                        foreach ($eventIds as $eventId) {
+                            $event = Event::leftJoin('venues', 'venues.id', 'events.venue_id')
+                                ->leftJoin('rooms', 'rooms.id', 'events.room_id')
+                                ->leftJoin('organizations', 'organizations.id', 'events.target_org')
+                                ->leftJoin('departments', 'departments.id', 'events.target_dept')
+                                ->leftJoin('accomplishmentreports', 'events.id', 'accomplishmentreports.event_id')
+                                ->leftJoin('documentations','accomplishmentreports.id','documentations.accomplishmentreports_id')
+                                ->select('organizations.organization',
+                                    'departments.department',
+                                    'events.status',
+                                    'events.event_name',
+                                    'events.start_date',
+                                    'events.end_date',
+                                    'events.start_time',
+                                    'events.end_time',
+                                    'events.type',
+                                    'events.event_letter',
+                                    'accomplishmentreports.letter',
+                                    'documentations.image',
+                                    DB::raw('CASE
+                                                        WHEN rooms.name IS NULL THEN venues.name
+                                                        ELSE rooms.name END AS venueName'),
+                                    'events.id')
+                                ->where('events.id', $eventId)
+                                ->first();
+                        
+                            if ($event) {
+                                $events[] = $event;
+                            }
+                        }
 
         return response()->json($events);
     }
@@ -73,13 +83,13 @@ class AccomplishmentController extends Controller
             if ($existingAccomplishment) {
                 // Update the existing accomplishment report with the new PDF file
                 $existingAccomplishment->update([
-                    'letter' => 'pdf/' . $pdfName
+                    'letter' => 'pdfs/' . $pdfName
                 ]);
             } else {
                 // Create a new accomplishment report
                 $newAccomplishment = Accomplishment::create([
                     'event_id' => $id,
-                    'letter' => 'pdf/' . $pdfName
+                    'letter' => 'pdfs/' . $pdfName
                 ]);
     
                 // Save the ID of the newly created accomplishment report

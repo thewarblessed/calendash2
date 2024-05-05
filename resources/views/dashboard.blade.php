@@ -46,161 +46,220 @@
                         <div class="swiper-wrapper">
 
                             <div class="swiper-slide">
-                                <div class="card card-background border-radius-xl align-items-start mb-0">
+                                <div class="card border-radius-xl align-items-start mb-0">
                                     <div class="card-body text-center ">
                                         <div class="row mt-4">
-                                            <h5 class="card-title font-weight-bold text-center" style="color:rgb(25, 7, 90)">Welcome to CALENDASH,<br></h5>
-                                               <h6>To schedule an event using CALENDASH, simply follow these easy steps:</h6>
+                                            <h5 class="card-title font-weight-bold text-center"
+                                                style="color:rgb(25, 7, 90)">Welcome to CALENDASH,<br></h5>
+                                            <h6>To schedule an event using CALENDASH, simply follow these easy steps:
+                                            </h6>
                                         </div>
                                     </div>
-                                </div>      
+                                </div>
                             </div>
 
                             <div class="swiper-slide">
-                                <div class="card card-background border-radius-xl align-items-start mb-0">
+                                <div class="card border-radius-xl align-items-start mb-0">
                                     <div class="card-body text-center ">
                                         <div class="row mt-4">
-                                            <h5 class="card-title font-weight-bold text-center" style="color:rgb(25, 7, 90)">1. LOGIN</h5>
+                                            <h5 class="card-title font-weight-bold text-center"
+                                                style="color:rgb(25, 7, 90)">1. LOGIN</h5>
                                             <ul>
-                                                <p class="card-text" style="color: black;">Users or event organizers should login their google account first to schedule an event.</p>
-                                            </ul>     
+                                                <p class="card-text" style="color: black;">Users or event organizers
+                                                    should login their google account first to schedule an event.</p>
+                                            </ul>
                                         </div>
                                     </div>
-                                </div>  
+                                </div>
                             </div>
 
                             <div class="swiper-slide">
-                                <div class="card card-background border-radius-xl align-items-start mb-0">
+                                <div class="card border-radius-xl align-items-start mb-0">
                                     <div class="card-body text-center ">
                                         <div class="row mt-4">
-                                            <h5 class="card-title font-weight-bold text-center" style="color:rgb(25, 7, 90)">2. COMPLETE PROFILE</h5>
+                                            <h5 class="card-title font-weight-bold text-center"
+                                                style="color:rgb(25, 7, 90)">2. COMPLETE PROFILE</h5>
                                             <ul>
-                                                <p class="card-text" style="color: black;">User or event organizer must complete their details accurately
+                                                <p class="card-text" style="color: black;">User or event organizer must
+                                                    complete their details accurately
                                                     and wait for the admin to approve your account.</p>
-                                            </ul>     
+                                            </ul>
                                         </div>
                                     </div>
-                                </div>  
+                                </div>
                             </div>
                             <div class="swiper-slide">
-                                <div class="card card-background border-radius-xl align-items-start mb-0">
+                                <div class="card border-radius-xl align-items-start mb-0">
                                     <div class="card-body text-center ">
                                         <div class="row mt-4">
-                                            <h5 class="card-title font-weight-bold text-center" style="color:rgb(25, 7, 90)">3. CLICK CREATE EVENTS</h5>
+                                            <h5 class="card-title font-weight-bold text-center"
+                                                style="color:rgb(25, 7, 90)">3. CLICK CREATE EVENTS</h5>
                                             <ul>
-                                                <p class="card-text" style="color: black;">Users or event organizers are required to fill up the form
+                                                <p class="card-text" style="color: black;">Users or event organizers are
+                                                    required to fill up the form
                                                     that includes details of the event.</p>
-                                            </ul>     
+                                            </ul>
                                         </div>
                                     </div>
-                                </div>  
+                                </div>
                             </div>
                             <div class="swiper-slide">
-                                <div class="card card-background border-radius-xl align-items-start mb-0">
+                                <div class="card border-radius-xl align-items-start mb-0">
                                     <div class="card-body text-center ">
                                         <div class="row mt-4">
-                                            <h5 class="card-title font-weight-bold text-center" style="color:rgb(25, 7, 90)">4. SELECT VENUE</h5>
+                                            <h5 class="card-title font-weight-bold text-center"
+                                                style="color:rgb(25, 7, 90)">4. SELECT VENUE</h5>
                                             <ul>
-                                                <p class="card-text" style="color: black;">After inputing details about the event, Users or event
-                                                    organizers are required to select the preferred venue for their event that is
+                                                <p class="card-text" style="color: black;">After inputing details about
+                                                    the event, Users or event
+                                                    organizers are required to select the preferred venue for their
+                                                    event that is
                                                     suitable for the capacity of attendees.</p>
-                                            </ul>     
+                                            </ul>
                                         </div>
                                     </div>
-                                </div>  
+                                </div>
                             </div>
                             <div class="swiper-slide">
-                                <div class="card card-background border-radius-xl align-items-start mb-0">
+                                <div class="card border-radius-xl align-items-start mb-0">
                                     <div class="card-body text-center ">
                                         <div class="row mt-4">
-                                            <h5 class="card-title font-weight-bold text-center" style="color:rgb(25, 7, 90)">5. CREATE A FEEDBACK FORM FOR THE EVENT</h5>
+                                            <h5 class="card-title font-weight-bold text-center"
+                                                style="color:rgb(25, 7, 90)">5. CREATE A FEEDBACK FORM FOR THE EVENT
+                                            </h5>
                                             <ul>
-                                                <p class="card-text" style="color: black;">Please provide a link for your feedback form since the system
-                                                    requires a feedback form to turn into QR code for more accessible for
+                                                <p class="card-text" style="color: black;">Please provide a link for
+                                                    your feedback form since the system
+                                                    requires a feedback form to turn into QR code for more accessible
+                                                    for
                                                     participants</p>
-                                            </ul>     
+                                            </ul>
                                         </div>
                                     </div>
-                                </div>  
+                                </div>
                             </div>
                             <div class="swiper-slide">
-                                <div class="card card-background border-radius-xl align-items-start mb-0">
+                                <div class="card border-radius-xl align-items-start mb-0">
                                     <div class="card-body text-center ">
                                         <div class="row mt-4">
-                                            <h5 class="card-title font-weight-bold text-center" style="color:rgb(25, 7, 90)">6. CREATE/UPLOAD REQUEST LETTER</h5>
+                                            <h5 class="card-title font-weight-bold text-center"
+                                                style="color:rgb(25, 7, 90)">6. CREATE/UPLOAD REQUEST LETTER</h5>
                                             <ul>
-                                                <p class="card-text" style="color: black;">The user or event organizers can upload or create their
-                                                    request letter using the system. After creating the letter, it can be saved as PDF.</p>
-                                            </ul>     
+                                                <p class="card-text" style="color: black;">The user or event organizers
+                                                    can upload or create their
+                                                    request letter using the system. After creating the letter, it can
+                                                    be saved as PDF.</p>
+                                            </ul>
                                         </div>
                                     </div>
-                                </div>  
+                                </div>
                             </div>
                             <div class="swiper-slide">
-                                <div class="card card-background border-radius-xl align-items-start mb-0">
+                                <div class="card border-radius-xl align-items-start mb-0">
                                     <div class="card-body text-center ">
                                         <div class="row mt-4">
-                                            <h5 class="card-title font-weight-bold text-center" style="color:rgb(25, 7, 90)">7. APPROVAL STATUS</h5>
+                                            <h5 class="card-title font-weight-bold text-center"
+                                                style="color:rgb(25, 7, 90)">7. APPROVAL STATUS</h5>
                                             <ul>
-                                                <p class="card-text" style="color: black;">After the user or event organizer submit its request letter,
-                                                    the system will show the timeline status to notify the event organizers if their
+                                                <p class="card-text" style="color: black;">After the user or event
+                                                    organizer submit its request letter,
+                                                    the system will show the timeline status to notify the event
+                                                    organizers if their
                                                     letter is approved, pending or rejected.</p>
-                                            </ul>     
+                                            </ul>
                                         </div>
                                     </div>
-                                </div>  
+                                </div>
                             </div>
                             <div class="swiper-slide">
-                                <div class="card card-background border-radius-xl align-items-start mb-0">
+                                <div class="card border-radius-xl align-items-start mb-0">
                                     <div class="card-body text-center ">
                                         <div class="row mt-4">
-                                            <h5 class="card-title font-weight-bold text-center" style="color:rgb(25, 7, 90)">8. UPLOAD LIST OF ATTENDEES</h5>
+                                            <h5 class="card-title font-weight-bold text-center"
+                                                style="color:rgb(25, 7, 90)">8. UPLOAD LIST OF ATTENDEES</h5>
                                             <ul>
-                                                <p class="card-text" style="color: black;">The system requires event organizers to upload an Excel file
-                                                    containing their list of attendees. This enables organizers to monitor
+                                                <p class="card-text" style="color: black;">The system requires event
+                                                    organizers to upload an Excel file
+                                                    containing their list of attendees. This enables organizers to
+                                                    monitor
                                                     attendance effectively within the system.</p>
-                                            </ul>     
+                                            </ul>
                                         </div>
                                     </div>
-                                </div>  
+                                </div>
                             </div>
                             <div class="swiper-slide">
-                                <div class="card card-background border-radius-xl align-items-start mb-0">
+                                <div class="card border-radius-xl align-items-start mb-0">
                                     <div class="card-body text-center ">
                                         <div class="row mt-4">
-                                            <h5 class="card-title font-weight-bold text-center" style="color:rgb(25, 7, 90)">9. UPLOAD LIST OF ATTENDEES</h5>
+                                            <h5 class="card-title font-weight-bold text-center"
+                                                style="color:rgb(25, 7, 90)">9. UPLOAD LIST OF ATTENDEES</h5>
                                             <ul>
-                                                <p class="card-text" style="color: black;">The system requires event organizers to upload an Excel file
-                                                    containing their list of attendees. This enables organizers to monitor
+                                                <p class="card-text" style="color: black;">The system requires event
+                                                    organizers to upload an Excel file
+                                                    containing their list of attendees. This enables organizers to
+                                                    monitor
                                                     attendance effectively within the system.</p>
-                                            </ul>     
+                                            </ul>
                                         </div>
                                     </div>
-                                </div>  
+                                </div>
                             </div>
                             <div class="swiper-slide">
-                                <div class="card card-background border-radius-xl align-items-start mb-0">
+                                <div class="card border-radius-xl align-items-start mb-0">
                                     <div class="card-body text-center ">
                                         <div class="row mt-4">
-                                            <h5 class="card-title font-weight-bold text-center" style="color:rgb(25, 7, 90)">10. UPLOAD ACCOMPLISHMENT REPORT</h5>
+                                            <h5 class="card-title font-weight-bold text-center"
+                                                style="color:rgb(25, 7, 90)">10. UPLOAD ACCOMPLISHMENT REPORT</h5>
                                             <ul>
-                                                <p class="card-text" style="color: black;">After the event concludes, organizers must submit their
-                                                    accomplishment reports through the system; failure to do so will result in their
+                                                <p class="card-text" style="color: black;">After the event concludes,
+                                                    organizers must submit their
+                                                    accomplishment reports through the system; failure to do so will
+                                                    result in their
                                                     inability to schedule future events.</p>
-                                            </ul>     
+                                            </ul>
                                         </div>
                                     </div>
-                                </div>  
+                                </div>
                             </div>
-
-
-
                         </div>
                     </div>
                     <div class="swiper-button-prev"></div>
                     <div class="swiper-button-next"></div>
                 </div>
             </div><br><br>
+            <style>
+                .swiper-slide {
+                    background-color: rgb(1, 1, 43);
+                    color: #fff;
+                    border-radius: 10px;
+                    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                    padding: 20px;
+                }
+
+                .swiper-slide h5 {
+                    margin-bottom: 10px;
+                }
+
+                .swiper-button-prev,
+                .swiper-button-next {
+                    color: #fff;
+                }
+            </style>
+            <script>
+                document.addEventListener("DOMContentLoaded", function() {
+                    var swiper = new Swiper(".mySwiper", {
+                        effect: "cards",
+                        grabCursor: true,
+                        navigation: {
+                            nextEl: '.swiper-button-next',
+                            prevEl: '.swiper-button-prev',
+                        },
+                        initialSlide: 0 // Set the initial slide index to 0 (the first slide)
+                    });
+                });
+            </script>
+
             <!-- END SLIDER PROCESS OF REQUEST LETTER -->
 
             <!-- ======= DESCRIPTION ======= -->
@@ -255,10 +314,11 @@
                                     type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour"
                                     aria-expanded="false" aria-controls="collapseFour">
                                     <h2>Term and Conditions</h2>
-                                    <i class="collapse-close fa fa-plus text-xs pt-1 position-absolute end-0 me-3"
+                                    <i class="collapse-open fa fa-arrow-down text-xs pt-1 position-absolute end-0 me-3"
                                         aria-hidden="true"></i>
-                                    <i class="collapse-open fa fa-minus text-xs pt-1 position-absolute end-0 me-3"
+                                    <i class="collapse-close fa fa-arrown-up text-xs pt-1 position-absolute end-0 me-3"
                                         aria-hidden="true"></i>
+                                   
                                 </button>
                                 <p>These Terms and Conditions <b>("Terms")</b> govern the scheduling of events in
                                     Technological University of the Philippines - Taguig <b>("TUP-T")</b> by CALENDASH
@@ -371,10 +431,10 @@
                                                 data-bs-target="#collapseOne" aria-expanded="false"
                                                 aria-controls="collapseOne">
                                                 <h6>How do I create/request an event?</h6>
-                                                <i class="collapse-close fa fa-plus text-xs pt-1 position-absolute end-0 me-3"
-                                                    aria-hidden="true"></i>
-                                                <i class="collapse-open fa fa-minus text-xs pt-1 position-absolute end-0 me-3"
-                                                    aria-hidden="true"></i>
+                                                <i class="collapse-open fa fa-arrow-down text-xs pt-1 position-absolute end-0 me-3"
+                                                aria-hidden="true"></i>
+                                            <i class="collapse-close fa fa-arrown-up text-xs pt-1 position-absolute end-0 me-3"
+                                                aria-hidden="true"></i>
                                             </button>
                                         </h5>
                                         <div id="collapseOne" class="accordion-collapse collapse"
@@ -435,10 +495,10 @@
                                                 data-bs-target="#collapseTwo" aria-expanded="false"
                                                 aria-controls="collapseTwo">
                                                 <h6> How will I know the status of my events?</h6>
-                                                <i class="collapse-close fa fa-plus text-xs pt-1 position-absolute end-0 me-3"
-                                                    aria-hidden="true"></i>
-                                                <i class="collapse-open fa fa-minus text-xs pt-1 position-absolute end-0 me-3"
-                                                    aria-hidden="true"></i>
+                                                <i class="collapse-open fa fa-arrow-down text-xs pt-1 position-absolute end-0 me-3"
+                                        aria-hidden="true"></i>
+                                    <i class="collapse-close fa fa-arrown-up text-xs pt-1 position-absolute end-0 me-3"
+                                        aria-hidden="true"></i>
                                             </button>
                                         </h5>
                                         <div id="collapseTwo" class="accordion-collapse collapse"
@@ -462,10 +522,10 @@
                                                 data-bs-target="#collapseThree" aria-expanded="false"
                                                 aria-controls="collapseThree">
                                                 <h6>How much time does it take to approve my event request?</h6>
-                                                <i class="collapse-close fa fa-plus text-xs pt-1 position-absolute end-0 me-3"
-                                                    aria-hidden="true"></i>
-                                                <i class="collapse-open fa fa-minus text-xs pt-1 position-absolute end-0 me-3"
-                                                    aria-hidden="true"></i>
+                                                <i class="collapse-open fa fa-arrow-down text-xs pt-1 position-absolute end-0 me-3"
+                                        aria-hidden="true"></i>
+                                    <i class="collapse-close fa fa-arrown-up text-xs pt-1 position-absolute end-0 me-3"
+                                        aria-hidden="true"></i>
                                             </button>
                                         </h5>
                                         <div id="collapseThree" class="accordion-collapse collapse"
@@ -494,80 +554,84 @@
                     <div class="row">
                         <div class="section-title text-center">
                             <h2>About Us</h2>
-                            <p>Welcome to CALENDASH, your premier solution for School Event Scheduling and Monitoring at TUP
+                            <p>Welcome to CALENDASH, your premier solution for School Event Scheduling and Monitoring at
+                                TUP
                                 Taguig. Our platform is designed to streamline the scheduling process and enhance the
-                                monitoring of school events, ensuring efficiency and organization throughout the academic
+                                monitoring of school events, ensuring efficiency and organization throughout the
+                                academic
                                 calendar.</p>
                         </div>
                     </div><br><br>
                 </div>
                 <section id="about" class="about">
-               <!-- End ABOUT US SECTION -->
+                    <!-- End ABOUT US SECTION -->
 
-            <!-- ======= Team Section ======= -->
-            <section id="team" class="team section-bg">
-                <div class="container">
+                    <!-- ======= Team Section ======= -->
+                    <section id="team" class="team section-bg">
+                        <div class="container">
 
-                    <div class="section-title">
-                        <h2 style="text-align: center">Meet the Team</h2>
-                        <p>Our team comprises dedicated individuals with diverse skill sets and backgrounds,
-                            all united by a common goal: to create innovative solutions that enhance productivity and
-                            efficiency.
-                            Each member brings unique expertise and perspectives to the table, fostering a collaborative
-                            environment
-                            where creativity thrives and challenges are met with enthusiasm.</p>
-                    </div>
+                            <div class="section-title">
+                                <h2 style="text-align: center">Meet the Team</h2>
+                                <p>Our team comprises dedicated individuals with diverse skill sets and backgrounds,
+                                    all united by a common goal: to create innovative solutions that enhance
+                                    productivity and
+                                    efficiency.
+                                    Each member brings unique expertise and perspectives to the table, fostering a
+                                    collaborative
+                                    environment
+                                    where creativity thrives and challenges are met with enthusiasm.</p>
+                            </div>
 
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-lg-4 col-md-6 d-flex align-items-stretch">
-                                <div class="member">
-                                    <img src="assets/img/dom.png" alt=""
-                                        style="max-width: 100%; border-radius: 50%; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);">
-                                    <h4>John Dominic M. Acuisa</h4>
-                                    {{-- Additional content --}}
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-lg-4 col-md-6 d-flex align-items-stretch">
+                                        <div class="member">
+                                            <img src="assets/img/dom.png" alt=""
+                                                style="max-width: 100%; border-radius: 50%; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);">
+                                            <h4>John Dominic M. Acuisa</h4>
+                                            {{-- Additional content --}}
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-4 col-md-6 d-flex align-items-stretch">
+                                        <div class="member">
+                                            <img src="assets/img/xy.png" alt=""
+                                                style="max-width: 80%; border-radius: 50%; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);">
+                                            <h4>Xyra C. Ebron</h4>
+                                            {{-- Additional content --}}
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-4 col-md-6 d-flex align-items-stretch">
+                                        <div class="member">
+                                            <img src="assets/img/je.png" alt=""
+                                                style="max-width: 80%; border-radius: 50%; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);">
+                                            <h4>Jerico B. Aguirre</h4>
+                                            {{-- Additional content --}}
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
-                            <div class="col-lg-4 col-md-6 d-flex align-items-stretch">
-                                <div class="member">
-                                    <img src="assets/img/xy.png" alt=""
-                                        style="max-width: 80%; border-radius: 50%; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);">
-                                    <h4>Xyra C. Ebron</h4>
-                                    {{-- Additional content --}}
-                                </div>
-                            </div>
+                            <style>
+                                .member {
+                                    text-align: center;
+                                    /* Center the content horizontally */
+                                    margin-bottom: 100px;
+                                    /* Add some space between each member */
+                                }
 
-                            <div class="col-lg-4 col-md-6 d-flex align-items-stretch">
-                                <div class="member">
-                                    <img src="assets/img/je.png" alt=""
-                                        style="max-width: 80%; border-radius: 50%; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);">
-                                    <h4>Jerico B. Agguire</h4>
-                                    {{-- Additional content --}}
-                                </div>
-                            </div>
+                                .member img {
+                                    max-width: 100%;
+                                    /* Make sure the image doesn't exceed the container width */
+                                    height: 250px;
+                                    /* Set the desired height for all images */
+                                    object-fit: cover;
+                                    /* Ensure the image covers the entire container */
+                                }
+                            </style>
                         </div>
-                    </div>
-
-                    <style>
-                        .member {
-                            text-align: center;
-                            /* Center the content horizontally */
-                            margin-bottom: 100px;
-                            /* Add some space between each member */
-                        }
-
-                        .member img {
-                            max-width: 100%;
-                            /* Make sure the image doesn't exceed the container width */
-                            height: 250px;
-                            /* Set the desired height for all images */
-                            object-fit: cover;
-                            /* Ensure the image covers the entire container */
-                        }
-                    </style>
-                </div>
-            </section><!-- End Team Section -->
+                    </section><!-- End Team Section -->
         </div>
     </main><!-- End #main -->
 

@@ -33,44 +33,30 @@
                     {{-- VENUE DETAILS --}}
                     <div class="tab d-none">
                         <h3 style="text-align: center">Choose Available Venues</h3>
-                        <div class="container">
-
-                            <div class="row">
-                                @foreach ($venues as $venue)
-                                    <div class="col-sm" style="display: block;" id="venueDiv">
-                                        <div id="venue{{ $venue->id }}" data-capacity="{{ $venue->capacity }}"
-                                            class="card_capacity"
-                                            style="width: 15rem; margin-top: 30px; box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px; border-radius: 8px">
-                                            <img src="{{ asset('storage/' . $venue->image) }}" height="180"
-                                                class="card-img-top" alt="...">
-                                            <div class="card-body">
-                                                <h4 class="card-title">{{ $venue->name }}</h4>
-                                                <p1 class="card-subtitle mb-2 text-muted">Rules and Regulations</p1>
-                                                <div class="card-text">
-                                                    <ul>
-                                                        @foreach (explode("\n", $venue->description) as $item)
-                                                            <li>{{ $item }}</li>
-                                                        @endforeach
-                                                    </ul>
-                                                </div>
-                                                <p class="card-text">Capacity: {{ $venue->capacity }}</p>
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="radio"
-                                                        name="event_venueOutsider" id="event_venueOutsider"
-                                                        value="{{ $venue->id }}" required>
-                                                    <label class="custom-control-label" for="event_venueOutsider"
-                                                        style="color: blue; font-size: 18px"><strong>SELECT</strong>
-                                                    </label>
-                                                </div>
-                                            </div>
+                        <div class="row">
+                            @foreach ($venues as $venue)
+                            <div class="col-md-4" style="margin-top: 30px;">
+                                <div id="venue{{ $venue->id }}" data-capacity="{{ $venue->capacity }}" class="card_capacity"
+                                    style="width: 20rem; box-shadow: rgba(0, 0, 0, 0.30) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px; border-radius: 8px">
+                                    <img src="{{ asset('storage/' . $venue->image) }}" height="180" class="card-img-top" alt="...">
+                                    <div class="card-body">
+                                        <h4 class="card-title">{{ $venue->name }}</h4>
+                                        <p class="card-text">Capacity: {{ $venue->capacity }}</p>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="event_venueOutsider" id="event_venueOutsider"
+                                                value="{{ $venue->id }}" required>
+                                            <label class="custom-control-label" for="event_venueOutsider" style="color: blue; font-size: 18px">
+                                                <strong>SELECT</strong>
+                                            </label>
                                         </div>
                                     </div>
-                                @endforeach
+                                </div>
                             </div>
-
+                            @endforeach
                         </div>
                     </div>
-
+                    
+                    
                     {{-- SET DATE DETAILS --}}
                     <div class="tab d-none">
                         <div class="card-body">
