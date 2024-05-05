@@ -152,7 +152,7 @@
                                                             @endphp
 
                                                             @if ($hasOutsideEvent && $event->receipt_image == null)
-                                                                <button type="button" class="btn btn-dark btn-sm uploadImg"
+                                                                <button type="button" class="btn btn-dark btn-sm uploadImgReceipt"
                                                                          data-id="{{ $event->id }}">Upload Receipt</button>
                                                             @endif
 

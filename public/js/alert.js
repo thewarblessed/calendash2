@@ -3992,7 +3992,7 @@ $(document).ready(function () {
     //         reader.readAsDataURL(file);
     //       }
     // })
-    $("#eventOutsiderStatus tbody").on("click", 'button.uploadImg', async function (e) {
+    $("#eventOutsiderStatus tbody").on("click", 'button.uploadImgReceipt', async function (e) {
         var id = $(this).data("id");
         console.log(id);
         $("#outsider_event_id").val(id);
