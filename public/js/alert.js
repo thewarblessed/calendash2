@@ -3995,6 +3995,7 @@ $(document).ready(function () {
     $("#eventOutsiderStatus tbody").on("click", 'button.uploadImg', async function (e) {
         var id = $(this).data("id");
         console.log(id);
+
         const { value: file } = await Swal.fire({
             title: "Select image",
             input: "file",
@@ -4006,9 +4007,9 @@ $(document).ready(function () {
 
         if (file) {
             const reader = new FileReader();
-
-            reader.onload = function (e) {
-                Swal.fire({
+        
+            reader.onload = async function (e) {
+                const result = await Swal.fire({
                     title: "Confirm Image Upload",
                     text: "Is this the image you want to upload?",
                     imageUrl: e.target.result,
@@ -4018,52 +4019,126 @@ $(document).ready(function () {
                     showCancelButton: true,
                     confirmButtonText: "Yes",
                     cancelButtonText: "Cancel"
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        // Image confirmed, proceed with AJAX upload
-                        const formData = new FormData();
-                        formData.append('image', file);
-
-                        $.ajax({
-                            url: '/api/upload-receipt/' + id,
-                            type: 'POST',
+                });
+        
+                if (result.isConfirmed) {
+                    // Image confirmed, proceed with AJAX upload
+                    const formData = new FormData();
+                    formData.append('image', file);
+        
+                    try {
+                        const csrfToken = $('meta[name="csrf-token"]').attr('content');
+        
+                        const response = await fetch('/api/upload-receipt/' + id, {
+                            method: 'POST',
                             headers: {
-                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                                'X-CSRF-TOKEN': csrfToken
                             },
-                            data: formData,
-                            contentType: false,
-                            processData: false,
-                            success: function (response) {
-                                setTimeout(function () {
-                                    window.location.href = '/outside/myRequest';
-                                }, 1500);
-                                Swal.fire({
-                                    title: "Success!",
-                                    text: "Image successfully uploaded/sent.",
-                                    icon: "success"
-                                });
-                            },
-                            error: function (xhr, status, error) {
-                                Swal.fire({
-                                    title: "Error",
-                                    text: "Failed to upload image.",
-                                    icon: "error"
-                                });
-                            }
+                            body: formData
                         });
-                    } else {
-                        // Image not confirmed, show cancellation message
+        
+                        if (!response.ok) {
+                            throw new Error('Failed to upload image.');
+                        }
+        
+                        setTimeout(function () {
+                            window.location.href = '/outside/myRequest';
+                        }, 1500);
+                        
                         Swal.fire({
-                            title: "Cancelled",
-                            text: "Image upload cancelled.",
+                            title: "Success!",
+                            text: "Image successfully uploaded/sent.",
+                            icon: "success"
+                        });
+                    } catch (error) {
+                        Swal.fire({
+                            title: "Error",
+                            text: error.message || "Failed to upload image.",
                             icon: "error"
                         });
                     }
-                });
+                } else {
+                    // Image not confirmed, show cancellation message
+                    Swal.fire({
+                        title: "Cancelled",
+                        text: "Image upload cancelled.",
+                        icon: "error"
+                    });
+                }
             };
-
+        
             reader.readAsDataURL(file);
         }
+        
+        // const { value: file } = await Swal.fire({
+        //     title: "Select image",
+        //     input: "file",
+        //     inputAttributes: {
+        //         "accept": "image/*",
+        //         "aria-label": "Upload your profile picture"
+        //     }
+        // });
+
+        // if (file) {
+        //     const reader = new FileReader();
+
+        //     reader.onload = function (e) {
+        //         Swal.fire({
+        //             title: "Confirm Image Upload",
+        //             text: "Is this the image you want to upload?",
+        //             imageUrl: e.target.result,
+        //             imageWidth: 400,
+        //             imageHeight: 700,
+        //             imageAlt: "Uploaded image",
+        //             showCancelButton: true,
+        //             confirmButtonText: "Yes",
+        //             cancelButtonText: "Cancel"
+        //         }).then((result) => {
+        //             if (result.isConfirmed) {
+        //                 // Image confirmed, proceed with AJAX upload
+        //                 const formData = new FormData();
+        //                 formData.append('image', file);
+
+        //                 $.ajax({
+        //                     url: '/api/upload-receipt/' + id,
+        //                     type: 'POST',
+        //                     headers: {
+        //                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        //                     },
+        //                     data: formData,
+        //                     contentType: false,
+        //                     processData: false,
+        //                     success: function (response) {
+        //                         setTimeout(function () {
+        //                             window.location.href = '/outside/myRequest';
+        //                         }, 1500);
+        //                         Swal.fire({
+        //                             title: "Success!",
+        //                             text: "Image successfully uploaded/sent.",
+        //                             icon: "success"
+        //                         });
+        //                     },
+        //                     error: function (xhr, status, error) {
+        //                         Swal.fire({
+        //                             title: "Error",
+        //                             text: "Failed to upload image.",
+        //                             icon: "error"
+        //                         });
+        //                     }
+        //                 });
+        //             } else {
+        //                 // Image not confirmed, show cancellation message
+        //                 Swal.fire({
+        //                     title: "Cancelled",
+        //                     text: "Image upload cancelled.",
+        //                     icon: "error"
+        //                 });
+        //             }
+        //         });
+        //     };
+
+        //     reader.readAsDataURL(file);
+        // }
     });
 
 
