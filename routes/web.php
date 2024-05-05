@@ -419,8 +419,9 @@ Route::get('/rejected/rooms', [RequestRoomController::class, 'rejectedRoomsView'
 Route::get('/admin/report', [ReportController::class, 'countEventPerOrgReport'])->name('countEventPerOrgReport');
 
 Route::get('/users-count', [PdfController::class, 'userCountTable'])->name('userCountTable');
-
-
+// Route::get('/events-count', [PdfController::class, 'TotalNumberOfEventsPerOrganization'])->name('TotalNumberOfEventsPerOrganization');
+Route::get('/add-data-to-pdf', [PdfController::class, 'TotalNumberOfEventsPerOrganization'])->name('TotalNumberOfEventsPerOrganization');
+Route::get('/total-events-per-venue', [PdfController::class, 'TotalEventsPerVenue'])->name('TotalEventsPerVenue');
 
 //////////////////////////////////////// CHANGE PASSCODE ////////////////////////////////////////
 Route::get('/me/change-passcode', [ProfileController::class, 'changePasscodeView'])->name('changePasscodeView');

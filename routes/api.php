@@ -15,7 +15,7 @@ use App\Http\Controllers\BusinessManagerController;
 use App\Http\Controllers\AccomplishmentController;
 use App\Http\Controllers\AccomplishmentReportsController;
 use App\Http\Controllers\RoomController;
-
+use App\Http\Controllers\GoogleSocialiteController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -525,3 +525,6 @@ Route::post('/mobile/my-events', [EventController::class, 'myEventsMobile']);
 
 //status of events of user
 Route::post('/mobile/my-event-status/{id}', [EventController::class, 'myEventStatusMobile']);
+
+// CHECK GOOGLE ID / SOCIAL ID IN USERS TABLE
+Route::post('/mobile/check-social-id', [GoogleSocialiteController::class, 'checkGoogleID']);

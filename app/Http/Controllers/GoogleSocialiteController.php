@@ -7,6 +7,7 @@ use Socialite;
 use Auth;
 use Exception;
 use App\Models\User;
+use Log;
 
 class GoogleSocialiteController extends Controller
 {
@@ -66,6 +67,22 @@ class GoogleSocialiteController extends Controller
         } catch (Exception $e) {
             dd($e->getMessage());
         }
+    }
+
+    public function checkGoogleID(Request $request)
+    {
+        $google_id = $request->input('google_id');
+        // Log::info($request);
+        $user = User::where('social_id', $google_id)->first();
+        
+        if ($user) {
+            // User with the provided Google ID exists
+            return response()->json(['user' => $user,'message' => 'User exists'], 200);
+        } else {
+            // User with the provided Google ID does not exist
+            return response()->json(['message' => 'User does not exist'], 404);
+        }
+        
     }
 
 }
