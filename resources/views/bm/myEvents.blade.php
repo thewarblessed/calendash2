@@ -389,6 +389,38 @@
                 </div>
             </div>
         </div>
+
+        <div class="modal fade" id="uploadReceipt" tabindex="-1" role="dialog"
+            aria-labelledby="checkStatusModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2 class="modal-title" id="createeventModalLabel">Upload Photo of Receipt</h2>
+                        <button type="button" class="btn-close text-dark" data-bs-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="uploadReceiptForm" enctype="multipart/form-data" method="POST">
+                            @csrf
+                            <div class="form-group">
+                                <label for="exampleFormControlInput1" style="font-size: 18px">Upload photo:</label>
+                                <input name="id" type="text" class="form-control" id="outsider_event_id" hidden>
+                                <input name="image" type="file" class="form-control" id="image" accept="image/*" required>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-white" data-bs-dismiss="modal"
+                                    id="modalClose">Close</button>
+                                <a type="" class="btn btn-dark" id="outsiderSubmitReceipt">Submit</a>
+                                {{-- <button type="button" class="btn btn-danger" id="eventReject">Reject</button> --}}
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
     </main>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
