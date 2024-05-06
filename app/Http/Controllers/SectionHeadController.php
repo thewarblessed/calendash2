@@ -114,4 +114,11 @@ class SectionHeadController extends Controller
     {
         //
     }
+
+    public function getAllCourses()
+    {
+        $section = Section::all();
+
+        return response()->json($section);
+    }
 }

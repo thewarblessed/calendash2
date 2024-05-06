@@ -95,6 +95,9 @@
                             {{-- <div class="container-fluid"> --}}
                             <div class="row">
                                 <div class="col-md-12">
+                                    <span class="dot" style="background-color: #ecb211;"></span> Pending
+                                    <br>
+                                    <span class="dot" style="background-color: #7fc6f5;"></span> Approved                                  
                                     <div class="card mx-auto"
                                         style="max-width: 900px; 
                                         max-height: 100vh; 
@@ -275,3 +278,13 @@
 
 
 </x-guest-layout>
+
+<style>
+    .dot {
+  height: 10px;
+  width: 10px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 5px;
+}
+</style>

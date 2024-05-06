@@ -528,3 +528,10 @@ Route::post('/mobile/my-event-status/{id}', [EventController::class, 'myEventSta
 
 // CHECK GOOGLE ID / SOCIAL ID IN USERS TABLE
 Route::post('/mobile/check-social-id', [GoogleSocialiteController::class, 'checkGoogleID']);
+
+// GET ALL SECTIONS
+Route::get('/mobile/get-all-course', [SectionHeadController::class, 'getAllCourses']);
+
+Route::get('/mobile/get-all-organization', [OrganizationAdviserController::class, 'getAllOrganizations']);
+
+Route::get('/mobile/get-all-department', [DepartmentHeadController::class, 'getAllDepartments']);
