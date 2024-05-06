@@ -236,7 +236,7 @@
                     </div>
                 </div>
 
-                <x-app.footer />
+                {{-- <x-app.footer /> --}}
             </div>
     </main>
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">

@@ -95,9 +95,6 @@
                             {{-- <div class="container-fluid"> --}}
                             <div class="row">
                                 <div class="col-md-12">
-                                    <span class="dot" style="background-color: #ecb211;"></span> Pending
-                                    <br>
-                                    <span class="dot" style="background-color: #7fc6f5;"></span> Approved                                  
                                     <div class="card mx-auto"
                                         style="max-width: 900px; 
                                         max-height: 100vh; 
@@ -106,10 +103,22 @@
                                         text-align: center;
                                         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2), 0 1px 3px rgba(0, 0, 0, 0.1);">
                                         <div class="card-body">
+                                            <img src="../assets/img/calendashlogo.png" class="img-fluid" alt="" style="width: 130px;">
                                             <div id="myCalendar"></div>
                                         </div>
+                                        <div class="legend">
+                                            <span class="dot" style="background-color: #ecb211;"></span> Pending
+                                            <span class="dot" style="background-color: #7fc6f5;"></span> Approved
+                                            <span class="dot" style="background-color: #8b8b8b;"></span> OverDued
+                                        </div>
+                                        <style>
+                                        .legend .dot {
+                                            margin-left: 20px; /* Adjust the spacing as needed */
+                                        }
+                                        </style>
                                     </div>
                                 </div>
+                                
                             </div>
 
                         </div>

@@ -92,8 +92,8 @@
                                             <td>
                                                 <p class="text-sm text-dark font-weight-semibold mb-0">
                                                     <ul>
-                                                        @foreach (explode("\n", $room->description) as $bullet)
-                                                            <li>{{ $bullet }}</li>
+                                                        @foreach (explode("\n", $room->description) as $line)
+                                                            <ol>{{ $line }}</ol>
                                                         @endforeach
                                                     </ul>
                                                 </p>
@@ -184,7 +184,7 @@
                 </div>
             </div>
            
-            <x-app.footer />
+            {{-- <x-app.footer /> --}}
         </div>
     </main><script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>

@@ -116,109 +116,117 @@
             layout: {
                 topStart: {
                     buttons: [{
-                    extend: 'copyHtml5',
-                    footer: true
-                },
-                {
-                    extend: 'excelHtml5',
-                    footer: true
-                },
-                {
-                    extend: 'csvHtml5',
-                    footer: true
-                },
-                {
-                    extend: 'pdfHtml5',
-                    footer: true,            
-                },
-                {
-                    extend: 'print',
-                    footer: true,
-                    customize: function(win) {
-                        // Add your custom logo
-                        var logo = '<img src="https://upload.wikimedia.org/wikipedia/en/thumb/c/c8/Technological_University_of_the_Philippines_Seal.svg/1200px-Technological_University_of_the_Philippines_Seal.svg.png" style="width: 100px; height: auto; float: left; margin-right: 10px;">';
+                            extend: 'copyHtml5',
+                            footer: true
+                        },
+                        {
+                            extend: 'excelHtml5',
+                            footer: true
+                        },
+                        {
+                            extend: 'csvHtml5',
+                            footer: true
+                        },
+                        {
+                            extend: 'pdfHtml5',
+                            footer: true,
+                        },
+                        {
+                            extend: 'print',
+                            footer: true,
+                            customize: function(win) {
+                                // Add your custom logo
+                                var logo =
+                                    '<img src="https://upload.wikimedia.org/wikipedia/en/thumb/c/c8/Technological_University_of_the_Philippines_Seal.svg/1200px-Technological_University_of_the_Philippines_Seal.svg.png" style="width: 100px; height: auto; float: left; margin-right: 10px;">';
 
-                        // Add your custom header
-                        var header = '<h4 style="margin-top: 30px; text-align: center; margin-right: 20;">Technological University of the Philippines</h4><br><h4 style="margin-top: 30px; text-align: center; margin-right: 20;">Approved Events</h4>';
+                                // Add your custom header
+                                var header =
+                                    '<h4 style="margin-top: 30px; text-align: center; margin-right: 20;">Technological University of the Philippines</h4><br><h4 style="margin-top: 30px; text-align: center; margin-right: 20;">Approved Events</h4>';
 
-                        // Wrap logo and header in a container
-                        var headerContainer = '<div style="overflow: auto;">' + logo + header + '</div>';
+                                // Wrap logo and header in a container
+                                var headerContainer = '<div style="overflow: auto;">' + logo +
+                                    header + '</div>';
 
-                        // Prepend the container to the document body
-                        $(win.document.body).prepend(headerContainer);
+                                // Prepend the container to the document body
+                                $(win.document.body).prepend(headerContainer);
 
-                        // Remove the last column of both headers (th) and cells (td) in the table
-                        // $(win.document.body).find('table th:last-child, table td:last-child').remove();
+                                // Remove the last column of both headers (th) and cells (td) in the table
+                                // $(win.document.body).find('table th:last-child, table td:last-child').remove();
 
-                        // Remove the "Calendash" header
-                        $(win.document.body).find('h1').remove();
-                    }
-                }
-
-            ],
-            },
-            columns: [{
-                    data: "event_name",
-                    render: function(data, type, row) {
-                        return "<span style='color: black; font-weight: bold;'>" + data +
-                            "</span>";
-                    }
-                },
-                {
-                    data: "roomName",
-                    render: function(data, type, row) {
-                        return "<span style='color: black; font-weight: bold;'>" + data +
-                            "</span>";
-                    }
-                },
-                {
-                    data: "type",
-                    render: function(data, type, row) {
-                        if (data === "whole_day") {
-                            return "<span style='color: black; font-weight: bold;'>Whole Day</span>";
-                        } else if (data === "whole_week") {
-                            return "<span style='color: black; font-weight: bold;'>Whole Week</span>";
-                        } else if (data === "within_day") {
-                            return "<span style='color: black; font-weight: bold;'>Within the Day</span>";
+                                // Remove the "Calendash" header
+                                $(win.document.body).find('h1').remove();
+                            }
                         }
-                    }
+
+                    ],
                 },
-                {
-                    data: "start_date",
-                    render: function(data, type, row) {
-                        return "<span style='color: black; font-weight: bold;'>" + moment(data)
-                            .format('MMMM D, YYYY') + "</span>";
-                    }
-                },
-                {
-                    data: "end_date",
-                    render: function(data, type, row) {
-                        return "<span style='color: black; font-weight: bold;'>" + moment(data)
-                            .format('MMMM D, YYYY') + "</span>";
-                    }
-                },
-                {
-                    data: "start_time",
-                    render: function(data, type, row) {
-                        return "<span style='color: black; font-weight: bold;'>" + moment(data,
-                            'HH:mm').format('h:mm A') + "</span>";
-                    }
-                },
-                {
-                    data: "end_time",
-                    render: function(data, type, row) {
-                        return "<span style='color: black; font-weight: bold;'>" + moment(data,
-                            'HH:mm').format('h:mm A') + "</span>";
-                    }
-                },
-                {
-                    data: "status",
-                    render: function(data, type, row) {
-                        return "<span style='color: red; font-weight: bold;'>" + data +
-                            "</span>";
-                    }
-                },
-            ],
+                columns: [{
+                        data: "event_name",
+                        render: function(data, type, row) {
+                            return "<span style='color: black; font-weight: bold;'>" + data +
+                                "</span>";
+                        }
+                    },
+                    {
+                        data: "roomName",
+                        render: function(data, type, row) {
+                            return "<span style='color: black; font-weight: bold;'>" + data +
+                                "</span>";
+                        }
+                    },
+                    {
+                        data: "type",
+                        render: function(data, type, row) {
+                            if (data === "whole_day") {
+                                return "<span style='color: black; font-weight: bold;'>Whole Day</span>";
+                            } else if (data === "whole_week") {
+                                return "<span style='color: black; font-weight: bold;'>Whole Week</span>";
+                            } else if (data === "within_day") {
+                                return "<span style='color: black; font-weight: bold;'>Within the Day</span>";
+                            }
+                        }
+                    },
+                    {
+                        data: "start_date",
+                        render: function(data, type, row) {
+                            return "<span style='color: black; font-weight: bold;'>" + moment(
+                                    data)
+                                .format('MMMM D, YYYY') + "</span>";
+                        }
+                    },
+                    {
+                        data: "end_date",
+                        render: function(data, type, row) {
+                            return "<span style='color: black; font-weight: bold;'>" + moment(
+                                    data)
+                                .format('MMMM D, YYYY') + "</span>";
+                        }
+                    },
+                    {
+                        data: "start_time",
+                        render: function(data, type, row) {
+                            return "<span style='color: black; font-weight: bold;'>" + moment(
+                                data,
+                                'HH:mm').format('h:mm A') + "</span>";
+                        }
+                    },
+                    {
+                        data: "end_time",
+                        render: function(data, type, row) {
+                            return "<span style='color: black; font-weight: bold;'>" + moment(
+                                data,
+                                'HH:mm').format('h:mm A') + "</span>";
+                        }
+                    },
+                    {
+                        data: "status",
+                        render: function(data, type, row) {
+                            return "<span style='color: red; font-weight: bold;'>" + data +
+                                "</span>";
+                        }
+                    },
+                ],
+            }
         });
 
         // Initialize Date Range Filter

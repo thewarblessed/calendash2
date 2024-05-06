@@ -158,7 +158,7 @@
                 </div>
             </div>
            
-            <x-app.footer />
+            {{-- <x-app.footer /> --}}
         </div>
     </main><script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>

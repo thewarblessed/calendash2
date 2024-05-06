@@ -897,7 +897,7 @@
                             icon: "error",
                             title: "Pending Accomplishment Report",
                             text: "Accomplishment report not found!",
-                            footer: '<a href="#">Why do I have this issue?</a>'
+                            // footer: '<a href="#">Why do I have this issue?</a>'
                         }).then(function() {
                             window.location.href = "/accomplishment";
                         });

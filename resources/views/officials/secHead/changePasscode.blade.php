@@ -188,7 +188,7 @@
                 </div>
             </form>
         </div>
-        <x-app.footer />
+        {{-- <x-app.footer /> --}}
         </div>
     </main>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

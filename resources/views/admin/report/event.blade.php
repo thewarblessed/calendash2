@@ -80,7 +80,7 @@
                 </div>
             </div>
         </div>
-        <x-app.footer />
+        {{-- <x-app.footer /> --}}
     </main>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

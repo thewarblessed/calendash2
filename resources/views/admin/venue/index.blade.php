@@ -16,8 +16,8 @@
                                     <button type="button" class="btn btn-sm btn-white me-2">
                                         View all
                                     </button>
-                                    <a type="button"
-                                    href="{{ route('adminVenueCreate') }}" class="btn btn-sm btn-dark btn-icon d-flex align-items-center me-2">
+                                    <a type="button" href="{{ route('adminVenueCreate') }}"
+                                        class="btn btn-sm btn-dark btn-icon d-flex align-items-center me-2">
                                         <span class="btn-inner--icon">
                                             <svg width="16" height="16" xmlns="http://www.w3.org/2000/svg"
                                                 viewBox="0 0 24 24" fill="currentColor" class="d-block me-2">
@@ -58,68 +58,80 @@
                             <div class="table-responsive p-0">
                                 <table class="table align-items-center mb-0" id="venueTable">
                                     <thead class="bg-gray-100">
-                                        <tr>       
-                                            <th class="text-secondary text-xs font-weight-semibold opacity-15" >VENUE NAME
+                                        <tr>
+                                            <th class="text-secondary text-xs font-weight-semibold opacity-15">VENUE
+                                                NAME
                                             </th>
                                             <th class="text-secondary text-xs font-weight-semibold opacity-15 ps-2">
                                                 Description
                                             </th>
-               
-                                            <th class="text-center text-secondary text-xs font-weight-semibold opacity-15">
+
+                                            <th
+                                                class="text-center text-secondary text-xs font-weight-semibold opacity-15">
                                                 Capacity</th>
-                                            
+
                                             <th class="text-secondary opacity-7"></th>
-                                            
+
                                         </tr>
-                                        
+
                                     </thead>
                                     <tbody id="venueBody">
-                                        @foreach($venues as $venue)
-                                        <tr>
-                                            <td>
-                                                <div class="d-flex px-2 py-1">
-                                                    <div class="d-flex align-items-center" style="margin-right: 40px">
-                                                        
-                                                        <img src="{{ asset('storage/'.$venue->image) }}" width="100" height="100" style="border-radius: 50%;"/>
+                                        @foreach ($venues as $venue)
+                                            <tr>
+                                                <td>
+                                                    <div class="d-flex px-2 py-1">
+                                                        <div class="d-flex align-items-center"
+                                                            style="margin-right: 40px">
+
+                                                            <img src="{{ asset('storage/' . $venue->image) }}"
+                                                                width="100" height="100"
+                                                                style="border-radius: 50%;" />
+                                                        </div>
+                                                        <div class="d-flex flex-column justify-content-center ms-1">
+                                                            <h6 class="mb-0 text-sm font-weight-semibold">
+                                                                {{ $venue->name }}</h6>
+                                                            <p class="text-sm text-secondary mb-0">
+                                                            </p>
+                                                        </div>
                                                     </div>
-                                                    <div class="d-flex flex-column justify-content-center ms-1">
-                                                        <h6 class="mb-0 text-sm font-weight-semibold">{{$venue->name}}</h6>
-                                                        <p class="text-sm text-secondary mb-0">
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <p class="text-sm text-dark font-weight-semibold mb-0">
+                                                </td>
+                                                <td>
+                                                    <p class="text-sm text-dark font-weight-semibold mb-0">
                                                     <ul>
                                                         @foreach (explode("\n", $venue->description) as $line)
                                                             <ol>{{ $line }}</ol>
                                                         @endforeach
                                                     </ul>
-                                                </p>
-                                            </td>
-                                            <td class="align-middle text-center text-sm">
-                                                <span
-                                                    class="text-sm text-dark font-weight-semibold mb-0">{{$venue->capacity}}</span>
-                                            </td>
-                                            {{-- <td class="align-middle text-center">
+                                                    </p>
+                                                </td>
+                                                <td class="align-middle text-center text-sm">
+                                                    <span
+                                                        class="text-sm text-dark font-weight-semibold mb-0">{{ $venue->capacity }}</span>
+                                                </td>
+                                                {{-- <td class="align-middle text-center">
                                                 <span class="text-secondary text-sm font-weight-normal">{{$venue->name}}</span>
                                                 
                                             </td> --}}
-                                            <td class="align-middle">
-                                                <a href="javascript:;" class="text-secondary font-weight-bold text-xs editBtn"
-                                                    data-bs-toggle="tooltip" data-bs-title="Edit user" data-id="{{$venue->id}}">
-                                                    <i id="editVenue" class="fa-solid fa-pen-to-square fa-2xl" style="color: #5a38b7;"></i>
-                                                </a>
-                                            </td>
-                                            <td class="align-middle">
-                                                <a href="javascript:;" class="text-secondary font-weight-bold text-xs deleteBtn"
-                                                    data-bs-toggle="tooltip" data-bs-title="Delete user" data-id="{{$venue->id}}">
-                                                    <i id="deleteVenue" class="fa-solid fa-trash fa-2xl" style="color: #e10505;"></i>
-                                                </a>
-                                            </td>
-                                            
-                                        </tr>
+                                                <td class="align-middle">
+                                                    <a href="javascript:;"
+                                                        class="text-secondary font-weight-bold text-xs editBtn"
+                                                        data-bs-toggle="tooltip" data-bs-title="Edit user"
+                                                        data-id="{{ $venue->id }}">
+                                                        <i id="editVenue" class="fa-solid fa-pen-to-square fa-2xl"
+                                                            style="color: #5a38b7;"></i>
+                                                    </a>
+                                                </td>
+                                                <td class="align-middle">
+                                                    <a href="javascript:;"
+                                                        class="text-secondary font-weight-bold text-xs deleteBtn"
+                                                        data-bs-toggle="tooltip" data-bs-title="Delete user"
+                                                        data-id="{{ $venue->id }}">
+                                                        <i id="deleteVenue" class="fa-solid fa-trash fa-2xl"
+                                                            style="color: #e10505;"></i>
+                                                    </a>
+                                                </td>
+
+                                            </tr>
                                         @endforeach
 
                                     </tbody>
@@ -137,56 +149,64 @@
                 </div>
             </div>
 
-            <div class="modal fade" id="createVenueModal" tabindex="-1" role="dialog" aria-labelledby="createVenueModalLabel" aria-hidden="true">
+            <div class="modal fade" id="createVenueModal" tabindex="-1" role="dialog"
+                aria-labelledby="createVenueModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                    <h2 class="modal-title" id="createVenueModalLabel" >Edit Venue</h2>
-                    <button type="button" class="btn-close text-dark" data-bs-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                    </div>
-                    <div class="modal-body">
-                        <form id="venueUpdateForm" enctype="multipart/form-data">
-                            @csrf
-                            <div class="form-group">
-                              <label for="exampleFormControlInput1">Name of the venue</label>
-                              <input name="venueEditId" type="text" class="form-control" id="venueEditId" hidden>
-                              <input name="venueEditName" type="text" class="form-control" id="venueEditName" required>
-                            </div>
-                            {{-- <div class="form-group">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h2 class="modal-title" id="createVenueModalLabel">Edit Venue</h2>
+                            <button type="button" class="btn-close text-dark" data-bs-dismiss="modal"
+                                aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="venueUpdateForm" enctype="multipart/form-data">
+                                @csrf
+                                <div class="form-group">
+                                    <label for="exampleFormControlInput1">Name of the venue</label>
+                                    <input name="venueEditId" type="text" class="form-control" id="venueEditId"
+                                        hidden>
+                                    <input name="venueEditName" type="text" class="form-control"
+                                        id="venueEditName" required>
+                                </div>
+                                {{-- <div class="form-group">
                                 <label for="exampleFormControlInput1">Description</label>
                                 <input name="venueEditDesc" type="text" class="form-control" id="venueEditDesc" required>
                             </div>   --}}
-                             
+
                                 <div class="form-group">
                                     <label>Description</label>
                                     <textarea class="form-control" name="venueEditDesc" id="venueEditDesc" rows="20" required></textarea>
                                 </div>
 
-                            
-                            <div class="form-group">
-                                <label for="exampleFormControlInput1">Capacity</label>
-                                <input name="venueEditCapacity" type="text" class="form-control" id="venueEditCapacity" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="exampleFormControlInput1">Upload Image</label>
-                                <input name="venueEditImage" type="file" class="form-control" id="venueEditImage" required>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-white" data-bs-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-dark" id="venueUpdate">Save changes</button>
-                            </div>
-                        </form>
+
+                                <div class="form-group">
+                                    <label for="exampleFormControlInput1">Capacity</label>
+                                    <input name="venueEditCapacity" type="text" class="form-control"
+                                        id="venueEditCapacity" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleFormControlInput1">Upload Image</label>
+                                    <input name="venueEditImage" type="file" class="form-control"
+                                        id="venueEditImage" required>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-white"
+                                        data-bs-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-dark" id="venueUpdate">Save
+                                        changes</button>
+                                </div>
+                            </form>
+                        </div>
+
                     </div>
-                    
-                </div>
                 </div>
             </div>
-           
-            <x-app.footer />
+            {{-- <x-app.footer /> --}}
         </div>
-    </main><script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
     <script type="text/javascript" src="/js/alert.js"></script>
 </x-app-layout>
