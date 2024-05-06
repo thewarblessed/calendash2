@@ -247,7 +247,7 @@
 
             // Handle click event on View Documents button
             $('#userAccomplishmentTable tbody').on('click', '.viewImage', function() {
-                var data = table.row($(this).parents('tr')).data();
+                var data = dataTable.row($(this).parents('tr')).data();
                 if (data) {
                     $("#id").text(data.id);
                     $("#event_name").text(data.event_name);
