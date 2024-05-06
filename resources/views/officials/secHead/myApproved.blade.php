@@ -400,7 +400,7 @@
             function(settings, data, dataIndex) {
                 var min = $('#min').datepicker("getDate");
                 var max = $('#max').datepicker("getDate");
-                var startDate = new Date(data[4]); // Assuming start_date is the fifth column
+                var startDate = new Date(data[5]); // Assuming start_date is the fifth column
                 return (min === null || max === null) || (startDate >= min && startDate <= max);
             }
         );

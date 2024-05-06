@@ -33,15 +33,22 @@
                                     </div>
                                 </div>
 
-                                <button class="btn btn-primary btn-sm"
+                                {{-- <button class="btn btn-primary btn-sm"
                                     onclick="window.location.href='{{ route('createAdminEvents') }}'">
                                     <span>Create Event</span>
-                                </button>
+                                </button> --}}
 
                             </div>
                         </div>
 
-
+                        <div>
+                            <label for="min">Start Date:</label>
+                            <input type="text" id="min" name="min" class="form-control">
+                        </div>
+                        <div>
+                            <label for="max">End Date:</label>
+                            <input type="text" id="max" name="max" class="form-control">
+                        </div> 
 
                         <div class="card-body px-0 py-0">
 
@@ -255,6 +262,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
     <script type="text/javascript" src="/js/alert.js"></script>
 
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="https://cdn.datatables.net/plug-ins/1.10.25/range_dates/dataTables.rangeDates.min.js"></script>
+
     <script>
         // Initialize the datetime picker
         $(document).ready(function() {
@@ -393,8 +404,8 @@
     <script>
         // Define the generatePDF function
         $(document).ready(function() {
-            
-            $("#adminAllEvents").DataTable({
+             
+            var dataTable = $("#adminAllEvents").DataTable({
                 "pageLength": 5,
                 ajax: {
                     url: "/api/admin/all-events",
@@ -452,104 +463,123 @@
                 }
 
             ],
-                columns: [{
-                        data: "event_name",
-                        render: function(data, type, row) {
+            columns: [{
+                    data: "event_name",
+                    render: function(data, type, row) {
+                        return "<span style='color: black; font-weight: bold;'>" + data +
+                            "</span>";
+                    }
+                },
+                {
+                    data: "venueName",
+                    render: function(data, type, row) {
+                        return "<span style='color: black; font-weight: bold;'>" + data +
+                            "</span>";
+                    }
+                },
+                {
+                    data: "organization",
+                    render: function(data, type, row) {
+                        if (data === null) {
+                            return "<span style='color: black; font-weight: bold;'>N/A</span>";
+                        } else {
                             return "<span style='color: black; font-weight: bold;'>" + data +
                                 "</span>";
                         }
-                    },
-                    {
-                        data: "venueName",
-                        render: function(data, type, row) {
-                            return "<span style='color: black; font-weight: bold;'>" + data +
-                                "</span>";
-                        }
-                    },
-                    {
-                        data: "organization",
-                        render: function(data, type, row) {
-                            if (data === null) {
-                                return "<span style='color: black; font-weight: bold;'>N/A</span>";
-                            } else {
-                                return "<span style='color: black; font-weight: bold;'>" + data +
-                                    "</span>";
-                            }
 
-                        }
-                    },
-                    {
-                        data: "department",
-                        render: function(data, type, row) {
-                            if (data === null) {
-                                return "<span style='color: black; font-weight: bold;'>OUTSIDER</span>";
-                            } else {
-                                // Split the data string by whitespace and get the first element
-                                const firstWord = data.split(' ')[0];
-                                return "<span style='color: black; font-weight: bold;'>" + firstWord + "</span>";
-                            }
-                        }
-                    },
-                    {
-                        data: "type",
-                        render: function(data, type, row) {
-                            if (data === "whole_day") {
-                                return "<span style='color: black; font-weight: bold;'>Whole Day</span>";
-                            } else if (data === "whole_week") {
-                                return "<span style='color: black; font-weight: bold;'>Whole Week</span>";
-                            } else if (data === "within_day") {
-                                return "<span style='color: black; font-weight: bold;'>Within the Day</span>";
-                            }
-                        }
-                    },
-                    {
-                        data: "start_date",
-                        render: function(data, type, row) {
-                            return "<span style='color: black; font-weight: bold;'>" + moment(data)
-                                .format('MMMM D, YYYY') + "</span>";
-                        }
-                    },
-                    {
-                        data: "end_date",
-                        render: function(data, type, row) {
-                            return "<span style='color: black; font-weight: bold;'>" + moment(data)
-                                .format('MMMM D, YYYY') + "</span>";
-                        }
-                    },
-                    {
-                        data: "start_time",
-                        render: function(data, type, row) {
-                            return "<span style='color: black; font-weight: bold;'>" + moment(data,
-                                'HH:mm').format('h:mm A') + "</span>";
-                        }
-                    },
-                    {
-                        data: "end_time",
-                        render: function(data, type, row) {
-                            return "<span style='color: black; font-weight: bold;'>" + moment(data,
-                                'HH:mm').format('h:mm A') + "</span>";
-                        }
-                    },
-                    {
-                        data: "status",
-                        render: function(data, type, row) {
-                            if (data === "APPROVED") {
-                                return "<span style='color: green; font-weight: bold;'>APPROVED</span>";
-                            } else if (data === "PENDING") {
-                                return "<span style='color: orange; font-weight: bold;'>PENDING</span>";
-                            } else if (data === "REJECTED") {
-                                return "<span style='color: red; font-weight: bold;'>REJECTED</span>";
-                            }
-                        }
-                    },
-                    {
-                        data: "event_letter",
-                        render: function(data, type, row) {
-                            return "<a href='/storage/" + data + "' target='_blank'>Open PDF</a>";
+                    }
+                },
+                {
+                    data: "department",
+                    render: function(data, type, row) {
+                        if (data === null) {
+                            return "<span style='color: black; font-weight: bold;'>OUTSIDER</span>";
+                        } else {
+                            // Split the data string by whitespace and get the first element
+                            const firstWord = data.split(' ')[0];
+                            return "<span style='color: black; font-weight: bold;'>" + firstWord + "</span>";
                         }
                     }
+                },
+                {
+                    data: "type",
+                    render: function(data, type, row) {
+                        if (data === "whole_day") {
+                            return "<span style='color: black; font-weight: bold;'>Whole Day</span>";
+                        } else if (data === "whole_week") {
+                            return "<span style='color: black; font-weight: bold;'>Whole Week</span>";
+                        } else if (data === "within_day") {
+                            return "<span style='color: black; font-weight: bold;'>Within the Day</span>";
+                        }
+                    }
+                },
+                {
+                    data: "start_date",
+                    render: function(data, type, row) {
+                        return "<span style='color: black; font-weight: bold;'>" + moment(data)
+                            .format('MMMM D, YYYY') + "</span>";
+                    }
+                },
+                {
+                    data: "end_date",
+                    render: function(data, type, row) {
+                        return "<span style='color: black; font-weight: bold;'>" + moment(data)
+                            .format('MMMM D, YYYY') + "</span>";
+                    }
+                },
+                {
+                    data: "start_time",
+                    render: function(data, type, row) {
+                        return "<span style='color: black; font-weight: bold;'>" + moment(data,
+                            'HH:mm').format('h:mm A') + "</span>";
+                    }
+                },
+                {
+                    data: "end_time",
+                    render: function(data, type, row) {
+                        return "<span style='color: black; font-weight: bold;'>" + moment(data,
+                            'HH:mm').format('h:mm A') + "</span>";
+                    }
+                },
+                {
+                    data: "status",
+                    render: function(data, type, row) {
+                        if (data === "APPROVED") {
+                            return "<span style='color: green; font-weight: bold;'>APPROVED</span>";
+                        } else if (data === "PENDING") {
+                            return "<span style='color: orange; font-weight: bold;'>PENDING</span>";
+                        } else if (data === "REJECTED") {
+                            return "<span style='color: red; font-weight: bold;'>REJECTED</span>";
+                        }
+                    }
+                },
+                {
+                    data: "event_letter",
+                    render: function(data, type, row) {
+                        return "<a href='/storage/" + data + "' target='_blank'>Open PDF</a>";
+                    }
+                }
 
-                ],
+            ],
+            });
+
+            
+            // Initialize Date Range Filter
+            $.fn.dataTable.ext.search.push(
+                function(settings, data, dataIndex) {
+                    var min = $('#min').datepicker("getDate");
+                    var max = $('#max').datepicker("getDate");
+                    var startDate = new Date(data[5]); // Assuming start_date is the sixth column
+                    return (min === null || max === null) || (startDate >= min && startDate <= max);
+                }
+            );
+
+            // Add Datepickers for Date Range
+            $('#min, #max').datepicker({
+                dateFormat: 'yy-mm-dd',
+                onSelect: function() {
+                    dataTable.draw();
+                }
             });
 
         })

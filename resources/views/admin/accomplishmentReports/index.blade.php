@@ -108,7 +108,7 @@
         $(document).ready(function() {
             var id = $("#userAccomplishmentUserID").val();
             console.log(id + 'user_idng nakallogin');
-            var table = $("#userAccomplishmentTable").DataTable({
+            var dataTable = $("#userAccomplishmentTable").DataTable({
                 ajax: {
                     url: "/api/get-all-approved-events",
                     method: "GET",
@@ -279,7 +279,7 @@
                 function(settings, data, dataIndex) {
                     var min = $('#min').datepicker("getDate");
                     var max = $('#max').datepicker("getDate");
-                    var startDate = new Date(data[4]); // Assuming start_date is the fifth column
+                    var startDate = new Date(data[3]); // Assuming start_date is the fourth column
                     return (min === null || max === null) || (startDate >= min && startDate <= max);
                 }
             );
