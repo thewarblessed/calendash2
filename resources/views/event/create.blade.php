@@ -890,9 +890,10 @@
                 contentType: 'application/json',
                 dataType: 'json',
                 success: function(response) {
-                    if (response.error === 'No approved events found' || response.success === 'User has pending accomplishment report') {
+                    if (response.error === 'No approved events found' || response.success === 'User has pending accomplishment report' || response.success === 'User has already accomplishment report') {
                         return true;
                     } else {
+                        console
                         Swal.fire({
                             icon: "error",
                             title: "Pending Accomplishment Report",
