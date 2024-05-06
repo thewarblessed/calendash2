@@ -318,7 +318,7 @@
                                         aria-hidden="true"></i>
                                     <i class="collapse-close fa fa-arrown-up text-xs pt-1 position-absolute end-0 me-3"
                                         aria-hidden="true"></i>
-                                   
+
                                 </button>
                                 <p>These Terms and Conditions <b>("Terms")</b> govern the scheduling of events in
                                     Technological University of the Philippines - Taguig <b>("TUP-T")</b> by CALENDASH
@@ -389,11 +389,11 @@
                                                 process.</li>
                                         </ul>
                                         <b>
-                                            <li>Termination</li>
+                                            <li>Rejection</li>
                                         </b>
                                         <ul>
-                                            <li>CALENDASH reserves the right to terminate or suspend services if Users
-                                                breach any material provision of these Terms.</li>
+                                            <li>CALENDASH reserves the right to reject an event in consultation with
+                                                school officials due to unforeseen circumstances.</li>
                                         </ul>
                                     </ol>
                                     <b>
@@ -432,9 +432,9 @@
                                                 aria-controls="collapseOne">
                                                 <h6>How do I create/request an event?</h6>
                                                 <i class="collapse-open fa fa-arrow-down text-xs pt-1 position-absolute end-0 me-3"
-                                                aria-hidden="true"></i>
-                                            <i class="collapse-close fa fa-arrown-up text-xs pt-1 position-absolute end-0 me-3"
-                                                aria-hidden="true"></i>
+                                                    aria-hidden="true"></i>
+                                                <i class="collapse-close fa fa-arrown-up text-xs pt-1 position-absolute end-0 me-3"
+                                                    aria-hidden="true"></i>
                                             </button>
                                         </h5>
                                         <div id="collapseOne" class="accordion-collapse collapse"
@@ -496,9 +496,9 @@
                                                 aria-controls="collapseTwo">
                                                 <h6> How will I know the status of my events?</h6>
                                                 <i class="collapse-open fa fa-arrow-down text-xs pt-1 position-absolute end-0 me-3"
-                                        aria-hidden="true"></i>
-                                    <i class="collapse-close fa fa-arrown-up text-xs pt-1 position-absolute end-0 me-3"
-                                        aria-hidden="true"></i>
+                                                    aria-hidden="true"></i>
+                                                <i class="collapse-close fa fa-arrown-up text-xs pt-1 position-absolute end-0 me-3"
+                                                    aria-hidden="true"></i>
                                             </button>
                                         </h5>
                                         <div id="collapseTwo" class="accordion-collapse collapse"
@@ -523,9 +523,9 @@
                                                 aria-controls="collapseThree">
                                                 <h6>How much time does it take to approve my event request?</h6>
                                                 <i class="collapse-open fa fa-arrow-down text-xs pt-1 position-absolute end-0 me-3"
-                                        aria-hidden="true"></i>
-                                    <i class="collapse-close fa fa-arrown-up text-xs pt-1 position-absolute end-0 me-3"
-                                        aria-hidden="true"></i>
+                                                    aria-hidden="true"></i>
+                                                <i class="collapse-close fa fa-arrown-up text-xs pt-1 position-absolute end-0 me-3"
+                                                    aria-hidden="true"></i>
                                             </button>
                                         </h5>
                                         <div id="collapseThree" class="accordion-collapse collapse"

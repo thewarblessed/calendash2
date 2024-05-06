@@ -247,6 +247,7 @@
                             <div class="col-md-12">
                                 <p>*Take note regarding the allotted time for Ingress and Egress.</p>
                                 <ul>
+                                    <li>A one-week freeze will be implemented before the start of term exams.</li>
                                     <li>Allotted time for Ingress: The time allocated for entering the premises.</li>
                                     <li>Allotted time for Egress: The time allocated for exiting the premises.</li>
                                     <li>Ensure that you adhere to the specified Ingress and Egress timings.</li>

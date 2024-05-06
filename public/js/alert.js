@@ -3303,8 +3303,10 @@ $(document).ready(function () {
             c. Venue should be returned after use, including cleanliness and any specific requirements for repairs or maintenance.<br/><br/>
             <b>5. Approval Process:</b><br/>
             a. The approval process involves coordination with TUP-T officials. Users are advised to submit event request letter in advance to allow for the approval process.<br/><br/>
-            <b>6. Termination:</b><br/>
-            a. CALENDASH reserves the right to terminate or suspend services if Users breach any material provision of these Terms.<br/><br/>
+            <b>6. Rejection:</b><br/>
+            a. CALENDASH reserves the right to reject an event in consultation with school officials due to unforeseen circumstances.<br/>
+            b. CALENDASH will be implemented with a one-week freeze before the start of the term exams.<br/><br/>
+            
             By engaging our services, the Users acknowledge that they have read, understood, and agreed to these Terms and Conditions. These Terms may be subject to change, and Users will be notified of any revisions.</div>`,
             showCloseButton: true,
             showConfirmButton: false,
