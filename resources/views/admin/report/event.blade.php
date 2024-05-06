@@ -48,11 +48,11 @@
                                 <h3 class="text-sm text-center" style="margin-bottom:22px;">Total Events per Venue</h3>
                                 <div class="card shadow-xs border mb-4">
                                     <div class="card-body">
-                                        <select id="term-select">
+                                        {{-- <select id="term-select">
                                             <option value="first">First Term</option>
                                             <option value="second">Second Term</option>
                                             <option value="third">Third Term</option>
-                                          </select>
+                                          </select> --}}
                                         <div class="chart">
                                             <canvas id="chart-line" class="chart-canvas" height="300px"></canvas>
                                         </div>
