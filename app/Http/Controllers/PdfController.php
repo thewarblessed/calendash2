@@ -127,7 +127,7 @@ class PdfController extends Controller
 
         $pdf->SetY(40);
         // Set table header
-        $pdf->Cell(0, 10, 'Total Events per Organization', 0, 1, 'C',); // New line after text
+        $pdf->Cell(0, 10, 'Number of Events per Organization', 0, 1, 'C',); // New line after text
         $pdf->Ln(5); 
         // Set table columns
         $pdf->Cell(65, 10, 'Organization', 1);
