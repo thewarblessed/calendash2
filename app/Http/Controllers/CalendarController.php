@@ -126,6 +126,8 @@ class CalendarController extends Controller
                                 'events.event_name',
                                 'events.start_time',
                                 'events.end_time',
+                                'events.start_date',
+                                'events.end_date',
                                 'users.role',
                                 'users.name as eventOrganizerName',
                                 'rooms.name as roomName',

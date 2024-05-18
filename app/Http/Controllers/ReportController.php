@@ -37,6 +37,41 @@ class ReportController extends Controller
                     ->whereNull('events.room_id')
                     ->groupBy('venues.name')
                     ->get();
+        
+        $organizationVenueEvents = DB::table('events')
+                                        ->leftJoin('organizations', 'organizations.id', '=', 'events.target_org')
+                                        ->leftJoin('venues', 'venues.id', '=', 'events.venue_id')
+                                        ->selectRaw('organizations.organization AS organization_name, venues.name AS venue_name, COUNT(*) AS total_events')
+                                        ->whereNotNull('events.target_dept')
+                                        ->whereNotNull('events.target_org')
+                                        ->whereNull('events.room_id') // Ensure room_id is null to exclude room events
+                                        ->where('events.status', 'APPROVED') // Ensure the status is 'APPROVED'
+                                        ->groupBy('organizations.organization', 'venues.name')
+                                        ->get();
+        // dd($organizationVenueEvents);
+        $data = [];
+        $venuesPerOrg = [];
+        foreach ($organizationVenueEvents as $event) {
+            $data[$event->organization_name][$event->venue_name] = $event->total_events;
+            if (!in_array($event->venue_name, $venuesPerOrg)) {
+                $venuesPerOrg[] = $event->venue_name;
+            }
+        }
+        
+        $organizations = array_keys($data);
+        
+        $chartData = [];
+        foreach ($organizations as $organization) {
+            $dataset = [
+                'label' => $organization,
+                'data' => [],
+                'backgroundColor' => '#' . substr(md5(rand()), 0, 6), // Random color for each organization
+            ];
+            foreach ($venuesPerOrg as $venue) {
+                $dataset['data'][] = $data[$organization][$venue] ?? 0;
+            }
+            $chartData[] = $dataset;
+            }  
 
 
         $eventsPerRole = DB::table('events')
@@ -59,8 +94,9 @@ class ReportController extends Controller
         // dd($eventsPerRole->start_date);
         
         $venueNames = $venues->pluck('venue_name')->toArray();
+        // dd($venueNames);
         $totalEvents = $venues->pluck('total_events')->toArray();
-
+// dd($totalEvents);
 
         return view('admin.report.event', compact('events', 
                                                 'venues',
@@ -71,7 +107,10 @@ class ReportController extends Controller
                                                 'studentData',
                                                 'facultyData',
                                                 'staffData',
-                                                'outsiderData'));
+                                                'outsiderData',
+                                                'organizationVenueEvents',
+                                                'venuesPerOrg',
+                                                'chartData'));
     }
 
     // public function countNumberOfOrgPerVenue()

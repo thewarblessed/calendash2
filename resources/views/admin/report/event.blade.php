@@ -28,6 +28,21 @@
                             </div>
                         </div>
 
+                        <div class="card-body">
+                            {{-- <button onclick="generatePDF()">Download PDF</button>
+                            <a href="{{ route('userCountTable') }}">Download Users</a> --}}
+                            <button>
+                            <a href="{{ route('TotalNumberOfEventsPerOrganization') }}" target="_blank">Show PDF </a></button>
+                            <h3 class="text-sm text-center">Total Number of Events of Organization Per Venues (Bar Chart)</h3>
+                            <div class="card shadow-xs border mb-4">
+                                <div class="card-body p-3">
+                                    <div class="chart">
+                                        <canvas id="perOrgEvent" width="800" height="400"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="row">
 
                             <div class="col-md-6">
@@ -133,6 +148,55 @@
             element.style.height = '400px'; // Set the height of the chart canvas
             html2pdf().from(element).save();
             
+            // Reset chart size after downloading
+            element.style.width = '100%';
+            element.style.height = '100%';
+        }
+    </script>
+
+    {{-- BAR CHART NUMBER OF EVENTS BY ORGANIZATION PER VENUE --}}
+    <script>
+        var ctx = document.getElementById('perOrgEvent').getContext('2d');
+    
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: {!! json_encode($venuesPerOrg) !!},
+                datasets: {!! json_encode($chartData) !!}
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: true
+                    },
+                    tooltip: {
+                        backgroundColor: '#fff',
+                        titleColor: '#1e293b',
+                        bodyColor: '#1e293b',
+                        borderColor: '#e9ecef',
+                        borderWidth: 1,
+                        usePointStyle: true
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1
+                        }
+                    }
+                }
+            }
+        });
+    
+        function generatePDF() {
+            var element = document.getElementById('perOrgEvent');
+            element.style.width = '800px'; // Set the width of the chart canvas
+            element.style.height = '400px'; // Set the height of the chart canvas
+            html2pdf().from(element).save();
+    
             // Reset chart size after downloading
             element.style.width = '100%';
             element.style.height = '100%';
