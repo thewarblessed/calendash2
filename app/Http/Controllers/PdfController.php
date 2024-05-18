@@ -127,21 +127,19 @@ class PdfController extends Controller
 
         $pdf->SetY(40);
         // Set table header
-        $pdf->Cell(0, 10, 'Number of Events per Organization', 0, 1, 'C',); // New line after text
+        $pdf->Cell(0, 10, 'Number Events per Organization', 0, 1, 'C',); // New line after text
         $pdf->Ln(5); 
         // Set table columns
-        $pdf->Cell(45, 10, 'Organization', 1);
-        foreach($organizationVenueEvents as $event) {
-            $pdf->Cell(45, 10, $event->venue_name, 1);
-        }
-        // $pdf->Cell(65, 10, 'Total Events', 1);
+        $pdf->Cell(65, 10, 'Organization', 1);
+        $pdf->Cell(65, 10, 'Venue', 1);
+        $pdf->Cell(65, 10, 'Total Events', 1);
         $pdf->Ln(); // New line
 
         // Populate the table with data
         foreach($organizationVenueEvents as $event) {
-            $pdf->Cell(45, 10, $event->organization_name, 1);
-            // $pdf->Cell(45, 10, $event->venue_name, 1);
-            $pdf->Cell(45, 10, $event->total_events, 1);
+            $pdf->Cell(65, 10, $event->organization_name, 1);
+            $pdf->Cell(65, 10, $event->venue_name, 1);
+            $pdf->Cell(65, 10, $event->total_events, 1);
             $pdf->Ln(); // New line
         }
         // Add date at the bottom of the page
