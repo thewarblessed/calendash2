@@ -421,6 +421,7 @@ Route::get('/admin/report', [ReportController::class, 'countEventPerOrgReport'])
 Route::get('/users-count', [PdfController::class, 'userCountTable'])->name('userCountTable');
 // Route::get('/events-count', [PdfController::class, 'TotalNumberOfEventsPerOrganization'])->name('TotalNumberOfEventsPerOrganization');
 Route::get('/add-data-to-pdf', [PdfController::class, 'TotalNumberOfEventsPerOrganization'])->name('TotalNumberOfEventsPerOrganization');
+Route::get('/add-data-to-pdf-event-count', [PdfController::class, 'NumberOfEventsPerOrganizationPerVenue'])->name('NumberOfEventsPerOrganizationPerVenue');
 Route::get('/total-events-per-venue', [PdfController::class, 'TotalEventsPerVenue'])->name('TotalEventsPerVenue');
 
 //////////////////////////////////////// CHANGE PASSCODE ////////////////////////////////////////

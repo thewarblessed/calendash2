@@ -32,7 +32,7 @@
                             {{-- <button onclick="generatePDF()">Download PDF</button>
                             <a href="{{ route('userCountTable') }}">Download Users</a> --}}
                             <button>
-                            <a href="{{ route('TotalNumberOfEventsPerOrganization') }}" target="_blank">Show PDF </a></button>
+                            <a href="{{ route('NumberOfEventsPerOrganizationPerVenue') }}" target="_blank">Show PDF </a></button>
                             <h3 class="text-sm text-center">Total Number of Events of Organization Per Venues (Bar Chart)</h3>
                             <div class="card shadow-xs border mb-4">
                                 <div class="card-body p-3">
