@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Mail;
 use App\Mail\RejectAccountNotify;
+use App\Mail\ApproveAccountNotify;
 
 class UserController extends Controller
 {
@@ -189,6 +190,13 @@ class UserController extends Controller
             $forUser->email_verified_at = now(); // update
             $forUser->role = $user->role;
             $forUser->update();
+
+            $data = [
+                "subject" => "Calendash Account Verified",
+                "body" => "Hello {$forUser->name}!,\n\nWe would like to inform you that your account has been officially approved! Create your event now with Calendash!"
+                ];
+            Mail::to($forUser->email)->send(new ApproveAccountNotify($data));
+
             return response()->json(["user" => $user, 
                                     // "student" => $student, 
                                     "status" => 200]);
@@ -207,6 +215,13 @@ class UserController extends Controller
             $forUser->email_verified_at = now(); // update
             $forUser->role = $user->role;
             $forUser->update();
+
+            $data = [
+                "subject" => "Calendash Account Verified",
+                "body" => "Hello {$forUser->name}!,\n\nWe would to inform you that your account has been officially approved!."
+                ];
+            Mail::to($forUser->email)->send(new ApproveAccountNotify($data));
+
             return response()->json(["user" => $user, 
                                     // "student" => $student, 
                                     "status" => 200]);
@@ -225,6 +240,13 @@ class UserController extends Controller
             $forUser->email_verified_at = now(); // update
             $forUser->role = $user->role;
             $forUser->update();
+            
+            $data = [
+                "subject" => "Calendash Account Verified",
+                "body" => "Hello {$forUser->name}!,\n\nWe would to inform you that your account has been officially approved!."
+                ];
+            Mail::to($forUser->email)->send(new ApproveAccountNotify($data));
+
             return response()->json(["user" => $user, 
                                     // "student" => $student, 
                                     "status" => 200]);
@@ -234,6 +256,13 @@ class UserController extends Controller
             $forUser->email_verified_at = now(); // update
             $forUser->role = $user->role;
             $forUser->update();
+
+            $data = [
+                "subject" => "Calendash Account Verified",
+                "body" => "Hello {$forUser->name}!,\n\nWe would to inform you that your account has been officially approved!."
+                ];
+            Mail::to($forUser->email)->send(new ApproveAccountNotify($data));
+            
             return response()->json(["user" => $user, 
                                     // "student" => $student, 
                                     "status" => 200]);
