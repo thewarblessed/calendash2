@@ -195,7 +195,7 @@
                     data: "attendance_time",
                     render: function(data) {
                         if (data === null) {
-                            return "";
+                            return "Absent";
                         } else {
                             const date = new Date(data);
                             const formattedTime = date.toLocaleTimeString('en-US', {

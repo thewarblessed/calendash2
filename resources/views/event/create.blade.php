@@ -415,6 +415,9 @@
                                                 <p id="eventDescOutput"><strong>Event Description:</strong> </p>
                                                 <p id="numParticipantsOutput"><strong>Num. of Participants:</strong> </p>
                                                 <br>
+                                                <p id="orgOutput"><strong>Organization:</strong> {{ $org->organization }}</p>
+                                                <p id="deptOutput"><strong>Department:</strong> {{ $dept->department }}</p>
+                                                <br>
                                                 <p id="eventTypeOutput"><strong>Event Type:</strong> </p>
                                                 <p id="startDateOutput"><strong>Start Date:</strong> </p>
                                                 <p id="endDateOutput"><strong>End Date:</strong> </p>
@@ -891,7 +894,8 @@
                 contentType: 'application/json',
                 dataType: 'json',
                 success: function(response) {
-                    if (response.error === 'No approved events found' || response.success === 'User has pending accomplishment report' || response.success === 'User has already accomplishment report') {
+                    console.log(response);
+                    if (response.error === 'No approved events found' || response.success === 'User has pending accomplishment report' || response.message === 'User has already accomplishment report') {
                         return true;
                     } else {
                         console

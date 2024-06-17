@@ -29,7 +29,6 @@
                 <table id="userAccomplishmentTable" class="table table-striped table-hover" style="width:100%;">
                     <thead>
                         <tr>
-                            <th>Event ID</th>
                             <th>Event Name</th>
                             <th>Venue Name</th>
                             <th>Type</th>
@@ -38,7 +37,7 @@
                             <th>Start Time</th>
                             <th>End Time</th>
                             <th>Status</th>
-                            <th>Uploads</th>
+                            <th>Uploads/Edit</th>
                             <th>Reports</th>
                             <th>Documents</th>
                         </tr>
@@ -94,16 +93,54 @@
                             <!-- Add a hidden input field to store the event ID -->
                             <input type="hidden" name="eventId" id="eventIdInput">
                             <div class="form-group">
+                                <label for="documentPhotos">Upload Photos <br><i>Limit: Total of 10mb only</i></label>
+                                <input name="images[]" id="images" type="file" class="form-control" accept="image/*"
+                                    multiple>
+                            </div>
+                            <div class="form-group">
+                                <label for="accomplishmentReport">Upload Accomplishment Report (PDF) <br><i>Limit: Total of 5mb only</i></label>
+                                <input name="pdf" id="pdf" type="file" class="form-control" accept="application/pdf"
+                                    required>
+                            </div>
+                            <button id='submitUploadPhoto' class="btn btn-dark">Submit</button>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-white" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="editDocumentsModal" tabindex="-1" role="dialog"
+            aria-labelledby="uploadDocumentsModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="uploadDocumentsModalLabel">Edit Documents</h5>
+                        <button type="button" class="btn-close text-dark" data-bs-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- Display event ID and event name -->
+                        {{-- <p>Event ID: <span id="uploadId"></span></p> --}}
+                        {{-- <p>Event Name: <span id="editEvent_name"></span></p> --}}
+                        <form id="updateDocumentsForm">
+                            @csrf
+                            <!-- Add a hidden input field to store the event ID -->
+                            <input type="hidden" name="editIdInput" id="editIdInput">
+                            <div class="form-group">
                                 <label for="documentPhotos">Upload Photos</label>
-                                <input name="images[]" id="images" type="file" class="form-control"
-                                    accept="image/*" multiple>
+                                <input name="images[]" id="editImages" type="file" class="form-control" accept="image/*"
+                                    multiple>
                             </div>
                             <div class="form-group">
                                 <label for="accomplishmentReport">Upload Accomplishment Report (PDF)</label>
-                                <input name="pdf" id="pdf" type="file" class="form-control"
-                                    accept="application/pdf" required>
+                                <input name="pdf" id="editPdf" type="file" class="form-control" accept="application/pdf"
+                                    required>
                             </div>
-                            <button id='submitUploadPhoto' class="btn btn-dark">Submit</button>
+                            <button id='updateAccomplishment' class="btn btn-dark">Update</button>
                         </form>
                     </div>
                     <div class="modal-footer">
@@ -123,9 +160,11 @@
     <script type="text/javascript" charset="utf8"
         src="https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js">
+    <script type="text/javascript" charset="utf8"
+        src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js">
     </script>
-    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.print.min.js">
+    <script type="text/javascript" charset="utf8"
+        src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.print.min.js">
     </script>
     <script src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
 
@@ -169,6 +208,71 @@
                         .id); // Set the value of the hidden input field with the event ID
                     $("#uploadDocumentsModal").modal("show"); // Show the modal
                 }
+            });
+
+            $("#userAccomplishmentTable tbody").on("click", 'button.editImage', function(e) {
+                e.preventDefault();
+                // Open file input dialog
+                var id = $(this).data("id");
+                console.log(id);
+                $("#editIdInput").val(id); 
+                $("#editDocumentsModal").modal("show");
+
+                // alert(id);
+            });
+
+            $("#updateAccomplishment").on("click", function(e) {
+                e.preventDefault();
+                
+                var id = $("#editIdInput").val();
+
+                // console.log(id);
+                
+                
+                let formData = new FormData($('#updateDocumentsForm')[0]);
+
+                for (var pair of formData.entries()) {
+                    console.log(pair[0] + ',' + pair[1]);
+                }
+                console.log(formData)
+
+                
+                $.ajax({
+                    url: "/api/update/" + id, // Replace with your upload endpoint
+                    method: "POST",
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    headers: {
+                        "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
+                            "content"
+                        ),
+                    },
+                    dataType: "json",
+                    success: function(response) {
+                        // Handle success response
+                        console.log("Images uploaded successfully:", response);
+                        Swal.fire({
+                            icon: "success",
+                            title: "Documentation and Accomplishment Report Successfully Updated!",
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+                        setTimeout(function() {
+                            window.location.href = '/accomplishment';
+                        }, 1500);
+
+                        // Disable form elements after successful upload
+                        // $("#images").prop('disabled', true);
+                        // $("#pdf").prop('disabled', true);
+                        // $("#submitUploadPhoto").prop('disabled', true);
+                    },
+                    error: function(xhr, status, error) {
+                        // Handle error response
+                        console.error("Error uploading images:", error);
+                    }
+                });
+
             });
         })
 
@@ -244,7 +348,7 @@
     <script>
         $(document).ready(function() {
             var id = $("#userAccomplishmentUserID").val();
-
+            console.log(id + 'thisId')
             var dataTable = $('#userAccomplishmentTable').DataTable({
                 ajax: {
                     url: "/api/user/get-all-my-approved-events/" + id,
@@ -296,13 +400,7 @@
                 }
 
             ],
-                columns: [{
-                        data: "id",
-                        render: function(data, type, row) {
-                            return "<span style='color: black; font-weight: bold;'>" + data +
-                                "</span>";
-                        }
-                    },
+                columns: [
                     {
                         data: "event_name",
                         render: function(data, type, row) {
@@ -358,37 +456,72 @@
                         }
                     },
                     {
-                        data: "status",
+                        // data: "status",
+                        // render: function(data, type, row) {
+                        //     return "<span style='color: green; font-weight: bold;'>" + data +
+                        //         "</span>";
+                        // }
+                        data: null,
                         render: function(data, type, row) {
-                            return "<span style='color: green; font-weight: bold;'>" + data +
-                                "</span>";
+                            if (row.letter === null) {
+                                return "<span style='color: orange; font-weight: bold;'>Pending</span>";
+                            } else {
+                                return "<span style='color: green; font-weight: bold;'>Uploaded</span>";
+                            }
                         }
                     },
                     {
-                        data: "image",
+                        data: "id",
                         render: function(data, type, row) {
-                            if (data !==null) {
-                                // If the row has the 'image' property within 'documentations', disable the button
-                                return "<button class='btn btn-primary uploadImage' disabled>Upload</button>";
+                            if (row.letter === null) {
+                                return "<button class='btn btn-primary uploadImage'>Upload</button>";
                             } else {
-                                // If the row does not have the 'image' property within 'documentations', enable the button
-                                return "<button class='btn btn-primary uploadImage' '>Upload</button>";
-                            }s
+                                // Access the 'edit' column to get the number of edits left
+                                const editsLeft = row.edit;
+                                const lastModifiedDate = new Date(row.updated_at);
+                                const formattedDate = lastModifiedDate.toLocaleDateString();
+                                const formattedTime = lastModifiedDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                                
+                                const newUploadEdit = row.created_at;
+                                const newUploadDate = new Date(newUploadEdit);
+                                const formattedNewDate = newUploadDate.toLocaleDateString();
+                                const formattedNewTime = newUploadDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+                                if (editsLeft == 3){
+                                    return "<button class='btn btn-primary editImage' data-id='" + data + "'>Edit (" + editsLeft + " left)</button>" + "<p>Uploaded at:<br>" + formattedNewDate + " " + formattedNewTime + "</p>";
+                                } 
+                                else if (editsLeft != 0){
+                                    return "<button class='btn btn-primary editImage' data-id='" + data + "'>Edit (" + editsLeft + " left)</button>" + "<p>Last Modified:<br>" + formattedDate + " " + formattedTime + "</p>";
+                                }
+                                else{
+                                    return "<button class='btn btn-primary editImage' data-id='" + data + "'disabled>Edit (" + editsLeft + " left)</button>" + "<p>Last Modified:<br>" + formattedDate + " " + formattedTime + "</p>";
+                                }
+                            }
                         }
                     },
                     {
                         data: "letter",
                         render: function(data, type, row) {
-                            return "<a href='/storage/" + data + "' target='_blank'>Open PDF</a>";
+                            // return "<a href='/storage/" + data + "' target='_blank'>Open PDF</a>";
+                            if (data !==null) {
+                                // If the row has the 'image' property within 'documentations', disable the button
+                                return "<a href='/storage/" + data + "' target='_blank'>Open PDF</a>";
+                            } else {
+                                // If the row does not have the 'image' property within 'documentations', enable the button
+                                return "";
+                            }
                         }
                     },
                     {
-                        data: id,
+                        data: null,
                         render: function(data, type, row) {
-                            return "<button class='btn btn-primary viewImage' data-id = '" +
-                                data + "' >View</button>";
+                            if (row.letter === null) {
+                                return "";
+                            } else {
+                                return "<button class='btn btn-primary viewImage' data-id='" + data + "'>View</button>";
+                            }
                         }
-                    },
+                    }
 
                 ],
             });
@@ -440,6 +573,45 @@
                     dataTable.draw();
                 }
             });
+
+            $('#pdf').on('change', function(event) { 
+                // alert('hi');
+                const fileInput = event.target;
+                const file = fileInput.files[0];
+                
+                if (file && file.size > 5 * 1024 * 1024) { // 5MB limit
+                    Swal.fire({
+                        icon: "error",
+                        title: "Oops...",
+                        text: "The total size of the uploaded images exceeds the limit of 5MB.",
+                        footer: '<a href="#">Why do I have this issue?</a>'
+                    });
+                    fileInput.value = ''; // Clear the input
+                    return;
+                }
+            })
+
+            $('#images').on('change', function(event) { 
+                const fileInput = event.target;
+                const files = fileInput.files;
+                let totalSize = 0;
+
+                for (let i = 0; i < files.length; i++) {
+                    totalSize += files[i].size;
+                }
+
+                if (totalSize > 10 * 1024 * 1024) { // 15MB limit
+                    // alert('');
+                    Swal.fire({
+                        icon: "error",
+                        title: "Oops...",
+                        text: "The total size of the uploaded images exceeds the limit of 10MB.",
+                        footer: '<a href="#">Why do I have this issue?</a>'
+                    });
+                    fileInput.value = ''; // Clear the input
+                    return;
+                }
+            })
         });
     </script>
 </x-app-layout>

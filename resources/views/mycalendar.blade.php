@@ -82,52 +82,74 @@
                             var data = response;
                             console.log(data);
                             console.log(data.type);
+                            const eventStartDate = info.event.start.toISOString().split('T')[0];
+                            const eventEndDate = info.event.end.toISOString().split('T')[0];
 
+                            // var startTime = '';
+                            // if (data.type === 'whole_day') {
+                            //     startTime = 'Whole Day';
+                            // } 
+                            // else if (data.type === 'whole_week') {
+                            //     startTime = 'Whole Week';
+                            // }
+                            // else if (data.type === 'within_day') {
+                            //     startTime = info.event.start.toLocaleTimeString([], {
+                            //         hour: '2-digit',
+                            //         minute: '2-digit'
+                            //     });
+                            // }
+                            // else{
+                            //     var timeString = data.start_time;
+                            //     var date = new Date(timeString);
+                            //     startTime = date.toLocaleTimeString([], {
+                            //         hour: '2-digit',
+                            //         minute: '2-digit'
+                            //     }); 
+                            // }
 
-                            var startTime = '';
-                            if (data.type === 'whole_day') {
-                                startTime = 'Whole Day';
-                            } 
-                            else if (data.type === 'whole_week') {
-                                startTime = 'Whole Week';
-                            }
-                            else if (data.type === 'within_day') {
-                                startTime = info.event.start.toLocaleTimeString([], {
-                                    hour: '2-digit',
-                                    minute: '2-digit'
-                                });
-                            }
-                            else{
-                                var timeString = data.start_time;
-                                var date = new Date(timeString);
-                                startTime = date.toLocaleTimeString([], {
-                                    hour: '2-digit',
-                                    minute: '2-digit'
-                                }); 
+                            // // Determine end time based on data.type
+                            // var endTime = '';
+                            // if (data.type === 'whole_day') {
+                            //     endTime = 'Whole Day';
+                            // } 
+                            // else if (data.type === 'whole_week') {
+                            //     endTime = 'Whole Week';
+                            // }
+                            // else if (data.type === 'within_day') {
+                            //     endTime = info.event.end.toLocaleTimeString([], {
+                            //         hour: '2-digit',
+                            //         minute: '2-digit'
+                            //     });
+                            // }
+                            // else{
+                            //     var timeString = data.end_time;
+                            //     var date = new Date(timeString);
+                            //     endTime = date.toLocaleTimeString([], {
+                            //         hour: '2-digit',
+                            //         minute: '2-digit'
+                            //     });
+                            // }
+
+                            function formatTime(timeString) {
+                                var timeParts = timeString.split(':');
+                                var hours = parseInt(timeParts[0], 10);
+                                var minutes = timeParts[1];
+                                var ampm = hours >= 12 ? 'PM' : 'AM';
+                                hours = hours % 12;
+                                hours = hours ? hours : 12; // The hour '0' should be '12'
+                                return hours + ':' + minutes + ' ' + ampm;
                             }
 
-                            // Determine end time based on data.type
-                            var endTime = '';
-                            if (data.type === 'whole_day') {
-                                endTime = 'Whole Day';
-                            } 
-                            else if (data.type === 'whole_week') {
-                                endTime = 'Whole Week';
-                            }
-                            else if (data.type === 'within_day') {
-                                endTime = info.event.end.toLocaleTimeString([], {
-                                    hour: '2-digit',
-                                    minute: '2-digit'
-                                });
-                            }
-                            else{
-                                var timeString = data.end_time;
-                                var date = new Date(timeString);
-                                endTime = date.toLocaleTimeString([], {
-                                    hour: '2-digit',
-                                    minute: '2-digit'
-                                });
-                            }
+                            // Assuming data.start_time and data.end_time are available
+                            var timeStringStart = data.start_time; // Example: "05:00:00"
+                            var timeStringEnd = data.end_time; // Example: "17:00:00"
+
+                            // Format the start and end times
+                            var startTime = formatTime(timeStringStart);
+                            var endTime = formatTime(timeStringEnd);
+
+                            console.log('Start Time:', startTime); // This should log the start time in 12-hour format with AM/PM
+                            console.log('End Time:', endTime);
 
                             // Get the current date and time
                             var now = new Date();
@@ -161,11 +183,12 @@
                                     html: '<div style="text-align: center;">' + (data.feedback_image ? 
                                         '<img src="https://api.qrserver.com/v1/create-qr-code/?data=' + data.feedback_image + '&amp;size=100x100" style="width: 100px; height: 100px; margin: 0 auto; display: block;"><p>QR Code of Feedback Form</p>' :
                                         '<p>No QR Code Available</p>') + '</div>' +
+                                        'Date: <strong>' + eventStartDate + '</strong><br>' +
+                                        'Start Time: <strong>' + startTime + '</strong><br>' +
+                                        'End Time: <strong>' + endTime + '</strong><br>' +
                                         'Status: <strong style="color: ' + (info.event.extendedProps.status === 'PENDING' ? '#D6AD60' : 'green') + '">' + info.event.extendedProps.status + '</strong><br>' +
                                         'Event: <strong>' + info.event.title + '</strong><br>' +
                                         'Event Organizer: <strong>' + data.eventOrganizerName + '</strong><br>' +
-                                        'Start Time: <strong>' + startTime + '</strong><br>' +
-                                        'End Time: <strong>' + endTime + '</strong><br>' +
                                         'Location: <strong>' + (data.roomName ? data.roomName : (data.venueName ? data.venueName : 'Unknown')) + '</strong><br>' +
                                         'Organization: <strong>' + (data.role === 'professor' ? 'FACULTY' : (data.role === 'staff' ? 'STAFF/ADMIN' : (data.role === 'student' ? data.organization : (data.role === 'outsider' ? 'OUTSIDER' : 'UNKNOWN')))) + '</strong><br>' +
                                         'Department: <strong>' + (data.role === 'professor' ? 'FACULTY' : (data.role === 'staff' ? 'STAFF/ADMIN' : (data.role === 'student' ? data.department : (data.role === 'outsider' ? 'OUTSIDER' : 'UNKNOWN')))) + '</strong>',

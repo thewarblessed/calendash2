@@ -100,10 +100,10 @@
                                                 </a>
                                             </td>
                                             <td class="align-middle">
-                                                <a href="javascript:;" class="text-secondary font-weight-bold deleteOfficial"
+                                                {{-- <a href="javascript:;" class="text-secondary font-weight-bold deleteOfficial"
                                                     data-bs-toggle="tooltip" data-id="{{$official->id}}" data-bs-title="Delete official">
                                                     <i class="fa-solid fa-trash fa-xl" style="color:red"></i>
-                                                </a>
+                                                </a> --}}
                                             </td>
                                             
                                             

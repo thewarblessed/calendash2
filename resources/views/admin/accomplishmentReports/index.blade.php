@@ -32,6 +32,8 @@
                             {{-- <th>Event ID</th> --}}
                             <th>Event Name</th>
                             <th>Venue Name</th>
+                            <th>Organization</th>
+                            <th>Department</th>
                             <th>Type</th>
                             <th>Start Date</th>
                             <th>End Date</th>
@@ -110,7 +112,7 @@
             console.log(id + 'user_idng nakallogin');
             var dataTable = $("#userAccomplishmentTable").DataTable({
                 ajax: {
-                    url: "/api/get-all-approved-events",
+                    url: "/api/get-all-accomplishments",
                     method: "GET",
                     dataSrc: "",
                     headers: {
@@ -182,6 +184,20 @@
                         }
                     },
                     {
+                        data: "organization",
+                        render: function(data, type, row) {
+                            return "<span style='color: black; font-weight: bold;'>" + data +
+                                "</span>";
+                        }
+                    },
+                    {
+                        data: "department",
+                        render: function(data, type, row) {
+                            var firstFourLetters = data.substring(0, 4); // Extract first 4 letters
+                            return "<span style='color: black; font-weight: bold;'>" + firstFourLetters + "</span>";
+                        }
+                    },
+                    {
                         data: "type",
                         render: function(data, type, row) {
                             if (data === "whole_day") {
@@ -235,7 +251,7 @@
                         }
                     },
                     {
-                        data: id,
+                        data: "id",
                         render: function(data, type, row) {
                             return "<button class='btn btn-primary viewImage' data-id = '" +
                                 data + "' >View</button>";
@@ -253,7 +269,7 @@
                     $("#event_name").text(data.event_name);
                     $("#imageContainer").empty(); // Clear previous images
                     $.ajax({
-                        url: "/api/get-event-images/",
+                        url: "/api/get-event-images/" + data.id,
                         method: "GET",
                         success: function(response) {
                             response.forEach(function(image) {
@@ -272,6 +288,9 @@
                     });
                     $("#uploadDocumentsModal").modal("show"); // Show the modal
                 }
+            
+            
+            
             });
 
             // Initialize Date Range Filter

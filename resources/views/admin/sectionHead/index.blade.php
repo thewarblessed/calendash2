@@ -72,10 +72,10 @@
                                                 </a>
                                             </td>
                                             <td class="align-middle">
-                                                <a href="javascript:;" class="text-secondary font-weight-bold deletesSectionHead"
+                                                {{-- <a href="javascript:;" class="text-secondary font-weight-bold deletesSectionHead"
                                                     data-bs-toggle="tooltip" data-id="{{$official->id}}" data-bs-title="Delete">
                                                     <i class="fa-solid fa-trash fa-xl" style="color:red"></i>
-                                                </a>
+                                                </a> --}}
                                             </td>
                                             
                                             
