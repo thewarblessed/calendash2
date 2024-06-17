@@ -102,4 +102,8 @@ class User extends Authenticatable implements JWTSubject
         return [];
     }
 
+    public function pendingUser() {
+        return $this->hasOne('App\Models\PendingUser', 'user_id');
+    }
+
 }

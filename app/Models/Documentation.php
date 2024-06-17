@@ -16,5 +16,6 @@ class Documentation extends Model
     protected $fillable = [
         "accomplishmentreports_id",
         "image",
+        "created_at",
     ];
 }

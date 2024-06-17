@@ -16,5 +16,7 @@ class Accomplishment extends Model
     protected $fillable = [
         "event_id",
         "letter",
+        "edit",
+        "created_at",
     ];
 }

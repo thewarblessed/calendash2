@@ -355,13 +355,19 @@ class EventController extends Controller
 
     public function showVenues()
     {
+        $user = Auth::user();
         $venues = Venue::orderBy('id')->get();
         $rooms = Room::orderBy('id')->get();
+        $pendingUser = $user->pendingUser;
+        $org = Organization::where('id', $pendingUser->organization_id)->select('organization')->first();
+
+        $dept = Department::where('id', $pendingUser->department_id)->select('department')->first();
+        // dd($pendingUser);
         // dd($rooms)
         // dd($rooms)
         // $departments = 
         // return response()->json($venues);
-        return View::make('event.create', compact('venues','rooms'));
+        return View::make('event.create', compact('venues','rooms','org','dept'));
     }
 
     public function searchVenues()
