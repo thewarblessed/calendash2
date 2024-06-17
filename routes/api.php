@@ -350,9 +350,15 @@ Route::post('/user/store-accomplishment', [AccomplishmentController::class, 'sto
 Route::post('/upload/{id}', [AccomplishmentController::class, 'storeAccomplishment'])
 ->name('storeAccomplishment');
 
+Route::post('/update/{id}', [AccomplishmentController::class, 'updateAccomplishment'])
+->name('updateAccomplishment');
+
 ////////////////////////////// ALL ACCOMPLISHMENT REPORTS (ADMIN VIEW) //////////////////////////////
 Route::get('get-all-approved-events', [AccomplishmentReportsController::class, 'getAllApprovedEvents'])
     ->name('getAllApprovedEvents');
+
+Route::get('get-all-accomplishments', [AccomplishmentReportsController::class, 'getAllAccomplishments'])
+->name('getAllAccomplishments');
 
 Route::get('get-event-images/{id}', [AccomplishmentReportsController::class, 'getEventsImages'])
     ->name('getEventsImages');
