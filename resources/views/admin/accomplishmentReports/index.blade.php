@@ -2,7 +2,7 @@
     <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
         <x-app.navbar />
         <div class="container-fluid py-4 px-5">
-            <div class="container-xl px-4 mt-4">
+            <div class="row">
                 <h2>ACCOMPLISHMENT REPORTS</h2>
 
                 <div class="card-header border-bottom pb-0">
@@ -25,28 +25,31 @@
                     <input type="text" id="max" name="max" class="form-control">
                 </div>
                 <br>
-
-                <table id="userAccomplishmentTable" class="table table-striped table-hover" style="width:100%;">
-                    <thead>
-                        <tr>
-                            {{-- <th>Event ID</th> --}}
-                            <th>Event Name</th>
-                            <th>Venue Name</th>
-                            <th>Organization</th>
-                            <th>Department</th>
-                            <th>Type</th>
-                            <th>Start Date</th>
-                            <th>End Date</th>
-                            <th>Start Time</th>
-                            <th>End Time</th>
-                            <th>Status</th>
-                            <th>Reports</th>
-                            <th>Documents</th>
-                        </tr>
-                    </thead>
-                    <tbody id="userAccomplishmentBody">
-                    </tbody>
-                </table>
+                <div class="table-responsive">
+                    <table id="userAccomplishmentTable" class="table table-striped table-hover" style="width:100%;">
+                        <thead>
+                            <tr>
+                                {{-- <th>Event ID</th> --}}
+                                <th>Event Name</th>
+                                <th>Venue Name</th>
+                                <th>Organization</th>
+                                <th>Department</th>
+                                <th>Type</th>
+                                <th>Start Date</th>
+                                <th>End Date</th>
+                                <th>Start Time</th>
+                                <th>End Time</th>
+                                <th>Status</th>
+                                <th>Reports</th>
+                                <th>Documents</th>
+                                <th>Last Modified</th>
+                                <th>Uploaded At</th>
+                            </tr>
+                        </thead>
+                        <tbody id="userAccomplishmentBody">
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
 
@@ -84,9 +87,11 @@
     <script type="text/javascript" charset="utf8"
         src="https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js">
+    <script type="text/javascript" charset="utf8"
+        src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js">
     </script>
-    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.print.min.js">
+    <script type="text/javascript" charset="utf8"
+        src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.print.min.js">
     </script>
     <script src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
 
@@ -240,8 +245,7 @@
                     {
                         data: "status",
                         render: function(data, type, row) {
-                            return "<span style='color: green; font-weight: bold;'>" + data +
-                                "</span>";
+                            return "<span style='color: green; font-weight: bold;'>Uploaded</span>";
                         }
                     },
                     {
@@ -255,6 +259,42 @@
                         render: function(data, type, row) {
                             return "<button class='btn btn-primary viewImage' data-id = '" +
                                 data + "' >View</button>";
+                        }
+                    },
+                    {
+                        data: "updated_at",
+                        render: function(data, type, row) {
+                            var date = new Date(data);
+                            var options = {
+                                month: 'numeric',
+                                day: 'numeric',
+                                year: 'numeric',
+                                hour: 'numeric',
+                                minute: '2-digit',
+                                hour12: true
+                            };
+                            var formattedDate = date.toLocaleString('en-US', options);
+                            if (data === "null") {
+                                return "<span style='color: black;'>Not yet edited</span>";
+                            } else{
+                                return "<span style='color: black;'>" + formattedDate + "</span>";
+                            }
+                        }
+                    },
+                    {
+                        data: "created_at",
+                        render: function(data, type, row) {
+                            var date = new Date(data);
+                            var options = {
+                                month: 'numeric',
+                                day: 'numeric',
+                                year: 'numeric',
+                                hour: 'numeric',
+                                minute: '2-digit',
+                                hour12: true
+                            };
+                            var formattedDate = date.toLocaleString('en-US', options);
+                            return "<span style='color: black;'>" + formattedDate + "</span>";
                         }
                     },
 

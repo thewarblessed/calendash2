@@ -2,7 +2,7 @@
     <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
         <x-app.navbar />
         <div class="container-fluid py-4 px-5">
-            <div class="container-xl px-4 mt-4">
+            <div class="row">
                 <h2>ACCOMPLISHMENT REPORTS</h2>
 
                 <div class="card-header border-bottom pb-0">
@@ -25,8 +25,8 @@
                     <input type="text" id="max" name="max" class="form-control">
                 </div>
                 <br>
-
-                <table id="userAccomplishmentTable" class="table table-striped table-hover" style="width:100%;">
+                <div class="table-responsive">
+                    <table id="userAccomplishmentTable" class="table table-striped table-hover" style="width:100%;">
                     <thead>
                         <tr>
                             <th>Event Name</th>
@@ -45,6 +45,8 @@
                     <tbody id="userAccomplishmentBody">
                     </tbody>
                 </table>
+                </div>
+                
             </div>
         </div>
 

@@ -61,6 +61,8 @@ class AccomplishmentReportsController extends Controller
                     'events.end_time',
                     'events.type',
                     'events.event_letter',
+                    'documentations.updated_at',
+                    'accomplishmentreports.created_at',
                     DB::raw('CASE
                                     WHEN rooms.name IS NULL THEN venues.name
                                     ELSE rooms.name END AS venueName'),
