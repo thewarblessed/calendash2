@@ -133,12 +133,12 @@
                             <!-- Add a hidden input field to store the event ID -->
                             <input type="hidden" name="editIdInput" id="editIdInput">
                             <div class="form-group">
-                                <label for="documentPhotos">Upload Photos</label>
+                                <label for="documentPhotos">Upload Photos <br><i>Limit: Total of 10mb only</i></label>
                                 <input name="images[]" id="editImages" type="file" class="form-control" accept="image/*"
                                     multiple>
                             </div>
                             <div class="form-group">
-                                <label for="accomplishmentReport">Upload Accomplishment Report (PDF)</label>
+                                <label for="accomplishmentReport">Upload Accomplishment Report (PDF) <br><i>Limit: Total of 5mb only</i></label>
                                 <input name="pdf" id="editPdf" type="file" class="form-control" accept="application/pdf"
                                     required>
                             </div>
@@ -594,6 +594,45 @@
             })
 
             $('#images').on('change', function(event) { 
+                const fileInput = event.target;
+                const files = fileInput.files;
+                let totalSize = 0;
+
+                for (let i = 0; i < files.length; i++) {
+                    totalSize += files[i].size;
+                }
+
+                if (totalSize > 10 * 1024 * 1024) { // 15MB limit
+                    // alert('');
+                    Swal.fire({
+                        icon: "error",
+                        title: "Oops...",
+                        text: "The total size of the uploaded images exceeds the limit of 10MB.",
+                        footer: '<a href="#">Why do I have this issue?</a>'
+                    });
+                    fileInput.value = ''; // Clear the input
+                    return;
+                }
+            })
+
+            $('#editPdf').on('change', function(event) { 
+                // alert('hi');
+                const fileInput = event.target;
+                const file = fileInput.files[0];
+                
+                if (file && file.size > 5 * 1024 * 1024) { // 5MB limit
+                    Swal.fire({
+                        icon: "error",
+                        title: "Oops...",
+                        text: "The total size of the uploaded images exceeds the limit of 5MB.",
+                        footer: '<a href="#">Why do I have this issue?</a>'
+                    });
+                    fileInput.value = ''; // Clear the input
+                    return;
+                }
+            })
+
+            $('#editImages').on('change', function(event) { 
                 const fileInput = event.target;
                 const files = fileInput.files;
                 let totalSize = 0;
