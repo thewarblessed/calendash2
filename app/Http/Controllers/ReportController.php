@@ -29,6 +29,52 @@ class ReportController extends Controller
                     ->where('events.status','APPROVED')
                     ->get();
 
+        $monthlyEvents = DB::table('events')
+                    ->whereNotNull('target_dept')
+                    ->whereNotNull('target_org')
+                    ->leftJoin('organizations', 'organizations.id', '=', 'events.target_org')
+                    ->selectRaw('organizations.organization as organization_name, MONTH(events.start_date) as month, YEAR(events.start_date) as year, COUNT(*) as total')
+                    ->where('events.status', 'APPROVED')
+                    ->groupBy('organizations.organization', 'year', 'month')
+                    ->orderBy('year', 'asc')
+                    ->orderBy('month', 'asc')
+                    ->get();
+                    // dd($monthlyEvents);
+
+        $monthlyChartData = [];
+        foreach ($monthlyEvents as $event) {
+            $yearMonth = $event->year . '-' . str_pad($event->month, 2, '0', STR_PAD_LEFT);
+            $monthlyChartData[$event->organization_name][$yearMonth] = $event->total;
+        }
+        
+        // Prepare labels (unique year-month combinations)
+        $monthlyLabels = [];
+        foreach ($monthlyChartData as $organization => $data) {
+            $monthlyLabels = array_merge($monthlyLabels, array_keys($data));
+        }
+        $monthlyLabels = array_unique($monthlyLabels);
+        sort($monthlyLabels); // Sort labels chronologically
+
+        // Prepare datasets for each organization
+        $datasets = [];
+        $colors = ['rgb(75, 192, 192)', 'rgb(255, 99, 132)', 'rgb(54, 162, 235)']; // Example colors
+        $colorIndex = 0;
+        foreach ($monthlyChartData as $organization => $data) {
+            $dataset = [
+                'label' => $organization,
+                'data' => [],
+                'fill' => false,
+                'borderColor' => $colors[$colorIndex % count($colors)],
+                'tension' => 0.1
+            ];
+            foreach ($monthlyLabels as $label) {
+                $dataset['data'][] = $data[$label] ?? 0; // Use 0 if no data for that month
+            }
+            $datasets[] = $dataset;
+            $colorIndex++;
+        }
+
+
 
         $venues = DB::table('events')
                     ->leftJoin('organizations', 'organizations.id', 'events.target_org')
@@ -110,7 +156,8 @@ class ReportController extends Controller
                                                 'outsiderData',
                                                 'organizationVenueEvents',
                                                 'venuesPerOrg',
-                                                'chartData'));
+                                                'chartData',
+                                            'monthlyLabels', 'datasets'));
     }
 
     // public function countNumberOfOrgPerVenue()

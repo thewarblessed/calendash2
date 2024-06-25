@@ -17,7 +17,8 @@
                             {{-- <button onclick="generatePDF()">Download PDF</button>
                             <a href="{{ route('userCountTable') }}">Download Users</a> --}}
                             <button>
-                            <a href="{{ route('TotalNumberOfEventsPerOrganization') }}" target="_blank">Show PDF </a></button>
+                                <a href="{{ route('TotalNumberOfEventsPerOrganization') }}" target="_blank">Show PDF
+                                </a></button>
                             <h3 class="text-sm text-center">Total Number of Events Per Organization (Bar Chart)</h3>
                             <div class="card shadow-xs border mb-4">
                                 <div class="card-body p-3">
@@ -32,12 +33,13 @@
                             {{-- <button onclick="generatePDF()">Download PDF</button>
                             <a href="{{ route('userCountTable') }}">Download Users</a> --}}
                             <button>
-                            {{-- <a href="{{ route('TotalNumberOfEventsPerOrganization') }}" target="_blank">Show PDF </a></button> --}}
+                                 <a href="{{ route('TotalNumberOfEventsPerOrganization') }}" target="_blank">Show
+                                    PDF </a></button>
                             <h3 class="text-sm text-center">Number of Events Per Month</h3>
                             <div class="card shadow-xs border mb-4">
                                 <div class="card-body p-3">
                                     <div class="chart">
-                                        <canvas id="chart-monthly-event" width="800" height="400"></canvas>
+                                        <canvas id="myChart" width="800" height="400"></canvas>
                                     </div>
                                 </div>
                             </div>
@@ -47,8 +49,10 @@
                             {{-- <button onclick="generatePDF()">Download PDF</button>
                             <a href="{{ route('userCountTable') }}">Download Users</a> --}}
                             <button>
-                            <a href="{{ route('NumberOfEventsPerOrganizationPerVenue') }}" target="_blank">Show PDF </a></button>
-                            <h3 class="text-sm text-center">Total Number of Events of Organization Per Venues (Bar Chart)</h3>
+                                <a href="{{ route('NumberOfEventsPerOrganizationPerVenue') }}" target="_blank">Show PDF
+                                </a></button>
+                            <h3 class="text-sm text-center">Total Number of Events of Organization Per Venues (Bar
+                                Chart)</h3>
                             <div class="card shadow-xs border mb-4">
                                 <div class="card-body p-3">
                                     <div class="chart">
@@ -65,9 +69,11 @@
                                     <h3 class="text-sm text-center">Total Events per Venue</h3>
                                     <div class="card shadow-xs border mb-4">
                                         <div class="card-body p-3">
-                                            <button><a href="{{ route('TotalEventsPerVenue') }}" target="_blank">Show PDF</a></button>
+                                            <button><a href="{{ route('TotalEventsPerVenue') }}" target="_blank">Show
+                                                    PDF</a></button>
                                             <div class="chart">
-                                                <canvas id="chart-doughnut" class="chart-canvas" height="300px"></canvas>
+                                                <canvas id="chart-doughnut" class="chart-canvas"
+                                                    height="300px"></canvas>
                                             </div>
                                         </div>
                                     </div>
@@ -82,16 +88,16 @@
                                             <option value="first">First Term</option>
                                             <option value="second">Second Term</option>
                                             <option value="third">Third Term</option>
-                                          </select> --}}
+                                        </select> --}}
                                         <div class="chart">
                                             <canvas id="chart-line" class="chart-canvas" height="300px"></canvas>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            
+
                         </div>
-                        
+
 
                         {{-- <div class="card-body">
                             <h3 class="text-sm text-center">Event/Venue Per Organization (Doughnut Chart)</h3>
@@ -104,13 +110,14 @@
                             </div>
                         </div> --}}
 
-                        
+
 
                     </div>
                 </div>
             </div>
         </div>
-        {{-- <x-app.footer /> --}}
+        {{--
+        <x-app.footer /> --}}
     </main>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -468,6 +475,32 @@
 
     {{-- Monthly Event --}}
     <script>
+        // Define the configuration for the line chart
+        const labels = @json($monthlyLabels);
+        const datasets = @json($datasets);
 
+        const config = {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: datasets
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        };
+
+        // const ctx = document.getElementById('myChart').getContext('2d');
+        // new Chart(ctx, config);
+
+        // Get the context of the canvas element we want to select
+        const monthlyChart = document.getElementById('myChart').getContext('2d');
+
+        // Create the chart using the configuration
+        new Chart(monthlyChart, config);
     </script>
 </x-app-layout>
