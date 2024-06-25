@@ -363,6 +363,8 @@ Route::get('get-all-accomplishments', [AccomplishmentReportsController::class, '
 Route::get('get-event-images/{id}', [AccomplishmentReportsController::class, 'getEventsImages'])
     ->name('getEventsImages');
 
+Route::get('get-completed-events', [AccomplishmentReportsController::class, 'checkDeadline'])
+->name('checkDeadline');
 
 /////////////////////////////// OUTSIDE & BUSINESS MANAGER ////////////////////////
 Route::post('/outside/storeEvent',[
