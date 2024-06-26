@@ -18,7 +18,7 @@ class ReportController extends Controller
         // Your code to show the main reports dashboard view
     }
 
-    public function countEventPerOrgReport()
+    public function countEventPerOrgReport(Request $request)
     {
         $events = DB::table('events')
                     ->whereNotNull('target_dept')
@@ -29,50 +29,62 @@ class ReportController extends Controller
                     ->where('events.status','APPROVED')
                     ->get();
 
+        $selectedYear = $request->input('selectedYear', 2024); // Replace 'selectedYear' with your actual input name
+
+        // Fetch events for the selected year
         $monthlyEvents = DB::table('events')
-                    ->whereNotNull('target_dept')
-                    ->whereNotNull('target_org')
-                    ->leftJoin('organizations', 'organizations.id', '=', 'events.target_org')
-                    ->selectRaw('organizations.organization as organization_name, MONTH(events.start_date) as month, YEAR(events.start_date) as year, COUNT(*) as total')
-                    ->where('events.status', 'APPROVED')
-                    ->groupBy('organizations.organization', 'year', 'month')
-                    ->orderBy('year', 'asc')
-                    ->orderBy('month', 'asc')
-                    ->get();
-                    // dd($monthlyEvents);
+                            ->whereNotNull('target_dept')
+                            ->whereNotNull('target_org')
+                            ->leftJoin('organizations', 'organizations.id', '=', 'events.target_org')
+                            ->selectRaw('organizations.organization as organization_name, MONTH(events.start_date) as month, YEAR(events.start_date) as year, COUNT(*) as total')
+                            ->where('events.status', 'APPROVED')
+                            ->whereYear('events.start_date', $selectedYear)
+                            ->groupBy('organizations.organization', 'year', 'month')
+                            ->orderBy('year', 'asc')
+                            ->orderBy('month', 'asc')
+                            ->get();
 
-        $monthlyChartData = [];
-        foreach ($monthlyEvents as $event) {
-            $yearMonth = $event->year . '-' . str_pad($event->month, 2, '0', STR_PAD_LEFT);
-            $monthlyChartData[$event->organization_name][$yearMonth] = $event->total;
-        }
-        
-        // Prepare labels (unique year-month combinations)
-        $monthlyLabels = [];
-        foreach ($monthlyChartData as $organization => $data) {
-            $monthlyLabels = array_merge($monthlyLabels, array_keys($data));
-        }
-        $monthlyLabels = array_unique($monthlyLabels);
-        sort($monthlyLabels); // Sort labels chronologically
-
-        // Prepare datasets for each organization
-        $datasets = [];
-        $colors = ['rgb(75, 192, 192)', 'rgb(255, 99, 132)', 'rgb(54, 162, 235)']; // Example colors
-        $colorIndex = 0;
-        foreach ($monthlyChartData as $organization => $data) {
-            $dataset = [
-                'label' => $organization,
-                'data' => [],
-                'fill' => false,
-                'borderColor' => $colors[$colorIndex % count($colors)],
-                'tension' => 0.1
-            ];
-            foreach ($monthlyLabels as $label) {
-                $dataset['data'][] = $data[$label] ?? 0; // Use 0 if no data for that month
-            }
-            $datasets[] = $dataset;
-            $colorIndex++;
-        }
+                            $monthlyChartData = [];
+                            foreach ($monthlyEvents as $event) {
+                                $monthName = Carbon::createFromDate(null, $event->month)->format('F');
+                                $monthlyChartData[$event->organization_name][$monthName] = $event->total;
+                            }
+                            
+                            // Prepare labels (unique month names)
+                            $monthlyLabels = [];
+                            foreach ($monthlyChartData as $organization => $data) {
+                                $monthlyLabels = array_merge($monthlyLabels, array_keys($data));
+                            }
+                            $monthlyLabels = array_unique($monthlyLabels);
+                            
+                            // Define the chronological order of months
+                            $monthOrder = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+                            
+                            // Sort the labels based on the chronological order
+                            usort($monthlyLabels, function($a, $b) use ($monthOrder) {
+                                return array_search($a, $monthOrder) - array_search($b, $monthOrder);
+                            });
+                            
+                            // Prepare datasets for each organization
+                            $datasets = [];
+                            $colors = ['rgb(75, 192, 192)', 'rgb(255, 99, 132)', 'rgb(54, 162, 235)']; // Example colors
+                            $colorIndex = 0;
+                            foreach ($monthlyChartData as $organization => $data) {
+                                $dataset = [
+                                    'name' => $organization,
+                                    'data' => [],
+                                    'fill' => false,
+                                    'backgroundColor' => $colors[$colorIndex % count($colors)], // Use the same color as borderColor
+                                    'barThickness' => 20, // Set a fixed bar thickness
+                                    'maxBarThickness' => 20 // Maximum bar thickness
+                                ];
+                                foreach ($monthlyLabels as $label) {
+                                    // Add data for the current label (month name)
+                                    $dataset['data'][] = $data[$label] ?? 0; // Use 0 if no data for that month
+                                }
+                                $datasets[] = $dataset;
+                                $colorIndex++;
+                            }
 
 
 
@@ -128,9 +140,10 @@ class ReportController extends Controller
                             ->orderBy('events.start_date')
                             // ->where('events.status', 'APPROVED')
                             ->get();
+        
         // dd($eventsPerRole);
         $studentData = $eventsPerRole->where('user_role', 'student')->pluck('total')->toArray();
-        $facultyData = $eventsPerRole->where('user_role', 'faculty')->pluck('total')->toArray();
+        $facultyData = $eventsPerRole->where('user_role', 'professor')->pluck('total')->toArray();
         $staffData = $eventsPerRole->where('user_role', 'staff')->pluck('total')->toArray();
         $outsiderData = $eventsPerRole->where('user_role', 'outsider')->pluck('total')->toArray();
         $datesOfEventsPerRole = $eventsPerRole->pluck('start_date')->map(function ($date) {
@@ -158,6 +171,66 @@ class ReportController extends Controller
                                                 'venuesPerOrg',
                                                 'chartData',
                                             'monthlyLabels', 'datasets'));
+    }
+
+    public function changeYear(Request $request)
+    {
+        $selectedYear = $request->input('selectedYear', 2024); // Replace 'selectedYear' with your actual input name
+        $monthlyEvents = DB::table('events')
+                            ->whereNotNull('target_dept')
+                            ->whereNotNull('target_org')
+                            ->leftJoin('organizations', 'organizations.id', '=', 'events.target_org')
+                            ->selectRaw('organizations.organization as organization_name, MONTH(events.start_date) as month, YEAR(events.start_date) as year, COUNT(*) as total')
+                            ->where('events.status', 'APPROVED')
+                            ->whereYear('events.start_date', $selectedYear)
+                            ->groupBy('organizations.organization', 'year', 'month')
+                            ->orderBy('year', 'asc')
+                            ->orderBy('month', 'asc')
+                            ->get();
+
+        $monthlyChartData = [];
+        foreach ($monthlyEvents as $event) {
+            $monthName = Carbon::createFromDate(null, $event->month)->format('F');
+            $monthlyChartData[$event->organization_name][$monthName] = $event->total;
+        }
+        
+        // Prepare labels (unique month names)
+        $monthlyLabels = [];
+        foreach ($monthlyChartData as $organization => $data) {
+            $monthlyLabels = array_merge($monthlyLabels, array_keys($data));
+        }
+        $monthlyLabels = array_unique($monthlyLabels);
+        
+        // Define the chronological order of months
+        $monthOrder = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+        
+        // Sort the labels based on the chronological order
+        usort($monthlyLabels, function($a, $b) use ($monthOrder) {
+            return array_search($a, $monthOrder) - array_search($b, $monthOrder);
+        });
+        
+        // Prepare datasets for each organization
+        $datasets = [];
+        $colors = ['rgb(75, 192, 192)', 'rgb(255, 99, 132)', 'rgb(54, 162, 235)']; // Example colors
+        $colorIndex = 0;
+        foreach ($monthlyChartData as $organization => $data) {
+            $dataset = [
+                'name' => $organization,
+                'data' => [],
+                'fill' => false,
+                'backgroundColor' => $colors[$colorIndex % count($colors)], // Use the same color as borderColor
+                'barThickness' => 20, // Set a fixed bar thickness
+                'maxBarThickness' => 20 // Maximum bar thickness
+            ];
+            foreach ($monthlyLabels as $label) {
+                // Add data for the current label (month name)
+                $dataset['data'][] = $data[$label] ?? 0; // Use 0 if no data for that month
+            }
+            $datasets[] = $dataset;
+            $colorIndex++;
+        }
+        
+        return view('admin.report.event', compact('monthlyLabels', 'datasets'));
     }
 
     // public function countNumberOfOrgPerVenue()
