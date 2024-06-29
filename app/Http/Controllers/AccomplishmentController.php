@@ -113,7 +113,7 @@ class AccomplishmentController extends Controller
     
             // Use the ID of the existing or newly created accomplishment report
             $lastid = $existingAccomplishment ? $existingAccomplishment->id : $lastid;
-    
+            dd($lastid);
             foreach ($files as $file) {
                 $this->documentation_img_upload($file);
                 $upload = [
