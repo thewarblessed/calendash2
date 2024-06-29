@@ -113,14 +113,18 @@ class AccomplishmentController extends Controller
     
             // Use the ID of the existing or newly created accomplishment report
             $lastid = $existingAccomplishment ? $existingAccomplishment->id : $lastid;
-            dd($lastid);
+            // dd($lastid);
             foreach ($files as $file) {
                 $this->documentation_img_upload($file);
-                $upload = [
+                // $upload = [
+                //     'image' => time() . '_' . $file->getClientOriginalName(),
+                //     'accomplishmentreports_id' => $lastid,
+                // ];
+                // DB::table('documentations')->insert($upload);
+                $newDocumentation = Documentation::create([
                     'image' => time() . '_' . $file->getClientOriginalName(),
                     'accomplishmentreports_id' => $lastid,
-                ];
-                DB::table('documentations')->insert($upload);
+                ]);
             }
             // dd($files);
         }
