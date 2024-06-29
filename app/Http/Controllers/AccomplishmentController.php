@@ -122,10 +122,10 @@ class AccomplishmentController extends Controller
                 ];
                 DB::table('documentations')->insert($upload);
             }
-            dd($files);
+            // dd($files);
         }
     
-        return response()->json(['Message' => 'Successfully!']);
+        return response()->json(['Message' => 'Successfully!', 'images' => $files]);
     }
 
     public function updateAccomplishment(Request $request, String $id)
