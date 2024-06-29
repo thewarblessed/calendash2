@@ -543,7 +543,7 @@
                             response.forEach(function(image) {
                                 console.log(image.image);
                                 var img = $("<img>").attr("src",
-                                    "/images/documentation/" + image.image).css(
+                                    "/storage/images/" + image.image).css(
                                     "width", "180px").css("height", "180px").css(
                                     "margin-right", "10px").css("margin-bottom",
                                     "10px");
