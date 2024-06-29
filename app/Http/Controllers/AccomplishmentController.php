@@ -70,10 +70,10 @@ class AccomplishmentController extends Controller
     
     public function storeAccomplishment(Request $request, String $id)
     {
-        // $request->validate([
-        //     'images.*' => 'nullable|image|max:2048', // Max size: 2MB
-        //     'pdf' => 'nullable|mimes:pdf|max:2048', // PDF file
-        // ]);
+        $request->validate([
+            'images.*' => 'nullable|image|max:15360', // Max size: 15MB (15360 KB)
+            'pdf' => 'nullable|mimes:pdf|max:5120',   // Max size: 5MB (5120 KB)
+        ]);
     
         // Check if an accomplishment report with the given event_id exists
         $existingAccomplishment = Accomplishment::where('event_id', $id)->first();
