@@ -125,7 +125,7 @@ class AccomplishmentController extends Controller
             // dd($files);
         }
     
-        return response()->json(['Message' => 'Successfully!', 'images' => $files]);
+        return response()->json(['Message' => 'Successfully!']);
     }
 
     public function updateAccomplishment(Request $request, String $id)
