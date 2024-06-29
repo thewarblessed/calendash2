@@ -179,28 +179,52 @@ class AccomplishmentController extends Controller
         // }
     
         // Upload images
+        // if ($request->hasFile('images')) {
+        //     $files = $request->file('images');
+        //     // dd($files);
+        //     // Use the ID of the existing or newly created accomplishment report
+        //     $lastid = $existingAccomplishment ? $existingAccomplishment->id : $lastid;
+            
+        //     Documentation::where('accomplishmentreports_id', $lastid)->delete();
+
+        //     // Insert new documentation records
+        //     foreach ($files as $file) {
+        //         // Upload the image (assuming the method returns the image name or path)
+        //         $imageName = $this->documentation_img_upload($file);
+                
+        //         // Prepare the data to be inserted
+        //         $upload = [
+        //             'image' => $imageName ?? time() . '_' . $file->getClientOriginalName(), // Use $imageName if available
+        //             'accomplishmentreports_id' => $lastid, // Ensure this matches your database column name
+        //             'updated_at' => now()
+        //         ];
+                
+        //         // Insert the new documentation record into the database
+        //         DB::table('documentations')->insert($upload);
+        //     }
+        // }
+
         if ($request->hasFile('images')) {
             $files = $request->file('images');
-            // dd($files);
+            
             // Use the ID of the existing or newly created accomplishment report
             $lastid = $existingAccomplishment ? $existingAccomplishment->id : $lastid;
-            
             Documentation::where('accomplishmentreports_id', $lastid)->delete();
-
-            // Insert new documentation records
             foreach ($files as $file) {
-                // Upload the image (assuming the method returns the image name or path)
-                $imageName = $this->documentation_img_upload($file);
-                
-                // Prepare the data to be inserted
-                $upload = [
-                    'image' => $imageName ?? time() . '_' . $file->getClientOriginalName(), // Use $imageName if available
-                    'accomplishmentreports_id' => $lastid, // Ensure this matches your database column name
-                    'updated_at' => now()
-                ];
-                
-                // Insert the new documentation record into the database
-                DB::table('documentations')->insert($upload);
+                try {
+                    $imageName = time() . '_' . $file->getClientOriginalName();
+                    $file->storeAs('public/images', $imageName);
+        
+                    $newDocumentation = Documentation::create([
+                        'image' => $imageName,
+                        'accomplishmentreports_id' => $lastid,
+                        'updated_at' => now()
+                    ]);
+                } catch (\Exception $e) {
+                    // Log the error message
+                    \Log::error('File Upload Error: '.$e->getMessage());
+                    return response()->json(['error' => 'File upload failed. Please try again.'], 500);
+                }
             }
         }
     
