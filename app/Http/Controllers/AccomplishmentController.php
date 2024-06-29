@@ -71,7 +71,7 @@ class AccomplishmentController extends Controller
     public function storeAccomplishment(Request $request, String $id)
     {
         $request->validate([
-            'images.*' => 'nullable|image|max:15360', // Max size: 15MB (15360 KB)
+            // 'images.*' => 'nullable|image|max:15360', // Max size: 15MB (15360 KB)
             'pdf' => 'nullable|mimes:pdf|max:5120',   // Max size: 5MB (5120 KB)
         ]);
     
