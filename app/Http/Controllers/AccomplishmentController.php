@@ -122,6 +122,7 @@ class AccomplishmentController extends Controller
                 ];
                 DB::table('documentations')->insert($upload);
             }
+            dd($files);
         }
     
         return response()->json(['Message' => 'Successfully!']);
