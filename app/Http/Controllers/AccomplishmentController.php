@@ -71,7 +71,7 @@ class AccomplishmentController extends Controller
     public function storeAccomplishment(Request $request, String $id)
     {
         $request->validate([
-            // 'images.*' => 'nullable|image|max:15360', // Max size: 15MB (15360 KB)
+            'images.*' => 'nullable|image|max:15360', // Max size: 15MB (15360 KB)
             'pdf' => 'nullable|mimes:pdf|max:5120',   // Max size: 5MB (5120 KB)
         ]);
     
@@ -103,9 +103,9 @@ class AccomplishmentController extends Controller
         }
     
         // If no accomplishment report exists and no new one was created, return an error
-        if (!$existingAccomplishment && !isset($lastid)) {
-            return response()->json(['error' => 'No accomplishment report found for the given event ID.'], 404);
-        }
+        // if (!$existingAccomplishment && !isset($lastid)) {
+        //     return response()->json(['error' => 'No accomplishment report found for the given event ID.'], 404);
+        // }
     
         // Upload images
         if ($request->hasFile('images')) {
