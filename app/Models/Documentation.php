@@ -17,5 +17,6 @@ class Documentation extends Model
         "accomplishmentreports_id",
         "image",
         "created_at",
+        "updated_at",
     ];
 }
