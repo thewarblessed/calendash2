@@ -110,24 +110,27 @@ class AccomplishmentController extends Controller
         // Upload images
         if ($request->hasFile('images')) {
             $files = $request->file('images');
-    
+            
             // Use the ID of the existing or newly created accomplishment report
             $lastid = $existingAccomplishment ? $existingAccomplishment->id : $lastid;
-            // dd($lastid);
+            
             foreach ($files as $file) {
-                $this->documentation_img_upload($file);
-                // $upload = [
-                //     'image' => time() . '_' . $file->getClientOriginalName(),
-                //     'accomplishmentreports_id' => $lastid,
-                // ];
-                // DB::table('documentations')->insert($upload);
-                $newDocumentation = Documentation::create([
-                    'image' => time() . '_' . $file->getClientOriginalName(),
-                    'accomplishmentreports_id' => $lastid,
-                ]);
+                try {
+                    $imageName = time() . '_' . $file->getClientOriginalName();
+                    $file->storeAs('public/images', $imageName);
+        
+                    $newDocumentation = Documentation::create([
+                        'image' => $imageName,
+                        'accomplishmentreports_id' => $lastid,
+                    ]);
+                } catch (\Exception $e) {
+                    // Log the error message
+                    \Log::error('File Upload Error: '.$e->getMessage());
+                    return response()->json(['error' => 'File upload failed. Please try again.'], 500);
+                }
             }
-            // dd($files);
         }
+        
     
         return response()->json(['Message' => 'Successfully!']);
     }
