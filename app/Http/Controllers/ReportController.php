@@ -173,6 +173,64 @@ class ReportController extends Controller
                                             'monthlyLabels', 'datasets'));
     }
 
+    public function getMonthlyChartData(Request $request)
+    {
+        $selectedYear = $request->query('selectedYear', 2024);
+
+        $monthlyEvents = DB::table('events')
+            ->whereNotNull('target_dept')
+            ->whereNotNull('target_org')
+            ->leftJoin('organizations', 'organizations.id', '=', 'events.target_org')
+            ->selectRaw('organizations.organization as organization_name, MONTH(events.start_date) as month, YEAR(events.start_date) as year, COUNT(*) as total')
+            ->where('events.status', 'APPROVED')
+            ->whereYear('events.start_date', $selectedYear)
+            ->groupBy('organizations.organization', 'year', 'month')
+            ->orderBy('year', 'asc')
+            ->orderBy('month', 'asc')
+            ->get();
+
+        $monthlyChartData = [];
+        foreach ($monthlyEvents as $event) {
+            $monthName = Carbon::createFromDate(null, $event->month)->format('F');
+            $monthlyChartData[$event->organization_name][$monthName] = $event->total;
+        }
+
+        $monthlyLabels = [];
+        foreach ($monthlyChartData as $organization => $data) {
+            $monthlyLabels = array_merge($monthlyLabels, array_keys($data));
+        }
+        $monthlyLabels = array_unique($monthlyLabels);
+
+        $monthOrder = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+        usort($monthlyLabels, function($a, $b) use ($monthOrder) {
+            return array_search($a, $monthOrder) - array_search($b, $monthOrder);
+        });
+
+        $datasets = [];
+        $colors = ['rgb(75, 192, 192)', 'rgb(255, 99, 132)', 'rgb(54, 162, 235)'];
+        $colorIndex = 0;
+        foreach ($monthlyChartData as $organization => $data) {
+            $dataset = [
+                'name' => $organization,
+                'data' => [],
+                'fill' => false,
+                'backgroundColor' => $colors[$colorIndex % count($colors)],
+                'barThickness' => 20,
+                'maxBarThickness' => 20
+            ];
+            foreach ($monthlyLabels as $label) {
+                $dataset['data'][] = $data[$label] ?? 0;
+            }
+            $datasets[] = $dataset;
+            $colorIndex++;
+        }
+
+        return response()->json([
+            'datasets' => $datasets,
+            'monthlyLabels' => $monthlyLabels
+        ]);
+    }
+
     public function changeYear(Request $request)
     {
         $selectedYear = $request->input('selectedYear', 2024); // Replace 'selectedYear' with your actual input name

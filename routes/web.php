@@ -424,5 +424,6 @@ Route::get('/add-data-to-pdf', [PdfController::class, 'TotalNumberOfEventsPerOrg
 Route::get('/add-data-to-pdf-event-count', [PdfController::class, 'NumberOfEventsPerOrganizationPerVenue'])->name('NumberOfEventsPerOrganizationPerVenue');
 Route::get('/total-events-per-venue', [PdfController::class, 'TotalEventsPerVenue'])->name('TotalEventsPerVenue');
 
+Route::get('/chart-data', [ReportController::class, 'getMonthlyChartData'])->name('chart.data');
 //////////////////////////////////////// CHANGE PASSCODE ////////////////////////////////////////
 Route::get('/me/change-passcode', [ProfileController::class, 'changePasscodeView'])->name('changePasscodeView');

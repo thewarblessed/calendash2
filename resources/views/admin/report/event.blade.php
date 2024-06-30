@@ -19,7 +19,7 @@
                             <button>
                                 <a href="{{ route('TotalNumberOfEventsPerOrganization') }}" target="_blank">Show PDF
                                 </a></button>
-                            <h3 class="text-sm text-center">Total Number of Events Per Organization (Bar Chart)</h3>
+                            <h3 class="text-sm text-center">Event Count for Each Organization</h3>
                             <div class="card shadow-xs border mb-4">
                                 <div class="card-body p-3">
                                     <div class="chart">
@@ -32,14 +32,18 @@
                         <div class="card-body">
                             {{-- <button onclick="generatePDF()">Download PDF</button>
                             <a href="{{ route('userCountTable') }}">Download Users</a> --}}
-                            <button>
+                            {{-- <button>
                                 <a href="{{ route('TotalNumberOfEventsPerOrganization') }}" target="_blank">Show
-                                    PDF </a></button>
-                            <h3 class="text-sm text-center">Number of Events Per Month</h3>
-                            <select id="year-select">
-                                <option value="2023">2023</option>
-                                <option value="2023" selected>2024</option>
-                            </select>
+                                    PDF </a></button> --}}
+                            <h3 class="text-sm text-center">Monthly Events Overview</h3>
+                            <div>
+                                <h5 for="year-select">Select Year: </h5>
+                                <select id="year-select" class="form-control mb-4">
+                                    <option value="2023">2023</option>
+                                    <option value="2024" selected>2024</option>
+                                </select>
+                                <p>Data for the Year <b id="yearLabel" style="color: blue">2024</b></p>
+                            </div>
                             <div class="card shadow-xs border mb-4">
                                 <div class="card-body p-3">
                                     <div class="chart" id="myChart">
@@ -54,7 +58,7 @@
                             <button>
                                 <a href="{{ route('NumberOfEventsPerOrganizationPerVenue') }}" target="_blank">Show PDF
                                 </a></button>
-                                
+
                             <h3 class="text-sm text-center">Total Number of Events of Organization Per Venues (Bar
                                 Chart)</h3>
                             <div class="card shadow-xs border mb-4">
@@ -583,62 +587,33 @@
         chart.render();
     </script>
 
-    // <script>
-    //     // Define a function to fetch data and update the chart
-    //     function fetchDataAndUpdateChart(year) {
-    //         var url = "{{ route('countEventPerOrgReport') }}";
-    //         var queryParams = `?year=${encodeURIComponent(year)}`; // Encode query parameters
+    <script>
+        document.getElementById('year-select').addEventListener('change', function() {
+            var selectedYear = this.value;
+            document.getElementById('yearLabel').textContent = selectedYear;
+            // alert(selectedYear);
+            $.ajax({
+                url: '<?php echo route('chart.data'); ?>',
+                method: 'GET',
+                data: {
+                    selectedYear: selectedYear
+                },
+                success: function(response) {
+                    var newSeries = response.datasets;
+                    var newCategories = response.monthlyLabels;
 
-    //         fetch(url + queryParams, {
-    //                 method: 'GET',
-    //                 headers: {
-    //                     'Content-Type': 'application/json',
-    //                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-    //                 }
-    //             })
-    //             .then(response => {
-    //                 // Check if response is JSON
-    //                 console.log(response.headers.get('content-type')); 
-    //                 if (response.headers.get('content-type').includes('application/json')) {
-    //                     return response.json();
-    //                 } else {
-    //                     throw new Error('Unexpected response format');
-    //                 }
-    //             })
-    //             .then(data => {
-    //                 // Assuming 'chart' is your ApexCharts instance
-    //                 chart.updateOptions({
-    //                     xaxis: {
-    //                         categories: data.venues // Update categories (labels) if needed
-    //                     }
-    //                 });
-    //                 chart.updateSeries([{
-    //                     data: data.events // Update series data
-    //                 }]);
-    //             })
-    //             .catch(error => {
-    //                 console.error('Error fetching or updating data:', error);
-    //             });
-    //     }
+                    chart.updateOptions({
+                        xaxis: {
+                            categories: newCategories
+                        }
+                    });
 
-    //     // Initialize the chart
-    //     var options = {
-    //         series: [],
-    //         chart: {
-    //             type: 'bar',
-    //             height: 430,
-    //             // Other chart options
-    //         },
-    //         // Other ApexCharts options
-    //     };
-
-    //     var chart = new ApexCharts(document.querySelector("#chart-container"), options);
-    //     chart.render();
-
-    //     // Add onchange event listener to the select element
-    //     document.getElementById('year-select').addEventListener('change', function() {
-    //         var selectedYear = this.value;
-    //         fetchDataAndUpdateChart(selectedYear);
-    //     });
-    // </script>
+                    chart.updateSeries(newSeries);
+                },
+                error: function(error) {
+                    console.error('Error fetching chart data:', error);
+                }
+            });
+        });
+    </script>
 </x-app-layout>
