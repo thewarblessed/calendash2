@@ -5,7 +5,11 @@
         </div><br><br><br>
         <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
             <div class="ms-md-auto pe-md-3 d-flex align-items-center">
-
+                @if (Auth::user()->penalties !== 0)
+                <div class="alert alert-warning" role="alert" style="margin-right: 90px; margin-top: 15px;">
+                    <strong><i class="fa-solid fa-triangle-exclamation"></i> Warning!</strong> A penalty has been applied due to the late submission of your accomplishment report.
+                </div>
+                @endif
                 <ul class="navbar-nav  justify-content-end">
                     <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
                         <a href="javascript:;" class="nav-link text-body p-0" id="iconNavbarSidenav">

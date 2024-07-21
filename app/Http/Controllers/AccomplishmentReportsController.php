@@ -174,6 +174,7 @@ class AccomplishmentReportsController extends Controller
                         ->leftJoin('rooms', 'rooms.id', 'events.room_id')
                         ->leftJoin('organizations', 'organizations.id', 'events.target_org')
                         ->leftJoin('departments', 'departments.id', 'events.target_dept')
+                        ->leftJoin('users', 'users.id', 'events.user_id')
                         ->select(
                             'organizations.organization',
                             'departments.department',
@@ -185,6 +186,7 @@ class AccomplishmentReportsController extends Controller
                             'events.end_time',
                             'events.type',
                             'events.event_letter',
+                            'users.penalties',
                             DB::raw('CASE
                                         WHEN rooms.name IS NULL THEN venues.name
                                         ELSE rooms.name END AS venueName'),
