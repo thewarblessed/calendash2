@@ -56,6 +56,7 @@ class GoogleSocialiteController extends Controller
                     'social_id'=> $user->id,
                     'role'=> 'student',
                     'social_type'=> 'google',
+                    'penalties' => 0,
                     'password' => encrypt('my-google')
                 ]);
                 
