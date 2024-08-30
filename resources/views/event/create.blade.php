@@ -13,9 +13,10 @@
                         <div class="card-body text-start p-4 w-100">
                             <h3 class="text-white mb-2 text-center">Create your Event</h3>
                             <p class="mb-4 font-weight-semibold text-center">
-                                Ready to host your next big event? With CALENDASH, creating an event is as easy as 1-2-3.
+                                Ready to host your next big event? With CALENDASH, creating an event is as easy as
+                                1-2-3.
                             </p>
-                      
+
                             <img src="../assets/img/puzzle-iso-gradient.png" alt="3d-cube"
                                 class="position-absolute top-0 end-1 w-25 max-width-200 mt-n6 d-sm-block d-none" />
                         </div>
@@ -352,7 +353,7 @@
                                 onclick="back()">Back</button>
                             <button type="button" id="next_button" class="btn btn-primary ms-auto"
                                 onclick="next()">Next</button>
-                                {{-- <button type="button" id="showModal" class="btn btn-primary ms-auto"
+                            {{-- <button type="button" id="showModal" class="btn btn-primary ms-auto"
                                 >Modal</button>     --}}
                         </div>
                     </div>
@@ -375,14 +376,15 @@
                             @endif
                         </div>
                     </div>
-                    
+
                     <div class="modal fade modal-lg" id="confirmModal" tabindex="-1" role="dialog"
                         aria-labelledby="createeventModalLabel" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h2 class="modal-title" id="createeventModalLabel">Confirm Event Details</h2>
-                                    <button type="button" class="btn-close text-dark" data-bs-dismiss="modal" aria-label="Close">
+                                    <button type="button" class="btn-close text-dark" data-bs-dismiss="modal"
+                                        aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
                                 </div>
@@ -390,15 +392,15 @@
                                     <p style="margin-left: 20px; text-align:center; margin-top: 10px">EVENT DETAILS</p>
                                 </div> --}}
                                 <div class="modal-body">
-                                    
-                                        {{-- <p><strong>Event Name:</strong> John Doe</p>
+
+                                    {{-- <p><strong>Event Name:</strong> John Doe</p>
                                         <p><strong>Event Description:</strong> 123 Main Street</p>
                                         <p><strong>Num. of Participants:</strong> 555-1234</p> --}}
 
-                                        {{-- venue --}}
-                                        {{-- <p><strong>Venue Name:</strong> John Doe</p> --}}
+                                    {{-- venue --}}
+                                    {{-- <p><strong>Venue Name:</strong> John Doe</p> --}}
 
-{{-- 
+                                    {{-- 
                                         <p><strong>Event Type:</strong> 123 Main Street</p>
                                         <p><strong>Start Date:</strong> 555-1234</p>
                                         <p><strong>End Date:</strong> 555-1234</p>
@@ -408,73 +410,78 @@
 
                                         <p><strong>Link of the feedback form:</strong> John Doe</p>
                                         <p><strong>Event Requester: </strong> {{ Auth::user()->name }}</p>    --}}
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <input type="text" class="form-control" id="venue_id" placeholder="Enter contact number" hidden>
-                                                <p id="eventNameOutput"><strong>Event Name:</strong> </p>
-                                                <p id="eventDescOutput"><strong>Event Description:</strong> </p>
-                                                <p id="numParticipantsOutput"><strong>Num. of Participants:</strong> </p>
-                                                <br>
-                                                @if(Auth::user()->role == 'student')
-                                                <p id="orgOutput"><strong>Organization:</strong> {{ $org->organization }}</p>
-                                                <p id="deptOutput"><strong>Department:</strong> {{ $dept->department }}</p>
-                                                @endif
-                                                <br>
-                                                <p id="eventTypeOutput"><strong>Event Type:</strong> </p>
-                                                <p id="startDateOutput"><strong>Start Date:</strong> </p>
-                                                <p id="endDateOutput"><strong>End Date:</strong> </p>
-                                                <p id="startTimeOutput"><strong>Start Time:</strong> </p>
-                                                <p id="endTimeOutput"><strong>End Time:</strong> </p>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <p id="venueNameOutput"><strong>Venue Name:</strong> </p>
-                                                <br>
-                                                <p id="linkOutput"><strong>Link of the feedback form:</strong> </p>
-                                                <p><strong>Event Requester: </strong> {{ Auth::user()->name }}</p>
-                                            </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <input type="text" class="form-control" id="venue_id"
+                                                placeholder="Enter contact number" hidden>
+                                            <p id="eventNameOutput"><strong>Event Name:</strong> </p>
+                                            <p id="eventDescOutput"><strong>Event Description:</strong> </p>
+                                            <p id="numParticipantsOutput"><strong>Num. of Participants:</strong> </p>
+                                            <br>
+                                            @if (Auth::user()->role == 'student')
+                                                <p id="orgOutput"><strong>Organization:</strong>
+                                                    {{ $org->organization }}</p>
+                                                <p id="deptOutput"><strong>Department:</strong>
+                                                    {{ $dept->department }}</p>
+                                            @endif
+                                            <br>
+                                            <p id="eventTypeOutput"><strong>Event Type:</strong> </p>
+                                            <p id="startDateOutput"><strong>Start Date:</strong> </p>
+                                            <p id="endDateOutput"><strong>End Date:</strong> </p>
+                                            <p id="startTimeOutput"><strong>Start Time:</strong> </p>
+                                            <p id="endTimeOutput"><strong>End Time:</strong> </p>
                                         </div>
-                                        <p>Please review the event details and click "Confirm" to proceed.</p>
-                                        
-                                        <div id="itBuilding" style="display: none;">
-                                            <h5>Flow of the request letter:</h5>
-                                            <ol>
-                                                @if(Auth::user()->role == 'student')
+                                        <div class="col-md-6">
+                                            <p id="venueNameOutput"><strong>Venue Name:</strong> </p>
+                                            <br>
+                                            <p id="linkOutput"><strong>Link of the feedback form:</strong> </p>
+                                            <p><strong>Event Requester: </strong> {{ Auth::user()->name }}</p>
+                                        </div>
+                                    </div>
+                                    <p>Please review the event details and click "Confirm" to proceed.</p>
+
+                                    <div id="itBuilding" style="display: none;">
+                                        <h5>Flow of the request letter:</h5>
+                                        <ol>
+                                            @if (Auth::user()->role == 'student')
                                                 <li>ORGANIZATION ADVISER</li>
                                                 <li>SECTION HEAD</li>
                                                 <li>DEPARTMENT HEAD</li>
                                                 <li>OSA</li>
                                                 <li>ADAA</li>
                                                 <li>ADAF</li>
-                                                @elseif(Auth::user()->role == 'professor')
+                                            @elseif(Auth::user()->role == 'professor')
                                                 <li>OSA</li>
                                                 <li>ADAA</li>
                                                 <li>ADAF</li>
-                                                @endif
-                                            </ol>
-                                        </div>
+                                            @endif
+                                        </ol>
+                                    </div>
 
-                                        <div id="notItBuilding" style="display: none;">
-                                            <h5>Flow of the request letter:</h5>
-                                            <ol>
-                                                @if(Auth::user()->role == 'student')
+                                    <div id="notItBuilding" style="display: none;">
+                                        <h5>Flow of the request letter:</h5>
+                                        <ol>
+                                            @if (Auth::user()->role == 'student')
                                                 <li>ORGANIZATION ADVISER</li>
                                                 <li>SECTION HEAD</li>
                                                 <li>DEPARTMENT HEAD</li>
                                                 <li>OSA</li>
                                                 <li>ADAA</li>
                                                 <li>CAMPUS DIRECTOR</li>
-                                                @elseif(Auth::user()->role == 'professor')
+                                            @elseif(Auth::user()->role == 'professor')
                                                 <li>OSA</li>
                                                 <li>ADAA</li>
                                                 <li>ADAF</li>
-                                                @endif
-                                            </ol>
-                                        </div>
+                                            @endif
+                                        </ol>
+                                    </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-white" data-bs-dismiss="modal"
                                             id="modalClose">Close</button>
                                         {{-- <a type="" class="btn btn-dark" id="eventApprove">Approve Request</a> --}}
-                                        <button type="button" class="btn btn-primary" id="storeCreateEventUser"><span class="" role="status" id="spinner" aria-hidden="true"></span> Confirm</button>
+                                        <button type="button" class="btn btn-primary"
+                                            id="storeCreateEventUser"><span class="" role="status"
+                                                id="spinner" aria-hidden="true"></span> Confirm</button>
                                     </div>
                                 </div>
 
@@ -586,7 +593,7 @@
             // page 2
             const eventPlace = document.querySelector('input[name="event_place"]:checked');
             const eventVenue = document.querySelector('input[name="event_venue"]:checked');
-            
+
             if (!eventPlace && current == 1) {
                 Swal.fire({
                     icon: "error",
@@ -620,12 +627,12 @@
             const isValid = validateInput();
             if (current == 2) {
                 if (!radiosChecked) {
-                Swal.fire({
-                    icon: "error",
-                    title: "Oops...",
-                    text: "Please select an option for preferred Date and Time!"
-                });
-                return false;
+                    Swal.fire({
+                        icon: "error",
+                        title: "Oops...",
+                        text: "Please select an option for preferred Date and Time!"
+                    });
+                    return false;
                 }
 
                 if (!isValid) {
@@ -636,10 +643,10 @@
                     });
                     return false;
                 }
-            
-                
+
+
                 const eventType = $('input[name="event_type"]:checked').val();
-                if (eventType === 'withinDay') { 
+                if (eventType === 'withinDay') {
                     const eventDate = $('#event_date_withinDayUser').val();
                     const startTime = $('#start_time_withinDayUser').val();
                     const endTime = $('#end_time_withinDayUser').val();
@@ -651,8 +658,7 @@
                         });
                         return false;
                     }
-                }
-                else if (eventType === 'wholeDay') {
+                } else if (eventType === 'wholeDay') {
                     const eventDateWholeDay = $('#event_date_wholeDayUser').val();
                     if (eventDateWholeDay === '') {
                         Swal.fire({
@@ -662,8 +668,7 @@
                         });
                         return false;
                     }
-                }
-                else if (eventType === 'wholeWeek'){
+                } else if (eventType === 'wholeWeek') {
                     const eventDateWholeWeek = $('#event_date_wholeWeekUser').val();
                     if (eventDateWholeWeek === '') {
                         Swal.fire({
@@ -673,8 +678,7 @@
                         });
                         return false;
                     }
-                }
-                else if (eventType === 'date_range'){
+                } else if (eventType === 'date_range') {
                     const eventDateRange = $('#date_range_User').val();
                     if (eventDateRange === '') {
                         Swal.fire({
@@ -699,7 +703,7 @@
                 $(tabs[current]).fadeIn();
             });
         }
-      
+
 
         function back() {
             // Fade out the current step and fade in the previous step
@@ -894,7 +898,7 @@
             });
         });
     </script>
-       
+
     <script>
         $(document).ready(function() {
             var id = "{{ Auth::user()->id }}"
@@ -909,7 +913,9 @@
                 dataType: 'json',
                 success: function(response) {
                     console.log(response);
-                    if (response.error === 'No approved events found' || response.success === 'User has pending accomplishment report' || response.message === 'User has already accomplishment report') {
+                    if (response.error === 'No approved events found' || response.success ===
+                        'User has pending accomplishment report' || response.message ===
+                        'User has already accomplishment report') {
                         return true;
                     } else {
                         console
@@ -927,8 +933,34 @@
                     console.error('Error checking accomplishment:', error);
                 }
             });
-            
-            
-       })
+
+
+        })
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const fileInput = document.getElementById('request_letter');
+
+            fileInput.addEventListener('change', function() {
+                const file = this.files[0];
+                if (file) {
+                    const fileSizeMB = file.size / (1024 * 1024); // Convert bytes to MB
+
+                    if (fileSizeMB > 5) {
+                        // Clear the file input
+                        this.value = '';
+
+                        // Show alert using SweetAlert
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'File Too Large',
+                            text: 'The selected file exceeds the 5MB size limit. Please choose a smaller file.',
+                            confirmButtonText: 'OK'
+                        });
+                    }
+                }
+            });
+        });
     </script>
 </x-app-layout>
