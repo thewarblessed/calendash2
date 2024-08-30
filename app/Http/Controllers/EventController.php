@@ -895,7 +895,7 @@ class EventController extends Controller
                         'whole_week' => false,
                         'status' => 'PENDING',
                         'color' => '#D6AD60',
-                        'org_adviser' => 'notnull',
+                        'dept_head' => 'notnull',
                         'created_at' => now()
                     ]);
                 }
@@ -917,7 +917,7 @@ class EventController extends Controller
                         'whole_week' => false,
                         'status' => 'PENDING',
                         'color' => '#D6AD60',
-                        'adaa' => 'notnull',
+                        'dept_head' => 'notnull',
                         'created_at' => now()
                     ]);
                 }
@@ -966,8 +966,8 @@ class EventController extends Controller
                         'room_id' => $request->event_venue,
                         'start_date' => $date,
                         'end_date' => $date,
-                        'start_time' => '00:00:00',
-                        'end_time' => '00:00:00',
+                        'start_time' => '08:00:00',
+                        'end_time' => '17:00:00',
                         'participants' => $request->numParticipants,
                         'target_dept' => $target_dept,
                         'event_letter' => $event_letter,
@@ -988,8 +988,8 @@ class EventController extends Controller
                         'venue_id' => $request->event_venue,
                         'start_date' => $date,
                         'end_date' => $date,
-                        'start_time' => '00:00:00',
-                        'end_time' => '00:00:00',
+                        'start_time' => '08:00:00',
+                        'end_time' => '17:00:00',
                         'participants' => $request->numParticipants,
                         'target_dept' => $target_dept,
                         'event_letter' => $event_letter,
@@ -997,7 +997,7 @@ class EventController extends Controller
                         'whole_week' => false,
                         'status' => 'PENDING',
                         'color' => '#D6AD60',
-                        'adaa' => 'notnull',
+                        'dept_head' => 'notnull',
                         'created_at' => now()
                     ]);
                 }

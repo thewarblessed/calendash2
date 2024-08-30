@@ -415,8 +415,10 @@
                                                 <p id="eventDescOutput"><strong>Event Description:</strong> </p>
                                                 <p id="numParticipantsOutput"><strong>Num. of Participants:</strong> </p>
                                                 <br>
+                                                @if(Auth::user()->role == 'student')
                                                 <p id="orgOutput"><strong>Organization:</strong> {{ $org->organization }}</p>
                                                 <p id="deptOutput"><strong>Department:</strong> {{ $dept->department }}</p>
+                                                @endif
                                                 <br>
                                                 <p id="eventTypeOutput"><strong>Event Type:</strong> </p>
                                                 <p id="startDateOutput"><strong>Start Date:</strong> </p>
@@ -436,24 +438,36 @@
                                         <div id="itBuilding" style="display: none;">
                                             <h5>Flow of the request letter:</h5>
                                             <ol>
+                                                @if(Auth::user()->role == 'student')
                                                 <li>ORGANIZATION ADVISER</li>
                                                 <li>SECTION HEAD</li>
                                                 <li>DEPARTMENT HEAD</li>
                                                 <li>OSA</li>
                                                 <li>ADAA</li>
                                                 <li>ADAF</li>
+                                                @elseif(Auth::user()->role == 'professor')
+                                                <li>OSA</li>
+                                                <li>ADAA</li>
+                                                <li>ADAF</li>
+                                                @endif
                                             </ol>
                                         </div>
 
                                         <div id="notItBuilding" style="display: none;">
                                             <h5>Flow of the request letter:</h5>
                                             <ol>
+                                                @if(Auth::user()->role == 'student')
                                                 <li>ORGANIZATION ADVISER</li>
                                                 <li>SECTION HEAD</li>
                                                 <li>DEPARTMENT HEAD</li>
                                                 <li>OSA</li>
                                                 <li>ADAA</li>
                                                 <li>CAMPUS DIRECTOR</li>
+                                                @elseif(Auth::user()->role == 'professor')
+                                                <li>OSA</li>
+                                                <li>ADAA</li>
+                                                <li>ADAF</li>
+                                                @endif
                                             </ol>
                                         </div>
                                     <div class="modal-footer">
@@ -717,7 +731,7 @@
         const minDateWithinDay = oneWeekLater.toISOString().split('T')[0];
         // document.getElementById('event_date').min = minDate;
         document.getElementById('event_date_withinDayUser').min = minDateWholeDay;
-        document.getElementById('event_date_wholeDayUser').min = minDateWithinDay;
+        // document.getElementById('event_date_wholeDayUser').min = minDateWithinDay;
 
         // $(function() {
         //     var minDate = new Date();

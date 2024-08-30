@@ -728,6 +728,58 @@ class RequestController extends Controller
             }
             else
             {
+                if($role === 'osa')
+                {
+                    // $userRequesterRole = 
+                    if ($hashedPasswordFromDatabase && Hash::check($password, $hashedPasswordFromDatabase->hash)) {
+                        // Passwords match, proceed with authentication logic
+                        // echo "Password Match";
+                        $users = User::find($user_id);
+                        $officials = Official::join('users', 'users.id', 'officials.user_id')->where('users.id', $user_id)->first();
+                        $events = Event::find($event_id);
+                        $events->osa = $officials->hash;
+                        $events->approved_osa_at = now();
+                        $events->updated_at = now();
+                        $events->save();
+                        $data = [
+                            "subject" => "Calendash Approved Request",
+                            "body" => "Hello {$requester->name}!, Your request has been approved by the OSA. Approval from the ADAA is now pending."
+                        ];
+                        Mail::to($requester->email)->send(new MailNotify($data));
+                        return response()->json(["message" => 'Request handled successfully']);
+                        // return response()->json(['message' => 'Request handled successfully']);
+                    } else {
+                        // Passwords do not match, handle invalid password
+                        // echo "Password Does Not Match";
+                        return response()->json(['error' => 'Invalid passcode'], 422);
+                    }
+                }
+                if($role === 'adaa')
+                {
+                    // $userRequesterRole = 
+                    if ($hashedPasswordFromDatabase && Hash::check($password, $hashedPasswordFromDatabase->hash)) {
+                        // Passwords match, proceed with authentication logic
+                        // echo "Password Match";
+                        $users = User::find($user_id);
+                        $officials = Official::join('users', 'users.id', 'officials.user_id')->where('users.id', $user_id)->first();
+                        $events = Event::find($event_id);
+                        $events->adaa = $officials->hash;
+                        $events->approved_adaa_at = now();
+                        $events->updated_at = now();
+                        $events->save();
+                        $data = [
+                            "subject" => "Calendash Approved Request",
+                            "body" => "Hello {$requester->name}!, Your request has been approved by the ADAA. Approval from the ADAF is now pending."
+                        ];
+                        Mail::to($requester->email)->send(new MailNotify($data));
+                        return response()->json(["message" => 'Request handled successfully']);
+                        // return response()->json(['message' => 'Request handled successfully']);
+                    } else {
+                        // Passwords do not match, handle invalid password
+                        // echo "Password Does Not Match";
+                        return response()->json(['error' => 'Invalid passcode'], 422);
+                    }
+                }
                 if($role === 'atty')
                     {
                         // $userRequesterRole = 
@@ -740,10 +792,12 @@ class RequestController extends Controller
                             $events->atty = $officials->hash;
                             $events->approved_atty_at = now();
                             $events->updated_at = now();
+                            $events->status = 'APPROVED';
+                            $events->color = '#31B4F2';
                             $events->save();
                             $data = [
                                 "subject" => "Calendash Approved Request",
-                                "body" => "Hello {$requester->name}!, Your request has been approved by the ADAF. Approval from the Campus Director is now pending."
+                                "body" => "Hello {$requester->name}!, Your request has been approved by the ADAF."
                             ];
                             Mail::to($requester->email)->send(new MailNotify($data));
                             return response()->json(["message" => 'Request handled successfully']);
