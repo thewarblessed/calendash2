@@ -7,7 +7,8 @@
             <div class="ms-md-auto pe-md-3 d-flex align-items-center">
                 @if (Auth::user()->penalties !== 0)
                 <div class="alert alert-warning" role="alert" style="margin-right: 90px; margin-top: 15px;">
-                    <strong><i class="fa-solid fa-triangle-exclamation"></i> Warning!</strong> A penalty has been applied due to the late submission of your accomplishment report.
+                    <strong><i class="fa-solid fa-triangle-exclamation"></i> Warning!</strong> A penalty has been
+                    applied due to the late submission of your accomplishment report.
                 </div>
                 @endif
                 <ul class="navbar-nav  justify-content-end">
@@ -53,7 +54,7 @@
                                         </div>
                                     </div>
                                 </a>
-                            </li>       
+                            </li>
                         </ul>
                     </li>
                     <li class="nav-item ps-2 d-flex align-items-center">
@@ -73,8 +74,7 @@
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
 
-                        <a href="login"
-                            onclick="event.preventDefault();
+                        <a href="login" onclick="event.preventDefault();
                 this.closest('form').submit();">
                             <button class="btn btn-sm  btn-primary  mb-0 me-1" type="submit">Log out</button>
                         </a>
@@ -235,6 +235,19 @@
             });
 
         });
+    });
+</script>
+
+<script>
+    $.ajax({
+        url: '/api/get-completed-events', // Update the URL to your endpoint
+        method: 'GET',
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        success: function(response) {
+            console.log(response)
+        }
     });
 </script>
 <!-- End Navbar -->
