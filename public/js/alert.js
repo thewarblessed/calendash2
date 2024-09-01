@@ -169,9 +169,9 @@ $(document).ready(function () {
 
     });//end delete venue
 
-     //<-------- REJECTED ACCOUNT----------------->
+    //<-------- REJECTED ACCOUNT----------------->
 
-     $("#pendingUsersTable tbody").on("click", 'button.rejectAccounts ', function (e) {
+    $("#pendingUsersTable tbody").on("click", 'button.rejectAccounts ', function (e) {
         var id = $(this).data("id");
         // e.preventDefault();
         console.log(id);
@@ -312,8 +312,8 @@ $(document).ready(function () {
             },
         });
     });//end account rejected
-     //<-------- END REJECTED ACCOUNT----------------->
-     
+    //<-------- END REJECTED ACCOUNT----------------->
+
     $("#filterCapacity").on("input", function () {
         // let elements = document.querySelectorAll(".card-title");
         // let cards = document.querySelectorAll(".card_capacity");
@@ -454,7 +454,7 @@ $(document).ready(function () {
         });
     });
 
-    
+
     $("#showModal").on("click", function (e) {
         $('#confirmModal').modal('show');
     })
@@ -488,28 +488,28 @@ $(document).ready(function () {
             }
             const ISOweekEnd = new Date(ISOweekStart);
             ISOweekEnd.setDate(ISOweekEnd.getDate() + 6);
-        
+
             const startDate = ISOweekStart.toDateString();
             const endDate = ISOweekEnd.toDateString();
-        
+
             return { startDate, endDate };
         }
         function formatDateRange(dateRange) {
             const dates = dateRange.split(' - ');
             const startDate = new Date(dates[0]);
             const endDate = new Date(dates[1]);
-        
+
             const options = { month: 'long', day: 'numeric', year: 'numeric' };
             const formattedStartDate = startDate.toLocaleDateString('en-US', options);
             const formattedEndDate = endDate.toLocaleDateString('en-US', options);
-        
+
             return formattedStartDate + ' - ' + formattedEndDate;
         }
 
         // $('#serviceSubmit').show()
         var data = $('#createEventForm')[0];
         var venueName = '';
-        
+
         // console.log(data);
         let formData = new FormData($('#createEventForm')[0]);
         // console.log(formData);
@@ -523,17 +523,17 @@ $(document).ready(function () {
 
         var weekString = formData.get('event_date_wholeWeekUser');
         const { startDate, endDate } = getWeekDates(weekString);
-        
+
         var dateRange = formData.get('daterange');
         console.log(venue_id);
-        if (formData.get('event_place') === 'venue'){
+        if (formData.get('event_place') === 'venue') {
             $.ajax({
                 type: "GET",
                 enctype: 'multipart/form-data',
                 processData: false, // Important!
                 contentType: false,
                 cache: false,
-                url: "/api/admin/venue/"+ venue_id + "/edit",
+                url: "/api/admin/venue/" + venue_id + "/edit",
                 headers: {
                     "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
                         "content"
@@ -546,7 +546,7 @@ $(document).ready(function () {
                     $('#eventDescOutput').html("<strong>Event Description:</strong> " + formData.get('eventDesc'));
                     $('#numParticipantsOutput').html("<strong>Num. of Participants:</strong> " + formData.get('numParticipants'));
 
-                    if (formData.get('event_type') === 'withinDay'){
+                    if (formData.get('event_type') === 'withinDay') {
                         $('#endDateOutput').show();
                         $('#startTimeOutput').show();
                         $('#endTimeOutput').show();
@@ -555,15 +555,15 @@ $(document).ready(function () {
                         $('#endDateOutput').html("<strong>End Date:</strong> " + formatDate(formData.get('event_date_withinDayUser')));
                         $('#startTimeOutput').html("<strong>Start Time:</strong> " + formatTime(formData.get('start_time_withinDayUser')));
                         $('#endTimeOutput').html("<strong>End Time:</strong> " + formatTime(formData.get('end_time_withinDayUser')))
-                    }   
-                    else if (formData.get('event_type') === 'wholeDay'){
+                    }
+                    else if (formData.get('event_type') === 'wholeDay') {
                         $('#eventTypeOutput').html("<strong>Event Type:</strong> Whole Day");
                         $('#startDateOutput').html("<strong>Date:</strong> " + formatDate(formData.get('event_date_wholeDayUser')));
                         $('#endDateOutput').hide();
                         $('#startTimeOutput').hide();
                         $('#endTimeOutput').hide();
                     }
-                    else if (formData.get('event_type') === 'wholeWeek'){
+                    else if (formData.get('event_type') === 'wholeWeek') {
                         $('#endDateOutput').show();
                         $('#eventTypeOutput').html("<strong>Event Type:</strong> Whole Week");
                         $('#startDateOutput').html("<strong>Start Date:</strong> " + startDate);
@@ -572,30 +572,30 @@ $(document).ready(function () {
                         $(
                             '#endTimeOutput').hide();
                     }
-                    else if (formData.get('event_type') === 'dateRanges'){
+                    else if (formData.get('event_type') === 'dateRanges') {
                         $('#eventTypeOutput').html("<strong>Event Type:</strong> Date Range");
-                        $('#startDateOutput').html("<strong>Date:</strong> " + formatDateRange (formData.get('daterange')));
+                        $('#startDateOutput').html("<strong>Date:</strong> " + formatDateRange(formData.get('daterange')));
                         $('#startTimeOutput').hide();
                         $('#endTimeOutput').hide();
                         $('#endDateOutput').hide();
                     }
                     $('#venueNameOutput').html("<strong>Venue Name:</strong> " + data.Venues.name);
                     $('#linkOutput').html("<strong>Link for the feedback form:</strong> " + formData.get('feedback_qr_code'));
-                    
-                    if (data.Venues.name === 'IT Auditorium'){
+
+                    if (data.Venues.name === 'IT Auditorium') {
                         $('#itBuilding').css('display', 'block');
                         $('#notItBuilding').css('display', 'none');
                     }
-                    else{
+                    else {
                         $('#notItBuilding').css('display', 'block');
                         $('#itBuilding').css('display', 'none');
                     }
-                    
+
                 },
                 error: function (error) {
                     console.log("error");
                 },
-            }); 
+            });
         }
         else {
             $.ajax({
@@ -604,7 +604,7 @@ $(document).ready(function () {
                 processData: false, // Important!
                 contentType: false,
                 cache: false,
-                url: "/api/admin/room/"+ venue_id + "/edit",
+                url: "/api/admin/room/" + venue_id + "/edit",
                 headers: {
                     "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
                         "content"
@@ -617,7 +617,7 @@ $(document).ready(function () {
                     $('#eventDescOutput').html("<strong>Event Description:</strong> " + formData.get('eventDesc'));
                     $('#numParticipantsOutput').html("<strong>Num. of Participants:</strong> " + formData.get('numParticipants'));
 
-                    if (formData.get('event_type') === 'withinDay'){
+                    if (formData.get('event_type') === 'withinDay') {
                         $('#endDateOutput').show();
                         $('#startTimeOutput').show();
                         $('#endTimeOutput').show();
@@ -626,15 +626,15 @@ $(document).ready(function () {
                         $('#endDateOutput').html("<strong>End Date:</strong> " + formatDate(formData.get('event_date_withinDayUser')));
                         $('#startTimeOutput').html("<strong>Start Time:</strong> " + formatTime(formData.get('start_time_withinDayUser')));
                         $('#endTimeOutput').html("<strong>End Time:</strong> " + formatTime(formData.get('end_time_withinDayUser')))
-                    }   
-                    else if (formData.get('event_type') === 'wholeDay'){
+                    }
+                    else if (formData.get('event_type') === 'wholeDay') {
                         $('#eventTypeOutput').html("<strong>Event Type:</strong> Whole Day");
                         $('#startDateOutput').html("<strong>Date:</strong> " + formatDate(formData.get('event_date_wholeDayUser')));
                         $('#endDateOutput').hide();
                         $('#startTimeOutput').hide();
                         $('#endTimeOutput').hide();
                     }
-                    else if (formData.get('event_type') === 'wholeWeek'){
+                    else if (formData.get('event_type') === 'wholeWeek') {
                         $('#endDateOutput').show();
                         $('#eventTypeOutput').html("<strong>Event Type:</strong> Whole Week");
                         $('#startDateOutput').html("<strong>Start Date:</strong> " + startDate);
@@ -642,9 +642,9 @@ $(document).ready(function () {
                         $('#startTimeOutput').hide();
                         $('#endTimeOutput').hide();
                     }
-                    else if (formData.get('event_type') === 'dateRanges'){
+                    else if (formData.get('event_type') === 'dateRanges') {
                         $('#eventTypeOutput').html("<strong>Event Type:</strong> Date Range");
-                        $('#startDateOutput').html("<strong>Date:</strong> " + formatDateRange (formData.get('daterange')));
+                        $('#startDateOutput').html("<strong>Date:</strong> " + formatDateRange(formData.get('daterange')));
                         $('#startTimeOutput').hide();
                         $('#endTimeOutput').hide();
                         $('#endDateOutput').hide();
@@ -655,12 +655,12 @@ $(document).ready(function () {
                 error: function (error) {
                     console.log("error");
                 },
-            }); 
+            });
         }
 
         $('#confirmModal').modal('show');
-        
-        
+
+
 
         $("#storeCreateEventUser").on("click", function (e) {
             $('#spinner').addClass('spinner-border spinner-border-sm');
@@ -686,7 +686,7 @@ $(document).ready(function () {
                     setTimeout(function () {
                         window.location.href = '/myEvents';
                     }, 1500);
-    
+
                     Swal.fire({
                         icon: 'success',
                         title: 'Event has been Requested!',
@@ -704,7 +704,7 @@ $(document).ready(function () {
                 }
             });
         })
-        
+
         //Swal.fire('SweetAlert2 is working!')
     });//end create event
 
@@ -1234,9 +1234,9 @@ $(document).ready(function () {
         var selectedEndTime = $(this).val();
         console.log("date: " + selectedDate);
         console.log("venue id: " + selectedVenueID);
-        console.log("StartTime: " +selectedStartTime);
-        console.log("Endtime: " +selectedEndTime);
-        console.log("venuetype: " +selectedVenueType);
+        console.log("StartTime: " + selectedStartTime);
+        console.log("Endtime: " + selectedEndTime);
+        console.log("venuetype: " + selectedVenueType);
 
 
         if (selectedVenueType === 'room') {
@@ -1597,8 +1597,52 @@ $(document).ready(function () {
     $("#completeProfileSubmit").on("click", function (e) {
 
         e.preventDefault();
+        // alert('clicked');
+        var role = $('#user_role').val();
+        if (role === 'student') {
+            if ($('#inputFirstName').val().trim() === '') {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Input Required',
+                    text: 'Please enter your first name.',
+                }).then(() => {
+                    // Focus on the input field after the SweetAlert is dismissed
+                    $('#inputFirstName').focus();
+                });
+            }
+            if ($('#inputLastName').val().trim() === '') {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Input Required',
+                    text: 'Please enter your last name.',
+                }).then(() => {
+                    // Focus on the input field after the SweetAlert is dismissed
+                    $('#inputLastName').focus();
+                });
+            }
+            if ($('#inputTupId').val().trim() === '') {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Input Required',
+                    text: 'Please enter your TUP ID.',
+                }).then(() => {
+                    // Focus on the input field after the SweetAlert is dismissed
+                    $('#inputTupId').focus();
+                });
+            }
+            if ($('#inputImageID').val().trim() === '') {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Input Required',
+                    text: 'Please upload your TUP ID.',
+                }).then(() => {
+                    // Focus on the input field after the SweetAlert is dismissed
+                    $('#inputImageID').focus();
+                });
+            }
+        }
         var data = $('#compeleteProfileForm')[0];
-        console.log(data);
+        // console.log(data);
         let formData = new FormData($('#compeleteProfileForm')[0]);
         console.log(formData);
 
@@ -1606,6 +1650,9 @@ $(document).ready(function () {
             console.log(pair[0] + ',' + pair[1]);
         }
         console.log(formData)
+
+        // console.log(role);
+
         $.ajax({
             type: "POST",
             url: "/api/users/storeCompleteProfile",
@@ -3766,8 +3813,8 @@ $(document).ready(function () {
             },
         });
 
-         // //PDF
-         $.ajax({
+        // //PDF
+        $.ajax({
             type: "GET",
             url: "/api/show/letter/" + id,
             headers: {
@@ -4111,39 +4158,39 @@ $(document).ready(function () {
         var id = $(this).data("id");
         console.log(id);
         $("#outsider_event_id").val(id);
-        
+
         $("#uploadReceipt").modal('show');
     });
-        // $.ajax({
-        //     url: '/api/upload-receipt/' + id,
-        //     type: 'POST',
-        //     headers: {
-        //         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        //     },
-        //     data: formData,
-        //     contentType: false,
-        //     processData: false,
-        //     success: function (response) {
-        //         setTimeout(function () {
-        //             window.location.href = '/outside/myRequest';
-        //         }, 1500);
-        //         Swal.fire({
-        //             title: "Success!",
-        //             text: "Image successfully uploaded/sent.",
-        //             icon: "success"
-        //         });
-        //     },
-        //     error: function (xhr, status, error) {
-        //         Swal.fire({
-        //             title: "Error",
-        //             text: "Failed to upload image.",
-        //             icon: "error"
-        //         });
-        //     }
-        // });
-    
+    // $.ajax({
+    //     url: '/api/upload-receipt/' + id,
+    //     type: 'POST',
+    //     headers: {
+    //         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    //     },
+    //     data: formData,
+    //     contentType: false,
+    //     processData: false,
+    //     success: function (response) {
+    //         setTimeout(function () {
+    //             window.location.href = '/outside/myRequest';
+    //         }, 1500);
+    //         Swal.fire({
+    //             title: "Success!",
+    //             text: "Image successfully uploaded/sent.",
+    //             icon: "success"
+    //         });
+    //     },
+    //     error: function (xhr, status, error) {
+    //         Swal.fire({
+    //             title: "Error",
+    //             text: "Failed to upload image.",
+    //             icon: "error"
+    //         });
+    //     }
+    // });
 
-    $("#outsiderSubmitReceipt").on("click",function (e) {
+
+    $("#outsiderSubmitReceipt").on("click", function (e) {
         e.preventDefault();
         var id = $("#outsider_event_id").val();
         console.log(id);
@@ -4208,21 +4255,21 @@ $(document).ready(function () {
                 ),
             },
             dataType: "json",
-            success: function (data) {  
+            success: function (data) {
                 console.log(data.events.id);
                 var image = data.events.receipt_image;
                 // Assuming 'image' is the filename of the image in the public path
-                    var imgSrc = "/storage/" + image; // Adjust the path if necessary
+                var imgSrc = "/storage/" + image; // Adjust the path if necessary
 
-                    // Create an image element with the specified source and styles
-                    var img = $("<img>")
-                        .attr("src", imgSrc)
-                        .css({
-                            "width": "450px",
-                            "height": "450px",
-                            "margin-right": "10px",
-                            "margin-bottom": "10px"
-                        });
+                // Create an image element with the specified source and styles
+                var img = $("<img>")
+                    .attr("src", imgSrc)
+                    .css({
+                        "width": "450px",
+                        "height": "450px",
+                        "margin-right": "10px",
+                        "margin-bottom": "10px"
+                    });
                 $("#checkReceiptIdContainer").append(img);
                 $("#event_id_of_outsider").val(data.events.id);
                 $("#checkReceiptModal").modal('show');
@@ -4266,7 +4313,7 @@ $(document).ready(function () {
             }
         });
     })
-    
+
 
     /////// REJECTION OF OUTSIDER ///////////
     $("#eventOutsiderTable tbody").on("click", 'button.rejectBtnOutsider', async function (e) {
@@ -4282,67 +4329,67 @@ $(document).ready(function () {
             confirmButtonColor: "#3085d6",
             cancelButtonColor: "#d33",
             confirmButtonText: "Yes, reject it!"
-          }).then(async(result) => {
+        }).then(async (result) => {
             if (result.isConfirmed) {
-            //   Swal.fire({
-            //     title: "Deleted!",
-            //     text: "Your file has been deleted.",
-            //     icon: "success"
-            //   });
-            const { value: text, dismiss: action } = await Swal.fire({
-                input: "textarea",
-                inputLabel: "Reason of rejection",
-                inputPlaceholder: "Type your message here...",
-                inputAttributes: {
-                  "aria-label": "Type your message here"
-                },
-                showCancelButton: true, // Add this line to show the cancel button
-                confirmButtonText: "Reject",
-                cancelButtonText: "Cancel"
-              });
+                //   Swal.fire({
+                //     title: "Deleted!",
+                //     text: "Your file has been deleted.",
+                //     icon: "success"
+                //   });
+                const { value: text, dismiss: action } = await Swal.fire({
+                    input: "textarea",
+                    inputLabel: "Reason of rejection",
+                    inputPlaceholder: "Type your message here...",
+                    inputAttributes: {
+                        "aria-label": "Type your message here"
+                    },
+                    showCancelButton: true, // Add this line to show the cancel button
+                    confirmButtonText: "Reject",
+                    cancelButtonText: "Cancel"
+                });
 
-              if (text) {
-                // User entered a reason for rejection
-                const dataToSend = {
-                    key1: text,
-                    key2: user_id
-                };
-                
-                $.ajax({
-                    url: '/api/reject-outsider-event/' + id,
-                    type: 'POST',
-                    data: JSON.stringify(dataToSend),
-                    contentType: 'application/json',
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    success: function (response) {
-                        console.log(response);
-                        Swal.fire({
-                            title: "Success!",
-                            text: "Event Rejected.",
-                            icon: "success"
-                        });
-                    },
-                    error: function (xhr, status, error) {
-                        Swal.fire({
-                            title: "Error",
-                            text: "Failed to reject event.",
-                            icon: "error"
-                        });
-                    }
-                });
-                // Proceed with rejection logic...
-              } else {
-                // User canceled the action
-                Swal.fire({
-                  title: "Cancelled",
-                  text: "Action cancelled.",
-                  icon: "error"
-                });
-              }
+                if (text) {
+                    // User entered a reason for rejection
+                    const dataToSend = {
+                        key1: text,
+                        key2: user_id
+                    };
+
+                    $.ajax({
+                        url: '/api/reject-outsider-event/' + id,
+                        type: 'POST',
+                        data: JSON.stringify(dataToSend),
+                        contentType: 'application/json',
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        success: function (response) {
+                            console.log(response);
+                            Swal.fire({
+                                title: "Success!",
+                                text: "Event Rejected.",
+                                icon: "success"
+                            });
+                        },
+                        error: function (xhr, status, error) {
+                            Swal.fire({
+                                title: "Error",
+                                text: "Failed to reject event.",
+                                icon: "error"
+                            });
+                        }
+                    });
+                    // Proceed with rejection logic...
+                } else {
+                    // User canceled the action
+                    Swal.fire({
+                        title: "Cancelled",
+                        text: "Action cancelled.",
+                        icon: "error"
+                    });
+                }
             }
-          });
+        });
     })
 
     ///////////////////// change of passcode ///////////////
@@ -4353,7 +4400,7 @@ $(document).ready(function () {
             currentPasscode: currentInput,
             user_id: user_id
         };
-    
+
         $.ajax({
             url: '/api/me/check-passcode',
             type: 'POST',
@@ -4363,12 +4410,12 @@ $(document).ready(function () {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
             success: function (response) {
-                if (response.message === 'Passcode matched!'){
+                if (response.message === 'Passcode matched!') {
                     $('#passcodeCheckResult').text(response.message);
                     $('#passcodeCheckResult').removeClass('text-danger');
                     $('#passcodeCheckResult').addClass('text-success');
-                } 
-                else{
+                }
+                else {
                     $('#passcodeCheckResult').text(response.message);
                     $('#passcodeCheckResult').addClass('text-danger');
                     $('#passcodeCheckResult').removeClass('text-success');
@@ -4379,7 +4426,7 @@ $(document).ready(function () {
             }
         });
     });
-    
+
     $('#passcodeSubmit').on('click', function (e) {
         e.preventDefault();
         var user_id = $('#user_id').val();
@@ -4389,7 +4436,7 @@ $(document).ready(function () {
             user_id: user_id,
             passcode: passcode,
         };
-    
+
         $.ajax({
             url: '/api/me/update-passcode',
             type: 'POST',
@@ -4410,7 +4457,7 @@ $(document).ready(function () {
                     title: "Passcode Updated",
                     showConfirmButton: false,
                     timer: 1500
-                  });
+                });
             },
             error: function (xhr, status, error) {
                 // Handle error response
@@ -4419,4 +4466,56 @@ $(document).ready(function () {
             }
         });
     });
+
+
+    $('#organization_id_user').change(function () {
+        var org_id = $(this).val();
+
+        $.ajax({
+            type: "GET",
+            url: "/api/get-department/" + org_id,
+            headers: {
+                'Authorization': 'Bearer ' + sessionStorage.getItem('token'),
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            dataType: "json",
+            success: function (data) {
+                // Assuming data.department contains the department value you want to set
+                // console.log(data.id);
+                // if(data.department == [''])
+                // {
+
+                // }
+                if (data.id == null) {
+                    var $select = $('#department_id_user');
+
+                    // Find the option with a specific value and change its text
+                    $select.find('option:selected').text('Hi');
+                    $('#department_id_user').val(0);
+                    console.log($('#department_id_user').val());
+                }
+                else {
+                    $('#department_id_user').val(data.id);
+                    console.log($('#department_id_user').val());
+                }
+
+                // $('#department_id_user').text(data.department);
+                // alert($('#department_id_user').val());
+
+
+            },
+            error: function (error) {
+                console.log('error');
+            }
+        });
+    });
+
+
+    // REGISTRATION TRAPPING
+    $('#user_role').val();
+
+
+
+
+
 })
