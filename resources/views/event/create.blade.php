@@ -61,7 +61,7 @@
                                 <div class="form-check">
                                     <input class="form-check-input" type="radio" name="event_place" value="venue"
                                         id="venue" required>
-                                    <label class="custom-control-label" for="event_place"
+                                    <label class="custom-control-label" for="venue"
                                         style="font-size: 16px;">VENUES</label>
                                 </div>
 
@@ -69,7 +69,7 @@
                                     style="{{ Auth::user()->role === 'outsider' ? 'display: none;' : '' }}">
                                     <input class="form-check-input" type="radio" name="event_place" value="room"
                                         id="room" required>
-                                    <label class="custom-control-label" for="event_place"
+                                    <label class="custom-control-label" for="room"
                                         style="font-size: 16px;">REQUEST ROOMS</label>
                                 </div>
                             </div>
@@ -89,10 +89,10 @@
                                                     <p class="card-text">Capacity: {{ $venue->capacity }}</p>
                                                     <div class="form-check">
                                                         <input class="form-check-input" type="radio"
-                                                            name="event_venue" id="event_venue"
+                                                            name="event_venue" id="event_venue_{{ $venue->id }}"
                                                             value="{{ $venue->id }}" required>
-                                                        <label class="custom-control-label" for="event_venue"
-                                                            style="color: blue; font-size: 18px"><strong>SELECT</strong>
+                                                        <label class="custom-control-label" for="event_venue_{{ $venue->id }}"
+                                                            style="color: blue; font-size: 18px"><strong>Select</strong>
                                                         </label>
                                                     </div>
                                                 </div>
@@ -902,7 +902,7 @@
     <script>
         $(document).ready(function() {
             var id = "{{ Auth::user()->id }}"
-            // console.log(id + ": Please ID NYA TO")
+             console.log(id + ": Please ID NYA TO")
             $.ajax({
                 url: '/api/me/check-accomplishments/' + id,
                 type: 'POST',

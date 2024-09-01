@@ -433,6 +433,17 @@ Route::post('/updateAttendance/{id}',[
         'as' => 'updateAttendance',
         ]);
 
+Route::get('/get-department/{id}',[
+        'uses' => 'OrganizationAdviserController@getDepartment',
+        'as' => 'getDepartmentCompleteProfile',
+]);
+
+Route::post('/add-participant/{id}',[
+        'uses' => 'AttendanceController@addParticipant',
+        'as' => 'addParticipantAttendance',
+]);
+        
+
 ////////////////////////////// NOTIFICATIONS  //////////////////////
 Route::post('/notif/request/{id}',[
         'uses' => 'NotificationController@index',

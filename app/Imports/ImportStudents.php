@@ -22,13 +22,17 @@ class ImportStudents implements ToCollection
 
     public function collection(Collection $rows)
     {
+        $rows->shift();
         foreach ($rows as $row) {
-            Attendance::create([
-                'event_id' => $this->eventId,
-                'yearsection' => $row[0],
-                'lastname' => $row[1],
-                'firstname' => $row[2],
-            ]);
+            // Ensure each row has the expected number of columns
+            if (isset($row[0]) && isset($row[1]) && isset($row[2])) {
+                Attendance::create([
+                    'event_id' => $this->eventId,
+                    'yearsection' => $row[0],
+                    'lastname' => $row[1],
+                    'firstname' => $row[2],
+                ]);
+            }
         }
     }
 }

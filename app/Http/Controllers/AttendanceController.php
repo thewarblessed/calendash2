@@ -7,6 +7,7 @@ use App\Models\Attendance;
 use App\Models\Event;
 use App\Imports\ImportStudents;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\AttendanceTemplateExport;
 use Auth;
 use Log;
 
@@ -114,5 +115,25 @@ class AttendanceController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function exportTemplate()
+    {
+        return Excel::download(new AttendanceTemplateExport, 'attendance_template.xlsx');
+    }
+
+    public function addParticipant(Request $request, String $id)
+    {
+        $event_id = $id;
+
+        $newParticipant = Attendance::create([
+            'event_id' => $event_id,
+            'yearsection' => $request->attendanceYearAndSection,
+            'lastname'=> $request->attendanceLastName,
+            'firstname'=> $request->attendanceFirstName,
+        ]);
+
+        return response()->json($newParticipant);
+        // return Excel::download(new AttendanceTemplateExport, 'attendance_template.xlsx');
     }
 }

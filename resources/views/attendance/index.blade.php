@@ -69,7 +69,7 @@
                     <div class="row">
                         @if ($events->isEmpty())
                             <div class="col-12 text-center">
-                                <img src="https://media3.giphy.com/media/O4B7pH57BbdVZVcNgS/200w.gif?cid=6c09b952srkcsa5x6oecl5wlks5dj0r6tul26s7n0vrrs66x&ep=v1_videos_search&rid=200w.gif&ct=v" width="250" height="250" style="border-radius: 20px" alt="Description of the image">
+                                <img src="https://static.vecteezy.com/system/resources/previews/010/726/317/original/no-event-filled-line-style-icon-empty-states-vector.jpg" width="250" height="250" style="border-radius: 20px" alt="Description of the image">
                                 <p>You have no ongoing events yet</p>
                             </div>
                         @else

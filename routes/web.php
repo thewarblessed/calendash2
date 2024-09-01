@@ -427,3 +427,5 @@ Route::get('/total-events-per-venue', [PdfController::class, 'TotalEventsPerVenu
 Route::get('/chart-data', [ReportController::class, 'getMonthlyChartData'])->name('chart.data');
 //////////////////////////////////////// CHANGE PASSCODE ////////////////////////////////////////
 Route::get('/me/change-passcode', [ProfileController::class, 'changePasscodeView'])->name('changePasscodeView');
+
+Route::get('/export-template', [AttendanceController::class, 'exportTemplate']);

@@ -7,58 +7,116 @@
                 <a href="{{ url('/attendance') }}" class="btn btn-primary">Back</a>
                 <div class="" style="text-align: center">
                     <div>
-                        {{-- <strong><h3>Events list</h3></strong> --}}
+                        {{-- <strong>
+                            <h3>Events list</h3>
+                        </strong> --}}
                         <h1>{{ $events->event_name }}</h1>
                         <p class="text-sm">See all participants</p>
 
-                        <button type="button" class="btn btn-dark approveBtn" style="width: 100%; height: 40px;"
-                            data-bs-toggle="modal" data-bs-target="#importStudentModal" id="importFile">Import
-                            File</button>
-                    </div>
-
-                    <!-- Modal for Process of letter -->
-                    <div class="modal fade" id="notesModal" tabindex="-1" role="dialog"
-                        aria-labelledby="processLetterModalLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="notesModalLabel">IMPORTANT REMINDERS</h5>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    <div style="text-align: justify; text-justify: inter-word; padding: 20px;">
-                                        <b>
-                                            <p style="color: #000000; font-size: 18px; font-weight: bold;">The Excel
-                                                file should follow a specific format:</p>
-                                        </b>
-                                        <p style="color: #000000;">• On the First Column, It should be <b>Year and
-                                                Section</b>
-                                            <br>• On the Second Column, It should be <b>First name</b>
-                                            <br>• On the Third Column, It should be <b>Last name</b> of the
-                                            participants.
-                                            <b>
-                                                <p style="color: #000000; font-size: 18px; font-weight: bold;">You only
-                                                    need to include this information without adding any headers like
-                                                    "Year and Section," "First name," or "Last name."
-                                            </b> Just ensure that the data
-                                            is arranged in the specified format without any additional labels.
-                                        </p></b>
-                                    </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-primary"
-                                        data-bs-dismiss="modal">Close</button>
-                                    <span aria-hidden="true"></span>
-                                </div>
+                        <div class="row">
+                            <div class="col-sm-12 col-md-4 col-xl-4">
+                                <a href="{{ url('/export-template') }}" class="btn btn-info getTemplate"
+                                    style="width: 100%; height: 40px;" id="getTemplate">Get Template/Format</a>
                             </div>
                         </div>
-                        <script>
-                            $(document).ready(function() {
-                                $('#notesModal').modal('show');
-                            });
-                        </script>
+
+                        <div class="row">
+                            <div class="col-sm-12 col-md-4 col-xl-2">
+                                <button type="button" class="btn btn-dark approveBtn" style="width: 100%; height: 40px;"
+                                    data-bs-toggle="modal" data-bs-target="#importStudentModal" id="importFile">Import
+                                    Participants</button>
+                            </div>
+                            <div class="col-sm-12 col-md-4 col-xl-2">
+                                <button class="btn btn-dark addParticipant" style="width: 100%; height: 40px;"
+                                    id="addParticipant">Add Participant</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
+
+                <!-- Modal for Process of letter -->
+                <div class="modal fade" id="addParticipantModal" tabindex="-1" role="dialog"
+                    aria-labelledby="processLetterModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="addParticipantLabel">Add Participant</h5>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="addParticipantForm" enctype="multipart/form-data">
+                                    @csrf
+                                    <div class="form-group">
+                                        <label for="exampleFormControlInput1">Year & Section</label>
+                                        <input name="attendanceYearAndSection" type="text" class="form-control"
+                                            id="attendanceYearAndSection" placeholder="Enter year & section" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="exampleFormControlInput1">Last Name</label>
+                                        <input name="attendanceLastName" type="text" class="form-control"
+                                            id="attendanceLastName" placeholder="Enter Last Name" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="exampleFormControlInput1">First Name</label>
+                                        <input name="attendanceFirstName" type="text" class="form-control"
+                                            id="attendanceFirstName" placeholder="Enter First Name" required>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="submit" class="btn btn-dark" id="attendanceParticipantSubmit">Add
+                                            Participant</button>
+                                        <button type="button" class="btn btn-danger"
+                                            data-bs-dismiss="modal">Close</button>
+                                        <span aria-hidden="true"></span>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <script>
+                        $(document).ready(function() {
+                                $('#notesModal').modal('show');
+                            });
+                    </script>
+                </div>
+
+                <!-- Modal for Process of letter -->
+                <div class="modal fade" id="notesModal" tabindex="-1" role="dialog"
+                    aria-labelledby="processLetterModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="notesModalLabel">IMPORTANT REMINDERS</h5>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div style="text-align: justify; text-justify: inter-word; padding: 20px;">
+                                    <b>
+                                        {{-- <p style="color: #000000; font-size: 18px; font-weight: bold;">The
+                                            Excel
+                                            file should follow a specific format:</p> --}}
+                                    </b>
+                                    <p style="color: #000000;">• The format/template of the Excel can be downloaded
+                                        by clicking the button <b>Get Template/Format</b>.
+                                        <br>• You can import an excel file by clicking the <b>Import
+                                            Participants</b>.
+                                        <br>• You can also add participant by clicking the <b>Add Partipant</b>
+                                        button.
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+                                <span aria-hidden="true"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <script>
+                        $(document).ready(function() {
+                                $('#notesModal').modal('show');
+                            });
+                    </script>
+                </div>
+
             </div>
             <table id="attendanceTable" class="table table-striped table-hover" style="width:100%;">
                 <thead>
@@ -73,7 +131,8 @@
                 <tbody id="attendanceBody">
                 </tbody>
             </table>
-            {{-- <x-app.footer /> --}}
+            {{--
+            <x-app.footer /> --}}
 
             <div class="modal fade" id="importStudentModal" tabindex="-1" role="dialog"
                 aria-labelledby="createeventModalLabel" aria-hidden="true">
@@ -120,14 +179,17 @@
     <script type="text/javascript" charset="utf8"
         src="https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js">
+    <script type="text/javascript" charset="utf8"
+        src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js">
     </script>
-    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.print.min.js">
+    <script type="text/javascript" charset="utf8"
+        src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.print.min.js">
     </script>
 
 
 
-    {{-- <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script> --}}
+    {{-- <script type="text/javascript" charset="utf8"
+        src="https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script> --}}
 
 </x-app-layout>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -245,8 +307,72 @@
             });
         });
 
-        $("#importFile").on("click", function(e) {
-            console.log('napindot')
+        // $("#importFile").on("click", function(e) {
+        //     console.log('napindot')
+        // });
+
+
+        $("#addParticipant").on("click", function(e) {
+            // e.preventDefault();
+           console.log('yeah')
+           $('#addParticipantModal').modal('show');
+        });
+
+        
+        $("#attendanceParticipantSubmit").on("click", function(e) {
+            e.preventDefault();
+            // $('#serviceSubmit').show()
+            var data = $('#addParticipantForm')[0];
+            console.log(data);
+            let formData = new FormData($('#addParticipantForm')[0]);
+
+            for (var pair of formData.entries()) {
+                console.log(pair[0] + ',' + pair[1]);
+            }
+            console.log(formData)
+            //    addParticipantForm
+            //    /add-participant/{id}
+            var url = new URL(window.location.href);
+
+            // Extract the pathname and split by '/'
+            var segments = url.pathname.split('/');
+
+            // The ID should be the last segment of the pathname
+            var id = segments[segments.length - 1];
+            
+            // console.log("Extracted ID: " + id);
+            var event_id = id;
+            console.log(event_id);
+            $.ajax({
+                type: "POST",
+                url: "/api/add-participant/" + event_id,
+                data: formData,
+                contentType: false,
+                processData: false,
+                headers: {
+                    'Authorization': 'Bearer ' + sessionStorage.getItem('token'),
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                dataType: "json",
+                success: function (data) {
+                    console.log(data);
+                    setTimeout(function () {
+                        window.location.href = '/attendance/' + event_id;
+                    }, 1500);
+
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Participant has been Added!',
+                        showConfirmButton: false,
+                        timer: 3000
+                    })
+                },
+                error: function (error) {
+                    console.log('error');
+                }
+            });
+
+        //    $('#addParticipantModal').modal('show');
         });
 
     })
