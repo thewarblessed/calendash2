@@ -119,7 +119,7 @@ class UserEventController extends Controller
     {
         $user_id = $id;
         // $myRejected = Events::
-        $myRejectList = Event::leftjoin('venues','events.venue_id','venues.id')
+        $myApprovedList = Event::leftjoin('venues','events.venue_id','venues.id')
                                 ->leftjoin('organizations','organizations.id','events.target_org')
                                 ->leftjoin('departments','departments.id','events.target_dept')
                                 ->leftjoin('rooms','rooms.id','events.room_id')
@@ -134,6 +134,11 @@ class UserEventController extends Controller
                                         'events.start_time',
                                         'events.end_time',
                                         'events.type',
+                                        'events.created_at',
+                                        'events.updated_at',
+                                        'events.event_letter',
+                                        'events.approved_campus_director_at',
+                                        'events.approved_atty_at',
                                         \DB::raw('CASE
                                                     WHEN rooms.name IS NULL THEN venues.name
                                                     ELSE rooms.name
@@ -142,6 +147,6 @@ class UserEventController extends Controller
                                 ->orderBy('events.id')
                                 ->get();
 
-        return response()->json($myRejectList);
+        return response()->json($myApprovedList);
     }
 }
