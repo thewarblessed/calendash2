@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Official;
 use App\Models\Organization;
+use App\Models\Department;
 use DB;
 
 class OrganizationAdviserController extends Controller
@@ -129,5 +130,14 @@ class OrganizationAdviserController extends Controller
                                 ->where('users.role','org_adviser')
                                 ->get();
         return response()->json(["orgAdvisers" => $orgAdvisers, "status" => 200]);
+    }
+
+    public function getDepartment(String $id)
+    {
+        $organization = Organization::where('id', $id)->first();
+        // dd($organization);
+        $department = Department::where('id', $organization->department_id)->first();
+        
+        return response()->json($department);
     }
 }

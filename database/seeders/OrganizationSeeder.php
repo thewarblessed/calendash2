@@ -16,79 +16,98 @@ class OrganizationSeeder extends Seeder
         //
         Organization::create([
             'org_name' => 'Association of Civil Engineering Students of TUP Taguig Campus',
-            'organization' => 'ACES'
+            'organization' => 'ACES',
+            'department_id' =>  2
         ]);
         Organization::create([
             'org_name' => 'Bachelor Science in Electrical Engineering Guild',
-            'organization' => 'BSEEG'
+            'organization' => 'BSEEG',
+            'department_id' =>  3
         ]);
         Organization::create([
             'org_name' => 'Dies and Moulds Makers Society',
-            'organization' => 'DMMS'
+            'organization' => 'DMMS',
+            'department_id' =>  4
         ]);
         Organization::create([
             'org_name' => 'Green Chemistry Society',
-            'organization' => 'GreeCS'
+            'organization' => 'GreeCS',
+            'department_id' =>  2
         ]);
         Organization::create([
             'org_name' => 'Institute of Electronics Engineering Phils.',
-            'organization' => 'IECEP'
+            'organization' => 'IECEP',
+            'department_id' =>  3
         ]);
         Organization::create([
             'org_name' => 'Junior Philippine Society of Mechanical Engineers',
-            'organization' => 'JPSME'
+            'organization' => 'JPSME',
+            'department_id' =>  4
         ]);
         Organization::create([
             'org_name' => 'Junior Society of Heating Ventilating Air Conditioning Engineers',
-            'organization' => 'JSHRAE-TUPT'
+            'organization' => 'JSHRAE-TUPT',
+            'department_id' =>  4
         ]);
         Organization::create([
             'org_name' => 'Manila Technician Institute Computer Society',
-            'organization' => 'MTICS'
+            'organization' => 'MTICS',
+            'department_id' =>  3
         ]);
         Organization::create([
             'org_name' => 'Mechanical Technologists and Leaders Society',
-            'organization' => 'METALS'
+            'organization' => 'METALS',
+            'department_id' =>  4
         ]);
         Organization::create([
             'org_name' => 'Mechatronics and Robotics Society of the Philippines Taguig Student Council',
-            'organization' => 'MRSP-TSC'
+            'organization' => 'MRSP-TSC',
+            'department_id' =>  4
         ]);
         Organization::create([
             'org_name' => 'Technical Educators Society - TUP Taguig',
-            'organization' => 'TEST-TUP Taguig'
+            'organization' => 'TEST-TUP Taguig',
+            'department_id' =>  1
         ]);
         Organization::create([
             'org_name' => 'Techno-Arts of Graphics Technology Students',
-            'organization' => 'TAAGTS'
+            'organization' => 'TAAGTS',
+            'department_id' =>  2
         ]);
         Organization::create([
             'org_name' => 'TUPT Society of Non Destructive Testing',
-            'organization' => 'TUP-TSNT'
+            'organization' => 'TUP-TSNT',
+            'department_id' =>  2
         ]);
         Organization::create([
             'org_name' => 'DOST Scholars for Innovation and Technology',
-            'organization' => 'D\'SAITECH'
+            'organization' => 'D\'SAITECH',
+            'department_id' =>  null
         ]);
         Organization::create([
             'org_name' => 'Peer Facilitators Group',
-            'organization' => 'PFG'
+            'organization' => 'PFG',    
+            'department_id' =>  null
         ]);
         Organization::create([
             'org_name' => 'Catholic Youth Movement',
-            'organization' => 'CYM'
+            'organization' => 'CYM',
+            'department_id' =>  null
         ]);
         Organization::create([
             'org_name' => 'Christian Brotherhood International',
-            'organization' => 'CBI'
+            'organization' => 'CBI',
+            'department_id' =>  null
         ]);
         Organization::create([
             'org_name' => 'Manila Technician Institute Christian Fellowship',
-            'organization' => 'MTICF'
+            'organization' => 'MTICF',
+            'department_id' =>  null
         ]);
         Organization::create([
             'org_name' => 'TUPT PLUS Network',
-            'organization' => 'PLUS'
+            'organization' => 'PLUS',
+            'department_id' =>  null
         ]);
     }
 }

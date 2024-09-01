@@ -68,6 +68,16 @@
                             </div>
                             <!-- Form Row        -->
                             <div class="row gx-3 mb-3">
+                                <!-- Form Group (organization name)-->
+                                <div class="col-md-6" style="display: block;" id="orgDivCompleteProfile">
+                                    <label for="organization_id">Select Organization</label>
+                                    <select class="form-control" id="organization_id_user" name="organization_id_user">
+                                        @foreach ($organizations as $id => $organization)
+                                            <option value="{{ $id }}">{{ $organization }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
                                 <!-- Form Group (department)-->
                                 <div class="col-md-6" style="display: block;" id="depDivCompleteProfile">
                                     <label for="organization_id">Select Department</label>
@@ -79,15 +89,12 @@
                                         @endforeach
                                     </select>
                                 </div>
-                                <!-- Form Group (organization name)-->
-                                <div class="col-md-6" style="display: block;" id="orgDivCompleteProfile">
-                                    <label for="organization_id">Select Organization</label>
-                                    <select class="form-control" id="organization_id_user" name="organization_id_user">
-                                        @foreach ($organizations as $id => $organization)
-                                            <option value="{{ $id }}">{{ $organization }}</option>
-                                        @endforeach
+
+                                {{-- <div class="col-md-6" style="display: block;" id="depDivCompleteProfile">
+                                    <label class="small mb-1" for="department_id_user">Department</label>
+                                    <select class="form-control" id="department_id_user" name="department_id_user" readonly>
                                     </select>
-                                </div>
+                                </div> --}}
 
                                 <div class="col-md-6" style="display: none;" id="depDivStaffCompleteProfile">
                                     <label for="organization_id">Select Department</label>
@@ -111,13 +118,13 @@
                             <!-- Form Group (email address)-->
                             <div class="mb-3" id="tupIDdiv">
                                 <label class="small mb-1" for="inputEmailAddress">TUP ID NO.</label>
-                                <input class="form-control" id="inputEmailAddress" name="tupID" type="text"
+                                <input class="form-control" id="inputTupId" name="tupID" type="text"
                                     placeholder="Enter your TUP ID (ex. TUPT-XX-XXXX)" value="">
                             </div>
 
                             <div class="mb-3" id="tupIDphotoDiv">
                                 <label class="small mb-1" for="inputImageID">Upload Image of your TUP ID</label>
-                                <input class="form-control" id="inputImageID" name="image" type="file"
+                                <input class="form-control" id="inputImageID" name="image" type="file" accept="image/*"
                                     placeholder="Enter your TUP ID (ex. TUPT-XX-XXXX)" value="">
                             </div>
 
@@ -197,7 +204,7 @@
                                 </div>
                             </div> --}}
                 <!-- Save changes button-->
-                <button class="btn btn-primary" type="button" id="completeProfileSubmit">Save
+                <button class="btn btn-primary" type="submit" id="completeProfileSubmit">Save
                     changes</button>
                 </form>
             </div>
