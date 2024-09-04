@@ -7,6 +7,7 @@ use Socialite;
 use Auth;
 use Exception;
 use App\Models\User;
+use App\Models\PendingUser;
 use Log;
 
 class GoogleSocialiteController extends Controller
@@ -33,7 +34,10 @@ class GoogleSocialiteController extends Controller
             $user = Socialite::driver('google')->stateless()->user();
         
             $finduser = User::where('social_id', $user->id)->first();
-     
+
+            
+            // $student = Student::where('')
+            
             if($finduser){
      
                 Auth::login($finduser);
@@ -41,7 +45,14 @@ class GoogleSocialiteController extends Controller
                 
                 if ($finduser->email_verified_at === null)
                 {
-                    return redirect('/completeProfile');
+                    $pendingUser = PendingUser::where('user_id', $finduser->id)->first();
+                    if ($pendingUser) {
+                        return redirect('/dashboard')->with('pending', 'Your account is currently under review. We appreciate your patience and will provide further instructions soon.');
+                    }
+                    else{
+                        return redirect('/completeProfile');
+                    }
+                    
                 }
                 else
                 {

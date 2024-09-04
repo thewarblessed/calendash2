@@ -24,7 +24,7 @@ class SectionSeeder extends Seeder
             'section' => 'BS Environmental Science'
         ]);
         Section::create([
-            'section' => 'BS in Civil Engineering'
+            'section' => 'BS Civil Engineering'
         ]);
         Section::create([
             'section' => 'BET Major in Civil Technology'
@@ -48,7 +48,7 @@ class SectionSeeder extends Seeder
             'section' => 'BET Major in Automotive Technology'
         ]);
         Section::create([
-            'section' => 'Bachelor of Technical Vocational Teacher Education'
+            'section' => 'Bachelor of Technical Vocational Teacher Education (BTVTED)'
         ]);
         Section::create([
             'section' => 'BS Information Technology'

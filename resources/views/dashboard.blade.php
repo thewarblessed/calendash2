@@ -1,5 +1,6 @@
 <x-app-layout>
-    {{-- <!-- Favicons -->
+    {{--
+    <!-- Favicons -->
     <link href="assets/img/favicon.png" rel="icon">
     <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon"> --}}
 
@@ -18,7 +19,7 @@
 
     <!-- Template Main CSS File -->
     <link href="assets/css/homepage.css" rel="stylesheet">
-
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
         <x-app.navbar />
         <div class="container-fluid py-4 px-5">
@@ -36,6 +37,29 @@
             <!-- ======= SLIDER UPCOMING EVENTS ======= -->
             <hr class="my-0">
             <div class="row">
+                @if(Auth::user()->email_verified_at == null && Auth::user()->role === 'student' || Auth::user()->role === 'professor' || Auth::user()->role === 'staff')
+                    <div class="alert alert-info text-dark text-sm" role="alert">
+                        <i class="fa-solid fa-circle-info"></i><strong>Info!</strong> Your account is currently under approval! Please wait. Thank You!
+                    </div>
+                    <script>
+                        Swal.fire({
+                                icon: 'info',
+                                title: 'Account Review',
+                                text: 'Your account is currently under approval. We appreciate your patience and will provide further instructions soon.',
+                                confirmButtonText: 'OK'
+                            });
+                    </script>
+                @endif
+                {{-- @if(session('pending'))
+                    <script>
+                        Swal.fire({
+                            icon: 'info',
+                            title: 'Account Review',
+                            text: '{{ session('pending') }}',
+                            confirmButtonText: 'OK'
+                        });
+                    </script>
+                @endif --}}
                 <h3 style="text-align: center; margin-top: 2%">Process of Request Letter</h3>
                 <p>Welcome to CALENDASH, where scheduling events is as seamless as sending a letter. Our
                     intuitive platform simplifies the process of organizing events,
@@ -267,8 +291,7 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-lg-6 order-1 order-lg-2">
-                            <img src="../assets/img/aboutss.png" class="img-fluid" alt=""
-                                style="width: 500px;
+                            <img src="../assets/img/aboutss.png" class="img-fluid" alt="" style="width: 500px;
                              margin-top: 10px; border-radius: 20px ">
                         </div>
                         <div class="col-lg-6 pt-4 pt-lg-0 order-2 order-lg-1 content ">
@@ -310,9 +333,9 @@
                     <div class="row">
                         <div class="col-lg-9 text-center text-lg-start">
                             <h5 class="accordion-header" id="headingOne">
-                                <button class="accordion-button border-bottom font-weight-bold collapsed"
-                                    type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour"
-                                    aria-expanded="false" aria-controls="collapseFour">
+                                <button class="accordion-button border-bottom font-weight-bold collapsed" type="button"
+                                    data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false"
+                                    aria-controls="collapseFour">
                                     <h2>Term and Conditions</h2>
                                     <i class="collapse-open fa fa-arrow-down text-xs pt-1 position-absolute end-0 me-3"
                                         aria-hidden="true"></i>
@@ -427,9 +450,8 @@
                                     <div class="accordion-item mb-3">
                                         <h5 class="accordion-header" id="headingOne">
                                             <button class="accordion-button border-bottom font-weight-bold collapsed"
-                                                type="button" data-bs-toggle="collapse"
-                                                data-bs-target="#collapseOne" aria-expanded="false"
-                                                aria-controls="collapseOne">
+                                                type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne"
+                                                aria-expanded="false" aria-controls="collapseOne">
                                                 <h6>How do I create/request an event?</h6>
                                                 <i class="collapse-open fa fa-arrow-down text-xs pt-1 position-absolute end-0 me-3"
                                                     aria-hidden="true"></i>
@@ -491,9 +513,8 @@
                                     <div class="accordion-item mb-3">
                                         <h5 class="accordion-header" id="headingTwo">
                                             <button class="accordion-button border-bottom font-weight-bold collapsed"
-                                                type="button" data-bs-toggle="collapse"
-                                                data-bs-target="#collapseTwo" aria-expanded="false"
-                                                aria-controls="collapseTwo">
+                                                type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo"
+                                                aria-expanded="false" aria-controls="collapseTwo">
                                                 <h6> How will I know the status of my events?</h6>
                                                 <i class="collapse-open fa fa-arrow-down text-xs pt-1 position-absolute end-0 me-3"
                                                     aria-hidden="true"></i>
@@ -518,9 +539,8 @@
                                     <div class="accordion-item mb-3">
                                         <h5 class="accordion-header" id="headingThree">
                                             <button class="accordion-button border-bottom font-weight-bold"
-                                                type="button" data-bs-toggle="collapse"
-                                                data-bs-target="#collapseThree" aria-expanded="false"
-                                                aria-controls="collapseThree">
+                                                type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree"
+                                                aria-expanded="false" aria-controls="collapseThree">
                                                 <h6>How much time does it take to approve my event request?</h6>
                                                 <i class="collapse-open fa fa-arrow-down text-xs pt-1 position-absolute end-0 me-3"
                                                     aria-hidden="true"></i>

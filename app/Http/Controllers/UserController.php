@@ -31,7 +31,8 @@ class UserController extends Controller
 
         $departments = Department::pluck('department', 'id');
 
-        $sections = Section::pluck('section', 'id');
+        $sections = Section::orderBy('section', 'asc')->pluck('section', 'id');
+        // dd($sections);
 
         return view('completeProfile', compact('organizations','departments','sections'));
     }

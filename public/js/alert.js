@@ -4486,18 +4486,18 @@ $(document).ready(function () {
                 // {
 
                 // }
-                if (data.id == null) {
-                    var $select = $('#department_id_user');
+                // if (data.id == null) {
+                //     var $select = $('#department_id_user');
 
-                    // Find the option with a specific value and change its text
-                    $select.find('option:selected').text('Hi');
-                    $('#department_id_user').val(0);
-                    console.log($('#department_id_user').val());
-                }
-                else {
+                //     // Find the option with a specific value and change its text
+                //     $select.find('option:selected').text('Hi');
+                //     $('#department_id_user').val(0);
+                //     console.log($('#department_id_user').val());
+                // }
+                // else {
                     $('#department_id_user').val(data.id);
                     console.log($('#department_id_user').val());
-                }
+                // }
 
                 // $('#department_id_user').text(data.department);
                 // alert($('#department_id_user').val());

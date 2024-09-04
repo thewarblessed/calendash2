@@ -82,32 +82,32 @@ class OrganizationSeeder extends Seeder
         Organization::create([
             'org_name' => 'DOST Scholars for Innovation and Technology',
             'organization' => 'D\'SAITECH',
-            'department_id' =>  null
+            'department_id' =>  1
         ]);
         Organization::create([
             'org_name' => 'Peer Facilitators Group',
             'organization' => 'PFG',    
-            'department_id' =>  null
+            'department_id' =>  1
         ]);
         Organization::create([
             'org_name' => 'Catholic Youth Movement',
             'organization' => 'CYM',
-            'department_id' =>  null
+            'department_id' =>  1
         ]);
         Organization::create([
             'org_name' => 'Christian Brotherhood International',
             'organization' => 'CBI',
-            'department_id' =>  null
+            'department_id' =>  1
         ]);
         Organization::create([
             'org_name' => 'Manila Technician Institute Christian Fellowship',
             'organization' => 'MTICF',
-            'department_id' =>  null
+            'department_id' =>  1
         ]);
         Organization::create([
             'org_name' => 'TUPT PLUS Network',
             'organization' => 'PLUS',
-            'department_id' =>  null
+            'department_id' =>  1
         ]);
     }
 }
