@@ -299,7 +299,9 @@
                 dataType: "json",
                 success: function(data) {
                     console.log(data);
-                    table.ajax.reload(); // Reload the table data
+                    var currentPage = table.page(); // Get the current page
+                    table.ajax.reload(null, false); // Reload the data without resetting pagination
+                    table.page(currentPage).draw('page'); // Restore the previous page
                 },
                 error: function(error) {
                     console.log('error');
